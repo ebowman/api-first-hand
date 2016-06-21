@@ -1,17 +1,17 @@
-# Play-Swagger
+# Api-First-Hand
 
-[![Build Status](https://travis-ci.org/zalando/play-swagger.svg)](https://travis-ci.org/zalando/play-swagger)
-[![codecov](https://codecov.io/gh/zalando/play-swagger/branch/master/graph/badge.svg)](https://codecov.io/gh/zalando/play-swagger)
-[![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zalando/play-swagger?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/zalando/api-first-hand.svg)](https://travis-ci.org/zalando/api-first-hand)
+# [![codecov](https://codecov.io/gh/zalando/api-first-hand/branch/master/graph/badge.svg)](https://codecov.io/gh/zalando/api-first-hand)
+[![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zalando/api-first-hand?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Compatibility
 
-- Play 2.4
+- Play 2.5.4+
 - Swagger (OpenAPI) 2.0
 
 ## Status
 
-This plugin should be enabled using the [play-swagger-service](http://www.typesafe.com/activator/template/play-swagger-service) activator template 
+This plugin should be enabled using the [api-first-hand](http://www.typesafe.com/activator/template/api-first-hand) activator template 
 as the version in this repository is under active development. The status of this software is beta, 
 an end-to-end functional release intended to demonstrate the possibility to generate following from a Swagger specification:
 
@@ -26,12 +26,12 @@ an end-to-end functional release intended to demonstrate the possibility to gene
 
 We benefit from community feedback. All comments are welcome!
 
-# Play-Swagger Tutorial
+# Api-First-Hand Tutorial
 
-This tutorial is based on the [play-swagger-service](http://www.typesafe.com/activator/template/play-swagger-service) activator template.
+This tutorial is based on the [api-first-hand](http://www.typesafe.com/activator/template/api-first-hand) activator template.
 
 ```bash
-$ activator new playground play-swagger-service
+$ activator new playground api-first-hand
 ```
 
 The template project contains following:
@@ -42,7 +42,7 @@ The template project contains following:
 - `conf` folder with following customized contents:
     * `routes` file with route configuration for Swagger UI, example specification and commented out links to other examples
     * `example.yaml`, a demo Swagger specification. The specification has a dummy implementation in `app` folder. 
-    * `examples` folder containing other different Swagger specification examples. Each specification in this folder represents some aspect of the Play-Swagger plugin in more details.
+    * `examples` folder containing other different Swagger specification examples. Each specification in this folder represents some aspect of the Api-First-Hand plugin in more details.
         For the specification to be picked up by the plugin it must be moved into the `conf` folder. It is allowed to have multiple Swagger specifications in the `conf` folder at the same time. 
 - `app` directory with following template implementations:
     * `controllers/Swagger.scala` - a backend side of the Swagger UI
@@ -52,17 +52,17 @@ The template project contains following:
         b) explicitly requested by issuing a `apiFirstSecurity` command 
 
 
-## Welcome to Play-Swagger
+## Welcome to Api-First-Hand
 
-Congratulations, you just created a new Play-Swagger application!
+Congratulations, you just created a new Api-First-Hand application!
 
-The [Play Framework](http://www.playframework.com/) with the [Play-Swagger](https://github.com/zalando/play-Swagger/) 
+The [Play Framework](http://www.playframework.com/) with the [Api-First-Hand](https://github.com/zalando/api-first-hand/) 
 plugin make it easy to build RESTful web services from a Swagger API specification as the single source of truth. 
 Play is based on a lightweight, stateless, web-friendly architecture. Built on [Akka](http://akka.io), 
 Play provides predictable and minimal resource consumption for highly-scalable applications. 
-The Play-Swagger plugin takes Swagger API definitions and treats them as the single source of truth of your REST services.
+The Api-First-Hand plugin takes Swagger API definitions and treats them as the single source of truth of your REST services.
 
-Play-Swagger supports round-trip regeneration and compilation of:
+Api-First-Hand supports round-trip regeneration and compilation of:
 
 - Play routes definitions (managed).
 - Swagger domain model definitions and parameters onto Scala case classes (managed).
@@ -101,7 +101,7 @@ run statically from the within Play, which provides a sandbox for your service.
 The template is configured with a template Swagger API definition called `example.yaml` 
 and located in the `conf` directory of the Play application. 
 
-The `example.yaml` definition provides an example [API description](https://github.com/zalando/play-swagger-service/blob/master/conf/example.yaml)
+The `example.yaml` definition provides an example [API description](https://github.com/zalando/api-first-hand-activator/blob/master/conf/example.yaml)
 
 This definition contains three end points: 
 - the `/token` path, which accept the `GET` and `POST` methods
@@ -123,8 +123,8 @@ Click the [default](http://localhost:9000/) button to expand the API definition 
 # Play Routes Integration
 
 As a Play application developer, you are used to defining your endpoints in the `conf/routes` file. 
-Not so with the Play-Swagger plugin! Swagger API specifications already define endpoints as `path` definitions, 
-as seen in the example above. So why do the work twice, right? Instead, the Play-Swagger plugin requires you to 
+Not so with the Api-First-Hand plugin! Swagger API specifications already define endpoints as `path` definitions, 
+as seen in the example above. So why do the work twice, right? Instead, the Api-First-Hand plugin requires you to 
 link your API definition in the routes file ones—making all Swagger API-defined endpoints available as children 
 of one single path context location, and generating Play route definitions from them (as shown below):
 
@@ -148,7 +148,7 @@ more complex types composed from objects and arrays with primitives as leaves.
 
 Both primitive types and complex types are mapped to scala.
 
-As an example, let's look at the Swagger API specification file [`simple.petstore.api.yaml`](https://github.com/zalando/play-swagger-service/blob/master/conf/examples/simple.petstore.api.yaml), 
+As an example, let's look at the Swagger API specification file [`simple.petstore.api.yaml`](https://github.com/zalando/api-first-hand-activator/blob/master/conf/examples/simple.petstore.api.yaml), 
 which defines the API of a simple pet store. It contains a model definition for a pet.
 
 ```yaml
@@ -169,7 +169,7 @@ definitions:
 
 This definition consists of an object `pet` containing the required properties `id` and `name` 
 and the optional property `tag`. The Swagger primitive types of these properties are a 64-bit `integer` 
-and (twice) a `string`, successively.  The Play-Swagger plugin will map this definition on to a generated Scala model.
+and (twice) a `string`, successively.  The Api-First-Hand plugin will map this definition on to a generated Scala model.
 
 ```scala
 package simple.petstore.api
@@ -204,7 +204,7 @@ val pet = Pet(0L, "Tucker", Some("Greyhound"))
 ## Specification Cross-References
 
 A `$ref` element of the specification is allowed to contain a name of file as it's part. Because of this, it is possible to split 
-a single specification into multiple files as shown in [`cross_spec_references.yaml`](https://github.com/zalando/play-swagger-service/blob/master/conf/examples/cross_spec_references.yaml) 
+a single specification into multiple files as shown in [`cross_spec_references.yaml`](https://github.com/zalando/api-first-hand-activator/blob/master/conf/examples/cross_spec_references.yaml) 
 example. It is also possible to reference a definition in one specification from another specification. 
 In this case for each reference an independent copy of the class definition will be created for each referencing specification. 
 The definition is then placed into the appropriate package for each specification. 
@@ -697,7 +697,7 @@ Swagger API definitions allow for constraints to be put on parameter types.
 We have already seen the `required` constraint, used to mark a parameter or specific field within 
 a domain definition to be required upon input. Additional constraints, as defined by the 
 [Parameter Object](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#parameterObject), 
-can be added to your API definition. The Play-Swagger plugin will generate validations for these parameter 
+can be added to your API definition. The Api-First-Hand plugin will generate validations for these parameter 
 constraints and make sure that your controller methods are only called if the input of your service 
 complies to those constraints. 
 
@@ -799,14 +799,14 @@ now excepts value within the range `[2000..2100]`, but returns a descriptive err
 
 Having an API definition as the single source of truth in your codebase—with formal type specification of the in- and output values, 
 including their constraints—provides for a powerful feature when it comes to testing. 
-The Play-Swagger plugin automates the creation of test data generators that can drive property checks directly 
-from the API specification. Play-Swagger derives data generators and unit tests directly from your Swagger API specification.
+The Api-First-Hand plugin automates the creation of test data generators that can drive property checks directly 
+from the API specification. Api-First-Hand derives data generators and unit tests directly from your Swagger API specification.
 
 Property-based testing using generator-driven property checks is a cool way to test the validity of your application 
 according to the rules or properties that apply to your application. Properties, in this sense, are high-level 
 specifications that should always hold for a range of data values. The idea is to generate a range of data 
 values for your data types and let (also generated) tests assert that the properties of these data types hold. 
-A Swagger API definition contains formal type definitions _and_ constraints for all data values, and the Play-Swagger 
+A Swagger API definition contains formal type definitions _and_ constraints for all data values, and the Api-First-Hand 
 plugin maps these types on managed Scala source code that represents the data types, so it is also possible to map 
 these API definitions on test data generators that provide a range of data values for these types. 
 The plugin does exactly that: It creates managed test data generators and unit tests that assert whether your 
@@ -817,7 +817,7 @@ We employ the ScalaTest [property-based testing](http://www.scalatest.org/user_g
 functionality as the framework to generate the data values, and map the data types of our API definition on 
 the test data generators that are created by the plugin. ScalaTest provides 
 `org.scalacheck.Gen` and `org.scalacheck.Arbitrary` objects with utility methods that help generate a range of 
-(possibly arbitrary) data values for common Scala types and primitives. The Play-Swagger plugin uses these 
+(possibly arbitrary) data values for common Scala types and primitives. The Api-First-Hand plugin uses these 
 methods to create test data generators specific for the data types of our API definition. When necessary, 
 it composes generators from primitive types into generators for complex types, so that you end up with a 
 set of generators that provide test data for your complete API.
@@ -925,7 +925,7 @@ package object yaml {
 
 We want to have test data generators that generate an arbitrary range of values for the model 
 code shown above - composed from primitive, and sometimes optional, data definitions. 
-The Play-Swagger plugin does this by generating two Scala objects: one for the Swagger API definition, 
+The Api-First-Hand plugin does this by generating two Scala objects: one for the Swagger API definition, 
 and one for the API path parts. Each object contains generator factory methods for the defined data types, 
 prefixed by `create`, which returns a generator function. A generator function takes a given integer count 
 and returns a generated amount of test data for the data type it was created for.
@@ -990,16 +990,16 @@ test data generators to implement our property-based testing.
 
 Running the test is as simple as running a test set from sbt. Just type `test` from your `sbt` prompt.
 
-# Building a Play-Swagger Plugin
+# Building a Api-First-Hand Plugin
 
 To build a plugin, do the following:
 
 - Clone the repository to your local filesystem
-- Run ```sbt +publishLocal``` in the Play-Swagger directory. This will publish the plugin into your local ivy repository
+- Run ```sbt +publishLocal``` in the Api-First-Hand directory. This will publish the plugin into your local ivy repository
 
 To use the plugin in a plain Play project:
 
-- Create a new Play-Swagger project using activator template, for example: ```activator new hello-world play-swagger-service```
+- Create a new Api-First-Hand project using activator template, for example: ```activator new hello-world api-first-hand```
 - Take a look at the `project/plugins.sbt` of the generated project and add required plugins and resolvers to the `project/plugins.sbt` of your Play project
 - Do the same for `build.sbt`
 - Put a Swagger specification with a ```.yaml``` or ```.json``` extension into the ```conf``` directory
@@ -1008,7 +1008,7 @@ To use the plugin in a plain Play project:
 
 ## Plugin Architecture
 
-Ths Play-Swagger plugin has a three-tier architecture:
+Ths Api-First-Hand plugin has a three-tier architecture:
 
 * specification - this tier is responsible for finding and parsing a specification and converting it into the raw AST format
 * normalisation - this tier performs a couple of optimisations on the AST including type deduplication, flattening and parameter dereferencing
@@ -1078,7 +1078,7 @@ project.  This project is `swagger-tester`.  To test your changes as you're deve
 directory, and run sbt. This project uses an sbt `ProjectRef` to the sbt plugin, which means you don't need to 
 `publishLocal` the plugin after each change. Just run `reload` in the sbt console, and it will pick up your changes.
 
-The play-swagger plugin provides a couple of commands useful for development: 
+The Api-First-Hand plugin provides a couple of commands useful for development: 
 
 * `apiFirstPrintDenotations` - outputs a common names of different parts of the AST as they are intended to be used in generated Scala code
 * `apiFirstPrintRawAstTypes` - outputs all type definitions as they read from the specification before type optimisations

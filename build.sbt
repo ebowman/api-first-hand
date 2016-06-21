@@ -14,7 +14,7 @@ lazy val common = (project in file("common"))
   .settings(commonSettings: _*)
   .settings(
     scalaVersion := Scala10,
-    name := "play-swagger-common",
+    name := "api-first-hand-common",
     libraryDependencies ++= deps.logback +: (deps.jacksonsJava ++ deps.test)
   )
 
@@ -24,7 +24,7 @@ lazy val api = (project in file("api"))
   .settings(commonSettings: _*)
   .settings(
     scalaVersion := Scala11,
-    name := "play-swagger-api",
+    name := "api-first-hand-api",
     libraryDependencies ++= deps.api ++ deps.test
   )
 
@@ -70,7 +70,7 @@ lazy val plugin = (project in file("plugin"))
   .settings(scriptedSettings: _*)
   .settings(
     libraryDependencies ++= deps.test,
-    name := "sbt-play-swagger",
+    name := "sbt-api-first-hand",
     sbtPlugin := true,
     addSbtPlugin("com.typesafe.play" % "sbt-plugin" % PlayVersion),
 
@@ -103,7 +103,7 @@ lazy val root = (project in file("."))
   // Use sbt-doge cross building since we have different projects with different scala versions
   .settings(commonSettings: _*)
   .settings(
-    name := "play-swagger-root",
+    name := "api-first-hand-root",
     aggregate in update := false
   )
   .aggregate(common, swaggerModel, api, swaggerParser, apiFirstCore, playScalaGenerator, plugin)
