@@ -1,1 +1,1 @@
-addSbtPlugin("de.zalando" % "sbt-play-swagger" % sys.props("project.version"))
+addSbtPlugin("de.zalando" % "sbt-api-first-hand" % sys.props("project.version"))
