@@ -1,0 +1,279 @@
+swagger: '2.0'
+info:
+  version: 0.0.1_Hackweek4
+  title: ArticleValidator
+  description: |
+    Validates article data against the Zalando Shop schema
+schemes:
+  - http
+host: localhost:9000
+basePath: /boo
+paths:
+  /schema/model:
+    get:
+      parameters:
+        - name: root
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/ModelSchemaRoot"
+      responses:
+        200:
+          description: |
+            Schema representing sales channel and merchant
+            specific structure and valid values for models to create articles with.
+          schema:
+            $ref: "#/definitions/ModelSchemaRoot"
+
+definitions:
+
+  ModelSchemaRoot:
+    type: object
+    description: Representation of a schema for a model
+    properties:
+      data:
+        description: The schema object
+        $ref: '#/definitions/ModelSchema'
+      meta:
+        description: Meta object
+        $ref: '#/definitions/Meta'
+      links:
+        description: Links
+        $ref: '#/definitions/Links'
+
+  ModelSchema:
+    type: object
+    description: Schema
+    required:
+      - partnerArticleModelId
+      - silhouetteId
+      - name
+      - brand
+      - ageGroups
+      - sizeRegister
+    properties:
+
+      # --- Required properties ------------------------------------------------------------------->
+
+      partnerArticleModelId:
+        description: ???
+        type: integer
+        format: ???
+      silhouetteId:
+        type: string
+        enum:
+          - ankle_boots
+          - backless_slipper
+          - backpack
+          - bag
+          - ball
+          - ballerina_shoe
+          - bathrobe
+          - bathroom
+          - beach_accessoires
+          - beach_shirt
+          - beach_trouser
+          - beauty_equipment
+          - bedroom
+          - belt
+          - bicycle
+          - bicycle_equipment
+          - bikini_combination
+          - bikini_top
+          - boards
+          - boots
+          - bra
+          - bustier
+          - cardigan
+          - case
+          - cleansing
+          - coat
+          - combination_clothing
+          - corsage
+          - dress
+          - etui
+          - eye_cosmetic
+          - face_cosmetic
+          - first_shoe
+          - fitness
+          - fragrance
+          - glasses
+          - gloves
+          - hair
+          - headgear
+          - headphones
+          - jacket
+          - jewellery
+          - keychain
+          - kitchen
+          - lip_cosmetic
+          - living
+          - lounge
+          - low_shoe
+          - nail
+          - night_shirt
+          - night_trouser
+          - nightdress
+          - nightwear_combination
+          - one_piece_beachwear
+          - one_piece_nightwear
+          - one_piece_suit
+          - one_piece_underwear
+          - other_accessoires
+          - other_equipment
+          - peeling
+          - protector
+          - pullover
+          - pumps
+          - racket
+          - sandals
+          - scarf
+          - shave
+          - shirt
+          - shoe_accessoires
+          - skates
+          - ski
+          - skincare
+          - skirt
+          - sleeping_bag
+          - sneaker
+          - stocking
+          - suit_accessoires
+          - sun
+          - system
+          - t_shirt_top
+          - tent
+          - tights
+          - toys
+          - travel_equipment
+          - trouser
+          - umbrella
+          - underpant
+          - undershirt
+          - underwear_combination
+          - vest
+          - voucher
+          - wallet
+          - watch
+      name:
+        type: string
+        description: Product name
+      brand:
+        description: Zalando brand code
+        type: string
+        minLength: 3
+        maxLength: 3
+        pattern: /[A-Z0-9]{3,3}/
+      ageGroups:
+        type: array
+        items:
+          type: string
+          enum:
+            - baby
+            - kid
+            - teen
+            - adult
+        maxItems: 4
+      sizeRegister:
+        type: string
+        pattern: /[1-9][A-Z0-9]*/
+        minLength: 10
+        maxLength: 10
+
+      # --- Optional properties ------------------------------------------------------------------->
+
+      articleModelAttributes:
+        description: |
+          Optional collection of product attributes - if present at least one attribute is required
+        type: array
+        minItems: 1
+        items:
+          type: string
+      lengthRegister:
+        description: Zalando Product Length Grid
+        type: string
+        pattern: /[1-9][A-Z0-9]*/
+        minLength: 10
+        maxLength: 10
+      keywords:
+        description: |
+          Product Keywords. Comma-Space (', ') separated Keyword List. A keyword may contain letters
+          both upper and lowercase as well as numbers and spaces. Each keyword has a maximum length of 255 characters.
+        type: string
+        pattern: /([\w\s]{1,255}|([\w\s]{1,255}, )+[\w\s]{1,255})/
+      description:
+        type: string
+      specialDescriptions:
+        type: array
+        items:
+          description: |
+            Each
+            occurance of the
+            'specialDescription'
+            node will be
+            transformed
+            into a
+            single line in the
+            Zalando Shop Frontend
+          type: string
+
+  Links:
+    type: object
+    description: Links response
+    properties:
+      self:
+        description: The link that generated the current response document
+        type: string
+      related:
+        description: A related resource link when the primary data represents a resource relationship
+        type: string
+
+  Meta:
+    type: object
+    description: Meta
+    properties:
+      copyright:
+        description: Zalando SE Copyright notice
+        type: string
+
+  ErrorSource:
+    type: object
+    description: Indicate the source of error
+    properties:
+      pointer:
+        description: A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+        type: string
+      parameter:
+        description: A string indicating which URI query parameter caused the error.
+        type: string
+
+  Error:
+    type: object
+    description: Error object
+    properties:
+      status:
+       description: The HTTP status code applicable to this p roblem, expressed as a string value.
+       type: string
+      code:
+       description: An application-specific error code, expressed as a string value.
+       type: string
+      title:
+       description: A short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrenc of the problem, except for purposes of localization.
+       type: string
+      detail:
+       description: A human-readable explanation specific to this occurrence of the problem.
+       type: string
+      source:
+       description: An object containing references to the source of the error
+       $ref: '#/definitions/ErrorSource'
+
+  Errors:
+    type: object
+    description: Array of error objects
+    properties:
+      errors:
+        description: All errors
+        type: array
+        items:
+          $ref: '#/definitions/Error'
+          

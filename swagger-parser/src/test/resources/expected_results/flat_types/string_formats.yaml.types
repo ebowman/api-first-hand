@@ -1,0 +1,16 @@
+⌿paths⌿/⌿get⌿base64 -> 
+	Opt(Base64String)
+⌿paths⌿/⌿get⌿petId -> 
+	BinaryString
+⌿paths⌿/⌿get⌿date_time -> 
+	Opt(DateTime)
+⌿paths⌿/⌿get⌿date -> 
+	Opt(Date)
+⌿paths⌿/⌿get⌿responses⌿200 -> 
+	Null
+-- params --
+
+⌿paths⌿/⌿get⌿petId -> Parameter(petId,BinaryString(TypeMeta(Some("binary"), List())),None,None,.+,false,body)
+⌿paths⌿/⌿get⌿base64 -> Parameter(base64,TypeRef(⌿paths⌿/⌿get⌿base64),None,None,.+,true,query)
+⌿paths⌿/⌿get⌿date -> Parameter(date,TypeRef(⌿paths⌿/⌿get⌿date),None,None,.+,true,query)
+⌿paths⌿/⌿get⌿date_time -> Parameter(date_time,TypeRef(⌿paths⌿/⌿get⌿date_time),None,None,.+,true,query)

@@ -1,0 +1,29 @@
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: Hypermedia test resource
+paths:
+  /:
+    get:
+      responses:
+        200:
+          description: OK
+          x-api-first-target-state: resource created
+        default:
+          description: Something else
+x-api-first-transitions:
+  resource created:
+    resource updated:
+      condition: "some rule to show the transition"
+    subresource added:
+  resource updated:
+    subresource added:
+      condition: "" # empty rule (always true)
+    self:
+      condition: "non-empty rule"
+  subresource added:
+    resource updated:
+    self:
+    resource deleted:
+  resource deleted:
+    self:

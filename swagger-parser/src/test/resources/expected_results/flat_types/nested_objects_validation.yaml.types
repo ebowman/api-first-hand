@@ -1,0 +1,29 @@
+⌿definitions⌿NestedObjects -> 
+	TypeDef(⌿definitions⌿NestedObjects, Seq(
+		Field(⌿definitions⌿NestedObjects⌿plain, TypeRef(⌿definitions⌿NestedObjects⌿plain)), 
+		Field(⌿definitions⌿NestedObjects⌿nested, TypeRef(⌿definitions⌿NestedObjects⌿nested))))
+⌿definitions⌿NestedObjects⌿nested -> 
+	Opt(TypeRef(⌿definitions⌿NestedObjects⌿nested⌿Opt))
+⌿definitions⌿NestedObjects⌿plain -> 
+	Opt(TypeRef(⌿definitions⌿NestedObjects⌿plain⌿Opt))
+⌿definitions⌿NestedObjects⌿nested⌿Opt -> 
+	TypeDef(⌿definitions⌿NestedObjects⌿nested, Seq(
+		Field(⌿definitions⌿NestedObjects⌿nested⌿nested2, TypeRef(⌿definitions⌿NestedObjects⌿nested⌿nested2))))
+⌿definitions⌿NestedObjects⌿plain⌿Opt -> 
+	TypeDef(⌿definitions⌿NestedObjects⌿plain, Seq(
+		Field(⌿definitions⌿NestedObjects⌿plain⌿simple, Str)))
+⌿definitions⌿NestedObjects⌿nested⌿nested2 -> 
+	TypeDef(⌿definitions⌿NestedObjects⌿nested⌿nested2, Seq(
+		Field(⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3, TypeRef(⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3))))
+⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3 -> 
+	Opt(TypeRef(⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3⌿Opt))
+⌿paths⌿/⌿get⌿responses⌿200 -> 
+	Null
+⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3⌿bottom -> 
+	Opt(Str)
+⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3⌿Opt -> 
+	TypeDef(⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3, Seq(
+		Field(⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3⌿bottom, TypeRef(⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3⌿bottom))))
+-- params --
+
+⌿paths⌿/⌿get⌿nestedObject -> Parameter(nestedObject,TypeRef(⌿definitions⌿NestedObjects),None,None,.+,false,body)

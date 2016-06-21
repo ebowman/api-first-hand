@@ -1,0 +1,24 @@
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%coloredLevel - %logger - %message%n%xException</pattern>
+        </encoder>
+    </appender>
+
+    <!--
+      The logger name is typically the Java/Scala package name.
+      This configures the log level to log at for a package and its children packages.
+    -->
+    <logger name="play" level="WARN" />
+    <logger name="application" level="WARN" />
+    <logger name="me.andrz.jackson" level="ERROR" />
+    <logger name="m.a.jackson" level="ERROR" />
+    <logger name="de.zalando.beard" level="ERROR" />
+    <logger name="ch.qos" level="ERROR" />
+
+    <root level="WARN">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

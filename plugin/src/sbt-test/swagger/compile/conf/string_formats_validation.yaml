@@ -1,0 +1,118 @@
+---
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: Simple API
+produces:
+    - application/json
+    - application/yaml
+paths:
+  /string:
+    post:
+      parameters:
+        - name: string_optional
+          in: query
+          required: false
+          type: string
+          pattern: /[1-9][A-Z0-9]*/
+          minLength: 0
+          maxLength: 10
+        - name: string_required
+          in: query
+          required: true
+          type: string
+          pattern: /[1-9][A-Z0-9]*/
+          minLength: 10
+          maxLength: 100
+        - name: binary_optional
+          required: false
+          in: body
+          schema:
+            type: string
+            format: binary
+            pattern: /[1-9][A-Z0-9]*/
+            minLength: 10
+            maxLength: 110
+        - name: base64optional
+          in: query
+          required: false
+          type: string
+          format: byte
+          pattern: /[1-9][A-Z0-9]*/
+          minLength: 0
+          maxLength: 10
+        - name: base64required
+          in: query
+          required: true
+          type: string
+          format: byte
+          pattern: /[1-9][A-Z0-9]*/
+          minLength: 0
+          maxLength: 10
+        - name: date_optional
+          in: query
+          required: false
+          type: string
+          format: date
+          pattern: /[1-9][A-Z0-9]*/
+          minLength: 0
+          maxLength: 10
+        - name: date_time_optional
+          in: query
+          required: false
+          type: string
+          format: date-time
+          pattern: /[1-9][A-Z0-9]*/
+          minLength: 1
+          maxLength: 10
+        - name: date_required
+          in: query
+          required: true
+          type: string
+          format: date
+          pattern: /[1-9][A-Z0-9]*/
+          minLength: 0
+          maxLength: 10
+        - name: date_time_required
+          in: query
+          required: true
+          type: string
+          format: date-time
+          pattern: /[1-9][A-Z0-9]*/
+          minLength: 0
+          maxLength: 10
+        - name: password_optional
+          in: query
+          required: false
+          type: string
+          format: password
+          pattern: /[1-9][A-Z0-9]*/
+          minLength: 0
+          maxLength: 10
+        - name: password_required
+          in: query
+          required: true
+          type: string
+          format: password
+          pattern: /[1-9][A-Z0-9]*/
+          minLength: 0
+          maxLength: 10
+      responses:
+        200:
+          description: OK
+  /string2:
+    post:
+      parameters:
+        - name: binary_required
+          in: query
+          required: true
+          in: body
+          schema:
+            type: string
+            format: binary
+            pattern: /[1-9][A-Z0-9]*/
+            minLength: 0
+            maxLength: 10
+      responses:
+        200:
+          description: OK

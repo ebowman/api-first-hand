@@ -1,0 +1,22 @@
+swagger: '2.0'
+info:
+  version: "1.0.0"
+  title: An Example of cross - specification references
+host: localhost:9000
+schemes:
+  - http
+paths:
+  /:
+    post:
+      parameters:
+        - name: root
+          in: body
+          required: true
+          schema:
+            $ref: "hackweek.yaml#/definitions/ModelSchemaRoot"
+      responses:
+        200:
+          description:  Must have correct imports for cross-references specifications
+          schema:
+            $ref: "parts/split.petstore.definitions.yaml#/definitions/Pet"
+

@@ -1,0 +1,2 @@
+api_key -> ApiKey(None,api_key,header)
+petstore_auth -> OAuth2Definition(None,Some(http://petstore.swagger.wordnik.com/oauth/dialog),Map(write_pets -> modify pets in your account, read_pets -> read your pets))

@@ -1,0 +1,84 @@
+⌿definitions⌿EventMetaData -> 
+	TypeDef(⌿definitions⌿EventMetaData, Seq(
+		Field(⌿definitions⌿EventMetaData⌿root_id, TypeRef(⌿definitions⌿Event⌿event_type)), 
+		Field(⌿definitions⌿EventMetaData⌿parent_id, TypeRef(⌿definitions⌿Event⌿event_type)), 
+		Field(⌿definitions⌿EventMetaData⌿scopes, TypeRef(⌿definitions⌿EventMetaData⌿scopes)), 
+		Field(⌿definitions⌿EventMetaData⌿id, TypeRef(⌿definitions⌿Event⌿event_type)), 
+		Field(⌿definitions⌿EventMetaData⌿created, TypeRef(⌿definitions⌿Event⌿event_type))))
+⌿definitions⌿Topic -> 
+	TypeDef(⌿definitions⌿Topic, Seq(
+		Field(⌿definitions⌿Topic⌿name, Str)))
+⌿definitions⌿Metrics -> 
+	TypeDef(⌿definitions⌿Metrics, Seq(
+		Field(⌿definitions⌿Metrics⌿name, TypeRef(⌿definitions⌿Event⌿event_type))))
+⌿definitions⌿Event -> 
+	TypeDef(⌿definitions⌿Event, Seq(
+		Field(⌿definitions⌿Event⌿event_type, TypeRef(⌿definitions⌿Event⌿event_type)), 
+		Field(⌿definitions⌿Event⌿partitioning_key, TypeRef(⌿definitions⌿Event⌿event_type)), 
+		Field(⌿definitions⌿Event⌿metadata, TypeRef(⌿definitions⌿Event⌿metadata))))
+⌿definitions⌿Cursor -> 
+	TypeDef(⌿definitions⌿Cursor, Seq(
+		Field(⌿definitions⌿Cursor⌿partition, Str), 
+		Field(⌿definitions⌿Cursor⌿offset, Str)))
+⌿definitions⌿Problem -> 
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿definitions⌿TopicPartition -> 
+	TypeDef(⌿definitions⌿TopicPartition, Seq(
+		Field(⌿definitions⌿TopicPartition⌿partition, Str), 
+		Field(⌿definitions⌿TopicPartition⌿oldest_available_offset, Str), 
+		Field(⌿definitions⌿TopicPartition⌿newest_available_offset, Str)))
+⌿definitions⌿SimpleStreamEvent -> 
+	TypeDef(⌿definitions⌿SimpleStreamEvent, Seq(
+		Field(⌿definitions⌿SimpleStreamEvent⌿cursor, TypeRef(⌿definitions⌿Cursor)), 
+		Field(⌿definitions⌿SimpleStreamEvent⌿events, TypeRef(⌿definitions⌿SimpleStreamEvent⌿events))))
+⌿definitions⌿Event⌿event_type -> 
+	Opt(Str)
+⌿definitions⌿Event⌿metadata -> 
+	Opt(TypeRef(⌿definitions⌿EventMetaData))
+⌿definitions⌿SimpleStreamEvent⌿events -> 
+	Opt(TypeRef(⌿definitions⌿SimpleStreamEvent⌿events⌿Opt))
+⌿definitions⌿EventMetaData⌿scopes -> 
+	Opt(TypeRef(⌿definitions⌿EventMetaData⌿scopes⌿Opt))
+⌿paths⌿/topics/{topic}/events/batch⌿post⌿topic -> 
+	Str
+⌿paths⌿/topics/{topic}/events⌿get⌿stream_timeout -> 
+	Opt(Intgr)
+⌿paths⌿/topics/{topic}/events⌿get⌿batch_limit -> 
+	Intgr
+⌿definitions⌿SimpleStreamEvent⌿events⌿Opt -> 
+	Arr(TypeRef(⌿definitions⌿Event))
+⌿definitions⌿EventMetaData⌿scopes⌿Opt -> 
+	Arr(Str)
+⌿paths⌿/topics/{topic}/events/batch⌿post⌿event -> 
+	Opt(TypeRef(⌿definitions⌿Event))
+⌿paths⌿/topics/{topic}/events⌿post⌿responses⌿201 -> 
+	Null
+⌿paths⌿/topics/{topic}/partitions⌿get⌿responses⌿200 -> 
+	ArrResult(TypeRef(⌿definitions⌿TopicPartition))
+⌿paths⌿/topics⌿get⌿responses⌿200 -> 
+	ArrResult(TypeRef(⌿definitions⌿Topic))
+-- params --
+
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿start_from -> Parameter(start_from,Str(None,TypeMeta(None, List())),None,None,.+,true,query)
+⌿paths⌿/topics/{topic}/partitions⌿get⌿topic -> Parameter(topic,Str(None,TypeMeta(None, List())),None,None,[^/]+,true,path)
+⌿paths⌿/topics/{topic}/events⌿get⌿stream_timeout -> Parameter(stream_timeout,TypeRef(⌿paths⌿/topics/{topic}/events⌿get⌿stream_timeout),None,None,.+,true,query)
+⌿paths⌿/topics/{topic}/events⌿get⌿stream_limit -> Parameter(stream_limit,TypeRef(⌿paths⌿/topics/{topic}/events⌿get⌿stream_timeout),None,None,.+,true,query)
+⌿paths⌿/topics/{topic}/events⌿get⌿batch_flush_timeout -> Parameter(batch_flush_timeout,TypeRef(⌿paths⌿/topics/{topic}/events⌿get⌿stream_timeout),None,None,.+,true,query)
+⌿paths⌿/topics/{topic}/partitions/{partition}⌿get⌿topic -> Parameter(topic,Str(None,TypeMeta(None, List())),None,None,[^/]+,true,path)
+⌿paths⌿/topics/{topic}/events⌿get⌿x_nakadi_cursors -> Parameter(x_nakadi_cursors,Str(None,TypeMeta(None, List())),None,None,.+,false,header)
+⌿paths⌿/topics/{topic}/events⌿get⌿batch_limit -> Parameter(batch_limit,Intgr(TypeMeta(Some("int32"), List())),None,Some(1),.+,true,query)
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿partition -> Parameter(partition,Str(None,TypeMeta(None, List())),None,None,[^/]+,true,path)
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿stream_limit -> Parameter(stream_limit,TypeRef(⌿paths⌿/topics/{topic}/events⌿get⌿stream_timeout),None,None,.+,true,query)
+⌿paths⌿/topics/{topic}/partitions/{partition}⌿get⌿partition -> Parameter(partition,Str(None,TypeMeta(None, List())),None,None,[^/]+,true,path)
+⌿paths⌿/topics/{topic}/events⌿get⌿batch_keep_alive_limit -> Parameter(batch_keep_alive_limit,TypeRef(⌿paths⌿/topics/{topic}/events⌿get⌿stream_timeout),None,None,.+,true,query)
+⌿paths⌿/topics/{topic}/events⌿post⌿event -> Parameter(event,TypeRef(⌿paths⌿/topics/{topic}/events/batch⌿post⌿event),None,None,.+,false,body)
+⌿paths⌿/topics/{topic}/events/batch⌿post⌿topic -> Parameter(topic,Str(None,TypeMeta(None, List())),None,None,[^/]+,true,path)
+⌿paths⌿/topics/{topic}/events/batch⌿post⌿event -> Parameter(event,TypeRef(⌿paths⌿/topics/{topic}/events/batch⌿post⌿event),None,None,.+,false,body)
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿topic -> Parameter(topic,Str(None,TypeMeta(None, List())),None,None,[^/]+,true,path)
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿batch_limit -> Parameter(batch_limit,Intgr(TypeMeta(Some("int32"), List())),None,Some(1),.+,true,query)
+⌿paths⌿/topics/{topic}/events⌿post⌿topic -> Parameter(topic,Str(None,TypeMeta(None, List())),None,None,[^/]+,true,path)
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿batch_flush_timeout -> Parameter(batch_flush_timeout,TypeRef(⌿paths⌿/topics/{topic}/events⌿get⌿stream_timeout),None,None,.+,true,query)
+⌿paths⌿/topics/{topic}/events⌿get⌿topic -> Parameter(topic,Str(None,TypeMeta(None, List())),None,None,[^/]+,true,path)
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿stream_timeout -> Parameter(stream_timeout,TypeRef(⌿paths⌿/topics/{topic}/events⌿get⌿stream_timeout),None,None,.+,true,query)
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿batch_keep_alive_limit -> Parameter(batch_keep_alive_limit,TypeRef(⌿paths⌿/topics/{topic}/events⌿get⌿stream_timeout),None,None,.+,true,query)

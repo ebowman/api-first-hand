@@ -1,0 +1,121 @@
+---
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Test specification for fromData parameters
+schemes:
+  - http
+host: localhost:9000
+basePath: /form_data
+produces:
+  - application/json
+paths:
+  /multipart:
+    post:
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: name
+          in: formData
+          description: name
+          type: string
+          required: true
+        - name: year
+          in: formData
+          description: year
+          type: integer
+          required: false
+        - name: avatar
+          in: formData
+          description: avatar
+          type: file
+          required: false
+      responses:
+        200:
+          description: Echo POST
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              year:
+                type: integer
+              fileSize:
+                type: integer
+              fileName:
+                type: string
+  /url-encoded:
+    post:
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: name
+          in: formData
+          description: name
+          type: string
+          required: true
+        - name: year
+          in: formData
+          description: year
+          type: integer
+          required: false
+        - name: avatar
+          in: formData
+          description: avatar
+          type: file
+          required: true
+      responses:
+        200:
+          description: Echo POST
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              year:
+                type: integer
+              fileSize:
+                type: integer
+              fileName:
+                type: string
+  /both:
+    post:
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
+      parameters:
+        - name: name
+          in: formData
+          description: name
+          type: string
+          required: true
+        - name: year
+          in: formData
+          description: year
+          type: integer
+          required: false
+        - name: avatar
+          in: formData
+          description: avatar
+          type: file
+          required: false
+        - name: ringtone
+          in: formData
+          description: music file
+          type: file
+          required: false
+      responses:
+        200:
+          description: Echo POST
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              year:
+                type: integer
+              avatarSize:
+                type: integer
+              ringtoneSize:
+                type: integer
+

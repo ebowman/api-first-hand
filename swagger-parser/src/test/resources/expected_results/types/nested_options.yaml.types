@@ -1,0 +1,4 @@
+⌿definitions⌿Basic ->
+	TypeDef(⌿definitions⌿Basic, Seq(
+		Field(⌿definitions⌿Basic⌿optional, Opt(TypeDef(⌿definitions⌿Basic⌿optional, Seq(
+			Field(⌿definitions⌿Basic⌿optional⌿nested_optional, Opt(Str))))))))

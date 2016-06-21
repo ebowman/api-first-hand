@@ -1,0 +1,1 @@
+BasicConstraint(basicAuth,Basic(Some(HTTP Basic Authentication. Works over `HTTP` and `HTTPS`)))

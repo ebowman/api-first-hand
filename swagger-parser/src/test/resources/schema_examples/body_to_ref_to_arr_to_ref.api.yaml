@@ -1,0 +1,24 @@
+---
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: API
+paths:
+  /api:
+    post:
+      parameters:
+        - in: body
+          name: foo
+          schema:
+            $ref: '#/definitions/foo'
+      responses:
+        200:
+          description: response
+definitions:
+  foo:
+    type: array
+    items:
+      $ref: '#/definitions/bar'
+  bar:
+    type: string
+

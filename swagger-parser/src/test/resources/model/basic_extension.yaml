@@ -1,0 +1,31 @@
+swagger: '2.0'
+info:
+  version: "1.0.0"
+  title: "1.0.0"
+paths:
+definitions:
+  ErrorModel:
+    description: Basic error model
+    type: object
+    required:
+    - message
+    - code
+    properties:
+      message:
+        description: The text of the error message
+        type: string
+      code:
+        description: The error code
+        type: integer
+        minimum: 100
+        maximum: 600
+  ExtendedErrorModel:
+    description: Extended error model
+    allOf:
+    - $ref: '#/definitions/ErrorModel'
+    - type: object
+      required:
+      - rootCause
+      properties:
+        rootCause:
+          type: string

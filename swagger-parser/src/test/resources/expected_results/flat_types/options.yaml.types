@@ -1,0 +1,11 @@
+⌿definitions⌿Basic -> 
+	TypeDef(⌿definitions⌿Basic, Seq(
+		Field(⌿definitions⌿Basic⌿id, Lng), 
+		Field(⌿definitions⌿Basic⌿required, TypeRef(⌿definitions⌿Basic⌿required)), 
+		Field(⌿definitions⌿Basic⌿optional, TypeRef(⌿definitions⌿Basic⌿optional))))
+⌿definitions⌿Basic⌿required -> 
+	Arr(Str)
+⌿definitions⌿Basic⌿optional -> 
+	Opt(TypeRef(⌿definitions⌿Basic⌿required))
+-- params --
+

@@ -1,0 +1,68 @@
+package {{main_package}}
+import play.api.mvc.{Action, Controller}
+import play.api.data.validation.Constraint
+import de.zalando.play.controllers._
+import PlayBodyParsing._
+import PlayValidations._
+
+{{for import in imports}}
+import {{import.name}}
+{{/for}}
+// ----- constraints and wrapper validations -----
+{{for v in primitive_validations}}
+class {{v.constraint_name}}(override val instance: {{v.validation_type_name}}) extends ValidationBase[{{v.validation_type_name}}] {
+    {{for implicit in  v.implicits}}
+        {{implicit.name}}
+    {{/for}}
+    override def constraints: Seq[Constraint[{{v.validation_type_name}}]] =
+        Seq({{for r in v.restrictions}}{{r.name}}{{if r.isNotLast}}, {{/if}}{{/for}})
+}
+class {{v.validation_name }}(instance: {{v.type_name}}) extends RecursiveValidator {
+    override val validators = Seq(new {{v.constraint_name}}(instance))
+}
+{{/for}}
+// ----- complex type validators -----
+{{for v in typedef_validations}}
+class {{v.validation_name}}(instance: {{v.type_name}}) extends RecursiveValidator {
+    override val validators = Seq(
+    {{for f in v.fields}}
+        new {{f.validation_name}}(instance.{{f.field_name}}){{if f.isNotLast}}, {{/if}}
+    {{/for}}
+    )
+}
+{{/for}}
+// ----- option delegating validators -----
+{{for v in opt_validations}}
+class {{v.validation_name}}(instance: {{v.type_name}}) extends RecursiveValidator {
+    override val validators = instance.toSeq.map { new {{v.delegate_validation_name}}(_) }
+}
+{{/for}}
+// ----- array delegating validators -----
+{{for v in array_validations}}
+class {{v.constraint_name}}(override val instance: {{v.type_name}}) extends ValidationBase[{{v.type_name}}] {
+    override def constraints: Seq[Constraint[{{v.type_name}}]] =
+        Seq({{for r in v.restrictions}}{{r.name}}{{if r.isNotLast}}, {{/if}}{{/for}})
+}
+class {{v.validation_name}}(instance: {{v.type_name}}) extends RecursiveValidator {
+    override val validators = new {{v.constraint_name}}(instance) +: instance.map { new {{v.delegate_validation_name}}(_)}
+}
+{{/for}}
+// ----- catch all simple validators -----
+{{for v in catch_validations}}
+class {{v.constraint_name}}(override val instance: {{v.type_name}}) extends ValidationBase[{{v.type_name}}] {
+    override def constraints: Seq[Constraint[{{v.type_name}}]] =
+        Seq({{for r in v.restrictions}}{{r.name}}{{if r.isNotLast}}, {{/if}}{{/for}})
+}
+class {{v.validation_name}}(instance: {{v.type_name}}) extends RecursiveValidator {
+    override val validators = Seq(new {{v.constraint_name}}(instance))
+}
+{{/for}}
+// ----- call validations -----
+{{for v in call_validations}}
+class {{v.validation_name}}({{for f in v.fields}}{{f.field_name}}: {{f.type_name}}{{if f.isNotLast}}, {{/if}}{{/for}}) extends RecursiveValidator {
+    override val validators = Seq({{for f in v.fields}}
+        new {{f.validation_name}}({{f.field_name}}){{if f.isNotLast}}, {{/if}}
+    {{/for}}
+    )
+}
+{{/for}}

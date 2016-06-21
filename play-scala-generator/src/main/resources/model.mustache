@@ -1,0 +1,44 @@
+{{if main_package_prefix}}package {{main_package_prefix}}
+{{/if}}
+package object {{main_package_suffix}} {
+
+{{for import in imports}}
+    import {{import.name}}
+{{/for}}
+{{for import in binding_imports}}
+    import {{import.name}}
+{{/for}}
+
+
+{{for alias in aliases}}
+    type {{alias.name}} = {{alias.alias}}{{alias.underlying_type}}
+{{/for}}
+
+{{for trait in traits}}
+    trait I{{trait.name}} {
+    {{for field in trait.fields}}
+        def {{field.name}}: {{field.type_name}}
+    {{/for}}
+    }
+{{/for}}
+
+{{for class in classes}}
+    case class {{class.name}}({{for field in class.fields}}{{field.name}}: {{field.type_name}}{{if field.isNotLast}}, {{/if}}{{/for}}) {{for trait in class.trait}}extends I{{trait.name}}{{/for}}
+{{/for}}
+
+{{for enum in enums}}
+    sealed trait {{enum.name}} { def value: {{enum.type_name}} }
+    {{for leaf in enum.leaves}}
+    case object {{leaf.name}} extends {{enum.name}} { val value = {{leaf.value}} }
+    {{/for}}
+    implicit def stringTo{{enum.name}}(in: String): {{enum.name}} = in match {
+    {{for leaf in enum.leaves}}
+        case {{leaf.value}} => {{leaf.name}}
+    {{/for}}
+    }
+{{/for}}
+{{for binding in model_bindings}}
+    {{binding.full_name}}
+{{/for}}
+
+}

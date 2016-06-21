@@ -1,0 +1,14 @@
+⌿paths⌿/⌿post⌿name ->
+	Opt(Str)
+⌿paths⌿/⌿post⌿year ->
+	Opt(Str)
+⌿paths⌿/test-path/{id}⌿get⌿id ->
+	Str
+⌿paths⌿/test-path/{id}⌿get⌿responses⌿200 ->
+	Null
+⌿paths⌿/⌿post⌿responses⌿200 ->
+	TypeDef(⌿paths⌿/⌿post⌿responses⌿200, Seq(
+		Field(⌿paths⌿/⌿post⌿responses⌿200⌿name, Opt(Str)), 
+		Field(⌿paths⌿/⌿post⌿responses⌿200⌿year, Opt(Str))))
+⌿paths⌿/⌿get⌿responses⌿200 ->
+	Null

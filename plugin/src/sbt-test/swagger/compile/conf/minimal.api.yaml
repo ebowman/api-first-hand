@@ -1,0 +1,12 @@
+---
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: Simple API
+paths:
+  /:
+    get:
+      "x-api-first-handler": "minimal.Dashboard.index"
+      responses:
+        200:
+          description: OK

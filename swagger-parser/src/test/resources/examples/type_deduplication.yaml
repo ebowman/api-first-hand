@@ -1,0 +1,966 @@
+swagger: '2.0'
+info:
+  title: Plantando API
+  description: RESTful API of the Plantando project.
+  version: "1.2.0"
+schemes:
+  - http
+basePath: /api
+produces:
+  - application/json
+paths:
+  /plants:
+    get:
+      summary: Get all plants
+      description: |
+        Returns information about all plants in Plantando. The response includes the name, kind, description, owner and the godparent of the plant.
+      tags:
+        - Plants
+      parameters:
+        - name: limit
+          in: query
+          description: Limit the result length to n items.
+          required: False
+          type: integer
+          minimum: 10
+        - name: offset
+          in: query
+          description: Skip first n results.
+          required: False
+          type: integer
+          maximum: 100
+      responses:
+        200:
+          description: Success - an array of plants is contained in the response body
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Plant'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /plants/{plant_id}:
+    get:
+      summary: Return a plant
+      description: |
+        Returns information about a particular plant identified by its ID. The response includes the name, kind, description, owner and the godparent of the plant.
+      tags:
+        - Plants
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+      responses:
+        200:
+          description: Success - plant with the specified plant_id is contained in the response body.
+          schema:
+            $ref: '#/definitions/Plant'
+        404:
+          description: The plant with the specified ID could not be found.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Create or update a plant
+      description: |
+        Creates or updates the plant with the specified ID. The plant with the provided ID will be updated if it already exist. Otherwise a new one will be create..
+      tags:
+        - Plants
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+        - name: plant
+          in: body
+          required: True
+          schema:
+            $ref: '#/definitions/Plant'
+      responses:
+        200:
+          description: Plant was updated successfuly
+        201:
+          description: A new plant was created
+        404:
+          description: Not found - the plant with the specified ID could not be found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Removes a plant
+      description: |
+        Removes the plant with the specified ID from Plantando.
+      tags:
+        - Plants
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+      responses:
+        200:
+          description: Plant was removed successfuly
+        404:
+          description: The plant with the specified ID could not be found.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /plants/{plant_id}/pictures:
+    get:
+      summary: All pictures assigned to a plant
+      description: |
+        The plant pictures endpoint returns an array with URLs of all pictures assigned to the plant with the specified ID.
+      tags:
+        - Plant
+        - Pictures
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+        - name: limit
+          in: query
+          description: Limit the resut length to n items.
+          required: False
+          type: integer
+        - name: offset
+          in: query
+          description: Skip first n results.
+          required: False
+          type: integer
+      responses:
+        200:
+          description: Success - an array of URLs of the assigned pictures is contained in the response body
+          schema:
+            type: array
+            items:
+              type: string
+        404:
+          description: The plant with the specified ID could not be found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /plants/{plant_id}/pictures/{picture_id}:
+    get:
+      summary: Get a plant picture
+      description: |
+        Returns the plant picture with the specified ID in its original binary format.
+      tags:
+        - Pictures
+        - Plants
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+        - name: picture_id
+          in: path
+          description: Id of the picture
+          required: True
+          type: string
+      responses:
+        200:
+          description: Success - the picture with the specified ID is contained in the response body.
+        404:
+          description: The picture or plant with the specified picture ID could not be found.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Create or change a plant picture
+      description: |
+        Assigns a new picture to a plant or updates an existing one.
+      tags:
+        - Pictures
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+        - name: picture_id
+          description: Id of the picture
+          in: path
+          required: True
+          type: string
+      responses:
+        200:
+          description: Picture with the specified ID was updated
+        201:
+          description: A new Picture was assigned to the plant
+        404:
+          description: Not found - the plant with the specified ID could not be found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete plant picture
+      description: |
+        Remove a picture with the provided id from a plant.
+      tags:
+        - Pictures
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+        - name: picture_id
+          in: path
+          description: Id of the picture
+          required: True
+          type: string
+      responses:
+        200:
+          description: Picture with the specified ID was deleted successfully.
+        404:
+          description: The picture or plant with the provided ID could not be found.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /plants/{plant_id}/water_needs:
+    get:
+      summary: Get the information about water needs of a plant
+      description: |
+        Returns the information about the frequency of watering and the amount of water needed in for one watering
+      tags:
+        - Plants
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+      responses:
+        200:
+          description: Success - the water needs of the plant are contained in the response body
+          schema:
+            $ref: '#/definitions/WaterNeeds'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Change the water needs of a plant
+      description: |
+        Assigns a new water needs to a plant
+      tags:
+        - Plants
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+        - name: water_needs
+          in: body
+          required: True
+          schema:
+            $ref: '#/definitions/WaterNeeds'
+      responses:
+        200:
+          description: Water needs of the plant were successfully updated
+        404:
+          description: Not found - the plant with the specified ID could not be found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /plants/{plant_id}/sunlight_needs:
+    get:
+      summary: Get the information about sunlight needs of a plant
+      description: |
+        Returns the information about the sunlight required for the plant
+      tags:
+        - Plants
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+      responses:
+        200:
+          description: Success - the sunlight needs of the plant are contained in the response body
+          schema:
+            $ref: '#/definitions/SunlightNeeds'
+        404:
+          description: Not found - the plant with the specified ID could not be found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Change the sunlight needs of a plant
+      description: |
+        Updates the sunlight needs to a plant
+      tags:
+        - Plants
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+        - name: sunlight_needs
+          in: body
+          required: True
+          schema:
+            $ref: '#/definitions/SunlightNeeds'
+      responses:
+        200:
+          description: Sunlight needs of the plant were successfully updated
+        404:
+          description: Not found - the plant with the specified ID could not be found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /plants/{plant_id}/location:
+    get:
+      summary: Get the location of the plant
+      description: |
+        Returns the information about the current location of the plant with the specified ID
+      tags:
+        - Plants
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+      responses:
+        200:
+          description: Success - the location of the plant are contained in the response body
+          schema:
+            $ref: '#/definitions/Location'
+        404:
+          description: Not found - the plant with the specified ID could not be found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Change the location of a plant
+      description: |
+        Updates the information about the location of the plant with the specified ID
+      tags:
+        - Plants
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+        - name: location
+          in: body
+          required: True
+          schema:
+            $ref: '#/definitions/Location'
+      responses:
+        200:
+          description: Location of the plant was successfully updated
+        404:
+          description: Not found - the plant with the specified ID could not be found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Remove the location of the plant
+      description: |
+        Removes the information of the plant location and move the plant to the pool.
+      tags:
+        - Plants
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+      responses:
+        200:
+          description: Location of the plant was successfully deleted
+        404:
+          description: Not found - the plant with the specified ID could not be found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /plants/{plant_id}/waterings:
+    get:
+      summary: Get the waterings of the plant
+      description: |
+        Returns the information about the waterings of the plant with the specified ID
+      tags:
+        - Plants
+        - Waterings
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+        - name: limit
+          in: query
+          description: Limit the resut length to n items.
+          required: False
+          type: integer
+        - name: offset
+          in: query
+          description: Skip first n results.
+          required: False
+          type: integer
+      responses:
+        200:
+          description: Success - the array of waterings is contained in the response body
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Watering'
+        404:
+          description: Not found - the plant with the specified ID could not be found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /plants/{plant_id}/waterings/{watering_id}:
+    get:
+      summary: Get the watering by id
+      description: |
+        Returns the information about the watering with the specified ID
+      tags:
+        - Plants
+        - Waterings
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+        - name: watering_id
+          in: path
+          description: Id of the watering
+          required: True
+          type: string
+      responses:
+        200:
+          description: Success - the watering information is contained in the response body
+          schema:
+            $ref: '#/definitions/Watering'
+        404:
+          description: Not found - the plant or the watering could not be found
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Add or change the watering by id
+      description: |
+        Updates the information about an existing watering or creates a new one
+      tags:
+        - Plants
+        - Waterings
+      parameters:
+        - name: plant_id
+          in: path
+          description: Id of the plant
+          required: True
+          type: string
+        - name: watering_id
+          in: path
+          description: Id of the watering
+          required: True
+          type: string
+      responses:
+        200:
+          description: The watering information was successfully updated
+        201:
+          description: A new watering information was successfully created
+        404:
+          description: Not found - the plant with the specified ID could not be found
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /areas:
+    get:
+      summary: Get all areas
+      description: |
+        Returns the information about the areas
+      tags:
+        - Areas
+      parameters:
+        - name: limit
+          in: query
+          description: Limit the resut length to n items.
+          required: False
+          type: integer
+        - name: offset
+          in: query
+          description: Skip first n results.
+          required: False
+          type: integer
+      responses:
+        200:
+          description: Success - the array of areas is contained in the response body
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Area'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /areas/{area_id}:
+    get:
+      summary: Get an area
+      description: |
+        Returns the information about the area with the specified ID
+      tags:
+        - Areas
+      parameters:
+        - name: area_id
+          in: path
+          description: The ID of the area.
+          required: True
+          type: string
+      responses:
+        200:
+          description: Success - the area is contained in the response body
+          schema:
+            $ref: '#/definitions/Area'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Create or update an area
+      description: |
+        Updates an existing area with the specified ID or creates a new one.
+      tags:
+        - Areas
+      parameters:
+        - name: area_id
+          in: path
+          description: The ID of the area.
+          required: True
+          type: string
+      responses:
+        200:
+          description: An existing area was updated
+        201:
+          description: An new area was created
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Remove an area
+      description: |
+        Removes existing area with the specified ID. All plants contained in this area will be moved to the pool and the area will be unassigned from all employees.
+      tags:
+        - Areas
+      parameters:
+        - name: area_id
+          in: path
+          description: The ID of the area.
+          required: True
+          type: string
+      responses:
+        200:
+          description: An existing area was removed
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /users:
+    get:
+      summary: Get all users
+      description: |
+        Returns the information about the users of Plantando
+      tags:
+        - Users
+      parameters:
+        - name: limit
+          in: query
+          description: Limit the resut length to n items.
+          required: False
+          type: integer
+        - name: offset
+          in: query
+          description: Skip first n results.
+          required: False
+          type: integer
+      responses:
+        200:
+          description: Success - the array of users is contained in the response body
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Register a new user
+      description: |
+        Creates a new user and adds it to Plantando
+      tags:
+        - Users
+      parameters:
+        - name: signin_data
+          in: body
+          required: True
+          schema:
+            $ref: '#/definitions/SigninData'
+      responses:
+        200:
+          description: Success - the user was created successfully
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /users/me:
+    get:
+      summary: Get current user
+      description: |
+        Returns the information about the current user.
+      tags:
+        - Users
+      responses:
+        200:
+          description: Success - the current users is contained in the response body
+          schema:
+            $ref: '#/definitions/User'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /users/{user_id}:
+    get:
+      summary: Get user by ID
+      description: |
+        Returns the information about the users with the specified ID
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: The ID of the user.
+          required: True
+          type: string
+      responses:
+        200:
+          description: Success - the users is contained in the response body
+          schema:
+              $ref: '#/definitions/User'
+        404:
+          description: The user could not be found
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Add or update user
+      description: |
+        Creates a new Plantando user or upates an existing one.
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: The ID of the user.
+          required: True
+          type: string
+        - name: user
+          in: body
+          description: User to create or update.
+          required: True
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: The users was updated successfully
+        201:
+          description: A new users was created successfully
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete user
+      description: |
+        Removes an existing Plantando user. All plants owned by this user will be moved to the pool.
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: The ID of the user.
+          required: True
+          type: string
+        - name: user
+          in: body
+          description: User to create or update.
+          required: True
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: The users was removed successfully
+        404:
+          description: The user could not be found
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /users/{user_id}/picture:
+    get:
+      summary: Get user picture
+      description: |
+        Returns the user picture in binary format
+      tags:
+        - Users
+        - Pictures
+      parameters:
+        - name: user_id
+          in: path
+          description: The ID of the user.
+          required: True
+          type: string
+      responses:
+        200:
+          description: Success - the user picture is contained in the response body
+        404:
+          description: The user could not be found
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Add or update user picture
+      description: |
+        Creates a new user picture or upates an existing one.
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: The ID of the user.
+          required: True
+          type: string
+      responses:
+        200:
+          description: The users was updated successfully
+        201:
+          description: A new users was created successfully
+        404:
+          description: The user could not be found
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete user picture
+      description: |
+        Removes an existing user picture.
+      tags:
+        - Users
+        - Pictures
+      parameters:
+        - name: user_id
+          in: path
+          description: The ID of the user.
+          required: True
+          type: string
+      responses:
+        200:
+          description: The user picture was removed successfully
+        404:
+          description: The user could not be found
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /user/{user_id}/plants:
+    get:
+      summary: All plants by user
+      description: |
+        Returns all plants owned by the specified user.
+      tags:
+        - Users
+        - Plants
+      parameters:
+        - name: user_id
+          in: path
+          description: Id of the user
+          required: True
+          type: string
+        - name: limit
+          in: query
+          description: Limit the resut length to n items.
+          required: False
+          type: integer
+        - name: offset
+          in: query
+          description: Skip first n results.
+          required: False
+          type: integer
+      responses:
+        200:
+          description: An array of plants owned by the user
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Plant'
+        404:
+          description: Not found - the user with the specified ID could not be found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Plant:
+    type: object
+    properties:
+      plant_id:
+        type: string
+        description: Unique identifier representing a plant.
+      name:
+        type: string
+        description: User defined name of the plant.
+      species:
+        type: string
+        description: Species of the plant.
+      description:
+        type: string
+        description: User defined description of the plant.
+      owner_id:
+        type: string
+        description: ID of the owner of this plant.
+      godparent:
+        type: string
+        description: ID of the godparent of this plant. Can be empty if no godparent is assigned
+  WaterNeeds:
+    type: object
+    properties:
+      amount:
+        type: string
+        description: Amount of water to be used.
+      period:
+        type: string
+        description: How often the plant shall be watered.
+  Location:
+    type: object
+    properties:
+      area_id:
+        type: string
+        description: ID of the area of the location.
+      details:
+        type: string
+        description: Details of the location within the specified area (e.g. "desk 1" or "windowsill" ).
+  Area:
+    type: object
+    properties:
+      area_id:
+        type: string
+        description: ID of the area.
+      building:
+        type: string
+        description: Name of the building.
+      floor:
+        type: string
+        description: Name of the floor.
+      room:
+        type: string
+        description: Name of the room within the building.
+  SunlightNeeds:
+    type: object
+    properties:
+      amount:
+        type: string
+        description: Amount of sunlight the plant need.
+  Watering:
+    type: object
+    properties:
+      watering_id:
+        type: string
+        description: Id of the watering.
+      user_id:
+        type: string
+        description: Id of the user responsible for watering this plant.
+      date:
+        type: string
+        description: Date of the last time the plant was watered.
+  User:
+    type: object
+    properties:
+      user_id:
+        type: string
+        description: ID of the user.
+      name:
+        type: string
+        description: Display name of the user.
+      area_id:
+        type: string
+        description: Id of the area where the user is usually located.
+  SigninData:
+    type: object
+    properties:
+      username:
+        type: string
+        description: Name of the new user.
+      password:
+        type: string
+        description: Password of the new user.
+      email:
+        type: string
+        description: E-mail address of the new user.
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string

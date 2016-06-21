@@ -1,0 +1,9 @@
+⌿definitions⌿KeyedArrays -> 
+	TypeDef(⌿definitions⌿KeyedArrays, Seq(
+		Field(⌿definitions⌿KeyedArrays⌿additionalProperties, TypeRef(⌿definitions⌿KeyedArrays⌿additionalProperties))))
+⌿definitions⌿KeyedArrays⌿additionalProperties -> 
+	CatchAll(TypeRef(⌿definitions⌿KeyedArrays⌿additionalProperties⌿CatchAll))
+⌿definitions⌿KeyedArrays⌿additionalProperties⌿CatchAll -> 
+	Arr(BInt)
+-- params --
+

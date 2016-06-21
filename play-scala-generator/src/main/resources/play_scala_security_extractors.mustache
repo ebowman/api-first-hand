@@ -1,0 +1,26 @@
+{{if security_extractors.extractors}}
+package {{main_package}}
+
+import scala.concurrent.Future
+import play.api.mvc._
+import de.zalando.play.controllers.SwaggerSecurityExtractors._
+{{for import in imports}}
+import {{import.name}}
+{{/for}}
+
+object SecurityExtractorsExecutionContext {
+    // this ExecutionContext might be overridden if default configuration is not suitable for some reason
+    implicit val ec = de.zalando.play.controllers.Contexts.tokenChecking
+}
+
+trait SecurityExtractors {
+    {{for extractor in security_extractors.extractors}}
+    def {{extractor.name}}[User >: Any]({{for param in extractor.external_security_params}}{{param.name}}: {{param.type}}{{if param.isNotLast}}, {{/if}}{{/for}}): RequestHeader => Future[Option[User]] =
+        header => {{extractor.type}}{{if extractor.external_security_params}}({{for param in extractor.external_security_params}}{{param.name}}{{if param.isNotLast}}, {{/if}}{{/for}}){{/if}}{{if extractor.security_params}}({{for param in extractor.security_params}}{{param.name}}{{if param.isNotLast}}, {{/if}}{{/for}}){{/if}}(header) { {{if extractor.user_params}}({{for param in extractor.user_params}}{{param.name}}: {{param.type}}{{if param.isNotLast}}, {{/if}}{{/for}}){{else}}_{{/if}} =>
+            ???
+    }
+    {{/for}}
+    implicit val unauthorizedContentWriter = ???
+    def unauthorizedContent(req: RequestHeader) = Results.Unauthorized(???)
+}
+{{/if}}

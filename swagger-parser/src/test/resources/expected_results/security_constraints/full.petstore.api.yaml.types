@@ -1,0 +1,2 @@
+OAuth2Constraint(petstore_auth,OAuth2Definition(None,Some(http://petstore.swagger.wordnik.com/oauth/dialog),Map(write_pets -> modify pets in your account, read_pets -> read your pets)),Set(write_pets, read_pets))
+ApiKeyConstraint(api_key,ApiKey(None,api_key,header))

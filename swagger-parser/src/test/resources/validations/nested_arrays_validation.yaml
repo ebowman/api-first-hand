@@ -1,0 +1,91 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: Swagger Petstore (Simple)
+  description: A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification
+  termsOfService: http://helloreverb.com/terms/
+  contact:
+    name: Swagger API team
+    email: foo@example.com
+    url: http://swagger.io
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+host: petstore.swagger.wordnik.com
+basePath: /api
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /:
+    get:
+      parameters:
+        - name: activity
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Activity"
+      responses:
+        200:
+          description: |
+            Schema representing sales channel and merchant
+            specific structure and valid values for models to create articles with.
+  /another:
+    post:
+      parameters:
+        - name: example
+          in: body
+          required: false
+          schema:
+            $ref: "#/definitions/Example"
+      responses:
+        200:
+          description: |
+            Schema representing sales channel and merchant
+            specific structure and valid values for models to create articles with.
+definitions:
+  Activity:
+    type: object
+    properties:
+      actions:
+        description: The text of the error message
+        type: string
+        pattern: "the pattern to validate"
+  Example:
+    type: object
+    properties:
+      messages:
+        description: The text of the error message
+        type: array
+        minItems: 5
+        maxItems: 6
+        items:
+          type: array
+          minItems: 5
+          maxItems: 6
+          items:
+            $ref: '#/definitions/Activity'
+      nestedArrays:
+        type: array
+        minItems: 5
+        maxItems: 6
+        items:
+          type: array
+          minItems: 15
+          maxItems: 16
+          items:
+            type: array
+            minItems: 25
+            maxItems: 26
+            items:
+              type: array
+              minItems: 35
+              maxItems: 36
+              items:
+                type: string
+                format: nested arrays
+                minLength: 5
+                maxLength: 6

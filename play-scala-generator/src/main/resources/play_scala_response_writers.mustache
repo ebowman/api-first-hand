@@ -1,0 +1,93 @@
+{{if marshallers.data}}
+package {{main_package}}
+
+import play.api.http.Writeable
+import play.api.libs.iteratee.Execution.Implicits.trampoline
+import play.api.mvc.RequestHeader
+import de.zalando.play.controllers._
+import WriteableWrapper.writeable2wrapper
+import akka.util.ByteString
+
+{{for import in imports}}
+import {{import.name}}
+{{/for}}
+
+{{else}}
+{{if unmarshallers.data}}
+package {{main_package}}
+
+import play.api.http.Writeable
+import play.api.libs.iteratee.Execution.Implicits.trampoline
+import play.api.mvc.RequestHeader
+import de.zalando.play.controllers._
+import WriteableWrapper.writeable2wrapper
+import akka.util.ByteString
+
+{{for import in imports}}
+import {{import.name}}
+{{/for}}
+
+{{/if}}
+{{/if}}
+{{if marshallers.data}}
+
+/**
+* This is a place to define definitions of custom serializers for results.
+* Serializers are just instances of {@Writeable}s
+* They must be placed into the {@custom} field of the ResponseWriters object
+*
+*/
+object ResponseWriters extends ResponseWritersBase {
+
+    /**
+    * Transformer instance to be used as logic for {@Writeable}
+    * It is important to define the type of {@Writeable} explicit and as narrow as possible
+    * in order for play-swagger to be able to provide safety net for
+    * different response types
+    */
+    {{for data in marshallers.data}}
+    val {{data.writable_name}}: Writeable[{{data.result_type}}] =
+        Writeable(a => ???, Some("{{data.mime_type}}"))
+
+    {{/for}}
+    /**
+    * This collection contains all {@Writeable}s which could be used in
+    * as a marshaller for different mime types and types of response
+    */
+    override val custom: Seq[WriteableWrapper[_]] = Seq(
+        {{for data in marshallers.data}}
+        {{data.writable_name}}{{if data.isNotLast}}, {{/if}}
+        {{/for}}
+    )
+}
+{{/if}}
+
+{{if unmarshallers.data}}
+/**
+* This is a place to define definitions of custom deserializers for request body.
+* They must be places into the {@custom} field of the ResponseWriters object
+*
+*/
+object WrappedBodyParsers extends WrappedBodyParsersBase {
+
+    /**
+    * Transformer instance to be used as logic for {@Writeable}
+    * It is important to define the type of {@Writeable} explicit and as narrow as possible
+    * in order for play-swagger to be able to provide safety net for
+    * different response types
+    */
+    {{for data in unmarshallers.data}}
+    val {{data.reader_name}}: Parser[{{data.result_type}}] =
+        (content: ByteString) => ???
+    {{/for}}
+    /**
+    * This collection contains all {@Writeable}s which could be used in
+    * as a marshaller for different mime types and types of response
+    */
+    override val custom: Seq[(String, ParserWrapper[_])] = Seq(
+        {{for data in unmarshallers.data}}
+            "{{data.mime_type}}" -> {{data.reader_name}}{{if data.isNotLast}}, {{/if}}
+        {{/for}}
+    )
+}
+{{/if}}

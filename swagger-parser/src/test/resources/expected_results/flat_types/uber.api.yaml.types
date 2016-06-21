@@ -1,0 +1,67 @@
+⌿definitions⌿Activity -> 
+	TypeDef(⌿definitions⌿Activity, Seq(
+		Field(⌿definitions⌿Activity⌿uuid, TypeRef(⌿definitions⌿Profile⌿picture))))
+⌿definitions⌿PriceEstimate -> 
+	TypeDef(⌿definitions⌿PriceEstimate, Seq(
+		Field(⌿definitions⌿PriceEstimate⌿low_estimate, TypeRef(⌿definitions⌿PriceEstimate⌿high_estimate)), 
+		Field(⌿definitions⌿PriceEstimate⌿display_name, TypeRef(⌿definitions⌿Profile⌿picture)), 
+		Field(⌿definitions⌿PriceEstimate⌿estimate, TypeRef(⌿definitions⌿Profile⌿picture)), 
+		Field(⌿definitions⌿PriceEstimate⌿high_estimate, TypeRef(⌿definitions⌿PriceEstimate⌿high_estimate)), 
+		Field(⌿definitions⌿PriceEstimate⌿product_id, TypeRef(⌿definitions⌿Profile⌿picture)), 
+		Field(⌿definitions⌿PriceEstimate⌿currency_code, TypeRef(⌿definitions⌿Profile⌿picture)), 
+		Field(⌿definitions⌿PriceEstimate⌿surge_multiplier, TypeRef(⌿definitions⌿PriceEstimate⌿high_estimate))))
+⌿definitions⌿Product -> 
+	TypeDef(⌿definitions⌿Product, Seq(
+		Field(⌿definitions⌿Product⌿image, TypeRef(⌿definitions⌿Profile⌿picture)), 
+		Field(⌿definitions⌿Product⌿description, TypeRef(⌿definitions⌿Profile⌿picture)), 
+		Field(⌿definitions⌿Product⌿display_name, TypeRef(⌿definitions⌿Profile⌿picture)), 
+		Field(⌿definitions⌿Product⌿product_id, TypeRef(⌿definitions⌿Profile⌿picture)), 
+		Field(⌿definitions⌿Product⌿capacity, TypeRef(⌿definitions⌿Profile⌿picture))))
+⌿definitions⌿Profile -> 
+	TypeDef(⌿definitions⌿Profile, Seq(
+		Field(⌿definitions⌿Profile⌿first_name, TypeRef(⌿definitions⌿Profile⌿picture)), 
+		Field(⌿definitions⌿Profile⌿email, TypeRef(⌿definitions⌿Profile⌿picture)), 
+		Field(⌿definitions⌿Profile⌿promo_code, TypeRef(⌿definitions⌿Profile⌿picture)), 
+		Field(⌿definitions⌿Profile⌿last_name, TypeRef(⌿definitions⌿Profile⌿picture)), 
+		Field(⌿definitions⌿Profile⌿picture, TypeRef(⌿definitions⌿Profile⌿picture))))
+⌿definitions⌿Activities -> 
+	TypeDef(⌿definitions⌿Activities, Seq(
+		Field(⌿definitions⌿Activities⌿offset, TypeRef(⌿definitions⌿Error⌿code)), 
+		Field(⌿definitions⌿Activities⌿limit, TypeRef(⌿definitions⌿Error⌿code)), 
+		Field(⌿definitions⌿Activities⌿count, TypeRef(⌿definitions⌿Error⌿code)), 
+		Field(⌿definitions⌿Activities⌿history, TypeRef(⌿definitions⌿Activities⌿history))))
+⌿definitions⌿Error -> 
+	TypeDef(⌿definitions⌿Error, Seq(
+		Field(⌿definitions⌿Error⌿code, TypeRef(⌿definitions⌿Error⌿code)), 
+		Field(⌿definitions⌿Error⌿message, TypeRef(⌿definitions⌿Profile⌿picture)), 
+		Field(⌿definitions⌿Error⌿fields, TypeRef(⌿definitions⌿Profile⌿picture))))
+⌿definitions⌿Activities⌿history -> 
+	Opt(TypeRef(⌿definitions⌿Activities⌿history⌿Opt))
+⌿definitions⌿Profile⌿picture -> 
+	Opt(Str)
+⌿definitions⌿Error⌿code -> 
+	Opt(Intgr)
+⌿definitions⌿PriceEstimate⌿high_estimate -> 
+	Opt(BDcml)
+⌿paths⌿/estimates/price⌿get⌿end_latitude -> 
+	Dbl
+⌿definitions⌿Activities⌿history⌿Opt -> 
+	Arr(TypeRef(⌿definitions⌿Activity))
+⌿paths⌿/products⌿get⌿responses⌿200 -> 
+	ArrResult(TypeRef(⌿definitions⌿Product))
+⌿paths⌿/estimates/price⌿get⌿responses⌿200 -> 
+	ArrResult(TypeRef(⌿definitions⌿PriceEstimate))
+-- params --
+
+⌿paths⌿/estimates/price⌿get⌿start_latitude -> Parameter(start_latitude,Dbl(TypeMeta(Some("double"), List())),None,None,.+,true,query)
+⌿paths⌿/estimates/price⌿get⌿end_longitude -> Parameter(end_longitude,Dbl(TypeMeta(Some("double"), List())),None,None,.+,true,query)
+⌿paths⌿/estimates/time⌿get⌿start_longitude -> Parameter(start_longitude,Dbl(TypeMeta(Some("double"), List())),None,None,.+,true,query)
+⌿paths⌿/estimates/time⌿get⌿customer_uuid -> Parameter(customer_uuid,TypeRef(⌿definitions⌿Profile⌿picture),None,None,.+,true,query)
+⌿paths⌿/estimates/price⌿get⌿end_latitude -> Parameter(end_latitude,Dbl(TypeMeta(Some("double"), List())),None,None,.+,true,query)
+⌿paths⌿/estimates/time⌿get⌿start_latitude -> Parameter(start_latitude,Dbl(TypeMeta(Some("double"), List())),None,None,.+,true,query)
+⌿paths⌿/history⌿get⌿limit -> Parameter(limit,TypeRef(⌿definitions⌿Error⌿code),None,None,.+,true,query)
+⌿paths⌿/products⌿get⌿longitude -> Parameter(longitude,Dbl(TypeMeta(Some("double"), List())),None,None,.+,true,query)
+⌿paths⌿/estimates/price⌿get⌿start_longitude -> Parameter(start_longitude,Dbl(TypeMeta(Some("double"), List())),None,None,.+,true,query)
+⌿paths⌿/estimates/time⌿get⌿product_id -> Parameter(product_id,TypeRef(⌿definitions⌿Profile⌿picture),None,None,.+,true,query)
+⌿paths⌿/products⌿get⌿latitude -> Parameter(latitude,Dbl(TypeMeta(Some("double"), List())),None,None,.+,true,query)
+⌿paths⌿/history⌿get⌿offset -> Parameter(offset,TypeRef(⌿definitions⌿Error⌿code),None,None,.+,true,query)

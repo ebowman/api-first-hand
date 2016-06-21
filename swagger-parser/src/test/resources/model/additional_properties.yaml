@@ -1,0 +1,31 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: Swagger Petstore (Simple)
+  description: A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification
+  termsOfService: http://helloreverb.com/terms/
+  contact:
+    name: Swagger API team
+    email: foo@example.com
+    url: http://swagger.io
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+host: petstore.swagger.wordnik.com
+basePath: /api
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+definitions:
+  KeyedArrays:
+    type: object
+    description: An object, all keys of which represent and ID
+    example: { "1": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "2": [9, 6, 8]}
+    additionalProperties:
+      type: array
+      items:
+        type: integer

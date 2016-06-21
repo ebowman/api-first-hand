@@ -1,0 +1,15 @@
+clean
+project api
+coverage
+test
+coverageReport
+coverageOff
+
+project compiler
+coverage
+test
+coverageReport
+coverageOff
+
+project root
+coverageAggregate

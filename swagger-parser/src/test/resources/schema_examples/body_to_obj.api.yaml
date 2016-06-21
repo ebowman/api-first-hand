@@ -1,0 +1,19 @@
+---
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: API
+paths:
+  /api:
+    post:
+      parameters:
+        - in: body
+          name: foo
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+      responses:
+        200:
+          description: response

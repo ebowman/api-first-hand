@@ -1,0 +1,98 @@
+# Project is clean, nothing is here
+
+$ absent app/generated_controllers/echo.api.yaml.scala
+$ absent target/routes/main/controllers_base/echo.api.yaml.scala
+$ absent target/routes/main/model/echo.api.yaml.scala
+$ absent target/routes/main/validators/echo.api.yaml.scala
+$ absent target/routes/test/tests/echo.api.yaml.scala
+$ absent target/routes/test/generators/echo.api.yaml.scala
+
+# Fails while compiled for the first time because of missing controllers
+> clean
+> playScalaApiFirstApp
+
+# $ absent app/generated_controllers/echo.api.yaml.scala
+$ exists target/routes/main/controllers_base/echo.api.yaml.scala
+$ exists target/routes/main/model/echo.api.yaml.scala
+$ exists target/routes/main/validators/echo.api.yaml.scala
+
+# The controller generation must be triggered explicitly
+# > playScalaControllers
+
+# all controllers were generated
+
+$ exists app/generated_controllers/echo.api.yaml.scala
+$ exists app/generated_controllers/basic.auth.api.yaml.scala
+$ exists app/generated_controllers/error_in_array.yaml.scala
+$ exists app/generated_controllers/full.petstore.api.yaml.scala
+$ exists app/generated_controllers/hackweek.yaml.scala
+$ exists app/generated_controllers/heroku.petstore.api.yaml.scala
+$ exists app/generated_controllers/minimal.api.yaml.scala
+$ exists app/generated_controllers/nakadi.yaml.scala
+$ exists app/generated_controllers/security.api.yaml.scala
+$ exists app/generated_controllers/simple.petstore.api.yaml.scala
+$ exists app/generated_controllers/uber.api.yaml.scala
+
+# other artifacts weren't deleted
+
+$ exists target/routes/main/controllers_base/echo.api.yaml.scala
+$ exists target/routes/main/model/echo.api.yaml.scala
+$ exists target/routes/main/validators/echo.api.yaml.scala
+$ absent target/routes/test/tests/echo.api.yaml.scala
+$ absent target/routes/test/generators/echo.api.yaml.scala
+
+# Successfully compiles after controllers have being generated
+> clean
+> playScalaApiFirstApp
+-> compile
+> playScalaMarshallers
+> playScalaSecurity
+# $ pause
+> compile
+
+
+# no test data exists yet
+
+$ exists app/generated_controllers/echo.api.yaml.scala
+$ exists app/generated_controllers/basic.auth.api.yaml.scala
+$ exists app/generated_controllers/error_in_array.yaml.scala
+$ exists app/generated_controllers/full.petstore.api.yaml.scala
+$ exists app/generated_controllers/hackweek.yaml.scala
+$ exists app/generated_controllers/heroku.petstore.api.yaml.scala
+$ exists app/generated_controllers/minimal.api.yaml.scala
+$ exists app/generated_controllers/nakadi.yaml.scala
+$ exists app/generated_controllers/security.api.yaml.scala
+$ exists app/generated_controllers/simple.petstore.api.yaml.scala
+$ exists app/generated_controllers/uber.api.yaml.scala
+
+$ exists target/routes/main/model/echo.api.yaml.scala
+$ exists target/routes/main/validators/echo.api.yaml.scala
+$ exists target/routes/main/controllers_base/echo.api.yaml.scala
+
+$ absent target/routes/test/tests/echo.api.yaml.scala
+$ absent target/routes/test/generators/echo.api.yaml.scala
+
+# Tests should fail with 404 because there is no mapping in routes file
+-> test
+
+# now everything must be present
+$ exists target/routes/test/tests/echo.api.yaml.scala
+$ exists target/routes/test/generators/echo.api.yaml.scala
+$ exists target/routes/main/controllers_base/echo.api.yaml.scala
+$ exists target/routes/main/model/echo.api.yaml.scala
+$ exists target/routes/main/validators/echo.api.yaml.scala
+
+$ exists app/generated_controllers/echo.api.yaml.scala
+$ exists app/generated_controllers/basic.auth.api.yaml.scala
+$ exists app/generated_controllers/error_in_array.yaml.scala
+$ exists app/generated_controllers/full.petstore.api.yaml.scala
+$ exists app/generated_controllers/hackweek.yaml.scala
+$ exists app/generated_controllers/heroku.petstore.api.yaml.scala
+$ exists app/generated_controllers/minimal.api.yaml.scala
+$ exists app/generated_controllers/nakadi.yaml.scala
+$ exists app/generated_controllers/security.api.yaml.scala
+$ exists app/generated_controllers/simple.petstore.api.yaml.scala
+$ exists app/generated_controllers/uber.api.yaml.scala
+
+# we don't check what is created by the play's routes compiler because its outside of our control
+

@@ -1,0 +1,8 @@
+⌿definitions⌿NestedObjects ->
+	TypeDef(⌿definitions⌿NestedObjects, Seq(
+		Field(⌿definitions⌿NestedObjects⌿plain, Opt(TypeDef(⌿definitions⌿NestedObjects⌿plain, Seq(
+			Field(⌿definitions⌿NestedObjects⌿plain⌿simple, Str))))), 
+		Field(⌿definitions⌿NestedObjects⌿nested, Opt(TypeDef(⌿definitions⌿NestedObjects⌿nested, Seq(
+			Field(⌿definitions⌿NestedObjects⌿nested⌿nested2, TypeDef(⌿definitions⌿NestedObjects⌿nested⌿nested2, Seq(
+				Field(⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3, Opt(TypeDef(⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3, Seq(
+					Field(⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3⌿bottom, Opt(Str)))))))))))))))

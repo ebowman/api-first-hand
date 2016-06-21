@@ -1,0 +1,27 @@
+⌿definitions⌿Activity -> 
+	TypeDef(⌿definitions⌿Activity, Seq(
+		Field(⌿definitions⌿Activity⌿actions, TypeRef(⌿definitions⌿Activity⌿actions))))
+⌿definitions⌿Example -> 
+	TypeDef(⌿definitions⌿Example, Seq(
+		Field(⌿definitions⌿Example⌿messages, TypeRef(⌿definitions⌿Example⌿messages)), 
+		Field(⌿definitions⌿Example⌿nestedArrays, TypeRef(⌿definitions⌿Example⌿nestedArrays))))
+⌿definitions⌿Example⌿messages -> 
+	Opt(TypeRef(⌿definitions⌿Example⌿messages⌿Opt))
+⌿definitions⌿Example⌿nestedArrays -> 
+	Opt(TypeRef(⌿definitions⌿Example⌿nestedArrays⌿Opt))
+⌿definitions⌿Activity⌿actions -> 
+	Opt(Str)
+⌿definitions⌿Example⌿nestedArrays⌿Opt -> 
+	Arr(TypeRef(⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr))
+⌿definitions⌿Example⌿messages⌿Opt -> 
+	Arr(TypeRef(⌿definitions⌿Example⌿messages⌿Opt⌿Arr))
+⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr -> 
+	Arr(TypeRef(⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr⌿Arr))
+⌿definitions⌿Example⌿messages⌿Opt⌿Arr -> 
+	Arr(TypeRef(⌿definitions⌿Activity))
+⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr⌿Arr -> 
+	Arr(TypeRef(⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr⌿Arr⌿Arr))
+⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr⌿Arr⌿Arr -> 
+	Arr(Str)
+-- params --
+

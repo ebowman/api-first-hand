@@ -1,0 +1,15 @@
+⌿definitions⌿Basic -> 
+	TypeDef(⌿definitions⌿Basic, Seq(
+		Field(⌿definitions⌿Basic⌿optional, TypeRef(⌿definitions⌿Basic⌿optional))))
+⌿definitions⌿Basic⌿optional -> 
+	Opt(TypeRef(⌿definitions⌿Basic⌿optional⌿Opt))
+⌿definitions⌿Basic⌿optional⌿Opt -> 
+	TypeDef(⌿definitions⌿Basic⌿optional, Seq(
+		Field(⌿definitions⌿Basic⌿optional⌿nested_optional, TypeRef(⌿definitions⌿Basic⌿optional⌿nested_optional))))
+⌿definitions⌿Basic⌿optional⌿nested_optional -> 
+	Opt(Str)
+⌿paths⌿/⌿get⌿responses⌿200 -> 
+	Null
+-- params --
+
+⌿paths⌿/⌿get⌿basic -> Parameter(basic,TypeRef(⌿definitions⌿Basic),None,None,.+,false,body)

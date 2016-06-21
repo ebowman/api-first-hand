@@ -1,0 +1,53 @@
+# See http://about.travis-ci.org/docs/user/build-configuration/
+language: scala
+
+scala:
+  - 2.10.5
+#  - 2.11.8
+branches:
+  only:
+    - master
+
+notifications:
+  email:
+    recipients:
+      - marco@splatter.nl
+      - slavaschmidt@gmx.de
+jdk:
+  - oraclejdk8
+
+#addons:
+#  apt:
+#    packages:
+#      - oracle-java8-installer
+
+# before_install:
+#  - pip install --user codecov
+
+# after_success:
+#  - codecov
+
+script:
+  - sbt -jvm-opts travis/jvmopts clean
+  - sbt -jvm-opts travis/jvmopts '++ 2.11.8 api/compile'
+  - sbt -jvm-opts travis/jvmopts '++ 2.10.5 common/compile' '++ 2.10.5 common/publishLocal'
+  - sbt -jvm-opts travis/jvmopts '++ 2.10.5 swaggerModel/compile' '++ 2.10.5 swaggerModel/publishLocal'
+  - sbt -jvm-opts travis/jvmopts '++ 2.10.5 apiFirstCore/compile' '++ 2.10.5 apiFirstCore/publishLocal'
+  - sbt -jvm-opts travis/jvmopts '++ 2.10.5 swaggerParser/compile' '++ 2.10.5 swaggerParser/publishLocal'
+  - sbt -jvm-opts travis/jvmopts '++ 2.10.5 playScalaGenerator/compile' '++ 2.10.5 playScalaGenerator/publishLocal'
+  - sbt -jvm-opts travis/jvmopts '++ 2.10.5 plugin/compile' '++ 2.10.5 plugin/publishLocal'
+#  - sbt -jvm-opts travis/jvmopts clean compile
+  - sbt -jvm-opts travis/jvmopts test
+  - sbt -jvm-opts travis/jvmopts_scripted scripted
+#  - sbt -jvm-opts travis/jvmopts < travis_coverage_script.txt
+
+
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt/boot/
+
+before_cache:
+  - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
+  - find $HOME/.sbt -name "*.lock" -delete
+  - find $HOME/.sbt -name "de.zalando" -delete

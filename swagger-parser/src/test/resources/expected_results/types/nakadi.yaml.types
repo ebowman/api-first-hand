@@ -1,0 +1,217 @@
+⌿definitions⌿EventMetaData ->
+	TypeDef(⌿definitions⌿EventMetaData, Seq(
+		Field(⌿definitions⌿EventMetaData⌿root_id, Opt(UUID)), 
+		Field(⌿definitions⌿EventMetaData⌿parent_id, Opt(UUID)), 
+		Field(⌿definitions⌿EventMetaData⌿scopes, Opt(Arr(Str))), 
+		Field(⌿definitions⌿EventMetaData⌿id, Opt(UUID)), 
+		Field(⌿definitions⌿EventMetaData⌿created, Opt(Str))))
+⌿definitions⌿Topic ->
+	TypeDef(⌿definitions⌿Topic, Seq(
+		Field(⌿definitions⌿Topic⌿name, Str)))
+⌿definitions⌿Metrics ->
+	TypeDef(⌿definitions⌿Metrics, Seq(
+		Field(⌿definitions⌿Metrics⌿name, Opt(Str))))
+⌿definitions⌿Event ->
+	TypeDef(⌿definitions⌿Event, Seq(
+		Field(⌿definitions⌿Event⌿event_type, Opt(Str)), 
+		Field(⌿definitions⌿Event⌿partitioning_key, Opt(Str)), 
+		Field(⌿definitions⌿Event⌿metadata, Opt(TypeDef(⌿definitions⌿EventMetaData, Seq(
+			Field(⌿definitions⌿EventMetaData⌿root_id, Opt(UUID)), 
+			Field(⌿definitions⌿EventMetaData⌿parent_id, Opt(UUID)), 
+			Field(⌿definitions⌿EventMetaData⌿scopes, Opt(Arr(Str))), 
+			Field(⌿definitions⌿EventMetaData⌿id, Opt(UUID)), 
+			Field(⌿definitions⌿EventMetaData⌿created, Opt(Str))))))))
+⌿definitions⌿Cursor ->
+	TypeDef(⌿definitions⌿Cursor, Seq(
+		Field(⌿definitions⌿Cursor⌿partition, Str), 
+		Field(⌿definitions⌿Cursor⌿offset, Str)))
+⌿definitions⌿Problem ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿definitions⌿TopicPartition ->
+	TypeDef(⌿definitions⌿TopicPartition, Seq(
+		Field(⌿definitions⌿TopicPartition⌿partition, Str), 
+		Field(⌿definitions⌿TopicPartition⌿oldest_available_offset, Str), 
+		Field(⌿definitions⌿TopicPartition⌿newest_available_offset, Str)))
+⌿definitions⌿SimpleStreamEvent ->
+	TypeDef(⌿definitions⌿SimpleStreamEvent, Seq(
+		Field(⌿definitions⌿SimpleStreamEvent⌿cursor, TypeDef(⌿definitions⌿Cursor, Seq(
+			Field(⌿definitions⌿Cursor⌿partition, Str), 
+			Field(⌿definitions⌿Cursor⌿offset, Str)))), 
+		Field(⌿definitions⌿SimpleStreamEvent⌿events, Opt(Arr(TypeDef(⌿definitions⌿Event, Seq(
+			Field(⌿definitions⌿Event⌿event_type, Opt(Str)), 
+			Field(⌿definitions⌿Event⌿partitioning_key, Opt(Str)), 
+			Field(⌿definitions⌿Event⌿metadata, Opt(TypeDef(⌿definitions⌿EventMetaData, Seq(
+				Field(⌿definitions⌿EventMetaData⌿root_id, Opt(UUID)), 
+				Field(⌿definitions⌿EventMetaData⌿parent_id, Opt(UUID)), 
+				Field(⌿definitions⌿EventMetaData⌿scopes, Opt(Arr(Str))), 
+				Field(⌿definitions⌿EventMetaData⌿id, Opt(UUID)), 
+				Field(⌿definitions⌿EventMetaData⌿created, Opt(Str)))))))))))))
+⌿paths⌿/topics/{topic}/events/batch⌿post⌿topic ->
+	Str
+⌿paths⌿/topics/{topic}/events⌿get⌿stream_timeout ->
+	Opt(Intgr)
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿start_from ->
+	Str
+⌿paths⌿/topics/{topic}/events⌿get⌿batch_limit ->
+	Intgr
+⌿paths⌿/topics/{topic}/partitions⌿get⌿topic ->
+	Str
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿batch_keep_alive_limit ->
+	Opt(Intgr)
+⌿paths⌿/topics/{topic}/events⌿get⌿batch_keep_alive_limit ->
+	Opt(Intgr)
+⌿paths⌿/topics/{topic}/events/batch⌿post⌿event ->
+	Opt(TypeDef(⌿definitions⌿Event, Seq(
+		Field(⌿definitions⌿Event⌿event_type, Opt(Str)), 
+		Field(⌿definitions⌿Event⌿partitioning_key, Opt(Str)), 
+		Field(⌿definitions⌿Event⌿metadata, Opt(TypeDef(⌿definitions⌿EventMetaData, Seq(
+			Field(⌿definitions⌿EventMetaData⌿root_id, Opt(UUID)), 
+			Field(⌿definitions⌿EventMetaData⌿parent_id, Opt(UUID)), 
+			Field(⌿definitions⌿EventMetaData⌿scopes, Opt(Arr(Str))), 
+			Field(⌿definitions⌿EventMetaData⌿id, Opt(UUID)), 
+			Field(⌿definitions⌿EventMetaData⌿created, Opt(Str)))))))))
+⌿paths⌿/topics/{topic}/partitions/{partition}⌿get⌿topic ->
+	Str
+⌿paths⌿/topics/{topic}/events⌿get⌿x_nakadi_cursors ->
+	Str
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿stream_limit ->
+	Opt(Intgr)
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿stream_timeout ->
+	Opt(Intgr)
+⌿paths⌿/topics/{topic}/events⌿post⌿topic ->
+	Str
+⌿paths⌿/topics/{topic}/events⌿get⌿batch_flush_timeout ->
+	Opt(Intgr)
+⌿paths⌿/topics/{topic}/events⌿post⌿event ->
+	Opt(TypeDef(⌿definitions⌿Event, Seq(
+		Field(⌿definitions⌿Event⌿event_type, Opt(Str)), 
+		Field(⌿definitions⌿Event⌿partitioning_key, Opt(Str)), 
+		Field(⌿definitions⌿Event⌿metadata, Opt(TypeDef(⌿definitions⌿EventMetaData, Seq(
+			Field(⌿definitions⌿EventMetaData⌿root_id, Opt(UUID)), 
+			Field(⌿definitions⌿EventMetaData⌿parent_id, Opt(UUID)), 
+			Field(⌿definitions⌿EventMetaData⌿scopes, Opt(Arr(Str))), 
+			Field(⌿definitions⌿EventMetaData⌿id, Opt(UUID)), 
+			Field(⌿definitions⌿EventMetaData⌿created, Opt(Str)))))))))
+⌿paths⌿/topics/{topic}/events⌿get⌿stream_limit ->
+	Opt(Intgr)
+⌿paths⌿/topics/{topic}/events⌿get⌿topic ->
+	Str
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿batch_flush_timeout ->
+	Opt(Intgr)
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿topic ->
+	Str
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿partition ->
+	Str
+⌿paths⌿/topics/{topic}/partitions/{partition}⌿get⌿partition ->
+	Str
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿batch_limit ->
+	Intgr
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿responses⌿401 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics⌿get⌿responses⌿503 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/metrics⌿get⌿responses⌿401 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics/{topic}/events/batch⌿post⌿responses⌿401 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics/{topic}/events⌿get⌿responses⌿404 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics/{topic}/events⌿get⌿responses⌿500 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics/{topic}/events⌿post⌿responses⌿503 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿responses⌿400 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics/{topic}/events⌿post⌿responses⌿201 ->
+	Null
+⌿paths⌿/topics/{topic}/events⌿get⌿responses⌿200 ->
+	TypeDef(⌿definitions⌿SimpleStreamEvent, Seq(
+		Field(⌿definitions⌿SimpleStreamEvent⌿cursor, TypeDef(⌿definitions⌿Cursor, Seq(
+			Field(⌿definitions⌿Cursor⌿partition, Str), 
+			Field(⌿definitions⌿Cursor⌿offset, Str)))), 
+		Field(⌿definitions⌿SimpleStreamEvent⌿events, Opt(ArrResult(TypeDef(⌿definitions⌿Event, Seq(
+			Field(⌿definitions⌿Event⌿event_type, Opt(Str)), 
+			Field(⌿definitions⌿Event⌿partitioning_key, Opt(Str)), 
+			Field(⌿definitions⌿Event⌿metadata, Opt(TypeDef(⌿definitions⌿EventMetaData, Seq(
+				Field(⌿definitions⌿EventMetaData⌿root_id, Opt(UUID)), 
+				Field(⌿definitions⌿EventMetaData⌿parent_id, Opt(UUID)), 
+				Field(⌿definitions⌿EventMetaData⌿scopes, Opt(ArrResult(Str))), 
+				Field(⌿definitions⌿EventMetaData⌿id, Opt(UUID)), 
+				Field(⌿definitions⌿EventMetaData⌿created, Opt(Str)))))))))))))
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿responses⌿404 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics/{topic}/partitions⌿get⌿responses⌿200 ->
+	ArrResult(TypeDef(⌿definitions⌿TopicPartition, Seq(
+		Field(⌿definitions⌿TopicPartition⌿partition, Str), 
+		Field(⌿definitions⌿TopicPartition⌿oldest_available_offset, Str), 
+		Field(⌿definitions⌿TopicPartition⌿newest_available_offset, Str))))
+⌿paths⌿/topics/{topic}/events⌿post⌿responses⌿422 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics/{topic}/events⌿post⌿responses⌿403 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/metrics⌿get⌿responses⌿200 ->
+	TypeDef(⌿definitions⌿Metrics, Seq(
+		Field(⌿definitions⌿Metrics⌿name, Opt(Str))))
+⌿paths⌿/topics/{topic}/events/batch⌿post⌿responses⌿503 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics/{topic}/events/batch⌿post⌿responses⌿422 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics⌿get⌿responses⌿200 ->
+	ArrResult(TypeDef(⌿definitions⌿Topic, Seq(
+		Field(⌿definitions⌿Topic⌿name, Str))))
+⌿paths⌿/topics/{topic}/events/batch⌿post⌿responses⌿403 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics/{topic}/events⌿get⌿responses⌿401 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿responses⌿500 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics/{topic}/events/batch⌿post⌿responses⌿201 ->
+	Null
+⌿paths⌿/topics/{topic}/events⌿post⌿responses⌿401 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/metrics⌿get⌿responses⌿503 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿responses⌿200 ->
+	TypeDef(⌿definitions⌿SimpleStreamEvent, Seq(
+		Field(⌿definitions⌿SimpleStreamEvent⌿cursor, TypeDef(⌿definitions⌿Cursor, Seq(
+			Field(⌿definitions⌿Cursor⌿partition, Str), 
+			Field(⌿definitions⌿Cursor⌿offset, Str)))), 
+		Field(⌿definitions⌿SimpleStreamEvent⌿events, Opt(ArrResult(TypeDef(⌿definitions⌿Event, Seq(
+			Field(⌿definitions⌿Event⌿event_type, Opt(Str)), 
+			Field(⌿definitions⌿Event⌿partitioning_key, Opt(Str)), 
+			Field(⌿definitions⌿Event⌿metadata, Opt(TypeDef(⌿definitions⌿EventMetaData, Seq(
+				Field(⌿definitions⌿EventMetaData⌿root_id, Opt(UUID)), 
+				Field(⌿definitions⌿EventMetaData⌿parent_id, Opt(UUID)), 
+				Field(⌿definitions⌿EventMetaData⌿scopes, Opt(ArrResult(Str))), 
+				Field(⌿definitions⌿EventMetaData⌿id, Opt(UUID)), 
+				Field(⌿definitions⌿EventMetaData⌿created, Opt(Str)))))))))))))
+⌿paths⌿/topics/{topic}/events⌿get⌿responses⌿400 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics⌿get⌿responses⌿401 ->
+	TypeDef(⌿definitions⌿Problem, Seq(
+		Field(⌿definitions⌿Problem⌿detail, Str)))
+⌿paths⌿/topics/{topic}/partitions/{partition}⌿get⌿responses⌿200 ->
+	TypeDef(⌿definitions⌿TopicPartition, Seq(
+		Field(⌿definitions⌿TopicPartition⌿partition, Str), 
+		Field(⌿definitions⌿TopicPartition⌿oldest_available_offset, Str), 
+		Field(⌿definitions⌿TopicPartition⌿newest_available_offset, Str)))

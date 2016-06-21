@@ -1,0 +1,76 @@
+package {{main_package}}
+
+import org.scalacheck.Gen
+import org.scalacheck.Arbitrary
+import play.api.libs.json.scalacheck.JsValueGenerators
+import Arbitrary._
+{{for import in imports}}
+import {{import.name}}
+{{/for}}
+
+object Generators extends JsValueGenerators {
+    {{if test_data_aliases}}
+
+    {{for alias in test_data_aliases}}
+    def {{alias.creator_method}} = _generate({{alias.generator}}){{/for}}{{/if}}
+    {{if test_data_aliases}}
+
+    {{for alias in test_data_aliases}}
+    def {{alias.generator}} = {{alias.generator_name}}{{/for}}{{/if}}
+    {{if test_data_classes}}
+
+    {{for class in test_data_classes}}
+    def {{class.creator_method }} = _generate({{class.generator}})
+    {{/for}}{{/if}}
+
+    {{for class in test_data_classes}}
+    def {{class.generator}} = for {
+        {{for field in class.fields}}
+        {{field.name}} <- {{field.generator}}
+        {{/for}}
+    } yield {{class.class_name}}({{for field in class.fields}}{{field.name}}{{if field.isNotLast}}, {{/if}}{{/for}})
+    {{/for}}
+
+    def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
+
+    {{if lists_part}}
+    def _genList[T](gen: Gen[T], format: String): Gen[ArrayWrapper[T]] = for {
+        items <- Gen.containerOf[List,T](gen)
+    } yield ArrayWrapper(format)(items)
+    {{/if}}
+    {{if maps_part}}
+    def _genMap[K,V](keyGen: Gen[K], valGen: Gen[V]): Gen[Map[K,V]] = for {
+        keys <- Gen.containerOf[List,K](keyGen)
+        values <- Gen.containerOfN[List,V](keys.size, valGen)
+    } yield keys.zip(values).toMap
+    {{/if}}
+    {{if date_part}}
+    implicit lazy val arbLocalDate: Arbitrary[LocalDate] = Arbitrary(for {
+        l <- arbitrary[Long]
+    } yield new LocalDate(System.currentTimeMillis + l))
+    {{/if}}
+    {{if date_time_part}}
+    implicit lazy val arbDateTime: Arbitrary[DateTime] = Arbitrary(for {
+        l <- arbitrary[Long]
+    } yield new DateTime(System.currentTimeMillis + l))
+    {{/if}}
+    {{if binary_string_part}}
+    implicit lazy val arbBinaryString: Arbitrary[BinaryString] = Arbitrary(for {
+        s <- arbitrary[String]
+    } yield BinaryString.fromString(s))
+    {{/if}}
+    {{if base64_string_part}}
+    implicit lazy val arbBase64String: Arbitrary[Base64String] = Arbitrary(for {
+        s <- arbitrary[String]
+    } yield Base64String.string2base64string(s))
+    {{/if}}
+    {{if file_part}}
+    implicit lazy val arbFile: Arbitrary[File] = Arbitrary(for {
+        content <- arbitrary[String]
+    } yield de.zalando.play.controllers.PlayPathBindables.tempFileFromString(content))
+    {{/if}}
+    {{if uuid_part}}
+    implicit lazy val arbUUID: Arbitrary[UUID] = Arbitrary(Gen.uuid)
+    {{/if}}
+
+}

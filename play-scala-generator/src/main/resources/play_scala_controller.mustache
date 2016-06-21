@@ -1,0 +1,34 @@
+{{for import in controller_imports}}
+import {{import.name}}
+{{/for}}
+{{for import in unmanaged_imports}}
+import {{import.name}}
+{{/for}}
+
+/**
+ * This controller is re-generated after each change in the specification.
+ * Please only place your hand-written code between appropriate comments in the body of the controller.
+ */
+
+{{for controller in controllers}}
+package {{controller.effective_package}} {
+
+    class {{controller.controller}} extends {{controller.base}} {
+    {{for method in controller.methods}}
+        val {{method.method}} = {{method.action}} { {{for sp in method.single_parameter}}({{sp.field_name}}: {{sp.type_name}}) =>{{/for}}{{if method.multiple_parameters}}input: ({{for p in method.multiple_parameters}}{{p.type_name}}{{if p.isNotLast}}, {{/if}}{{/for}}) =>
+            val ({{for p in method.multiple_parameters}}{{p.field_name}}{{if p.isNotLast}}, {{/if}}{{/for}}) = input{{else}}{{if method.single_parameter}} {{else}} _ => {{/if}} {{/if}}
+            {{method.start_comment}}
+            {{method.implementation}}
+            {{method.end_comment}}
+        }
+    {{/for}}
+    {{for part in controller.dead_code}}
+     // Dead code for absent method{{part.name}}
+     /*
+{{part.code}}
+     */
+
+    {{/for}}
+    }
+}
+{{/for}}

@@ -1,0 +1,24 @@
+⌿definitions⌿Pet -> 
+	TypeDef(⌿definitions⌿Pet, Seq(
+		Field(⌿definitions⌿Pet⌿name, TypeRef(⌿definitions⌿Pet⌿name)), 
+		Field(⌿definitions⌿Pet⌿birthday, TypeRef(⌿definitions⌿Pet⌿birthday))))
+⌿definitions⌿Pet⌿name -> 
+	Opt(Str)
+⌿definitions⌿Pet⌿birthday -> 
+	Opt(Intgr)
+⌿paths⌿/{petId}⌿get⌿petId -> 
+	Str
+⌿paths⌿/⌿get⌿limit -> 
+	BInt
+⌿paths⌿/⌿put⌿pet -> 
+	Opt(TypeRef(⌿definitions⌿Pet))
+⌿paths⌿/⌿post⌿responses⌿200 -> 
+	Null
+⌿paths⌿/⌿get⌿responses⌿200 -> 
+	ArrResult(TypeRef(⌿definitions⌿Pet))
+-- params --
+
+⌿paths⌿/⌿get⌿limit -> Parameter(limit,BInt(TypeMeta(None, List("""max(BigInt("10000"), false)""", """min(BigInt("11"), false)"""))),None,Some(11),.+,true,query)
+⌿paths⌿/⌿put⌿pet -> Parameter(pet,TypeRef(⌿paths⌿/⌿put⌿pet),None,None,.+,false,body)
+⌿paths⌿/⌿post⌿pet -> Parameter(pet,TypeRef(⌿definitions⌿Pet),None,None,.+,false,body)
+⌿paths⌿/{petId}⌿get⌿petId -> Parameter(petId,Str(None,TypeMeta(None, List())),None,None,[^/]+,true,path)

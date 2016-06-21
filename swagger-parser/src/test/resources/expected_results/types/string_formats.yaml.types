@@ -1,0 +1,12 @@
+⌿paths⌿/⌿get⌿base64 ->
+	Opt(Base64String)
+⌿paths⌿/⌿get⌿petId ->
+	BinaryString
+⌿paths⌿/⌿get⌿date_time ->
+	Opt(DateTime)
+⌿paths⌿/⌿get⌿uuid ->
+	Opt(UUID)
+⌿paths⌿/⌿get⌿date ->
+	Opt(Date)
+⌿paths⌿/⌿get⌿responses⌿200 ->
+	Null

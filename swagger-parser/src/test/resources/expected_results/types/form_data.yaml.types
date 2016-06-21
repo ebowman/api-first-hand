@@ -1,0 +1,38 @@
+⌿paths⌿/multipart⌿post⌿avatar ->
+	Opt(File)
+⌿paths⌿/both⌿post⌿avatar ->
+	Opt(File)
+⌿paths⌿/multipart⌿post⌿name ->
+	Str
+⌿paths⌿/url-encoded⌿post⌿name ->
+	Str
+⌿paths⌿/both⌿post⌿name ->
+	Str
+⌿paths⌿/both⌿post⌿ringtone ->
+	File
+⌿paths⌿/both⌿post⌿year ->
+	Opt(BInt)
+⌿paths⌿/multipart⌿post⌿year ->
+	Opt(BInt)
+⌿paths⌿/url-encoded⌿post⌿avatar ->
+	File
+⌿paths⌿/url-encoded⌿post⌿year ->
+	Opt(BInt)
+⌿paths⌿/multipart⌿post⌿responses⌿200 ->
+	TypeDef(⌿paths⌿/multipart⌿post⌿responses⌿200, Seq(
+		Field(⌿paths⌿/multipart⌿post⌿responses⌿200⌿name, Opt(Str)), 
+		Field(⌿paths⌿/multipart⌿post⌿responses⌿200⌿year, Opt(BInt)), 
+		Field(⌿paths⌿/multipart⌿post⌿responses⌿200⌿fileSize, Opt(BInt)), 
+		Field(⌿paths⌿/multipart⌿post⌿responses⌿200⌿fileName, Opt(Str))))
+⌿paths⌿/both⌿post⌿responses⌿200 ->
+	TypeDef(⌿paths⌿/both⌿post⌿responses⌿200, Seq(
+		Field(⌿paths⌿/both⌿post⌿responses⌿200⌿name, Opt(Str)), 
+		Field(⌿paths⌿/both⌿post⌿responses⌿200⌿year, Opt(BInt)), 
+		Field(⌿paths⌿/both⌿post⌿responses⌿200⌿avatarSize, Opt(BInt)), 
+		Field(⌿paths⌿/both⌿post⌿responses⌿200⌿ringtoneSize, Opt(BInt))))
+⌿paths⌿/url-encoded⌿post⌿responses⌿200 ->
+	TypeDef(⌿paths⌿/url-encoded⌿post⌿responses⌿200, Seq(
+		Field(⌿paths⌿/url-encoded⌿post⌿responses⌿200⌿name, Opt(Str)), 
+		Field(⌿paths⌿/url-encoded⌿post⌿responses⌿200⌿year, Opt(BInt)), 
+		Field(⌿paths⌿/url-encoded⌿post⌿responses⌿200⌿fileSize, Opt(BInt)), 
+		Field(⌿paths⌿/url-encoded⌿post⌿responses⌿200⌿fileName, Opt(Str))))

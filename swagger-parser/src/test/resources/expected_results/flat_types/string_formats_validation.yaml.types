@@ -1,0 +1,40 @@
+⌿paths⌿/string⌿post⌿string_optional -> 
+	Opt(Str)
+⌿paths⌿/string⌿post⌿date_time_required -> 
+	DateTime
+⌿paths⌿/string⌿post⌿date_required -> 
+	Date
+⌿paths⌿/string⌿post⌿password_optional -> 
+	Opt(Password)
+⌿paths⌿/string⌿post⌿date_optional -> 
+	Opt(Date)
+⌿paths⌿/string⌿post⌿string_required -> 
+	Str
+⌿paths⌿/string⌿post⌿binary_optional -> 
+	Opt(BinaryString)
+⌿paths⌿/string⌿post⌿password_required -> 
+	Password
+⌿paths⌿/string2⌿post⌿binary_required -> 
+	BinaryString
+⌿paths⌿/string⌿post⌿base64required -> 
+	Base64String
+⌿paths⌿/string⌿post⌿date_time_optional -> 
+	Opt(DateTime)
+⌿paths⌿/string⌿post⌿base64optional -> 
+	Opt(Base64String)
+⌿paths⌿/string2⌿post⌿responses⌿200 -> 
+	Null
+-- params --
+
+⌿paths⌿/string⌿post⌿string_required -> Parameter(string_required,Str(None,TypeMeta(None, List("maxLength(100)", "minLength(10)", """pattern("""+"""""""""+"""/[1-9][A-Z0-9]*/"""+"""""""""+""".r)"""))),None,None,.+,true,query)
+⌿paths⌿/string2⌿post⌿binary_required -> Parameter(binary_required,BinaryString(TypeMeta(Some("binary"), List("maxLength(10)", "minLength(0)", """pattern("""+"""""""""+"""/[1-9][A-Z0-9]*/"""+"""""""""+""".r)"""))),None,None,.+,false,body)
+⌿paths⌿/string⌿post⌿password_optional -> Parameter(password_optional,TypeRef(⌿paths⌿/string⌿post⌿password_optional),None,None,.+,true,query)
+⌿paths⌿/string⌿post⌿date_required -> Parameter(date_required,Date(TypeMeta(Some("date"), List())),None,None,.+,true,query)
+⌿paths⌿/string⌿post⌿binary_optional -> Parameter(binary_optional,TypeRef(⌿paths⌿/string⌿post⌿binary_optional),None,None,.+,false,body)
+⌿paths⌿/string⌿post⌿date_optional -> Parameter(date_optional,TypeRef(⌿paths⌿/string⌿post⌿date_optional),None,None,.+,true,query)
+⌿paths⌿/string⌿post⌿base64required -> Parameter(base64required,Base64String(TypeMeta(Some("byte"), List("maxLength(10)", "minLength(0)", """pattern("""+"""""""""+"""/[1-9][A-Z0-9]*/"""+"""""""""+""".r)"""))),None,None,.+,true,query)
+⌿paths⌿/string⌿post⌿base64optional -> Parameter(base64optional,TypeRef(⌿paths⌿/string⌿post⌿base64optional),None,None,.+,true,query)
+⌿paths⌿/string⌿post⌿string_optional -> Parameter(string_optional,TypeRef(⌿paths⌿/string⌿post⌿string_optional),None,None,.+,true,query)
+⌿paths⌿/string⌿post⌿date_time_required -> Parameter(date_time_required,DateTime(TypeMeta(Some("date-time"), List())),None,None,.+,true,query)
+⌿paths⌿/string⌿post⌿password_required -> Parameter(password_required,Password(TypeMeta(Some("password"), List("maxLength(10)", "minLength(0)", """pattern("""+"""""""""+"""/[1-9][A-Z0-9]*/"""+"""""""""+""".r)"""))),None,None,.+,true,query)
+⌿paths⌿/string⌿post⌿date_time_optional -> Parameter(date_time_optional,TypeRef(⌿paths⌿/string⌿post⌿date_time_optional),None,None,.+,true,query)

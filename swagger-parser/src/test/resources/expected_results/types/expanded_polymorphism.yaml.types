@@ -1,0 +1,66 @@
+⌿definitions⌿NewPet ->
+	TypeDef(⌿definitions⌿NewPet, Seq(
+		Field(⌿definitions⌿NewPet⌿name, Str), 
+		Field(⌿definitions⌿NewPet⌿tag, Opt(Str))))
+⌿definitions⌿Pet ->
+	AllOf(
+		TypeDef(⌿definitions⌿NewPet, Seq(
+			Field(⌿definitions⌿NewPet⌿name, Str), 
+			Field(⌿definitions⌿NewPet⌿tag, Opt(Str))))
+		TypeDef(⌿definitions⌿Pet, Seq(
+			Field(⌿definitions⌿Pet⌿id, Lng))))
+⌿definitions⌿Error ->
+	TypeDef(⌿definitions⌿Error, Seq(
+		Field(⌿definitions⌿Error⌿code, Intgr), 
+		Field(⌿definitions⌿Error⌿message, Str)))
+⌿paths⌿/pets/{id}⌿delete⌿id ->
+	Lng
+⌿paths⌿/pets⌿get⌿limit ->
+	Opt(Intgr)
+⌿paths⌿/pets/{id}⌿get⌿id ->
+	Lng
+⌿paths⌿/pets⌿get⌿tags ->
+	Opt(Arr(Str))
+⌿paths⌿/pets⌿post⌿pet ->
+	TypeDef(⌿definitions⌿NewPet, Seq(
+		Field(⌿definitions⌿NewPet⌿name, Str), 
+		Field(⌿definitions⌿NewPet⌿tag, Opt(Str))))
+⌿paths⌿/pets/{id}⌿delete⌿responses⌿default ->
+	TypeDef(⌿definitions⌿Error, Seq(
+		Field(⌿definitions⌿Error⌿code, Intgr), 
+		Field(⌿definitions⌿Error⌿message, Str)))
+⌿paths⌿/pets⌿post⌿responses⌿200 ->
+	AllOf(
+		TypeDef(⌿definitions⌿NewPet, Seq(
+			Field(⌿definitions⌿NewPet⌿name, Str), 
+			Field(⌿definitions⌿NewPet⌿tag, Opt(Str))))
+		TypeDef(⌿paths⌿/pets⌿post⌿responses⌿200, Seq(
+			Field(⌿paths⌿/pets⌿post⌿responses⌿200⌿id, Lng))))
+⌿paths⌿/pets/{id}⌿delete⌿responses⌿204 ->
+	Null
+⌿paths⌿/pets⌿get⌿responses⌿default ->
+	TypeDef(⌿definitions⌿Error, Seq(
+		Field(⌿definitions⌿Error⌿code, Intgr), 
+		Field(⌿definitions⌿Error⌿message, Str)))
+⌿paths⌿/pets/{id}⌿get⌿responses⌿default ->
+	TypeDef(⌿definitions⌿Error, Seq(
+		Field(⌿definitions⌿Error⌿code, Intgr), 
+		Field(⌿definitions⌿Error⌿message, Str)))
+⌿paths⌿/pets/{id}⌿get⌿responses⌿200 ->
+	AllOf(
+		TypeDef(⌿definitions⌿NewPet, Seq(
+			Field(⌿definitions⌿NewPet⌿name, Str), 
+			Field(⌿definitions⌿NewPet⌿tag, Opt(Str))))
+		TypeDef(⌿paths⌿/pets/{id}⌿get⌿responses⌿200, Seq(
+			Field(⌿paths⌿/pets/{id}⌿get⌿responses⌿200⌿id, Lng))))
+⌿paths⌿/pets⌿post⌿responses⌿default ->
+	TypeDef(⌿definitions⌿Error, Seq(
+		Field(⌿definitions⌿Error⌿code, Intgr), 
+		Field(⌿definitions⌿Error⌿message, Str)))
+⌿paths⌿/pets⌿get⌿responses⌿200 ->
+	ArrResult(AllOf(
+		TypeDef(⌿definitions⌿NewPet, Seq(
+			Field(⌿definitions⌿NewPet⌿name, Str), 
+			Field(⌿definitions⌿NewPet⌿tag, Opt(Str))))
+		TypeDef(⌿paths⌿/pets⌿get⌿responses⌿200, Seq(
+			Field(⌿paths⌿/pets⌿get⌿responses⌿200⌿id, Lng)))))

@@ -1,0 +1,26 @@
+---
+swagger: '2.0'
+x-api-first-package: test
+info:
+  version: 0.0.0
+  title: Simple API
+paths:
+  /{username}/{password}:
+    post:
+      parameters:
+        - in: path
+          name: username
+          description: The name that needs to be deleted
+          required: true
+          type: string
+        - in: path
+          name: password
+          required: true
+          type: string
+        - in: query
+          name: developer
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK

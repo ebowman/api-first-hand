@@ -1,0 +1,28 @@
+⌿paths⌿/⌿get⌿double_optional -> 
+	Opt(Dbl)
+⌿paths⌿/⌿get⌿integer_required -> 
+	Intgr
+⌿paths⌿/⌿get⌿integer_optional -> 
+	Opt(Intgr)
+⌿paths⌿/⌿get⌿double_required -> 
+	Dbl
+⌿paths⌿/⌿get⌿long_optional -> 
+	Opt(Lng)
+⌿paths⌿/⌿get⌿float_required -> 
+	Flt
+⌿paths⌿/⌿get⌿float_optional -> 
+	Opt(Flt)
+⌿paths⌿/⌿get⌿long_required -> 
+	Lng
+⌿paths⌿/⌿get⌿responses⌿200 -> 
+	Null
+-- params --
+
+⌿paths⌿/⌿get⌿float_required -> Parameter(float_required,Flt(TypeMeta(Some("float"), List("max(10.toFloat, true)", "min(10.toFloat, true)", "multipleOf(5.toFloat)"))),None,None,.+,true,query)
+⌿paths⌿/⌿get⌿double_required -> Parameter(double_required,Dbl(TypeMeta(Some("double"), List("max(10.toDouble, false)", "min(2.toDouble, false)", "multipleOf(5.toDouble)"))),None,None,.+,true,query)
+⌿paths⌿/⌿get⌿integer_optional -> Parameter(integer_optional,TypeRef(⌿paths⌿/⌿get⌿integer_optional),None,None,.+,true,query)
+⌿paths⌿/⌿get⌿long_required -> Parameter(long_required,Lng(TypeMeta(Some("int64"), List("max(10.toLong, true)", "min(0.toLong, true)", "multipleOf(5.toLong)"))),None,None,.+,true,query)
+⌿paths⌿/⌿get⌿integer_required -> Parameter(integer_required,Intgr(TypeMeta(Some("int32"), List("max(10.toInt, false)", "min(0.toInt, false)", "multipleOf(5.toInt)"))),None,None,.+,true,query)
+⌿paths⌿/⌿get⌿float_optional -> Parameter(float_optional,TypeRef(⌿paths⌿/⌿get⌿float_optional),None,None,.+,true,query)
+⌿paths⌿/⌿get⌿double_optional -> Parameter(double_optional,TypeRef(⌿paths⌿/⌿get⌿double_optional),None,None,.+,true,query)
+⌿paths⌿/⌿get⌿long_optional -> Parameter(long_optional,TypeRef(⌿paths⌿/⌿get⌿long_optional),None,None,.+,true,query)

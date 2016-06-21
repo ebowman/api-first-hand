@@ -1,0 +1,63 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: Swagger Petstore (Simple)
+  description: A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification
+  termsOfService: http://helloreverb.com/terms/
+  contact:
+    name: Swagger API team
+    email: foo@example.com
+    url: http://swagger.io
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+host: petstore.swagger.wordnik.com
+basePath: /api
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /:
+    get:
+      parameters:
+        - name: nestedObject
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/NestedObjects"
+      responses:
+        200:
+          description: |
+            Schema representing sales channel and merchant
+            specific structure and valid values for models to create articles with.
+definitions:
+  NestedObjects:
+    description: Nested Objects Model
+    properties:
+      plain:
+        type: object
+        required:
+        - simple
+        properties:
+          simple:
+            type: string
+            pattern: the pattern
+      nested:
+        type: object
+        required:
+        - nested2
+        properties:
+          nested2:
+            type: object
+            properties:
+              nested3:
+                type: object
+                properties:
+                  bottom:
+                    type: string
+                    minLength: 3
+                    maxLength: 30
+

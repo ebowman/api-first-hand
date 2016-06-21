@@ -1,0 +1,37 @@
+⌿definitions⌿errorModel -> 
+	TypeDef(⌿definitions⌿errorModel, Seq(
+		Field(⌿definitions⌿errorModel⌿code, Intgr), 
+		Field(⌿definitions⌿errorModel⌿message, Str)))
+⌿definitions⌿pet -> 
+	TypeDef(⌿definitions⌿pet, Seq(
+		Field(⌿definitions⌿pet⌿id, Lng), 
+		Field(⌿definitions⌿pet⌿name, Str), 
+		Field(⌿definitions⌿pet⌿tag, TypeRef(⌿definitions⌿newPet⌿tag))))
+⌿definitions⌿newPet -> 
+	TypeDef(⌿definitions⌿newPet, Seq(
+		Field(⌿definitions⌿newPet⌿name, Str), 
+		Field(⌿definitions⌿newPet⌿id, TypeRef(⌿definitions⌿newPet⌿id)), 
+		Field(⌿definitions⌿newPet⌿tag, TypeRef(⌿definitions⌿newPet⌿tag))))
+⌿definitions⌿newPet⌿tag -> 
+	Opt(Str)
+⌿definitions⌿newPet⌿id -> 
+	Opt(Lng)
+⌿paths⌿/pets/{id}⌿delete⌿id -> 
+	Lng
+⌿paths⌿/pets⌿get⌿limit -> 
+	Opt(Intgr)
+⌿paths⌿/pets⌿get⌿tags -> 
+	Opt(TypeRef(⌿paths⌿/pets⌿get⌿tags⌿Opt))
+⌿paths⌿/pets/{id}⌿delete⌿responses⌿204 -> 
+	Null
+⌿paths⌿/pets⌿get⌿tags⌿Opt -> 
+	Arr(Str)
+⌿paths⌿/pets⌿get⌿responses⌿200 -> 
+	ArrResult(TypeRef(⌿definitions⌿pet))
+-- params --
+
+⌿paths⌿/pets/{id}⌿get⌿id -> Parameter(id,Lng(TypeMeta(Some("int64"), List())),None,None,[^/]+,true,path)
+⌿paths⌿/pets/{id}⌿delete⌿id -> Parameter(id,Lng(TypeMeta(Some("int64"), List())),None,None,[^/]+,true,path)
+⌿paths⌿/pets⌿post⌿pet -> Parameter(pet,TypeRef(⌿definitions⌿newPet),None,None,.+,false,body)
+⌿paths⌿/pets⌿get⌿limit -> Parameter(limit,TypeRef(⌿paths⌿/pets⌿get⌿limit),None,None,.+,true,query)
+⌿paths⌿/pets⌿get⌿tags -> Parameter(tags,TypeRef(⌿paths⌿/pets⌿get⌿tags),None,None,.+,true,query)

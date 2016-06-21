@@ -1,0 +1,50 @@
+{{if form_parsers_required}}
+package {{main_package}}
+
+import play.api.libs.Files.TemporaryFile
+import play.api.mvc.MultipartFormData.FilePart
+import play.api.mvc.{AnyContent, Request}
+import de.zalando.play.controllers.PlayBodyParsing
+
+{{for import in imports}}
+import {{import.name}}
+{{/for}}
+{{for import in binding_imports}}
+import {{import.name}}
+{{/for}}
+
+object FormDataParser {
+{{for form_data in forms}}
+{{if form_data.form_parameters}}
+    def {{form_data.name}}(request: Request[AnyContent]):Either[Seq[String],({{for param in form_data.form_parameters}}{{param.type_name}}{{if param.isNotLast}}, {{/if}}{{/for}})] = {
+        val contentType = request.contentType.getOrElse("application/x-www-form-urlencoded")
+        def fromDataParts(data: Map[String, Seq[String]], files: Map[String, Option[FilePart[TemporaryFile]]], useFiles: Boolean):Either[Seq[String],({{for param in form_data.form_parameters}}{{param.type_name}}{{if param.isNotLast}}, {{/if}}{{/for}})] = {
+            {{for param in form_data.form_parameters}}
+            val {{param.field_name}}: Either[String,{{param.type_name}}] = {{if param.is_file}}if (useFiles) PlayBodyParsing.fromFile{{if param.optional}}Optional{{else}}Required{{/if}}("{{param.real_name}}", files("{{param.real_name}}")) else {{/if}}PlayBodyParsing.fromParameters[{{param.type_name}}]("form")("{{param.real_name}}", data)
+            {{/for}}
+            val all = Seq({{for param in form_data.form_parameters}}{{param.field_name}}{{if param.isNotLast}}, {{/if}}{{/for}})
+            val errors = all.filter(_.isLeft).flatMap(_.left.toSeq)
+            if (errors.nonEmpty) Left(errors) else Right(({{for param in form_data.form_parameters}}{{param.field_name}}.right.toOption.get{{if param.isNotLast}}, {{/if}}{{/for}}))
+        }
+        contentType.toLowerCase match {
+            {{if form_data.support_url_encoded}}
+            case "application/x-www-form-urlencoded" => request.body.asFormUrlEncoded.map { form =>
+                val noFiles = Map.empty[String, Option[FilePart[TemporaryFile]]]
+                fromDataParts(form, noFiles, useFiles = false)
+            }.getOrElse(Left(Seq("Could not find 'application/x-www-form-urlencoded' body")))
+            {{/if}}
+            {{if form_data.support_multipart_form_data}}
+            case "multipart/form-data" => request.body.asMultipartFormData.map { form =>
+                val files: Map[String, Option[FilePart[TemporaryFile]]] =
+                ({{for param in form_data.form_parameters}}{{if param.is_file}}("{{param.field_name}}", form.file("{{param.field_name}}")) :: {{/if}}{{/for}}Nil).toMap
+                fromDataParts(form.dataParts, files, useFiles = true)
+            }.getOrElse(Left(Seq("Could not find 'multipart/form-data' body")))
+            {{/if}}
+            case other =>
+                Left(Seq("Content type " + other + " is not supported"))
+        }
+    }
+{{/if}}
+{{/for}}
+}
+{{/if}}

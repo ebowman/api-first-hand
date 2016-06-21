@@ -1,0 +1,33 @@
+swagger: '2.0'
+info:
+  version: "1.0.0"
+  title: "1.0.0"
+paths:
+  /api:
+    post:
+      parameters:
+        - in: body
+          name: foo
+          schema:
+            $ref: '#/definitions/foo'
+      responses:
+        200:
+          description: response
+definitions:
+  foo:
+    discriminator: footype
+    properties:
+      name:
+        type: string
+      footype:
+        type: string
+  bar:
+    allOf:
+    - $ref: '#/definitions/foo'
+    - properties:
+        baz:
+          type: array
+          items:
+            $ref: '#/definitions/baz'
+  baz:
+    type: string

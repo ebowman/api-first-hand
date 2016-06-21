@@ -1,0 +1,95 @@
+---
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: Simple API
+produces:
+    - application/json
+    - application/yaml
+paths:
+  /:
+    get:
+      parameters:
+        - name: integer_optional
+          in: query
+          required: false
+          type: integer
+          format: int32
+          maximum: 10
+          minimum: -10
+          exclusiveMinimum: true
+          exclusiveMaximum: true
+          multipleOf: 5
+        - name: integer_required
+          in: query
+          required: true
+          type: integer
+          format: int32
+          maximum: 10
+          minimum: 0
+          exclusiveMinimum: false
+          exclusiveMaximum: false
+          multipleOf: 5
+        - name: long_optional
+          in: query
+          required: false
+          type: integer
+          format: int64
+          maximum: 10
+          minimum: 10
+          exclusiveMinimum: true
+          exclusiveMaximum: true
+          multipleOf: 10
+        - name: long_required
+          in: query
+          required: true
+          type: integer
+          format: int64
+          maximum: 10
+          minimum: 0
+          exclusiveMinimum: true
+          exclusiveMaximum: true
+          multipleOf: 5
+        - name: float_optional
+          in: query
+          required: false
+          type: number
+          format: float
+          maximum: 10
+          minimum: 1
+          exclusiveMinimum: false
+          exclusiveMaximum: false
+          multipleOf: 5
+        - name: float_required
+          in: query
+          required: true
+          type: number
+          format: float
+          maximum: 10
+          minimum: 10
+          exclusiveMinimum: true
+          exclusiveMaximum: true
+          multipleOf: 5
+        - name: double_optional
+          in: query
+          required: false
+          type: number
+          format: double
+          maximum: 10
+          minimum: 0
+          exclusiveMinimum: true
+          exclusiveMaximum: true
+          multipleOf: 5
+        - name: double_required
+          in: query
+          required: true
+          type: number
+          format: double
+          maximum: 10
+          minimum: 2
+          exclusiveMinimum: false
+          exclusiveMaximum: false
+          multipleOf: 5
+      responses:
+        200:
+          description: OK

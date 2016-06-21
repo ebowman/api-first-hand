@@ -1,0 +1,42 @@
+---
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: Simple API
+produces:
+    - application/json
+    - application/yaml
+paths:
+  /:
+    get:
+      parameters:
+        - name: petId
+          in: body
+          schema:
+            type: string
+            format: binary
+          description: ID of the pet
+          required: true
+        - name: base64
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: date
+          in: query
+          required: false
+          type: string
+          format: date
+        - name: date_time
+          in: query
+          required: false
+          type: string
+          format: date-time
+        - name: uuid
+          in: query
+          required: false
+          type: string
+          format: UUID
+      responses:
+        200:
+          description: OK

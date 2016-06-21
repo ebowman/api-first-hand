@@ -1,0 +1,12 @@
+digraph {
+ "resource created" -> "resource updated" [label="some rule to show the transition"];
+ "resource created" -> "subresource added" [label=""];
+ "resource updated" -> "subresource added" [label=""];
+ "resource updated" -> "resource updated" [label="non-empty rule"];
+ "resource deleted" -> "resource deleted" [label=""];
+ "subresource added" -> "resource updated" [label=""];
+ "subresource added" -> "subresource added" [label=""];
+ "subresource added" -> "resource deleted" [label=""];
+ "resource deleted" [color="red",style="bold"] 
+ "resource created" [color="green",style="bold"] 
+}
