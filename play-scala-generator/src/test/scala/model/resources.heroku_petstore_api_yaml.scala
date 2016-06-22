@@ -48,7 +48,7 @@ object heroku_petstore_api_yaml extends WithModel {
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
 def calls: Seq[ApiCall] = Seq(
-	ApiCall(GET, Path(Reference("⌿")), 
+	ApiCall(GET, Path(Reference("⌿")),
 		HandlerCall(
 			"heroku.petstore.api.yaml",
 			"HerokuPetstoreApiYaml",
@@ -57,20 +57,20 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/⌿get⌿limit"))
 				)
-			), 
-		Set(MimeType("application/json"), MimeType("text/xml")), 
-		Set(MimeType("application/json"), MimeType("text/html")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set(MimeType("application/json"), MimeType("text/xml")),
+		Set(MimeType("application/json"), MimeType("text/html")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/⌿get⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]), 
-	ApiCall(PUT, Path(Reference("⌿")), 
+	ApiCall(PUT, Path(Reference("⌿")),
 		HandlerCall(
 			"heroku.petstore.api.yaml",
 			"HerokuPetstoreApiYaml",
@@ -79,20 +79,20 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/⌿put⌿pet"))
 				)
-			), 
-		Set(MimeType("application/json"), MimeType("text/xml")), 
-		Set(MimeType("application/json"), MimeType("text/html")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set(MimeType("application/json"), MimeType("text/xml")),
+		Set(MimeType("application/json"), MimeType("text/html")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/⌿post⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]), 
-	ApiCall(POST, Path(Reference("⌿")), 
+	ApiCall(POST, Path(Reference("⌿")),
 		HandlerCall(
 			"heroku.petstore.api.yaml",
 			"HerokuPetstoreApiYaml",
@@ -101,20 +101,20 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/⌿post⌿pet"))
 				)
-			), 
-		Set(MimeType("application/json"), MimeType("text/xml")), 
-		Set(MimeType("application/json"), MimeType("text/html")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set(MimeType("application/json"), MimeType("text/xml")),
+		Set(MimeType("application/json"), MimeType("text/html")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/⌿post⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿{petId}")), 
+	ApiCall(GET, Path(Reference("⌿{petId}")),
 		HandlerCall(
 			"heroku.petstore.api.yaml",
 			"HerokuPetstoreApiYaml",
@@ -123,18 +123,18 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/{petId}⌿get⌿petId"))
 				)
-			), 
-		Set(MimeType("application/json"), MimeType("text/xml")), 
-		Set(MimeType("application/json"), MimeType("text/html")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set(MimeType("application/json"), MimeType("text/xml")),
+		Set(MimeType("application/json"), MimeType("text/html")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/⌿post⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]))
 
 def packageName: Option[String] = Some("heroku.petstore.api.yaml")

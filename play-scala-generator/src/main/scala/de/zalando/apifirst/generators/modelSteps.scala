@@ -22,10 +22,14 @@ trait ClassesStep extends EnrichmentStep[Type] {
    */
   protected def classes: SingleStep = typeDef => table => typeDef match {
     case (ref, t: TypeDef) if !ref.simple.contains("AllOf") && !ref.simple.contains("OneOf") =>
-      val traitName = app.discriminators.get(ref).map(_ => Map("name" -> typeNameDenotation(table, ref)))
+      val traitName = app.discriminators.get(ref).map(_ =>
+        Map("name" -> abstractTypeNameDenotation(table, ref).getOrElse("I" + typeNameDenotation(table, ref))))
       Map("classes" -> (typeDefProps(ref, t)(table) + ("trait" -> traitName)))
     case (ref, t: Composite) =>
-      Map("classes" -> (typeDefProps(ref, t)(table) + ("trait" -> t.root.map(r => Map("name" -> r.className)))))
+      Map("classes" -> (typeDefProps(ref, t)(table) + ("trait" -> t.root.map { r =>
+        val an = abstractTypeNameDenotation(table, r).getOrElse("I" + r.className)
+        Map("name" -> an)
+      })))
     case _ => empty
   }
 
@@ -39,7 +43,7 @@ trait ClassesStep extends EnrichmentStep[Type] {
         )
       },
       "imports" -> t.imports
-    )
+    ) ++ abstractTypeNameDenotation(table, k).map("abstract_name" -> _).toSeq
   }
 
 }
@@ -123,7 +127,9 @@ trait AliasesStep extends EnrichmentStep[Type] {
     Map(
       "name" -> typeNameDenotation(table, k),
       "alias" -> v.name.simple,
-      "underlying_type" -> v.nestedTypes.map { t => typeNameDenotation(table, t.name) }.mkString("[", ", ", "]"),
+      "underlying_type" -> v.nestedTypes.map { t =>
+        abstractTypeNameDenotation(table, t.name).getOrElse(typeNameDenotation(table, t.name))
+      }.mkString("[", ", ", "]"),
       "imports" -> v.allImports
     )
   }

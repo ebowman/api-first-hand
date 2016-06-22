@@ -403,7 +403,7 @@ object cross_spec_references_yaml extends WithModel {
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
 def calls: Seq[ApiCall] = Seq(
-	ApiCall(POST, Path(Reference("⌿")), 
+	ApiCall(POST, Path(Reference("⌿")),
 		HandlerCall(
 			"cross_spec_references.yaml",
 			"Cross_spec_referencesYaml",
@@ -412,18 +412,18 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/⌿post⌿root"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set.empty[MimeType], 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set.empty[MimeType],
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/⌿post⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]))
 
 def packageName: Option[String] = Some("cross_spec_references.yaml")

@@ -64,7 +64,7 @@ object expanded_polymorphism_yaml extends WithModel {
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
 def calls: Seq[ApiCall] = Seq(
-	ApiCall(GET, Path(Reference("⌿pets")), 
+	ApiCall(GET, Path(Reference("⌿pets")),
 		HandlerCall(
 			"expanded",
 			"Expanded_polymorphismYaml",
@@ -74,20 +74,20 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/pets⌿get⌿tags")),
 				ParameterRef(Reference("⌿paths⌿/pets⌿get⌿limit"))
 				)
-			), 
-		Set(MimeType("application/json")), 
-		Set(MimeType("application/json")), 
-		Map("404" -> Seq(classOf[java.util.NoSuchElementException])), 
+			),
+		Set(MimeType("application/json")),
+		Set(MimeType("application/json")),
+		Map("404" -> Seq(classOf[java.util.NoSuchElementException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/pets⌿get⌿responses⌿200"))
-		), Some(	ParameterRef(Reference("⌿definitions⌿Error")))), 
+		), Some(	ParameterRef(Reference("⌿definitions⌿Error")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(POST, Path(Reference("⌿pets")), 
+	ApiCall(POST, Path(Reference("⌿pets")),
 		HandlerCall(
 			"expanded",
 			"Expanded_polymorphismYaml",
@@ -96,20 +96,20 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/pets⌿post⌿pet"))
 				)
-			), 
-		Set(MimeType("application/json")), 
-		Set(MimeType("application/json")), 
-		Map("404" -> Seq(classOf[java.util.NoSuchElementException])), 
+			),
+		Set(MimeType("application/json")),
+		Set(MimeType("application/json")),
+		Map("404" -> Seq(classOf[java.util.NoSuchElementException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿definitions⌿Pet"))
-		), Some(	ParameterRef(Reference("⌿definitions⌿Error")))), 
+		), Some(	ParameterRef(Reference("⌿definitions⌿Error")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(DELETE, Path(Reference("⌿pets⌿{id}")), 
+	ApiCall(DELETE, Path(Reference("⌿pets⌿{id}")),
 		HandlerCall(
 			"expanded",
 			"Expanded_polymorphismYaml",
@@ -118,18 +118,18 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/pets/{id}⌿delete⌿id"))
 				)
-			), 
-		Set(MimeType("application/json")), 
-		Set(MimeType("application/json")), 
-		Map("404" -> Seq(classOf[java.util.NoSuchElementException])), 
+			),
+		Set(MimeType("application/json")),
+		Set(MimeType("application/json")),
+		Map("404" -> Seq(classOf[java.util.NoSuchElementException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			204 -> ParameterRef(Reference("⌿paths⌿/pets/{id}⌿delete⌿responses⌿204"))
-		), Some(	ParameterRef(Reference("⌿definitions⌿Error")))), 
+		), Some(	ParameterRef(Reference("⌿definitions⌿Error")))),
 		StateResponseInfo(
 				Map[Int, State](
 					204 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]))
 
 def packageName: Option[String] = Some("expanded")

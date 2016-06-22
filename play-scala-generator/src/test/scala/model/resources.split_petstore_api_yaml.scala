@@ -125,7 +125,7 @@ object split_petstore_api_yaml extends WithModel {
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
 def calls: Seq[ApiCall] = Seq(
-	ApiCall(GET, Path(Reference("⌿pets⌿findByTags")), 
+	ApiCall(GET, Path(Reference("⌿pets⌿findByTags")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -134,24 +134,24 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/pets/findByTags⌿get⌿tags"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			400 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")),
 			200 -> ParameterRef(Reference("⌿paths⌿/pets/findByStatus⌿get⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					400 -> Self
-			), None), 
+			), None),
 		Set(
 			OAuth2Constraint("petstore_auth", OAuth2Definition(None, Some(new URL("http://petstore.swagger.wordnik.com/oauth/dialog")), Map[String, String]( "write_pets" -> "modify pets in your account" ,  "read_pets" -> "read your pets" )), Set("write_pets", "read_pets"))
 		)), 
-	ApiCall(POST, Path(Reference("⌿stores⌿order")), 
+	ApiCall(POST, Path(Reference("⌿stores⌿order")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -160,22 +160,22 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/stores/order⌿post⌿body"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			400 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")),
 			200 -> ParameterRef(Reference("⌿paths⌿/stores/order⌿post⌿body⌿Opt"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					400 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]), 
-	ApiCall(POST, Path(Reference("⌿users")), 
+	ApiCall(POST, Path(Reference("⌿users")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -184,14 +184,14 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/users⌿post⌿body"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
-		TypesResponseInfo(Map.empty[Int, ParameterRef], Some(	ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")))), 
-		StateResponseInfo(Map.empty[Int, State], Some(Self)), 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
+		TypesResponseInfo(Map.empty[Int, ParameterRef], Some(	ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")))),
+		StateResponseInfo(Map.empty[Int, State], Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(POST, Path(Reference("⌿users⌿createWithList")), 
+	ApiCall(POST, Path(Reference("⌿users⌿createWithList")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -200,14 +200,14 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿body"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
-		TypesResponseInfo(Map.empty[Int, ParameterRef], Some(	ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")))), 
-		StateResponseInfo(Map.empty[Int, State], Some(Self)), 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
+		TypesResponseInfo(Map.empty[Int, ParameterRef], Some(	ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")))),
+		StateResponseInfo(Map.empty[Int, State], Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿users⌿{username}")), 
+	ApiCall(GET, Path(Reference("⌿users⌿{username}")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -216,24 +216,24 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/users/{username}⌿get⌿username"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			404 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")),
 			400 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")),
 			200 -> ParameterRef(Reference("⌿paths⌿/users/{username}⌿put⌿body⌿Opt"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					404 -> Self,
 					200 -> Self,
 					400 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]), 
-	ApiCall(PUT, Path(Reference("⌿users⌿{username}")), 
+	ApiCall(PUT, Path(Reference("⌿users⌿{username}")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -243,22 +243,22 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/users/{username}⌿put⌿username")),
 				ParameterRef(Reference("⌿paths⌿/users/{username}⌿put⌿body"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			404 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")),
 			400 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					404 -> Self,
 					400 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]), 
-	ApiCall(DELETE, Path(Reference("⌿users⌿{username}")), 
+	ApiCall(DELETE, Path(Reference("⌿users⌿{username}")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -267,22 +267,22 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/users/{username}⌿delete⌿username"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			404 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")),
 			400 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					404 -> Self,
 					400 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]), 
-	ApiCall(PUT, Path(Reference("⌿pets")), 
+	ApiCall(PUT, Path(Reference("⌿pets")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -291,26 +291,26 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/pets⌿put⌿body"))
 				)
-			), 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
+			),
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			405 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")),
 			404 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")),
 			400 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					405 -> Self,
 					404 -> Self,
 					400 -> Self
-			), None), 
+			), None),
 		Set(
 			OAuth2Constraint("petstore_auth", OAuth2Definition(None, Some(new URL("http://petstore.swagger.wordnik.com/oauth/dialog")), Map[String, String]( "write_pets" -> "modify pets in your account" ,  "read_pets" -> "read your pets" )), Set("write_pets", "read_pets"))
 		)), 
-	ApiCall(POST, Path(Reference("⌿pets")), 
+	ApiCall(POST, Path(Reference("⌿pets")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -319,22 +319,22 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/pets⌿post⌿body"))
 				)
-			), 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
+			),
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			405 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					405 -> Self
-			), None), 
+			), None),
 		Set(
 			OAuth2Constraint("petstore_auth", OAuth2Definition(None, Some(new URL("http://petstore.swagger.wordnik.com/oauth/dialog")), Map[String, String]( "write_pets" -> "modify pets in your account" ,  "read_pets" -> "read your pets" )), Set("write_pets", "read_pets"))
 		)), 
-	ApiCall(POST, Path(Reference("⌿users⌿createWithArray")), 
+	ApiCall(POST, Path(Reference("⌿users⌿createWithArray")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -343,14 +343,14 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/users/createWithArray⌿post⌿body"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
-		TypesResponseInfo(Map.empty[Int, ParameterRef], Some(	ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")))), 
-		StateResponseInfo(Map.empty[Int, State], Some(Self)), 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
+		TypesResponseInfo(Map.empty[Int, ParameterRef], Some(	ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")))),
+		StateResponseInfo(Map.empty[Int, State], Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿stores⌿order⌿{orderId}")), 
+	ApiCall(GET, Path(Reference("⌿stores⌿order⌿{orderId}")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -359,24 +359,24 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/stores/order/{orderId}⌿get⌿orderId"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			404 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")),
 			400 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")),
 			200 -> ParameterRef(Reference("⌿paths⌿/stores/order⌿post⌿body⌿Opt"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					404 -> Self,
 					200 -> Self,
 					400 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]), 
-	ApiCall(DELETE, Path(Reference("⌿stores⌿order⌿{orderId}")), 
+	ApiCall(DELETE, Path(Reference("⌿stores⌿order⌿{orderId}")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -385,22 +385,22 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/stores/order/{orderId}⌿delete⌿orderId"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			404 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")),
 			400 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					404 -> Self,
 					400 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿users⌿logout")), 
+	ApiCall(GET, Path(Reference("⌿users⌿logout")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -409,14 +409,14 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
-		TypesResponseInfo(Map.empty[Int, ParameterRef], Some(	ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")))), 
-		StateResponseInfo(Map.empty[Int, State], Some(Self)), 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
+		TypesResponseInfo(Map.empty[Int, ParameterRef], Some(	ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")))),
+		StateResponseInfo(Map.empty[Int, State], Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿pets⌿{petId}")), 
+	ApiCall(GET, Path(Reference("⌿pets⌿{petId}")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -425,27 +425,27 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/pets/{petId}⌿get⌿petId"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			404 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")),
 			400 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default")),
 			200 -> ParameterRef(Reference("⌿paths⌿/pets⌿post⌿body⌿Opt"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					404 -> Self,
 					200 -> Self,
 					400 -> Self
-			), None), 
+			), None),
 		Set(
 			ApiKeyConstraint("api_key", ApiKey(None, "api_key", ParameterPlace.withName("header"))),
 			OAuth2Constraint("petstore_auth", OAuth2Definition(None, Some(new URL("http://petstore.swagger.wordnik.com/oauth/dialog")), Map[String, String]( "write_pets" -> "modify pets in your account" ,  "read_pets" -> "read your pets" )), Set("write_pets", "read_pets"))
 		)), 
-	ApiCall(POST, Path(Reference("⌿pets⌿{petId}")), 
+	ApiCall(POST, Path(Reference("⌿pets⌿{petId}")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -456,22 +456,22 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/pets/{petId}⌿post⌿name")),
 				ParameterRef(Reference("⌿paths⌿/pets/{petId}⌿post⌿status"))
 				)
-			), 
-		Set(MimeType("application/x-www-form-urlencoded")), 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
+			),
+		Set(MimeType("application/x-www-form-urlencoded")),
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			405 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					405 -> Self
-			), None), 
+			), None),
 		Set(
 			OAuth2Constraint("petstore_auth", OAuth2Definition(None, Some(new URL("http://petstore.swagger.wordnik.com/oauth/dialog")), Map[String, String]( "write_pets" -> "modify pets in your account" ,  "read_pets" -> "read your pets" )), Set("write_pets", "read_pets"))
 		)), 
-	ApiCall(DELETE, Path(Reference("⌿pets⌿{petId}")), 
+	ApiCall(DELETE, Path(Reference("⌿pets⌿{petId}")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -481,22 +481,22 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/pets/{petId}⌿delete⌿api_key")),
 				ParameterRef(Reference("⌿paths⌿/pets/{petId}⌿delete⌿petId"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			400 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					400 -> Self
-			), None), 
+			), None),
 		Set(
 			OAuth2Constraint("petstore_auth", OAuth2Definition(None, Some(new URL("http://petstore.swagger.wordnik.com/oauth/dialog")), Map[String, String]( "write_pets" -> "modify pets in your account" ,  "read_pets" -> "read your pets" )), Set("write_pets", "read_pets"))
 		)), 
-	ApiCall(GET, Path(Reference("⌿pets⌿findByStatus")), 
+	ApiCall(GET, Path(Reference("⌿pets⌿findByStatus")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -505,24 +505,24 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/pets/findByStatus⌿get⌿status"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/pets/findByStatus⌿get⌿responses⌿200")),
 			400 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					400 -> Self
-			), None), 
+			), None),
 		Set(
 			OAuth2Constraint("petstore_auth", OAuth2Definition(None, Some(new URL("http://petstore.swagger.wordnik.com/oauth/dialog")), Map[String, String]( "write_pets" -> "modify pets in your account" ,  "read_pets" -> "read your pets" )), Set("write_pets", "read_pets"))
 		)), 
-	ApiCall(GET, Path(Reference("⌿users⌿login")), 
+	ApiCall(GET, Path(Reference("⌿users⌿login")),
 		HandlerCall(
 			"split.petstore.api.yaml",
 			"SplitPetstoreApiYaml",
@@ -532,20 +532,20 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/users/login⌿get⌿username")),
 				ParameterRef(Reference("⌿paths⌿/users/login⌿get⌿password"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/xml")), 
-		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])), 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/xml")),
+		Map("405" -> Seq(classOf[java.lang.IllegalArgumentException], classOf[java.lang.IndexOutOfBoundsException])),
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/users/{username}⌿get⌿username")),
 			400 -> ParameterRef(Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					400 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]))
 
 def packageName: Option[String] = Some("split.petstore.api.yaml")

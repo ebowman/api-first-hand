@@ -60,7 +60,7 @@ object form_data_yaml extends WithModel {
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
 def calls: Seq[ApiCall] = Seq(
-	ApiCall(POST, Path(Reference("⌿multipart")), 
+	ApiCall(POST, Path(Reference("⌿multipart")),
 		HandlerCall(
 			"form_data.yaml",
 			"Form_dataYaml",
@@ -71,20 +71,20 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/multipart⌿post⌿year")),
 				ParameterRef(Reference("⌿paths⌿/multipart⌿post⌿avatar"))
 				)
-			), 
-		Set(MimeType("multipart/form-data")), 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set(MimeType("multipart/form-data")),
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/multipart⌿post⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]), 
-	ApiCall(POST, Path(Reference("⌿url-encoded")), 
+	ApiCall(POST, Path(Reference("⌿url-encoded")),
 		HandlerCall(
 			"form_data.yaml",
 			"Form_dataYaml",
@@ -95,20 +95,20 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/url-encoded⌿post⌿year")),
 				ParameterRef(Reference("⌿paths⌿/url-encoded⌿post⌿avatar"))
 				)
-			), 
-		Set(MimeType("application/x-www-form-urlencoded")), 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set(MimeType("application/x-www-form-urlencoded")),
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/multipart⌿post⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]), 
-	ApiCall(POST, Path(Reference("⌿both")), 
+	ApiCall(POST, Path(Reference("⌿both")),
 		HandlerCall(
 			"form_data.yaml",
 			"Form_dataYaml",
@@ -120,18 +120,18 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/both⌿post⌿avatar")),
 				ParameterRef(Reference("⌿paths⌿/both⌿post⌿ringtone"))
 				)
-			), 
-		Set(MimeType("application/x-www-form-urlencoded"), MimeType("multipart/form-data")), 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set(MimeType("application/x-www-form-urlencoded"), MimeType("multipart/form-data")),
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/both⌿post⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]))
 
 def packageName: Option[String] = Some("form_data.yaml")

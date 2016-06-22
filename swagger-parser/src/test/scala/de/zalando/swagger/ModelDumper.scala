@@ -9,10 +9,13 @@ import org.scalatest.{ FunSpec, Ignore, MustMatchers }
 /**
  * @since 18.11.2015.
  */
-@Ignore
-class ModelDumper extends FunSpec with MustMatchers with ExpectedResults {
+object ModelDumper extends App with ExpectedResults {
 
-  override def expectationsFolder: String = "/../../play-scala-generator/src/test/scala/model/"
+  val flatExpectations = "/../../play-scala-generator/src/test/scala/model/"
+  val origExpectations = "/../../api-first-core/src/test/scala/model/"
+
+  val flatDumpType = false
+  override def expectationsFolder: String = if (flatDumpType) flatExpectations else origExpectations
 
   val modelFixtures = new File(resourcesPath + "model").listFiles
 
@@ -20,25 +23,23 @@ class ModelDumper extends FunSpec with MustMatchers with ExpectedResults {
 
   val validationFixtures = new File(resourcesPath + "validations").listFiles
 
-  def toTest: File => Boolean = f => f.getName.endsWith(".yaml") // && f.getName.startsWith("basic_poly")
+  def toTest: File => Boolean = f => f.getName.endsWith(".yaml") && f.getName.startsWith("basic_poly")
 
-  describe("ScalaModelDumper should generate scala files") {
+  def run(): Unit = {
     (modelFixtures ++ exampleFixtures ++ validationFixtures).filter(toTest).foreach { file =>
-      dumpFile(file)
+      dumpFile(file, flatten = flatDumpType)
     }
   }
 
-  def dumpFile(file: File): Unit = {
-    it(s"should parse the yaml swagger file ${file.getName} as specification") {
-      val (base, model) = StrictYamlParser.parse(file)
-      val packageName = ScalaName.scalaPackageName(file.getName)
-      val ast = ModelConverter.fromModel(base, model, Option(file))
-      val flatAst = TypeNormaliser.flatten(ast)
-
-      val root = file.getParentFile.getParentFile
-      dump(ScalaPrinter.asScala(file.getName, flatAst), root, file.getName.replace('.', '_') + ".scala")
-
-    }
+  def dumpFile(file: File, flatten: Boolean): Unit = {
+    val (base, model) = StrictYamlParser.parse(file)
+    val packageName = ScalaName.scalaPackageName(file.getName)
+    val ast = ModelConverter.fromModel(base, model, Option(file))
+    val flatAst = if (flatten) TypeNormaliser.flatten(ast) else ast
+    val root = file.getParentFile.getParentFile
+    dump(ScalaPrinter.asScala(file.getName, flatAst), root, file.getName.replace('.', '_') + ".scala")
   }
+
+  run()
 
 }

@@ -12,6 +12,11 @@ import Security._
 object basic_polymorphism_yaml extends WithModel {
  
  def types = Map[Reference, Type](
+	Reference("⌿definitions⌿Zoo") → 
+		TypeDef(Reference("⌿definitions⌿Zoo"), 
+			Seq(
+					Field(Reference("⌿definitions⌿Zoo⌿tiers"), TypeRef(Reference("⌿definitions⌿Zoo⌿tiers")))
+			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿definitions⌿Cat") → 
 					AllOf(Reference("⌿definitions⌿Cat⌿Cat"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
 			TypeRef(Reference("⌿definitions⌿Pet")),
@@ -44,6 +49,8 @@ object basic_polymorphism_yaml extends WithModel {
 			Seq(
 					Field(Reference("⌿definitions⌿Dog⌿packSize"), Intgr(TypeMeta(Some("the size of the pack the dog is from"), List("min(0.toInt, false)"))))
 			), TypeMeta(Some("Named types: 1"), List())),
+	Reference("⌿definitions⌿Zoo⌿tiers") → 
+		Opt(TypeRef(Reference("⌿definitions⌿Zoo⌿tiers⌿Opt")), TypeMeta(None, List())),
 	Reference("⌿definitions⌿Cat⌿huntingSkill") → 
 					EnumTrait(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), TypeMeta(Some("Enum type : 4"), List()), 
 				Set(
@@ -64,6 +71,8 @@ object basic_polymorphism_yaml extends WithModel {
 					EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "clueless", TypeMeta(Some("clueless"), List())),
 	Reference("⌿definitions⌿CatNDog⌿huntingSkill⌿aggressive") → 
 					EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "aggressive", TypeMeta(Some("aggressive"), List())),
+	Reference("⌿definitions⌿Zoo⌿tiers⌿Opt") → 
+		Arr(TypeRef(Reference("⌿definitions⌿Pet")), TypeMeta(None, List()), "csv"),
 	Reference("⌿definitions⌿Cat⌿huntingSkill⌿adventurous") → 
 					EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "adventurous", TypeMeta(Some("adventurous"), List()))
 ) 
@@ -76,6 +85,7 @@ object basic_polymorphism_yaml extends WithModel {
 		Reference("⌿definitions⌿CatNDog") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Dog") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Cat") -> Reference("⌿definitions⌿Pet⌿petType"),
+	Reference("⌿definitions⌿Zoo⌿tiers") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Labrador") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Pet") -> Reference("⌿definitions⌿Pet⌿petType"))
  def securityDefinitions: SecurityDefinitionsTable = Map[String, Security.Definition](

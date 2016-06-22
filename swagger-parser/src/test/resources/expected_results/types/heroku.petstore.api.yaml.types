@@ -1,26 +1,26 @@
-⌿definitions⌿Pet ->
-	TypeDef(⌿definitions⌿Pet, Seq(
-		Field(⌿definitions⌿Pet⌿name, Opt(Str)), 
-		Field(⌿definitions⌿Pet⌿birthday, Opt(Intgr))))
-⌿paths⌿/{petId}⌿get⌿petId ->
+"definitions" / "Pet" ->
+	TypeDef("definitions" / "Pet", Seq(
+		Field("definitions" / "Pet" / "name", Opt(Str)), 
+		Field("definitions" / "Pet" / "birthday", Opt(Intgr))))
+"paths" / "/{petId}" / "get" / "petId" ->
 	Str
-⌿paths⌿/⌿post⌿pet ->
-	TypeDef(⌿definitions⌿Pet, Seq(
-		Field(⌿definitions⌿Pet⌿name, Opt(Str)), 
-		Field(⌿definitions⌿Pet⌿birthday, Opt(Intgr))))
-⌿paths⌿/⌿get⌿limit ->
+"paths" / "/" / "post" / "pet" ->
+	TypeDef("definitions" / "Pet", Seq(
+		Field("definitions" / "Pet" / "name", Opt(Str)), 
+		Field("definitions" / "Pet" / "birthday", Opt(Intgr))))
+"paths" / "/" / "get" / "limit" ->
 	BInt
-⌿paths⌿/⌿put⌿pet ->
-	Opt(TypeDef(⌿definitions⌿Pet, Seq(
-		Field(⌿definitions⌿Pet⌿name, Opt(Str)), 
-		Field(⌿definitions⌿Pet⌿birthday, Opt(Intgr)))))
-⌿paths⌿/⌿post⌿responses⌿200 ->
+"paths" / "/" / "put" / "pet" ->
+	Opt(TypeDef("definitions" / "Pet", Seq(
+		Field("definitions" / "Pet" / "name", Opt(Str)), 
+		Field("definitions" / "Pet" / "birthday", Opt(Intgr)))))
+"paths" / "/" / "post" / "responses" / "200" ->
 	Null
-⌿paths⌿/{petId}⌿get⌿responses⌿200 ->
+"paths" / "/{petId}" / "get" / "responses" / "200" ->
 	Null
-⌿paths⌿/⌿put⌿responses⌿200 ->
+"paths" / "/" / "put" / "responses" / "200" ->
 	Null
-⌿paths⌿/⌿get⌿responses⌿200 ->
-	ArrResult(TypeDef(⌿definitions⌿Pet, Seq(
-		Field(⌿definitions⌿Pet⌿name, Opt(Str)), 
-		Field(⌿definitions⌿Pet⌿birthday, Opt(Intgr)))))
+"paths" / "/" / "get" / "responses" / "200" ->
+	ArrResult(TypeDef("definitions" / "Pet", Seq(
+		Field("definitions" / "Pet" / "name", Opt(Str)), 
+		Field("definitions" / "Pet" / "birthday", Opt(Intgr)))))

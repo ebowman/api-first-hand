@@ -1,47 +1,47 @@
-⌿definitions⌿Zoo ->
-	TypeDef(⌿definitions⌿Zoo, Seq(
-		Field(⌿definitions⌿Zoo⌿tiers, Opt(Arr(TypeDef(⌿definitions⌿Pet, Seq(
-			Field(⌿definitions⌿Pet⌿name, Str), 
-			Field(⌿definitions⌿Pet⌿petType, Str))))))))
-⌿definitions⌿Cat ->
+"definitions" / "Zoo" ->
+	TypeDef("definitions" / "Zoo", Seq(
+		Field("definitions" / "Zoo" / "tiers", Opt(Arr(TypeDef("definitions" / "Pet", Seq(
+			Field("definitions" / "Pet" / "name", Str), 
+			Field("definitions" / "Pet" / "petType", Str))))))))
+"definitions" / "Cat" ->
 	AllOf(
-		TypeDef(⌿definitions⌿Pet, Seq(
-			Field(⌿definitions⌿Pet⌿name, Str), 
-			Field(⌿definitions⌿Pet⌿petType, Str)))
-		TypeDef(⌿definitions⌿Cat, Seq(
-			Field(⌿definitions⌿Cat⌿huntingSkill, EnumTrait(Str)))))
-⌿definitions⌿Dog ->
+		TypeDef("definitions" / "Pet", Seq(
+			Field("definitions" / "Pet" / "name", Str), 
+			Field("definitions" / "Pet" / "petType", Str)))
+		TypeDef("definitions" / "Cat", Seq(
+			Field("definitions" / "Cat" / "huntingSkill", EnumTrait(Str)))))
+"definitions" / "Dog" ->
 	AllOf(
-		TypeDef(⌿definitions⌿Pet, Seq(
-			Field(⌿definitions⌿Pet⌿name, Str), 
-			Field(⌿definitions⌿Pet⌿petType, Str)))
-		TypeDef(⌿definitions⌿Dog, Seq(
-			Field(⌿definitions⌿Dog⌿packSize, Intgr))))
-⌿definitions⌿CatNDog ->
-	AllOf(
-		AllOf(
-			TypeDef(⌿definitions⌿Pet, Seq(
-				Field(⌿definitions⌿Pet⌿name, Str), 
-				Field(⌿definitions⌿Pet⌿petType, Str)))
-			TypeDef(⌿definitions⌿CatNDog, Seq(
-				Field(⌿definitions⌿CatNDog⌿packSize, Intgr))))
-		AllOf(
-			TypeDef(⌿definitions⌿Pet, Seq(
-				Field(⌿definitions⌿Pet⌿name, Str), 
-				Field(⌿definitions⌿Pet⌿petType, Str)))
-			TypeDef(⌿definitions⌿CatNDog, Seq(
-				Field(⌿definitions⌿CatNDog⌿huntingSkill, EnumTrait(Str))))))
-⌿definitions⌿Pet ->
-	TypeDef(⌿definitions⌿Pet, Seq(
-		Field(⌿definitions⌿Pet⌿name, Str), 
-		Field(⌿definitions⌿Pet⌿petType, Str)))
-⌿definitions⌿Labrador ->
+		TypeDef("definitions" / "Pet", Seq(
+			Field("definitions" / "Pet" / "name", Str), 
+			Field("definitions" / "Pet" / "petType", Str)))
+		TypeDef("definitions" / "Dog", Seq(
+			Field("definitions" / "Dog" / "packSize", Intgr))))
+"definitions" / "CatNDog" ->
 	AllOf(
 		AllOf(
-			TypeDef(⌿definitions⌿Pet, Seq(
-				Field(⌿definitions⌿Pet⌿name, Str), 
-				Field(⌿definitions⌿Pet⌿petType, Str)))
-			TypeDef(⌿definitions⌿Labrador, Seq(
-				Field(⌿definitions⌿Labrador⌿packSize, Intgr))))
-		TypeDef(⌿definitions⌿Labrador, Seq(
-			Field(⌿definitions⌿Labrador⌿cuteness, Intgr))))
+			TypeDef("definitions" / "Pet", Seq(
+				Field("definitions" / "Pet" / "name", Str), 
+				Field("definitions" / "Pet" / "petType", Str)))
+			TypeDef("definitions" / "CatNDog", Seq(
+				Field("definitions" / "CatNDog" / "packSize", Intgr))))
+		AllOf(
+			TypeDef("definitions" / "Pet", Seq(
+				Field("definitions" / "Pet" / "name", Str), 
+				Field("definitions" / "Pet" / "petType", Str)))
+			TypeDef("definitions" / "CatNDog", Seq(
+				Field("definitions" / "CatNDog" / "huntingSkill", EnumTrait(Str))))))
+"definitions" / "Pet" ->
+	TypeDef("definitions" / "Pet", Seq(
+		Field("definitions" / "Pet" / "name", Str), 
+		Field("definitions" / "Pet" / "petType", Str)))
+"definitions" / "Labrador" ->
+	AllOf(
+		AllOf(
+			TypeDef("definitions" / "Pet", Seq(
+				Field("definitions" / "Pet" / "name", Str), 
+				Field("definitions" / "Pet" / "petType", Str)))
+			TypeDef("definitions" / "Labrador", Seq(
+				Field("definitions" / "Labrador" / "packSize", Intgr))))
+		TypeDef("definitions" / "Labrador", Seq(
+			Field("definitions" / "Labrador" / "cuteness", Intgr))))

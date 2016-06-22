@@ -59,7 +59,7 @@ object nested_arrays_validation_yaml extends WithModel {
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
 def calls: Seq[ApiCall] = Seq(
-	ApiCall(GET, Path(Reference("⌿")), 
+	ApiCall(GET, Path(Reference("⌿")),
 		HandlerCall(
 			"nested_arrays_validation.yaml",
 			"Nested_arrays_validationYaml",
@@ -68,20 +68,20 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/⌿get⌿activity"))
 				)
-			), 
-		Set(MimeType("application/json")), 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set(MimeType("application/json")),
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/another⌿post⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]), 
-	ApiCall(POST, Path(Reference("⌿another")), 
+	ApiCall(POST, Path(Reference("⌿another")),
 		HandlerCall(
 			"nested_arrays_validation.yaml",
 			"Nested_arrays_validationYaml",
@@ -90,18 +90,18 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/another⌿post⌿example"))
 				)
-			), 
-		Set(MimeType("application/json")), 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set(MimeType("application/json")),
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/another⌿post⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]))
 
 def packageName: Option[String] = Some("nested_arrays_validation.yaml")

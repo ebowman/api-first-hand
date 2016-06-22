@@ -407,7 +407,7 @@ object hackweek_yaml extends WithModel {
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
 def calls: Seq[ApiCall] = Seq(
-	ApiCall(GET, Path(Reference("⌿schema⌿model")), 
+	ApiCall(GET, Path(Reference("⌿schema⌿model")),
 		HandlerCall(
 			"hackweek.yaml",
 			"HackweekYaml",
@@ -416,18 +416,18 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/schema/model⌿get⌿root"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set.empty[MimeType], 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set.empty[MimeType],
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿definitions⌿ModelSchemaRoot"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]))
 
 def packageName: Option[String] = Some("hackweek.yaml")

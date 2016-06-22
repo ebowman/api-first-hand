@@ -1,15 +1,19 @@
 
 package object basic_polymorphism_yaml {
 
+    import de.zalando.play.controllers.ArrayWrapper
 
 
 
+    type ZooTiersOpt = ArrayWrapper[IPet]
+    type ZooTiers = Option[ZooTiersOpt]
 
     trait IPet {
         def name: String
         def petType: String
     }
 
+    case class Zoo(tiers: ZooTiers) 
     case class Cat(name: String, petType: String, huntingSkill: CatHuntingSkill) extends IPet
     case class Dog(name: String, petType: String, packSize: Int) extends IPet
     case class CatNDog(name: String, petType: String, packSize: Int, huntingSkill: CatHuntingSkill) extends IPet

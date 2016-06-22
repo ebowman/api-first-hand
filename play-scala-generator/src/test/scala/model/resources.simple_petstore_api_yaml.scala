@@ -65,7 +65,7 @@ object simple_petstore_api_yaml extends WithModel {
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
 def calls: Seq[ApiCall] = Seq(
-	ApiCall(GET, Path(Reference("⌿pets")), 
+	ApiCall(GET, Path(Reference("⌿pets")),
 		HandlerCall(
 			"admin",
 			"Dashboard",
@@ -75,20 +75,20 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/pets⌿get⌿tags")),
 				ParameterRef(Reference("⌿paths⌿/pets⌿get⌿limit"))
 				)
-			), 
-		Set(MimeType("application/json")), 
-		Set(MimeType("application/json"), MimeType("application/xml"), MimeType("text/xml"), MimeType("text/html")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set(MimeType("application/json")),
+		Set(MimeType("application/json"), MimeType("application/xml"), MimeType("text/xml"), MimeType("text/html")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/pets⌿get⌿responses⌿200"))
-		), Some(	ParameterRef(Reference("⌿definitions⌿errorModel")))), 
+		), Some(	ParameterRef(Reference("⌿definitions⌿errorModel")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(POST, Path(Reference("⌿pets")), 
+	ApiCall(POST, Path(Reference("⌿pets")),
 		HandlerCall(
 			"simple.petstore.api.yaml",
 			"SimplePetstoreApiYaml",
@@ -97,20 +97,20 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/pets⌿post⌿pet"))
 				)
-			), 
-		Set(MimeType("application/json")), 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set(MimeType("application/json")),
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿definitions⌿pet"))
-		), Some(	ParameterRef(Reference("⌿definitions⌿errorModel")))), 
+		), Some(	ParameterRef(Reference("⌿definitions⌿errorModel")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿pets⌿{id}")), 
+	ApiCall(GET, Path(Reference("⌿pets⌿{id}")),
 		HandlerCall(
 			"admin",
 			"Dashboard",
@@ -119,20 +119,20 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/pets/{id}⌿get⌿id"))
 				)
-			), 
-		Set(MimeType("application/json")), 
-		Set(MimeType("application/json"), MimeType("application/xml"), MimeType("text/xml"), MimeType("text/html")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set(MimeType("application/json")),
+		Set(MimeType("application/json"), MimeType("application/xml"), MimeType("text/xml"), MimeType("text/html")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿definitions⌿pet"))
-		), Some(	ParameterRef(Reference("⌿definitions⌿errorModel")))), 
+		), Some(	ParameterRef(Reference("⌿definitions⌿errorModel")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(DELETE, Path(Reference("⌿pets⌿{id}")), 
+	ApiCall(DELETE, Path(Reference("⌿pets⌿{id}")),
 		HandlerCall(
 			"admin",
 			"Dashboard",
@@ -141,18 +141,18 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/pets/{id}⌿delete⌿id"))
 				)
-			), 
-		Set(MimeType("application/json")), 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set(MimeType("application/json")),
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			204 -> ParameterRef(Reference("⌿paths⌿/pets/{id}⌿delete⌿responses⌿204"))
-		), Some(	ParameterRef(Reference("⌿definitions⌿errorModel")))), 
+		), Some(	ParameterRef(Reference("⌿definitions⌿errorModel")))),
 		StateResponseInfo(
 				Map[Int, State](
 					204 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]))
 
 def packageName: Option[String] = None

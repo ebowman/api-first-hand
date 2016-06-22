@@ -1,12 +1,12 @@
-⌿paths⌿/⌿get⌿base64 ->
+"paths" / "/" / "get" / "base64" ->
 	Opt(Base64String)
-⌿paths⌿/⌿get⌿petId ->
+"paths" / "/" / "get" / "petId" ->
 	BinaryString
-⌿paths⌿/⌿get⌿date_time ->
+"paths" / "/" / "get" / "date_time" ->
 	Opt(DateTime)
-⌿paths⌿/⌿get⌿uuid ->
+"paths" / "/" / "get" / "uuid" ->
 	Opt(UUID)
-⌿paths⌿/⌿get⌿date ->
+"paths" / "/" / "get" / "date" ->
 	Opt(Date)
-⌿paths⌿/⌿get⌿responses⌿200 ->
+"paths" / "/" / "get" / "responses" / "200" ->
 	Null

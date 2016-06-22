@@ -35,13 +35,14 @@ object naming {
     val simple = if (parts.isEmpty) delimiter else parts.last
     val parent = if (parts.isEmpty) root else Reference(parts.init)
     val tokens = parts
-    override def toString: String = qualified
+    // override def toString: String = qualified
     def /(part: String): Reference = new NameDsl(this) / part
     def /(part: Reference): Reference = new NameDsl(this) / part
     def prepend(part: String): Reference = Reference(part :: parts)
     lazy val isResponsePath = parts.contains(responses)
     lazy val isDefinition = parts.headOption.exists(_ == definitions)
     lazy val isTopResponsePath = parts.last == responses
+    override def toString: String = parts.map("\"" + _ + "\"").mkString(" / ")
   }
 
   object Reference {

@@ -58,7 +58,8 @@ trait Transformation[T] extends EnrichmentStep[T] {
 /**
  * Enriches AST with information related to Types
  */
-class ScalaPlayTypeEnricher(val app: StrictModel) extends Transformation[Type] with DataGeneratorsStep with AliasesStep with EnumsStep with TraitsStep with ClassesStep with CommonDataStep {
+class ScalaPlayTypeEnricher(val app: StrictModel) extends Transformation[Type]
+    with DataGeneratorsStep with AliasesStep with EnumsStep with TraitsStep with ClassesStep with CommonDataStep {
 
   override val data = app.typeDefs.toSeq
 
@@ -118,9 +119,14 @@ object DenotationNames {
 
   val COMMON = "common"
   val TYPE_NAME = "type_name"
+  val ABSTRACT_TYPE_NAME = "abstract_type_name"
   val MEMBER_NAME = "member_name"
   val FIELDS = "fields"
   val GENERATOR_NAME = "generator_name"
+
+  def abstractTypeNameDenotation(table: DenotationTable, r: Reference): Option[String] = {
+    table.get(r).flatMap(_(COMMON).get(ABSTRACT_TYPE_NAME).map(_.toString))
+  }
 
   def typeNameDenotation(table: DenotationTable, r: Reference): String = {
     table.get(r).map(_(COMMON)(TYPE_NAME).toString).getOrElse {

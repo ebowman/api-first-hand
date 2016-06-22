@@ -12,6 +12,15 @@ import Security._
 object basic_polymorphism_yaml extends WithModel {
  
  def types = Map[Reference, Type](
+	Reference("⌿definitions⌿Zoo") → 
+		TypeDef(Reference("⌿definitions⌿Zoo"), 
+			Seq(
+					Field(Reference("⌿definitions⌿Zoo⌿tiers"), Opt(Arr(TypeDef(Reference("⌿definitions⌿Pet"), 
+			Seq(
+						Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List()))),
+						Field(Reference("⌿definitions⌿Pet⌿petType"), Str(None, TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 2"), List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿definitions⌿Cat") → 
 					AllOf(Reference("⌿definitions⌿Cat⌿Cat"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
 			TypeDef(Reference("⌿definitions⌿Pet"), 
@@ -102,6 +111,7 @@ object basic_polymorphism_yaml extends WithModel {
 		Reference("⌿definitions⌿CatNDog") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Dog") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Cat") -> Reference("⌿definitions⌿Pet⌿petType"),
+	Reference("⌿definitions⌿Zoo⌿tiers") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Labrador") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Pet") -> Reference("⌿definitions⌿Pet⌿petType"))
  def securityDefinitions: SecurityDefinitionsTable = Map[String, Security.Definition](

@@ -67,7 +67,10 @@ trait CommonDataStep extends EnrichmentStep[Type] with CommonData {
   protected def types: SingleStep = typeDef => table => typeDef match {
     case (ref, t) =>
       val name = avoidClashes(table, typeName(t, ref))()
-      Map(COMMON -> Map(TYPE_NAME -> name, FIELDS -> fieldsForType(t), MEMBER_NAME -> memberName(t, ref)))
+      val abstractType = app.discriminators.get(ref).map { tpe =>
+        ABSTRACT_TYPE_NAME -> escape("I" + name)
+      }.toSeq
+      Map(COMMON -> (Seq(TYPE_NAME -> name, FIELDS -> fieldsForType(t), MEMBER_NAME -> memberName(t, ref)) ++ abstractType).toMap)
   }
 
 }

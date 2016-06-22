@@ -1,526 +1,526 @@
-⌿definitions⌿SunlightNeeds ->
-	TypeDef(⌿definitions⌿SunlightNeeds, Seq(
-		Field(⌿definitions⌿SunlightNeeds⌿amount, Opt(Str))))
-⌿definitions⌿Plant ->
-	TypeDef(⌿definitions⌿Plant, Seq(
-		Field(⌿definitions⌿Plant⌿species, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿name, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿description, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿owner_id, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿plant_id, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿godparent, Opt(Str))))
-⌿definitions⌿User ->
-	TypeDef(⌿definitions⌿User, Seq(
-		Field(⌿definitions⌿User⌿user_id, Opt(Str)), 
-		Field(⌿definitions⌿User⌿name, Opt(Str)), 
-		Field(⌿definitions⌿User⌿area_id, Opt(Str))))
-⌿definitions⌿SigninData ->
-	TypeDef(⌿definitions⌿SigninData, Seq(
-		Field(⌿definitions⌿SigninData⌿username, Opt(Str)), 
-		Field(⌿definitions⌿SigninData⌿password, Opt(Str)), 
-		Field(⌿definitions⌿SigninData⌿email, Opt(Str))))
-⌿definitions⌿Watering ->
-	TypeDef(⌿definitions⌿Watering, Seq(
-		Field(⌿definitions⌿Watering⌿watering_id, Opt(Str)), 
-		Field(⌿definitions⌿Watering⌿user_id, Opt(Str)), 
-		Field(⌿definitions⌿Watering⌿date, Opt(Str))))
-⌿definitions⌿Area ->
-	TypeDef(⌿definitions⌿Area, Seq(
-		Field(⌿definitions⌿Area⌿area_id, Opt(Str)), 
-		Field(⌿definitions⌿Area⌿building, Opt(Str)), 
-		Field(⌿definitions⌿Area⌿floor, Opt(Str)), 
-		Field(⌿definitions⌿Area⌿room, Opt(Str))))
-⌿definitions⌿Location ->
-	TypeDef(⌿definitions⌿Location, Seq(
-		Field(⌿definitions⌿Location⌿area_id, Opt(Str)), 
-		Field(⌿definitions⌿Location⌿details, Opt(Str))))
-⌿definitions⌿Error ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿definitions⌿WaterNeeds ->
-	TypeDef(⌿definitions⌿WaterNeeds, Seq(
-		Field(⌿definitions⌿WaterNeeds⌿amount, Opt(Str)), 
-		Field(⌿definitions⌿WaterNeeds⌿period, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/waterings⌿get⌿plant_id ->
+"definitions" / "SunlightNeeds" ->
+	TypeDef("definitions" / "SunlightNeeds", Seq(
+		Field("definitions" / "SunlightNeeds" / "amount", Opt(Str))))
+"definitions" / "Plant" ->
+	TypeDef("definitions" / "Plant", Seq(
+		Field("definitions" / "Plant" / "species", Opt(Str)), 
+		Field("definitions" / "Plant" / "name", Opt(Str)), 
+		Field("definitions" / "Plant" / "description", Opt(Str)), 
+		Field("definitions" / "Plant" / "owner_id", Opt(Str)), 
+		Field("definitions" / "Plant" / "plant_id", Opt(Str)), 
+		Field("definitions" / "Plant" / "godparent", Opt(Str))))
+"definitions" / "User" ->
+	TypeDef("definitions" / "User", Seq(
+		Field("definitions" / "User" / "user_id", Opt(Str)), 
+		Field("definitions" / "User" / "name", Opt(Str)), 
+		Field("definitions" / "User" / "area_id", Opt(Str))))
+"definitions" / "SigninData" ->
+	TypeDef("definitions" / "SigninData", Seq(
+		Field("definitions" / "SigninData" / "username", Opt(Str)), 
+		Field("definitions" / "SigninData" / "password", Opt(Str)), 
+		Field("definitions" / "SigninData" / "email", Opt(Str))))
+"definitions" / "Watering" ->
+	TypeDef("definitions" / "Watering", Seq(
+		Field("definitions" / "Watering" / "watering_id", Opt(Str)), 
+		Field("definitions" / "Watering" / "user_id", Opt(Str)), 
+		Field("definitions" / "Watering" / "date", Opt(Str))))
+"definitions" / "Area" ->
+	TypeDef("definitions" / "Area", Seq(
+		Field("definitions" / "Area" / "area_id", Opt(Str)), 
+		Field("definitions" / "Area" / "building", Opt(Str)), 
+		Field("definitions" / "Area" / "floor", Opt(Str)), 
+		Field("definitions" / "Area" / "room", Opt(Str))))
+"definitions" / "Location" ->
+	TypeDef("definitions" / "Location", Seq(
+		Field("definitions" / "Location" / "area_id", Opt(Str)), 
+		Field("definitions" / "Location" / "details", Opt(Str))))
+"definitions" / "Error" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"definitions" / "WaterNeeds" ->
+	TypeDef("definitions" / "WaterNeeds", Seq(
+		Field("definitions" / "WaterNeeds" / "amount", Opt(Str)), 
+		Field("definitions" / "WaterNeeds" / "period", Opt(Str))))
+"paths" / "/plants/{plant_id}/waterings" / "get" / "plant_id" ->
 	Str
-⌿paths⌿/users⌿get⌿limit ->
+"paths" / "/users" / "get" / "limit" ->
 	Opt(BInt)
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿get⌿plant_id ->
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "get" / "plant_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/pictures⌿get⌿limit ->
+"paths" / "/plants/{plant_id}/pictures" / "get" / "limit" ->
 	Opt(BInt)
-⌿paths⌿/areas/{area_id}⌿delete⌿area_id ->
+"paths" / "/areas/{area_id}" / "delete" / "area_id" ->
 	Str
-⌿paths⌿/users/{user_id}/picture⌿get⌿user_id ->
+"paths" / "/users/{user_id}/picture" / "get" / "user_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/pictures⌿get⌿plant_id ->
+"paths" / "/plants/{plant_id}/pictures" / "get" / "plant_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/location⌿delete⌿plant_id ->
+"paths" / "/plants/{plant_id}/location" / "delete" / "plant_id" ->
 	Str
-⌿paths⌿/plants⌿get⌿limit ->
+"paths" / "/plants" / "get" / "limit" ->
 	Opt(BInt)
-⌿paths⌿/users⌿post⌿signin_data ->
-	TypeDef(⌿definitions⌿SigninData, Seq(
-		Field(⌿definitions⌿SigninData⌿username, Opt(Str)), 
-		Field(⌿definitions⌿SigninData⌿password, Opt(Str)), 
-		Field(⌿definitions⌿SigninData⌿email, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿put⌿plant_id ->
+"paths" / "/users" / "post" / "signin_data" ->
+	TypeDef("definitions" / "SigninData", Seq(
+		Field("definitions" / "SigninData" / "username", Opt(Str)), 
+		Field("definitions" / "SigninData" / "password", Opt(Str)), 
+		Field("definitions" / "SigninData" / "email", Opt(Str))))
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "put" / "plant_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/location⌿get⌿plant_id ->
+"paths" / "/plants/{plant_id}/location" / "get" / "plant_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}⌿delete⌿plant_id ->
+"paths" / "/plants/{plant_id}" / "delete" / "plant_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/water_needs⌿put⌿water_needs ->
-	TypeDef(⌿definitions⌿WaterNeeds, Seq(
-		Field(⌿definitions⌿WaterNeeds⌿amount, Opt(Str)), 
-		Field(⌿definitions⌿WaterNeeds⌿period, Opt(Str))))
-⌿paths⌿/users⌿get⌿offset ->
+"paths" / "/plants/{plant_id}/water_needs" / "put" / "water_needs" ->
+	TypeDef("definitions" / "WaterNeeds", Seq(
+		Field("definitions" / "WaterNeeds" / "amount", Opt(Str)), 
+		Field("definitions" / "WaterNeeds" / "period", Opt(Str))))
+"paths" / "/users" / "get" / "offset" ->
 	Opt(BInt)
-⌿paths⌿/plants/{plant_id}/sunlight_needs⌿get⌿plant_id ->
+"paths" / "/plants/{plant_id}/sunlight_needs" / "get" / "plant_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}⌿put⌿plant ->
-	TypeDef(⌿definitions⌿Plant, Seq(
-		Field(⌿definitions⌿Plant⌿species, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿name, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿description, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿owner_id, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿plant_id, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿godparent, Opt(Str))))
-⌿paths⌿/plants/{plant_id}⌿get⌿plant_id ->
+"paths" / "/plants/{plant_id}" / "put" / "plant" ->
+	TypeDef("definitions" / "Plant", Seq(
+		Field("definitions" / "Plant" / "species", Opt(Str)), 
+		Field("definitions" / "Plant" / "name", Opt(Str)), 
+		Field("definitions" / "Plant" / "description", Opt(Str)), 
+		Field("definitions" / "Plant" / "owner_id", Opt(Str)), 
+		Field("definitions" / "Plant" / "plant_id", Opt(Str)), 
+		Field("definitions" / "Plant" / "godparent", Opt(Str))))
+"paths" / "/plants/{plant_id}" / "get" / "plant_id" ->
 	Str
-⌿paths⌿/users/{user_id}⌿put⌿user_id ->
+"paths" / "/users/{user_id}" / "put" / "user_id" ->
 	Str
-⌿paths⌿/users/{user_id}⌿put⌿user ->
-	TypeDef(⌿definitions⌿User, Seq(
-		Field(⌿definitions⌿User⌿user_id, Opt(Str)), 
-		Field(⌿definitions⌿User⌿name, Opt(Str)), 
-		Field(⌿definitions⌿User⌿area_id, Opt(Str))))
-⌿paths⌿/user/{user_id}/plants⌿get⌿offset ->
+"paths" / "/users/{user_id}" / "put" / "user" ->
+	TypeDef("definitions" / "User", Seq(
+		Field("definitions" / "User" / "user_id", Opt(Str)), 
+		Field("definitions" / "User" / "name", Opt(Str)), 
+		Field("definitions" / "User" / "area_id", Opt(Str))))
+"paths" / "/user/{user_id}/plants" / "get" / "offset" ->
 	Opt(BInt)
-⌿paths⌿/areas/{area_id}⌿get⌿area_id ->
+"paths" / "/areas/{area_id}" / "get" / "area_id" ->
 	Str
-⌿paths⌿/user/{user_id}/plants⌿get⌿limit ->
+"paths" / "/user/{user_id}/plants" / "get" / "limit" ->
 	Opt(BInt)
-⌿paths⌿/areas⌿get⌿offset ->
+"paths" / "/areas" / "get" / "offset" ->
 	Opt(BInt)
-⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿get⌿plant_id ->
+"paths" / "/plants/{plant_id}/waterings/{watering_id}" / "get" / "plant_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿put⌿watering_id ->
+"paths" / "/plants/{plant_id}/waterings/{watering_id}" / "put" / "watering_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/water_needs⌿put⌿plant_id ->
+"paths" / "/plants/{plant_id}/water_needs" / "put" / "plant_id" ->
 	Str
-⌿paths⌿/plants⌿get⌿offset ->
+"paths" / "/plants" / "get" / "offset" ->
 	Opt(BInt)
-⌿paths⌿/user/{user_id}/plants⌿get⌿user_id ->
+"paths" / "/user/{user_id}/plants" / "get" / "user_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}⌿put⌿plant_id ->
+"paths" / "/plants/{plant_id}" / "put" / "plant_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿get⌿watering_id ->
+"paths" / "/plants/{plant_id}/waterings/{watering_id}" / "get" / "watering_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/location⌿put⌿plant_id ->
+"paths" / "/plants/{plant_id}/location" / "put" / "plant_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿delete⌿picture_id ->
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "delete" / "picture_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿put⌿plant_id ->
+"paths" / "/plants/{plant_id}/waterings/{watering_id}" / "put" / "plant_id" ->
 	Str
-⌿paths⌿/users/{user_id}⌿delete⌿user ->
-	TypeDef(⌿definitions⌿User, Seq(
-		Field(⌿definitions⌿User⌿user_id, Opt(Str)), 
-		Field(⌿definitions⌿User⌿name, Opt(Str)), 
-		Field(⌿definitions⌿User⌿area_id, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/waterings⌿get⌿limit ->
+"paths" / "/users/{user_id}" / "delete" / "user" ->
+	TypeDef("definitions" / "User", Seq(
+		Field("definitions" / "User" / "user_id", Opt(Str)), 
+		Field("definitions" / "User" / "name", Opt(Str)), 
+		Field("definitions" / "User" / "area_id", Opt(Str))))
+"paths" / "/plants/{plant_id}/waterings" / "get" / "limit" ->
 	Opt(BInt)
-⌿paths⌿/users/{user_id}/picture⌿put⌿user_id ->
+"paths" / "/users/{user_id}/picture" / "put" / "user_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/waterings⌿get⌿offset ->
+"paths" / "/plants/{plant_id}/waterings" / "get" / "offset" ->
 	Opt(BInt)
-⌿paths⌿/plants/{plant_id}/location⌿put⌿location ->
-	TypeDef(⌿definitions⌿Location, Seq(
-		Field(⌿definitions⌿Location⌿area_id, Opt(Str)), 
-		Field(⌿definitions⌿Location⌿details, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/sunlight_needs⌿put⌿plant_id ->
+"paths" / "/plants/{plant_id}/location" / "put" / "location" ->
+	TypeDef("definitions" / "Location", Seq(
+		Field("definitions" / "Location" / "area_id", Opt(Str)), 
+		Field("definitions" / "Location" / "details", Opt(Str))))
+"paths" / "/plants/{plant_id}/sunlight_needs" / "put" / "plant_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿get⌿picture_id ->
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "get" / "picture_id" ->
 	Str
-⌿paths⌿/users/{user_id}⌿delete⌿user_id ->
+"paths" / "/users/{user_id}" / "delete" / "user_id" ->
 	Str
-⌿paths⌿/areas/{area_id}⌿put⌿area_id ->
+"paths" / "/areas/{area_id}" / "put" / "area_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿delete⌿plant_id ->
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "delete" / "plant_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿put⌿picture_id ->
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "put" / "picture_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}/sunlight_needs⌿put⌿sunlight_needs ->
-	TypeDef(⌿definitions⌿SunlightNeeds, Seq(
-		Field(⌿definitions⌿SunlightNeeds⌿amount, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/pictures⌿get⌿offset ->
+"paths" / "/plants/{plant_id}/sunlight_needs" / "put" / "sunlight_needs" ->
+	TypeDef("definitions" / "SunlightNeeds", Seq(
+		Field("definitions" / "SunlightNeeds" / "amount", Opt(Str))))
+"paths" / "/plants/{plant_id}/pictures" / "get" / "offset" ->
 	Opt(BInt)
-⌿paths⌿/areas⌿get⌿limit ->
+"paths" / "/areas" / "get" / "limit" ->
 	Opt(BInt)
-⌿paths⌿/plants/{plant_id}/water_needs⌿get⌿plant_id ->
+"paths" / "/plants/{plant_id}/water_needs" / "get" / "plant_id" ->
 	Str
-⌿paths⌿/users/{user_id}/picture⌿delete⌿user_id ->
+"paths" / "/users/{user_id}/picture" / "delete" / "user_id" ->
 	Str
-⌿paths⌿/users/{user_id}⌿get⌿user_id ->
+"paths" / "/users/{user_id}" / "get" / "user_id" ->
 	Str
-⌿paths⌿/plants/{plant_id}⌿get⌿responses⌿404 ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿put⌿responses⌿404 ->
+"paths" / "/plants/{plant_id}" / "get" / "responses" / "404" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "put" / "responses" / "404" ->
 	Null
-⌿paths⌿/plants/{plant_id}/sunlight_needs⌿get⌿responses⌿200 ->
-	TypeDef(⌿definitions⌿SunlightNeeds, Seq(
-		Field(⌿definitions⌿SunlightNeeds⌿amount, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/areas/{area_id}⌿get⌿responses⌿200 ->
-	TypeDef(⌿definitions⌿Area, Seq(
-		Field(⌿definitions⌿Area⌿area_id, Opt(Str)), 
-		Field(⌿definitions⌿Area⌿building, Opt(Str)), 
-		Field(⌿definitions⌿Area⌿floor, Opt(Str)), 
-		Field(⌿definitions⌿Area⌿room, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿delete⌿responses⌿404 ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿delete⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿put⌿responses⌿404 ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/user/{user_id}/plants⌿get⌿responses⌿404 ->
+"paths" / "/plants/{plant_id}/sunlight_needs" / "get" / "responses" / "200" ->
+	TypeDef("definitions" / "SunlightNeeds", Seq(
+		Field("definitions" / "SunlightNeeds" / "amount", Opt(Str))))
+"paths" / "/plants/{plant_id}/waterings/{watering_id}" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/areas/{area_id}" / "get" / "responses" / "200" ->
+	TypeDef("definitions" / "Area", Seq(
+		Field("definitions" / "Area" / "area_id", Opt(Str)), 
+		Field("definitions" / "Area" / "building", Opt(Str)), 
+		Field("definitions" / "Area" / "floor", Opt(Str)), 
+		Field("definitions" / "Area" / "room", Opt(Str))))
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "delete" / "responses" / "404" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "delete" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/waterings/{watering_id}" / "put" / "responses" / "404" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/user/{user_id}/plants" / "get" / "responses" / "404" ->
 	Null
-⌿paths⌿/plants/{plant_id}/sunlight_needs⌿put⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/areas⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/waterings⌿get⌿responses⌿404 ->
+"paths" / "/plants/{plant_id}/sunlight_needs" / "put" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/areas" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/waterings" / "get" / "responses" / "404" ->
 	Null
-⌿paths⌿/plants/{plant_id}/waterings⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/users⌿get⌿responses⌿200 ->
-	ArrResult(TypeDef(⌿definitions⌿User, Seq(
-		Field(⌿definitions⌿User⌿user_id, Opt(Str)), 
-		Field(⌿definitions⌿User⌿name, Opt(Str)), 
-		Field(⌿definitions⌿User⌿area_id, Opt(Str)))))
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿put⌿responses⌿201 ->
+"paths" / "/plants/{plant_id}/waterings" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/users" / "get" / "responses" / "200" ->
+	ArrResult(TypeDef("definitions" / "User", Seq(
+		Field("definitions" / "User" / "user_id", Opt(Str)), 
+		Field("definitions" / "User" / "name", Opt(Str)), 
+		Field("definitions" / "User" / "area_id", Opt(Str)))))
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "put" / "responses" / "201" ->
 	Null
-⌿paths⌿/users/{user_id}⌿put⌿responses⌿201 ->
+"paths" / "/users/{user_id}" / "put" / "responses" / "201" ->
 	Null
-⌿paths⌿/areas/{area_id}⌿delete⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}⌿delete⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/user/{user_id}/plants⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/sunlight_needs⌿get⌿responses⌿404 ->
+"paths" / "/areas/{area_id}" / "delete" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}" / "delete" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/user/{user_id}/plants" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/sunlight_needs" / "get" / "responses" / "404" ->
 	Null
-⌿paths⌿/users/{user_id}/picture⌿put⌿responses⌿200 ->
+"paths" / "/users/{user_id}/picture" / "put" / "responses" / "200" ->
 	Null
-⌿paths⌿/plants/{plant_id}⌿delete⌿responses⌿200 ->
+"paths" / "/plants/{plant_id}" / "delete" / "responses" / "200" ->
 	Null
-⌿paths⌿/plants/{plant_id}/water_needs⌿get⌿responses⌿200 ->
-	TypeDef(⌿definitions⌿WaterNeeds, Seq(
-		Field(⌿definitions⌿WaterNeeds⌿amount, Opt(Str)), 
-		Field(⌿definitions⌿WaterNeeds⌿period, Opt(Str))))
-⌿paths⌿/users/{user_id}/picture⌿delete⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/water_needs⌿put⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/users/{user_id}/picture⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants⌿get⌿responses⌿200 ->
-	ArrResult(TypeDef(⌿definitions⌿Plant, Seq(
-		Field(⌿definitions⌿Plant⌿species, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿name, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿description, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿owner_id, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿plant_id, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿godparent, Opt(Str)))))
-⌿paths⌿/areas/{area_id}⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/location⌿put⌿responses⌿404 ->
+"paths" / "/plants/{plant_id}/water_needs" / "get" / "responses" / "200" ->
+	TypeDef("definitions" / "WaterNeeds", Seq(
+		Field("definitions" / "WaterNeeds" / "amount", Opt(Str)), 
+		Field("definitions" / "WaterNeeds" / "period", Opt(Str))))
+"paths" / "/users/{user_id}/picture" / "delete" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/water_needs" / "put" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/users/{user_id}/picture" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants" / "get" / "responses" / "200" ->
+	ArrResult(TypeDef("definitions" / "Plant", Seq(
+		Field("definitions" / "Plant" / "species", Opt(Str)), 
+		Field("definitions" / "Plant" / "name", Opt(Str)), 
+		Field("definitions" / "Plant" / "description", Opt(Str)), 
+		Field("definitions" / "Plant" / "owner_id", Opt(Str)), 
+		Field("definitions" / "Plant" / "plant_id", Opt(Str)), 
+		Field("definitions" / "Plant" / "godparent", Opt(Str)))))
+"paths" / "/areas/{area_id}" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/location" / "put" / "responses" / "404" ->
 	Null
-⌿paths⌿/users/{user_id}⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/water_needs⌿put⌿responses⌿404 ->
+"paths" / "/users/{user_id}" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/water_needs" / "put" / "responses" / "404" ->
 	Null
-⌿paths⌿/areas⌿get⌿responses⌿200 ->
-	ArrResult(TypeDef(⌿definitions⌿Area, Seq(
-		Field(⌿definitions⌿Area⌿area_id, Opt(Str)), 
-		Field(⌿definitions⌿Area⌿building, Opt(Str)), 
-		Field(⌿definitions⌿Area⌿floor, Opt(Str)), 
-		Field(⌿definitions⌿Area⌿room, Opt(Str)))))
-⌿paths⌿/users/me⌿get⌿responses⌿200 ->
-	TypeDef(⌿definitions⌿User, Seq(
-		Field(⌿definitions⌿User⌿user_id, Opt(Str)), 
-		Field(⌿definitions⌿User⌿name, Opt(Str)), 
-		Field(⌿definitions⌿User⌿area_id, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/sunlight_needs⌿put⌿responses⌿404 ->
+"paths" / "/areas" / "get" / "responses" / "200" ->
+	ArrResult(TypeDef("definitions" / "Area", Seq(
+		Field("definitions" / "Area" / "area_id", Opt(Str)), 
+		Field("definitions" / "Area" / "building", Opt(Str)), 
+		Field("definitions" / "Area" / "floor", Opt(Str)), 
+		Field("definitions" / "Area" / "room", Opt(Str)))))
+"paths" / "/users/me" / "get" / "responses" / "200" ->
+	TypeDef("definitions" / "User", Seq(
+		Field("definitions" / "User" / "user_id", Opt(Str)), 
+		Field("definitions" / "User" / "name", Opt(Str)), 
+		Field("definitions" / "User" / "area_id", Opt(Str))))
+"paths" / "/plants/{plant_id}/sunlight_needs" / "put" / "responses" / "404" ->
 	Null
-⌿paths⌿/areas/{area_id}⌿put⌿responses⌿201 ->
+"paths" / "/areas/{area_id}" / "put" / "responses" / "201" ->
 	Null
-⌿paths⌿/plants⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/location⌿delete⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/sunlight_needs⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/location⌿get⌿responses⌿200 ->
-	TypeDef(⌿definitions⌿Location, Seq(
-		Field(⌿definitions⌿Location⌿area_id, Opt(Str)), 
-		Field(⌿definitions⌿Location⌿details, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/location⌿put⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/user/{user_id}/plants⌿get⌿responses⌿200 ->
-	ArrResult(TypeDef(⌿definitions⌿Plant, Seq(
-		Field(⌿definitions⌿Plant⌿species, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿name, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿description, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿owner_id, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿plant_id, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿godparent, Opt(Str)))))
-⌿paths⌿/users/{user_id}⌿get⌿responses⌿404 ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/areas/{area_id}⌿put⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿delete⌿responses⌿200 ->
+"paths" / "/plants" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/location" / "delete" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/sunlight_needs" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/location" / "get" / "responses" / "200" ->
+	TypeDef("definitions" / "Location", Seq(
+		Field("definitions" / "Location" / "area_id", Opt(Str)), 
+		Field("definitions" / "Location" / "details", Opt(Str))))
+"paths" / "/plants/{plant_id}/location" / "put" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/user/{user_id}/plants" / "get" / "responses" / "200" ->
+	ArrResult(TypeDef("definitions" / "Plant", Seq(
+		Field("definitions" / "Plant" / "species", Opt(Str)), 
+		Field("definitions" / "Plant" / "name", Opt(Str)), 
+		Field("definitions" / "Plant" / "description", Opt(Str)), 
+		Field("definitions" / "Plant" / "owner_id", Opt(Str)), 
+		Field("definitions" / "Plant" / "plant_id", Opt(Str)), 
+		Field("definitions" / "Plant" / "godparent", Opt(Str)))))
+"paths" / "/users/{user_id}" / "get" / "responses" / "404" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/areas/{area_id}" / "put" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "delete" / "responses" / "200" ->
 	Null
-⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿put⌿responses⌿200 ->
+"paths" / "/plants/{plant_id}/waterings/{watering_id}" / "put" / "responses" / "200" ->
 	Null
-⌿paths⌿/plants/{plant_id}⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}⌿delete⌿responses⌿404 ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/users/{user_id}/picture⌿put⌿responses⌿404 ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/users⌿post⌿responses⌿200 ->
+"paths" / "/plants/{plant_id}" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}" / "delete" / "responses" / "404" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/users/{user_id}/picture" / "put" / "responses" / "404" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/users" / "post" / "responses" / "200" ->
 	Null
-⌿paths⌿/plants/{plant_id}⌿put⌿responses⌿404 ->
+"paths" / "/plants/{plant_id}" / "put" / "responses" / "404" ->
 	Null
-⌿paths⌿/users/me⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/location⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/users⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿put⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}⌿put⌿responses⌿200 ->
+"paths" / "/users/me" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/location" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/users" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "put" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}" / "put" / "responses" / "200" ->
 	Null
-⌿paths⌿/areas/{area_id}⌿put⌿responses⌿200 ->
+"paths" / "/areas/{area_id}" / "put" / "responses" / "200" ->
 	Null
-⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿put⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/location⌿delete⌿responses⌿404 ->
+"paths" / "/plants/{plant_id}/waterings/{watering_id}" / "put" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/location" / "delete" / "responses" / "404" ->
 	Null
-⌿paths⌿/users/{user_id}⌿delete⌿responses⌿404 ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/areas/{area_id}⌿delete⌿responses⌿200 ->
+"paths" / "/users/{user_id}" / "delete" / "responses" / "404" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/areas/{area_id}" / "delete" / "responses" / "200" ->
 	Null
-⌿paths⌿/plants/{plant_id}/water_needs⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿get⌿responses⌿200 ->
-	TypeDef(⌿definitions⌿Watering, Seq(
-		Field(⌿definitions⌿Watering⌿watering_id, Opt(Str)), 
-		Field(⌿definitions⌿Watering⌿user_id, Opt(Str)), 
-		Field(⌿definitions⌿Watering⌿date, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/sunlight_needs⌿put⌿responses⌿200 ->
+"paths" / "/plants/{plant_id}/water_needs" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/waterings/{watering_id}" / "get" / "responses" / "200" ->
+	TypeDef("definitions" / "Watering", Seq(
+		Field("definitions" / "Watering" / "watering_id", Opt(Str)), 
+		Field("definitions" / "Watering" / "user_id", Opt(Str)), 
+		Field("definitions" / "Watering" / "date", Opt(Str))))
+"paths" / "/plants/{plant_id}/sunlight_needs" / "put" / "responses" / "200" ->
 	Null
-⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿get⌿responses⌿404 ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}⌿put⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}⌿put⌿responses⌿201 ->
+"paths" / "/plants/{plant_id}/waterings/{watering_id}" / "get" / "responses" / "404" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}" / "put" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}" / "put" / "responses" / "201" ->
 	Null
-⌿paths⌿/plants/{plant_id}/location⌿put⌿responses⌿200 ->
+"paths" / "/plants/{plant_id}/location" / "put" / "responses" / "200" ->
 	Null
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿put⌿responses⌿200 ->
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "put" / "responses" / "200" ->
 	Null
-⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿put⌿responses⌿201 ->
+"paths" / "/plants/{plant_id}/waterings/{watering_id}" / "put" / "responses" / "201" ->
 	Null
-⌿paths⌿/users/{user_id}⌿put⌿responses⌿200 ->
+"paths" / "/users/{user_id}" / "put" / "responses" / "200" ->
 	Null
-⌿paths⌿/plants/{plant_id}⌿get⌿responses⌿200 ->
-	TypeDef(⌿definitions⌿Plant, Seq(
-		Field(⌿definitions⌿Plant⌿species, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿name, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿description, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿owner_id, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿plant_id, Opt(Str)), 
-		Field(⌿definitions⌿Plant⌿godparent, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿get⌿responses⌿200 ->
+"paths" / "/plants/{plant_id}" / "get" / "responses" / "200" ->
+	TypeDef("definitions" / "Plant", Seq(
+		Field("definitions" / "Plant" / "species", Opt(Str)), 
+		Field("definitions" / "Plant" / "name", Opt(Str)), 
+		Field("definitions" / "Plant" / "description", Opt(Str)), 
+		Field("definitions" / "Plant" / "owner_id", Opt(Str)), 
+		Field("definitions" / "Plant" / "plant_id", Opt(Str)), 
+		Field("definitions" / "Plant" / "godparent", Opt(Str))))
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "get" / "responses" / "200" ->
 	Null
-⌿paths⌿/users/{user_id}⌿get⌿responses⌿200 ->
-	TypeDef(⌿definitions⌿User, Seq(
-		Field(⌿definitions⌿User⌿user_id, Opt(Str)), 
-		Field(⌿definitions⌿User⌿name, Opt(Str)), 
-		Field(⌿definitions⌿User⌿area_id, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/pictures⌿get⌿responses⌿200 ->
+"paths" / "/users/{user_id}" / "get" / "responses" / "200" ->
+	TypeDef("definitions" / "User", Seq(
+		Field("definitions" / "User" / "user_id", Opt(Str)), 
+		Field("definitions" / "User" / "name", Opt(Str)), 
+		Field("definitions" / "User" / "area_id", Opt(Str))))
+"paths" / "/plants/{plant_id}/pictures" / "get" / "responses" / "200" ->
 	ArrResult(Str)
-⌿paths⌿/users/{user_id}/picture⌿delete⌿responses⌿404 ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/users/{user_id}⌿put⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/users/{user_id}⌿delete⌿responses⌿200 ->
+"paths" / "/users/{user_id}/picture" / "delete" / "responses" / "404" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/users/{user_id}" / "put" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/users/{user_id}" / "delete" / "responses" / "200" ->
 	Null
-⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿get⌿responses⌿404 ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/users/{user_id}/picture⌿get⌿responses⌿200 ->
+"paths" / "/plants/{plant_id}/pictures/{picture_id}" / "get" / "responses" / "404" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/users/{user_id}/picture" / "get" / "responses" / "200" ->
 	Null
-⌿paths⌿/plants/{plant_id}/location⌿get⌿responses⌿404 ->
+"paths" / "/plants/{plant_id}/location" / "get" / "responses" / "404" ->
 	Null
-⌿paths⌿/plants/{plant_id}/pictures⌿get⌿responses⌿404 ->
+"paths" / "/plants/{plant_id}/pictures" / "get" / "responses" / "404" ->
 	Null
-⌿paths⌿/plants/{plant_id}/waterings⌿get⌿responses⌿200 ->
-	ArrResult(TypeDef(⌿definitions⌿Watering, Seq(
-		Field(⌿definitions⌿Watering⌿watering_id, Opt(Str)), 
-		Field(⌿definitions⌿Watering⌿user_id, Opt(Str)), 
-		Field(⌿definitions⌿Watering⌿date, Opt(Str)))))
-⌿paths⌿/users/{user_id}/picture⌿delete⌿responses⌿200 ->
+"paths" / "/plants/{plant_id}/waterings" / "get" / "responses" / "200" ->
+	ArrResult(TypeDef("definitions" / "Watering", Seq(
+		Field("definitions" / "Watering" / "watering_id", Opt(Str)), 
+		Field("definitions" / "Watering" / "user_id", Opt(Str)), 
+		Field("definitions" / "Watering" / "date", Opt(Str)))))
+"paths" / "/users/{user_id}/picture" / "delete" / "responses" / "200" ->
 	Null
-⌿paths⌿/users/{user_id}/picture⌿put⌿responses⌿201 ->
+"paths" / "/users/{user_id}/picture" / "put" / "responses" / "201" ->
 	Null
-⌿paths⌿/users⌿post⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/water_needs⌿put⌿responses⌿200 ->
+"paths" / "/users" / "post" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/water_needs" / "put" / "responses" / "200" ->
 	Null
-⌿paths⌿/users/{user_id}/picture⌿put⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/users/{user_id}/picture⌿get⌿responses⌿404 ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/location⌿delete⌿responses⌿200 ->
+"paths" / "/users/{user_id}/picture" / "put" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/users/{user_id}/picture" / "get" / "responses" / "404" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/location" / "delete" / "responses" / "200" ->
 	Null
-⌿paths⌿/users/{user_id}⌿delete⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
-⌿paths⌿/plants/{plant_id}/pictures⌿get⌿responses⌿default ->
-	TypeDef(⌿definitions⌿Error, Seq(
-		Field(⌿definitions⌿Error⌿code, Opt(Intgr)), 
-		Field(⌿definitions⌿Error⌿message, Opt(Str)), 
-		Field(⌿definitions⌿Error⌿fields, Opt(Str))))
+"paths" / "/users/{user_id}" / "delete" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))
+"paths" / "/plants/{plant_id}/pictures" / "get" / "responses" / "default" ->
+	TypeDef("definitions" / "Error", Seq(
+		Field("definitions" / "Error" / "code", Opt(Intgr)), 
+		Field("definitions" / "Error" / "message", Opt(Str)), 
+		Field("definitions" / "Error" / "fields", Opt(Str))))

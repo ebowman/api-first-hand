@@ -15,7 +15,7 @@ package object {{main_package_suffix}} {
 {{/for}}
 
 {{for trait in traits}}
-    trait I{{trait.name}} {
+    trait {{trait.abstract_name}} {
     {{for field in trait.fields}}
         def {{field.name}}: {{field.type_name}}
     {{/for}}
@@ -23,7 +23,7 @@ package object {{main_package_suffix}} {
 {{/for}}
 
 {{for class in classes}}
-    case class {{class.name}}({{for field in class.fields}}{{field.name}}: {{field.type_name}}{{if field.isNotLast}}, {{/if}}{{/for}}) {{for trait in class.trait}}extends I{{trait.name}}{{/for}}
+    case class {{class.name}}({{for field in class.fields}}{{field.name}}: {{field.type_name}}{{if field.isNotLast}}, {{/if}}{{/for}}) {{for trait in class.trait}}extends {{trait.name}}{{/for}}
 {{/for}}
 
 {{for enum in enums}}
