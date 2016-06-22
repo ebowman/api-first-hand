@@ -32,7 +32,7 @@ object basic_polymorphism_yaml extends WithModel {
 	Reference("⌿definitions⌿Pet") → 
 		TypeDef(Reference("⌿definitions⌿Pet"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List("maxLength(100)", "minLength(1)")))),
 					Field(Reference("⌿definitions⌿Pet⌿petType"), Str(None, TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
 	Reference("⌿definitions⌿Labrador") → 
@@ -74,11 +74,15 @@ object basic_polymorphism_yaml extends WithModel {
 	Reference("⌿definitions⌿Zoo⌿tiers⌿Opt") → 
 		Arr(TypeRef(Reference("⌿definitions⌿Pet")), TypeMeta(None, List()), "csv"),
 	Reference("⌿definitions⌿Cat⌿huntingSkill⌿adventurous") → 
-					EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "adventurous", TypeMeta(Some("adventurous"), List()))
+					EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "adventurous", TypeMeta(Some("adventurous"), List())),
+	Reference("⌿paths⌿/⌿put⌿dummy") → 
+		Opt(TypeRef(Reference("⌿definitions⌿Pet")), TypeMeta(None, List())),
+	Reference("⌿paths⌿/⌿put⌿responses⌿200") → 
+		Null(TypeMeta(None, List()))
 ) 
  
  def parameters = Map[ParameterRef, Parameter](
-
+	ParameterRef(	Reference("⌿paths⌿/⌿put⌿dummy")) → Parameter("dummy", TypeRef(Reference("⌿paths⌿/⌿put⌿dummy")), None, None, ".+", encode = false, ParameterPlace.withName("body"))
 ) 
  def basePath: String =null
  def discriminators: DiscriminatorLookupTable = Map[Reference, Reference](
@@ -86,15 +90,38 @@ object basic_polymorphism_yaml extends WithModel {
 	Reference("⌿definitions⌿Dog") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Cat") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Zoo⌿tiers") -> Reference("⌿definitions⌿Pet⌿petType"),
+	Reference("⌿paths⌿/⌿put⌿dummy") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Labrador") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Pet") -> Reference("⌿definitions⌿Pet⌿petType"))
  def securityDefinitions: SecurityDefinitionsTable = Map[String, Security.Definition](
 	
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
-def calls: Seq[ApiCall] = Seq()
+def calls: Seq[ApiCall] = Seq(
+	ApiCall(PUT, Path(Reference("⌿")),
+		HandlerCall(
+			"basic_polymorphism.yaml",
+			"Basic_polymorphismYaml",
+			instantiate = false,
+			"put",parameters = 
+			Seq(
+				ParameterRef(Reference("⌿paths⌿/⌿put⌿dummy"))
+				)
+			),
+		Set.empty[MimeType],
+		Set.empty[MimeType],
+		Map.empty[String, Seq[Class[Exception]]],
+		TypesResponseInfo(
+			Map[Int, ParameterRef](
+			200 -> ParameterRef(Reference("⌿paths⌿/⌿put⌿responses⌿200"))
+		), None),
+		StateResponseInfo(
+				Map[Int, State](
+					200 -> Self
+			), None),
+		Set.empty[Security.Constraint]))
 
-def packageName: Option[String] = None
+def packageName: Option[String] = Some("basic_polymorphism.yaml")
 
 def model = new StrictModel(calls, types, parameters, discriminators, basePath, packageName, stateTransitions, securityDefinitions)
     

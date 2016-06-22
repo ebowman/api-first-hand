@@ -3,12 +3,25 @@ info:
   version: "1.0.0"
   title: "1.0.0"
 paths:
+  /:
+    put:
+      parameters:
+        - name: dummy
+          in: body
+          description: dummy parameter
+          schema:
+            $ref: "#/definitions/Pet"
+      responses:
+        200:
+          description: dummy call to get validators generated
 definitions:
   Pet:
     discriminator: petType
     properties:
       name:
         type: string
+        maxLength: 100
+        minLength: 1
       petType:
         type: string
     required:

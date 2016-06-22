@@ -1,4 +1,4 @@
-package basic_polymorphism_yaml
+package basic_polymorphism.yaml
 
 import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
@@ -13,12 +13,16 @@ object Generators extends JsValueGenerators {
     def createZooTiersOptGenerator = _generate(ZooTiersOptGenerator)
     def createZooTiersGenerator = _generate(ZooTiersGenerator)
     def createCatHuntingSkillGenerator = _generate(CatHuntingSkillGenerator)
+    def createPutDummyGenerator = _generate(PutDummyGenerator)
+    def createNullGenerator = _generate(NullGenerator)
     
 
     
     def ZooTiersOptGenerator = _genList(PetGenerator, "csv")
     def ZooTiersGenerator = Gen.option(ZooTiersOptGenerator)
     def CatHuntingSkillGenerator = Gen.oneOf(Seq(Clueless, Lazy, Adventurous, Aggressive))
+    def PutDummyGenerator = Gen.option(PetGenerator)
+    def NullGenerator = arbitrary[Null]
     
 
     def createZooGenerator = _generate(ZooGenerator)

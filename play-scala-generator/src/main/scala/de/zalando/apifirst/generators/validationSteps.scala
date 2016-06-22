@@ -139,7 +139,7 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
   private def typeDefValidations(r: Reference, t: TypeDef)(implicit table: DenotationTable) =
     Map(
       "validation_name" -> validator(r, table),
-      "type_name" -> typeNameDenotation(table, r),
+      "type_name" -> abstractTypeNameDenotation(table, r).getOrElse(typeNameDenotation(table, r)),
       "fields" -> t.fields.collect {
         case f if constraints0(f.name -> f.tpe).nonEmpty =>
           Map(

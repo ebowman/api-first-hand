@@ -45,3 +45,9 @@
 				Field("definitions" / "Labrador" / "packSize", Intgr))))
 		TypeDef("definitions" / "Labrador", Seq(
 			Field("definitions" / "Labrador" / "cuteness", Intgr))))
+"paths" / "/" / "put" / "dummy" ->
+	Opt(TypeDef("definitions" / "Pet", Seq(
+		Field("definitions" / "Pet" / "name", Str), 
+		Field("definitions" / "Pet" / "petType", Str))))
+"paths" / "/" / "put" / "responses" / "200" ->
+	Null

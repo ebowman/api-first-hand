@@ -17,7 +17,7 @@ object basic_polymorphism_yaml extends WithModel {
 			Seq(
 					Field(Reference("⌿definitions⌿Zoo⌿tiers"), Opt(Arr(TypeDef(Reference("⌿definitions⌿Pet"), 
 			Seq(
-						Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List()))),
+						Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List("maxLength(100)", "minLength(1)")))),
 						Field(Reference("⌿definitions⌿Pet⌿petType"), Str(None, TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
@@ -25,7 +25,7 @@ object basic_polymorphism_yaml extends WithModel {
 					AllOf(Reference("⌿definitions⌿Cat⌿Cat"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
 			TypeDef(Reference("⌿definitions⌿Pet"), 
 			Seq(
-						Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List()))),
+						Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List("maxLength(100)", "minLength(1)")))),
 						Field(Reference("⌿definitions⌿Pet⌿petType"), Str(None, TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
 			TypeDef(Reference("⌿definitions⌿Cat"), 
@@ -43,7 +43,7 @@ object basic_polymorphism_yaml extends WithModel {
 					AllOf(Reference("⌿definitions⌿Dog⌿Dog"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
 			TypeDef(Reference("⌿definitions⌿Pet"), 
 			Seq(
-						Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List()))),
+						Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List("maxLength(100)", "minLength(1)")))),
 						Field(Reference("⌿definitions⌿Pet⌿petType"), Str(None, TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
 			TypeDef(Reference("⌿definitions⌿Dog"), 
@@ -55,7 +55,7 @@ object basic_polymorphism_yaml extends WithModel {
 							AllOf(Reference("⌿definitions⌿CatNDog⌿CatNDog"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
 				TypeDef(Reference("⌿definitions⌿Pet"), 
 			Seq(
-							Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List()))),
+							Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List("maxLength(100)", "minLength(1)")))),
 							Field(Reference("⌿definitions⌿Pet⌿petType"), Str(None, TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
 				TypeDef(Reference("⌿definitions⌿CatNDog"), 
@@ -65,7 +65,7 @@ object basic_polymorphism_yaml extends WithModel {
 							AllOf(Reference("⌿definitions⌿CatNDog⌿CatNDog"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
 				TypeDef(Reference("⌿definitions⌿Pet"), 
 			Seq(
-							Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List()))),
+							Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List("maxLength(100)", "minLength(1)")))),
 							Field(Reference("⌿definitions⌿Pet⌿petType"), Str(None, TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
 				TypeDef(Reference("⌿definitions⌿CatNDog"), 
@@ -82,7 +82,7 @@ object basic_polymorphism_yaml extends WithModel {
 	Reference("⌿definitions⌿Pet") → 
 		TypeDef(Reference("⌿definitions⌿Pet"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List("maxLength(100)", "minLength(1)")))),
 					Field(Reference("⌿definitions⌿Pet⌿petType"), Str(None, TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
 	Reference("⌿definitions⌿Labrador") → 
@@ -90,7 +90,7 @@ object basic_polymorphism_yaml extends WithModel {
 							AllOf(Reference("⌿definitions⌿Labrador⌿Labrador"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
 				TypeDef(Reference("⌿definitions⌿Pet"), 
 			Seq(
-							Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List()))),
+							Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List("maxLength(100)", "minLength(1)")))),
 							Field(Reference("⌿definitions⌿Pet⌿petType"), Str(None, TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
 				TypeDef(Reference("⌿definitions⌿Labrador"), 
@@ -100,11 +100,23 @@ object basic_polymorphism_yaml extends WithModel {
 			TypeDef(Reference("⌿definitions⌿Labrador"), 
 			Seq(
 						Field(Reference("⌿definitions⌿Labrador⌿cuteness"), Intgr(TypeMeta(Some("the cuteness of the animal in percent"), List("min(0.toInt, false)"))))
-			), TypeMeta(Some("Named types: 1"), List()))) , Some(Reference("⌿definitions⌿Pet⌿petType")))
+			), TypeMeta(Some("Named types: 1"), List()))) , Some(Reference("⌿definitions⌿Pet⌿petType"))),
+	Reference("⌿paths⌿/⌿put⌿dummy") → 
+		Opt(TypeDef(Reference("⌿definitions⌿Pet"), 
+			Seq(
+					Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List("maxLength(100)", "minLength(1)")))),
+					Field(Reference("⌿definitions⌿Pet⌿petType"), Str(None, TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 2"), List())), TypeMeta(None, List())),
+	Reference("⌿paths⌿/⌿put⌿responses⌿200") → 
+		Null(TypeMeta(None, List()))
 ) 
  
  def parameters = Map[ParameterRef, Parameter](
-
+	ParameterRef(	Reference("⌿paths⌿/⌿put⌿dummy")) → Parameter("dummy", Opt(TypeDef(Reference("⌿definitions⌿Pet"), 
+			Seq(
+		Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List("maxLength(100)", "minLength(1)")))),
+		Field(Reference("⌿definitions⌿Pet⌿petType"), Str(None, TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 2"), List())), TypeMeta(None, List())), None, None, ".+", encode = false, ParameterPlace.withName("body"))
 ) 
  def basePath: String =null
  def discriminators: DiscriminatorLookupTable = Map[Reference, Reference](
@@ -112,15 +124,38 @@ object basic_polymorphism_yaml extends WithModel {
 	Reference("⌿definitions⌿Dog") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Cat") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Zoo⌿tiers") -> Reference("⌿definitions⌿Pet⌿petType"),
+	Reference("⌿paths⌿/⌿put⌿dummy") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Labrador") -> Reference("⌿definitions⌿Pet⌿petType"),
 	Reference("⌿definitions⌿Pet") -> Reference("⌿definitions⌿Pet⌿petType"))
  def securityDefinitions: SecurityDefinitionsTable = Map[String, Security.Definition](
 	
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
-def calls: Seq[ApiCall] = Seq()
+def calls: Seq[ApiCall] = Seq(
+	ApiCall(PUT, Path(Reference("⌿")),
+		HandlerCall(
+			"basic_polymorphism.yaml",
+			"Basic_polymorphismYaml",
+			instantiate = false,
+			"put",parameters = 
+			Seq(
+				ParameterRef(Reference("⌿paths⌿/⌿put⌿dummy"))
+				)
+			),
+		Set.empty[MimeType],
+		Set.empty[MimeType],
+		Map.empty[String, Seq[Class[Exception]]],
+		TypesResponseInfo(
+			Map[Int, ParameterRef](
+			200 -> ParameterRef(Reference("⌿paths⌿/⌿put⌿responses⌿200"))
+		), None),
+		StateResponseInfo(
+				Map[Int, State](
+					200 -> Self
+			), None),
+		Set.empty[Security.Constraint]))
 
-def packageName: Option[String] = None
+def packageName: Option[String] = Some("basic_polymorphism.yaml")
 
 def model = new StrictModel(calls, types, parameters, discriminators, basePath, packageName, stateTransitions, securityDefinitions)
     

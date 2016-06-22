@@ -1,5 +1,6 @@
+package basic_polymorphism
 
-package object basic_polymorphism_yaml {
+package object yaml {
 
     import de.zalando.play.controllers.ArrayWrapper
 
@@ -7,6 +8,8 @@ package object basic_polymorphism_yaml {
 
     type ZooTiersOpt = ArrayWrapper[IPet]
     type ZooTiers = Option[ZooTiersOpt]
+    type PutDummy = Option[IPet]
+    type PutResponses200 = Null
 
     trait IPet {
         def name: String

@@ -14,8 +14,9 @@ object ModelDumper extends App with ExpectedResults {
   val flatExpectations = "/../../play-scala-generator/src/test/scala/model/"
   val origExpectations = "/../../api-first-core/src/test/scala/model/"
 
-  val flatDumpType = false
-  override def expectationsFolder: String = if (flatDumpType) flatExpectations else origExpectations
+  var flatten: Boolean = false
+
+  override def expectationsFolder: String = if (flatten) flatExpectations else origExpectations
 
   val modelFixtures = new File(resourcesPath + "model").listFiles
 
@@ -25,9 +26,9 @@ object ModelDumper extends App with ExpectedResults {
 
   def toTest: File => Boolean = f => f.getName.endsWith(".yaml") && f.getName.startsWith("basic_poly")
 
-  def run(): Unit = {
+  def run: Unit = {
     (modelFixtures ++ exampleFixtures ++ validationFixtures).filter(toTest).foreach { file =>
-      dumpFile(file, flatten = flatDumpType)
+      dumpFile(file, flatten)
     }
   }
 
@@ -40,6 +41,8 @@ object ModelDumper extends App with ExpectedResults {
     dump(ScalaPrinter.asScala(file.getName, flatAst), root, file.getName.replace('.', '_') + ".scala")
   }
 
-  run()
+  run
+  flatten = true
+  run
 
 }
