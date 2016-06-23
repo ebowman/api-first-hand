@@ -6,13 +6,13 @@ import org.scalacheck.Arbitrary._
 import org.scalacheck.Prop._
 import org.scalacheck.Test._
 import org.specs2.mutable._
+import org.specs2.execute._
 import play.api.test.Helpers._
 import play.api.test._
 import play.api.mvc.MultipartFormData.FilePart
 import play.api.mvc._
 
 import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
 import java.net.URLEncoder
 import com.fasterxml.jackson.databind.ObjectMapper
 
@@ -22,36 +22,39 @@ import play.api.test.Helpers.{status => requestStatusCode_}
 import play.api.test.Helpers.{contentAsString => requestContentAsString_}
 import play.api.test.Helpers.{contentType => requestContentType_}
 
-import de.zalando.play.controllers.ArrayWrapper
-import java.util.UUID
+import org.scalatest.{OptionValues, WordSpec}
+import org.scalatestplus.play.{OneAppPerTest, WsScalaTestClient}
 
 import Generators._
 
-    @RunWith(classOf[JUnitRunner])
-    class Nakadi_yamlSpec extends Specification {
-        def toPath[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
-        def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
-        def toHeader[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
+import de.zalando.play.controllers.ArrayWrapper
+import java.util.UUID
 
-      def checkResult(props: Prop) =
-        Test.check(Test.Parameters.default, props).status match {
-          case Failed(args, labels) =>
-            val failureMsg = labels.mkString("\n") + " given args: " + args.map(_.arg).mkString("'", "', '","'")
-            failure(failureMsg)
-          case Proved(_) | Exhausted | Passed => success
-          case PropException(_, e, labels) =>
-            val error = if (labels.isEmpty) e.getLocalizedMessage() else labels.mkString("\n")
-            failure(error)
-        }
 
-      private def parserConstructor(mimeType: String) = PlayBodyParsing.jacksonMapper(mimeType)
+class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
+    def toPath[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
+    def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
+    def toHeader[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
 
-      def parseResponseContent[T](mapper: ObjectMapper, content: String, mimeType: Option[String], expectedType: Class[T]) =
-        mapper.readValue(content, expectedType)
+  def checkResult(props: Prop) =
+    Test.check(Test.Parameters.default, props).status match {
+      case Failed(args, labels) =>
+        val failureMsg = labels.mkString("\n") + " given args: " + args.map(_.arg).mkString("'", "', '","'")
+        Failure(failureMsg)
+      case Proved(_) | Exhausted | Passed => Success()
+      case PropException(_, e, labels) =>
+        val error = if (labels.isEmpty) e.getLocalizedMessage() else labels.mkString("\n")
+        Failure(error)
+    }
+
+  private def parserConstructor(mimeType: String) = PlayBodyParsing.jacksonMapper(mimeType)
+
+  def parseResponseContent[T](mapper: ObjectMapper, content: String, mimeType: Option[String], expectedType: Class[T]) =
+    mapper.readValue(content, expectedType)
 
 
     "GET /topics/{topic}/partitions/{partition}" should {
-        def testInvalidInput(input: (String, String)) = {
+        def testInvalidInput(input: (String, String)): Prop = {
 
             val (topic, partition) = input
 
@@ -99,7 +102,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, String)) = {
+        def testValidInput(input: (String, String)): Prop = {
             val (topic, partition) = input
             
             val url = s"""/topics/${toPath(topic)}/partitions/${toPath(partition)}"""
@@ -152,7 +155,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                         topic <- StringGenerator
                         partition <- StringGenerator
@@ -162,9 +165,9 @@ import Generators._
                 new TopicsTopicPartitionsPartitionGetValidator(topic, partition).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                     topic <- StringGenerator
                     partition <- StringGenerator
@@ -174,13 +177,13 @@ import Generators._
                 new TopicsTopicPartitionsPartitionGetValidator(topic, partition).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "GET /topics/{topic}/events" should {
-        def testInvalidInput(input: (TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, String, Int, TopicsTopicEventsGetStream_timeout, String)) = {
+        def testInvalidInput(input: (TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, String, Int, TopicsTopicEventsGetStream_timeout, String)): Prop = {
 
             val (stream_timeout, stream_limit, batch_flush_timeout, x_nakadi_cursors, batch_limit, batch_keep_alive_limit, topic) = input
 
@@ -230,7 +233,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, String, Int, TopicsTopicEventsGetStream_timeout, String)) = {
+        def testValidInput(input: (TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, String, Int, TopicsTopicEventsGetStream_timeout, String)): Prop = {
             val (stream_timeout, stream_limit, batch_flush_timeout, x_nakadi_cursors, batch_limit, batch_keep_alive_limit, topic) = input
             
             val url = s"""/topics/${toPath(topic)}/events?${toQuery("stream_timeout", stream_timeout)}&${toQuery("stream_limit", stream_limit)}&${toQuery("batch_flush_timeout", batch_flush_timeout)}&${toQuery("batch_limit", batch_limit)}&${toQuery("batch_keep_alive_limit", batch_keep_alive_limit)}"""
@@ -289,7 +292,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                         stream_timeout <- TopicsTopicEventsGetStream_timeoutGenerator
                         stream_limit <- TopicsTopicEventsGetStream_timeoutGenerator
@@ -304,9 +307,9 @@ import Generators._
                 new TopicsTopicEventsGetValidator(stream_timeout, stream_limit, batch_flush_timeout, x_nakadi_cursors, batch_limit, batch_keep_alive_limit, topic).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                     stream_timeout <- TopicsTopicEventsGetStream_timeoutGenerator
                     stream_limit <- TopicsTopicEventsGetStream_timeoutGenerator
@@ -321,13 +324,13 @@ import Generators._
                 new TopicsTopicEventsGetValidator(stream_timeout, stream_limit, batch_flush_timeout, x_nakadi_cursors, batch_limit, batch_keep_alive_limit, topic).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "GET /topics/{topic}/partitions/{partition}/events" should {
-        def testInvalidInput(input: (String, String, TopicsTopicEventsGetStream_timeout, String, Int, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout)) = {
+        def testInvalidInput(input: (String, String, TopicsTopicEventsGetStream_timeout, String, Int, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout)): Prop = {
 
             val (start_from, partition, stream_limit, topic, batch_limit, batch_flush_timeout, stream_timeout, batch_keep_alive_limit) = input
 
@@ -375,7 +378,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, String, TopicsTopicEventsGetStream_timeout, String, Int, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout)) = {
+        def testValidInput(input: (String, String, TopicsTopicEventsGetStream_timeout, String, Int, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout)): Prop = {
             val (start_from, partition, stream_limit, topic, batch_limit, batch_flush_timeout, stream_timeout, batch_keep_alive_limit) = input
             
             val url = s"""/topics/${toPath(topic)}/partitions/${toPath(partition)}/events?${toQuery("start_from", start_from)}&${toQuery("stream_limit", stream_limit)}&${toQuery("batch_limit", batch_limit)}&${toQuery("batch_flush_timeout", batch_flush_timeout)}&${toQuery("stream_timeout", stream_timeout)}&${toQuery("batch_keep_alive_limit", batch_keep_alive_limit)}"""
@@ -432,7 +435,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                         start_from <- StringGenerator
                         partition <- StringGenerator
@@ -448,9 +451,9 @@ import Generators._
                 new TopicsTopicPartitionsPartitionEventsGetValidator(start_from, partition, stream_limit, topic, batch_limit, batch_flush_timeout, stream_timeout, batch_keep_alive_limit).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                     start_from <- StringGenerator
                     partition <- StringGenerator
@@ -466,13 +469,13 @@ import Generators._
                 new TopicsTopicPartitionsPartitionEventsGetValidator(start_from, partition, stream_limit, topic, batch_limit, batch_flush_timeout, stream_timeout, batch_keep_alive_limit).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "POST /topics/{topic}/events" should {
-        def testInvalidInput(input: (String, TopicsTopicEventsBatchPostEvent)) = {
+        def testInvalidInput(input: (String, TopicsTopicEventsBatchPostEvent)): Prop = {
 
             val (topic, event) = input
 
@@ -521,7 +524,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, TopicsTopicEventsBatchPostEvent)) = {
+        def testValidInput(input: (String, TopicsTopicEventsBatchPostEvent)): Prop = {
             val (topic, event) = input
             
             val parsed_event = parserConstructor("application/json").writeValueAsString(event)
@@ -580,7 +583,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                         topic <- StringGenerator
                         event <- TopicsTopicEventsBatchPostEventGenerator
@@ -590,9 +593,9 @@ import Generators._
                 new TopicsTopicEventsPostValidator(topic, event).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                     topic <- StringGenerator
                     event <- TopicsTopicEventsBatchPostEventGenerator
@@ -602,13 +605,13 @@ import Generators._
                 new TopicsTopicEventsPostValidator(topic, event).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "GET /topics/{topic}/partitions" should {
-        def testInvalidInput(topic: String) = {
+        def testInvalidInput(topic: String): Prop = {
 
 
             val url = s"""/topics/${toPath(topic)}/partitions"""
@@ -655,7 +658,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(topic: String) = {
+        def testValidInput(topic: String): Prop = {
             
             val url = s"""/topics/${toPath(topic)}/partitions"""
             val contentTypes: Seq[String] = Seq(
@@ -707,7 +710,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                     topic <- StringGenerator
                 } yield topic
@@ -715,9 +718,9 @@ import Generators._
                 new TopicsTopicPartitionsGetValidator(topic).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                 topic <- StringGenerator
             } yield topic
@@ -725,13 +728,13 @@ import Generators._
                 new TopicsTopicPartitionsGetValidator(topic).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "POST /topics/{topic}/events/batch" should {
-        def testInvalidInput(input: (String, TopicsTopicEventsBatchPostEvent)) = {
+        def testInvalidInput(input: (String, TopicsTopicEventsBatchPostEvent)): Prop = {
 
             val (topic, event) = input
 
@@ -780,7 +783,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, TopicsTopicEventsBatchPostEvent)) = {
+        def testValidInput(input: (String, TopicsTopicEventsBatchPostEvent)): Prop = {
             val (topic, event) = input
             
             val parsed_event = parserConstructor("application/json").writeValueAsString(event)
@@ -839,7 +842,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                         topic <- StringGenerator
                         event <- TopicsTopicEventsBatchPostEventGenerator
@@ -849,9 +852,9 @@ import Generators._
                 new TopicsTopicEventsBatchPostValidator(topic, event).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                     topic <- StringGenerator
                     event <- TopicsTopicEventsBatchPostEventGenerator
@@ -861,7 +864,7 @@ import Generators._
                 new TopicsTopicEventsBatchPostValidator(topic, event).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }

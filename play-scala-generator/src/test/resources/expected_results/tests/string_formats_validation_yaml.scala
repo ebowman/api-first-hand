@@ -6,13 +6,13 @@ import org.scalacheck.Arbitrary._
 import org.scalacheck.Prop._
 import org.scalacheck.Test._
 import org.specs2.mutable._
+import org.specs2.execute._
 import play.api.test.Helpers._
 import play.api.test._
 import play.api.mvc.MultipartFormData.FilePart
 import play.api.mvc._
 
 import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
 import java.net.URLEncoder
 import com.fasterxml.jackson.databind.ObjectMapper
 
@@ -22,6 +22,11 @@ import play.api.test.Helpers.{status => requestStatusCode_}
 import play.api.test.Helpers.{contentAsString => requestContentAsString_}
 import play.api.test.Helpers.{contentType => requestContentType_}
 
+import org.scalatest.{OptionValues, WordSpec}
+import org.scalatestplus.play.{OneAppPerTest, WsScalaTestClient}
+
+import Generators._
+
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 import de.zalando.play.controllers.BinaryString
@@ -29,33 +34,31 @@ import BinaryString._
 import de.zalando.play.controllers.Base64String
 import Base64String._
 
-import Generators._
 
-    @RunWith(classOf[JUnitRunner])
-    class String_formats_validation_yamlSpec extends Specification {
-        def toPath[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
-        def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
-        def toHeader[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
+class String_formats_validation_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
+    def toPath[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
+    def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
+    def toHeader[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
 
-      def checkResult(props: Prop) =
-        Test.check(Test.Parameters.default, props).status match {
-          case Failed(args, labels) =>
-            val failureMsg = labels.mkString("\n") + " given args: " + args.map(_.arg).mkString("'", "', '","'")
-            failure(failureMsg)
-          case Proved(_) | Exhausted | Passed => success
-          case PropException(_, e, labels) =>
-            val error = if (labels.isEmpty) e.getLocalizedMessage() else labels.mkString("\n")
-            failure(error)
-        }
+  def checkResult(props: Prop) =
+    Test.check(Test.Parameters.default, props).status match {
+      case Failed(args, labels) =>
+        val failureMsg = labels.mkString("\n") + " given args: " + args.map(_.arg).mkString("'", "', '","'")
+        Failure(failureMsg)
+      case Proved(_) | Exhausted | Passed => Success()
+      case PropException(_, e, labels) =>
+        val error = if (labels.isEmpty) e.getLocalizedMessage() else labels.mkString("\n")
+        Failure(error)
+    }
 
-      private def parserConstructor(mimeType: String) = PlayBodyParsing.jacksonMapper(mimeType)
+  private def parserConstructor(mimeType: String) = PlayBodyParsing.jacksonMapper(mimeType)
 
-      def parseResponseContent[T](mapper: ObjectMapper, content: String, mimeType: Option[String], expectedType: Class[T]) =
-        mapper.readValue(content, expectedType)
+  def parseResponseContent[T](mapper: ObjectMapper, content: String, mimeType: Option[String], expectedType: Class[T]) =
+    mapper.readValue(content, expectedType)
 
 
     "POST /string" should {
-        def testInvalidInput(input: (String, StringPostPassword_optional, LocalDate, StringPostBinary_optional, StringPostDate_optional, Base64String, StringPostBase64optional, StringPostString_optional, DateTime, String, StringPostDate_time_optional)) = {
+        def testInvalidInput(input: (String, StringPostPassword_optional, LocalDate, StringPostBinary_optional, StringPostDate_optional, Base64String, StringPostBase64optional, StringPostString_optional, DateTime, String, StringPostDate_time_optional)): Prop = {
 
             val (string_required, password_optional, date_required, binary_optional, date_optional, base64required, base64optional, string_optional, date_time_required, password_required, date_time_optional) = input
 
@@ -104,7 +107,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, StringPostPassword_optional, LocalDate, StringPostBinary_optional, StringPostDate_optional, Base64String, StringPostBase64optional, StringPostString_optional, DateTime, String, StringPostDate_time_optional)) = {
+        def testValidInput(input: (String, StringPostPassword_optional, LocalDate, StringPostBinary_optional, StringPostDate_optional, Base64String, StringPostBase64optional, StringPostString_optional, DateTime, String, StringPostDate_time_optional)): Prop = {
             val (string_required, password_optional, date_required, binary_optional, date_optional, base64required, base64optional, string_optional, date_time_required, password_required, date_time_optional) = input
             
             val parsed_binary_optional = parserConstructor("application/json").writeValueAsString(binary_optional)
@@ -159,7 +162,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                         string_required <- StringGenerator
                         password_optional <- StringPostPassword_optionalGenerator
@@ -178,9 +181,9 @@ import Generators._
                 new StringPostValidator(string_required, password_optional, date_required, binary_optional, date_optional, base64required, base64optional, string_optional, date_time_required, password_required, date_time_optional).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                     string_required <- StringGenerator
                     password_optional <- StringPostPassword_optionalGenerator
@@ -199,13 +202,13 @@ import Generators._
                 new StringPostValidator(string_required, password_optional, date_required, binary_optional, date_optional, base64required, base64optional, string_optional, date_time_required, password_required, date_time_optional).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "POST /string2" should {
-        def testInvalidInput(binary_required: BinaryString) = {
+        def testInvalidInput(binary_required: BinaryString): Prop = {
 
 
             val url = s"""/string2"""
@@ -253,7 +256,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(binary_required: BinaryString) = {
+        def testValidInput(binary_required: BinaryString): Prop = {
             
             val parsed_binary_required = parserConstructor("application/json").writeValueAsString(binary_required)
             
@@ -307,7 +310,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                     binary_required <- BinaryStringGenerator
                 } yield binary_required
@@ -315,9 +318,9 @@ import Generators._
                 new String2PostValidator(binary_required).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                 binary_required <- BinaryStringGenerator
             } yield binary_required
@@ -325,7 +328,7 @@ import Generators._
                 new String2PostValidator(binary_required).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }

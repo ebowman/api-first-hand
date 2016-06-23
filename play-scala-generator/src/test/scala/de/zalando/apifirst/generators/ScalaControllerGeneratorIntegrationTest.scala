@@ -14,12 +14,6 @@ class ScalaControllerGeneratorIntegrationTest extends FunSpec with MustMatchers 
     }
   }
 
-  describe("ScalaSecurityGenerator should generate controller bases") {
-    (model ++ examples).foreach { ast =>
-      testScalaBaseControllerGenerator(ast)
-    }
-  }
-
   def testScalaControllerGenerator(ast: WithModel): Unit = {
     val name = nameFromModel(ast)
     it(s"from model $name") {
@@ -28,18 +22,6 @@ class ScalaControllerGeneratorIntegrationTest extends FunSpec with MustMatchers 
       val scalaModel = new ScalaGenerator(model).playScalaControllers(name, ast.model.packageName.getOrElse(name), expected)
       if (expected.isEmpty)
         dump(scalaModel, name, "scala")
-      clean(scalaModel) mustBe clean(expected)
-    }
-  }
-
-  def testScalaBaseControllerGenerator(ast: WithModel): Unit = {
-    val name = nameFromModel(ast)
-    it(s"from model $name") {
-      val model = ast.model
-      val scalaModel = new ScalaGenerator(model).playScalaControllerBases(name, ast.model.packageName.getOrElse(name))
-      val expected = asInFile(name, "base.scala")
-      if (expected.isEmpty)
-        dump(scalaModel, name, "base.scala")
       clean(scalaModel) mustBe clean(expected)
     }
   }

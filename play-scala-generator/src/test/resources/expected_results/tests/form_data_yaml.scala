@@ -6,13 +6,13 @@ import org.scalacheck.Arbitrary._
 import org.scalacheck.Prop._
 import org.scalacheck.Test._
 import org.specs2.mutable._
+import org.specs2.execute._
 import play.api.test.Helpers._
 import play.api.test._
 import play.api.mvc.MultipartFormData.FilePart
 import play.api.mvc._
 
 import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
 import java.net.URLEncoder
 import com.fasterxml.jackson.databind.ObjectMapper
 
@@ -22,36 +22,39 @@ import play.api.test.Helpers.{status => requestStatusCode_}
 import play.api.test.Helpers.{contentAsString => requestContentAsString_}
 import play.api.test.Helpers.{contentType => requestContentType_}
 
-import java.io.File
-import scala.math.BigInt
+import org.scalatest.{OptionValues, WordSpec}
+import org.scalatestplus.play.{OneAppPerTest, WsScalaTestClient}
 
 import Generators._
 
-    @RunWith(classOf[JUnitRunner])
-    class Form_data_yamlSpec extends Specification {
-        def toPath[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
-        def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
-        def toHeader[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
+import java.io.File
+import scala.math.BigInt
 
-      def checkResult(props: Prop) =
-        Test.check(Test.Parameters.default, props).status match {
-          case Failed(args, labels) =>
-            val failureMsg = labels.mkString("\n") + " given args: " + args.map(_.arg).mkString("'", "', '","'")
-            failure(failureMsg)
-          case Proved(_) | Exhausted | Passed => success
-          case PropException(_, e, labels) =>
-            val error = if (labels.isEmpty) e.getLocalizedMessage() else labels.mkString("\n")
-            failure(error)
-        }
 
-      private def parserConstructor(mimeType: String) = PlayBodyParsing.jacksonMapper(mimeType)
+class Form_data_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
+    def toPath[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
+    def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
+    def toHeader[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
 
-      def parseResponseContent[T](mapper: ObjectMapper, content: String, mimeType: Option[String], expectedType: Class[T]) =
-        mapper.readValue(content, expectedType)
+  def checkResult(props: Prop) =
+    Test.check(Test.Parameters.default, props).status match {
+      case Failed(args, labels) =>
+        val failureMsg = labels.mkString("\n") + " given args: " + args.map(_.arg).mkString("'", "', '","'")
+        Failure(failureMsg)
+      case Proved(_) | Exhausted | Passed => Success()
+      case PropException(_, e, labels) =>
+        val error = if (labels.isEmpty) e.getLocalizedMessage() else labels.mkString("\n")
+        Failure(error)
+    }
+
+  private def parserConstructor(mimeType: String) = PlayBodyParsing.jacksonMapper(mimeType)
+
+  def parseResponseContent[T](mapper: ObjectMapper, content: String, mimeType: Option[String], expectedType: Class[T]) =
+    mapper.readValue(content, expectedType)
 
 
     "POST /form_data/multipart" should {
-        def testInvalidInput(input: (String, BothPostYear, MultipartPostAvatar)) = {
+        def testInvalidInput(input: (String, BothPostYear, MultipartPostAvatar)): Prop = {
 
             val (name, year, avatar) = input
 
@@ -99,7 +102,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, BothPostYear, MultipartPostAvatar)) = {
+        def testValidInput(input: (String, BothPostYear, MultipartPostAvatar)): Prop = {
             val (name, year, avatar) = input
             
             val url = s"""/form_data/multipart"""
@@ -152,7 +155,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                         name <- StringGenerator
                         year <- BothPostYearGenerator
@@ -163,9 +166,9 @@ import Generators._
                 new MultipartPostValidator(name, year, avatar).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                     name <- StringGenerator
                     year <- BothPostYearGenerator
@@ -176,13 +179,13 @@ import Generators._
                 new MultipartPostValidator(name, year, avatar).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "POST /form_data/both" should {
-        def testInvalidInput(input: (String, BothPostYear, MultipartPostAvatar, File)) = {
+        def testInvalidInput(input: (String, BothPostYear, MultipartPostAvatar, File)): Prop = {
 
             val (name, year, avatar, ringtone) = input
 
@@ -232,7 +235,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, BothPostYear, MultipartPostAvatar, File)) = {
+        def testValidInput(input: (String, BothPostYear, MultipartPostAvatar, File)): Prop = {
             val (name, year, avatar, ringtone) = input
             
             val url = s"""/form_data/both"""
@@ -287,7 +290,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                         name <- StringGenerator
                         year <- BothPostYearGenerator
@@ -299,9 +302,9 @@ import Generators._
                 new BothPostValidator(name, year, avatar, ringtone).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                     name <- StringGenerator
                     year <- BothPostYearGenerator
@@ -313,13 +316,13 @@ import Generators._
                 new BothPostValidator(name, year, avatar, ringtone).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "POST /form_data/url-encoded" should {
-        def testInvalidInput(input: (String, BothPostYear, File)) = {
+        def testInvalidInput(input: (String, BothPostYear, File)): Prop = {
 
             val (name, year, avatar) = input
 
@@ -367,7 +370,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, BothPostYear, File)) = {
+        def testValidInput(input: (String, BothPostYear, File)): Prop = {
             val (name, year, avatar) = input
             
             val url = s"""/form_data/url-encoded"""
@@ -420,7 +423,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                         name <- StringGenerator
                         year <- BothPostYearGenerator
@@ -431,9 +434,9 @@ import Generators._
                 new Url_encodedPostValidator(name, year, avatar).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                     name <- StringGenerator
                     year <- BothPostYearGenerator
@@ -444,7 +447,7 @@ import Generators._
                 new Url_encodedPostValidator(name, year, avatar).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }

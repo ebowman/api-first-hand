@@ -137,6 +137,6 @@ def deletePetAction[T] = (f: deletePetActionType[T]) => (id: Long) => deletePetA
         Results.NotAcceptable
       }
     }
-    abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with FindPetsType[Result] with AddPetType[Result] with DeletePetType[Result] { val result = Results.Status(204).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.Status(204)) }
+    abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with FindPetsType[Result] with AddPetType[Result] with DeletePetType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.Status(statusCode)) }
     case object NotImplementedYet extends ResultWrapper[Results.EmptyContent]  with FindPetsType[Results.EmptyContent] with AddPetType[Results.EmptyContent] with DeletePetType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
 }

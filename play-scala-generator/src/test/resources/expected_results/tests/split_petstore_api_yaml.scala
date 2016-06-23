@@ -6,13 +6,13 @@ import org.scalacheck.Arbitrary._
 import org.scalacheck.Prop._
 import org.scalacheck.Test._
 import org.specs2.mutable._
+import org.specs2.execute._
 import play.api.test.Helpers._
 import play.api.test._
 import play.api.mvc.MultipartFormData.FilePart
 import play.api.mvc._
 
 import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
 import java.net.URLEncoder
 import com.fasterxml.jackson.databind.ObjectMapper
 
@@ -22,36 +22,39 @@ import play.api.test.Helpers.{status => requestStatusCode_}
 import play.api.test.Helpers.{contentAsString => requestContentAsString_}
 import play.api.test.Helpers.{contentType => requestContentType_}
 
-import de.zalando.play.controllers.ArrayWrapper
-import org.joda.time.DateTime
+import org.scalatest.{OptionValues, WordSpec}
+import org.scalatestplus.play.{OneAppPerTest, WsScalaTestClient}
 
 import Generators._
 
-    @RunWith(classOf[JUnitRunner])
-    class Split_petstore_api_yamlSpec extends Specification {
-        def toPath[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
-        def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
-        def toHeader[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
+import de.zalando.play.controllers.ArrayWrapper
+import org.joda.time.DateTime
 
-      def checkResult(props: Prop) =
-        Test.check(Test.Parameters.default, props).status match {
-          case Failed(args, labels) =>
-            val failureMsg = labels.mkString("\n") + " given args: " + args.map(_.arg).mkString("'", "', '","'")
-            failure(failureMsg)
-          case Proved(_) | Exhausted | Passed => success
-          case PropException(_, e, labels) =>
-            val error = if (labels.isEmpty) e.getLocalizedMessage() else labels.mkString("\n")
-            failure(error)
-        }
 
-      private def parserConstructor(mimeType: String) = PlayBodyParsing.jacksonMapper(mimeType)
+class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
+    def toPath[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
+    def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
+    def toHeader[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
 
-      def parseResponseContent[T](mapper: ObjectMapper, content: String, mimeType: Option[String], expectedType: Class[T]) =
-        mapper.readValue(content, expectedType)
+  def checkResult(props: Prop) =
+    Test.check(Test.Parameters.default, props).status match {
+      case Failed(args, labels) =>
+        val failureMsg = labels.mkString("\n") + " given args: " + args.map(_.arg).mkString("'", "', '","'")
+        Failure(failureMsg)
+      case Proved(_) | Exhausted | Passed => Success()
+      case PropException(_, e, labels) =>
+        val error = if (labels.isEmpty) e.getLocalizedMessage() else labels.mkString("\n")
+        Failure(error)
+    }
+
+  private def parserConstructor(mimeType: String) = PlayBodyParsing.jacksonMapper(mimeType)
+
+  def parseResponseContent[T](mapper: ObjectMapper, content: String, mimeType: Option[String], expectedType: Class[T]) =
+    mapper.readValue(content, expectedType)
 
 
     "POST /v2/users" should {
-        def testInvalidInput(body: UsersUsernamePutBody) = {
+        def testInvalidInput(body: UsersUsernamePutBody): Prop = {
 
 
             val url = s"""/v2/users"""
@@ -99,7 +102,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(body: UsersUsernamePutBody) = {
+        def testValidInput(body: UsersUsernamePutBody): Prop = {
             
             val parsed_body = parserConstructor("Null").writeValueAsString(body)
             
@@ -151,7 +154,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                     body <- UsersUsernamePutBodyGenerator
                 } yield body
@@ -159,9 +162,9 @@ import Generators._
                 new UsersPostValidator(body).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                 body <- UsersUsernamePutBodyGenerator
             } yield body
@@ -169,13 +172,13 @@ import Generators._
                 new UsersPostValidator(body).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "POST /v2/stores/order" should {
-        def testInvalidInput(body: StoresOrderPostBody) = {
+        def testInvalidInput(body: StoresOrderPostBody): Prop = {
 
 
             val url = s"""/v2/stores/order"""
@@ -223,7 +226,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(body: StoresOrderPostBody) = {
+        def testValidInput(body: StoresOrderPostBody): Prop = {
             
             val parsed_body = parserConstructor("application/json").writeValueAsString(body)
             
@@ -278,7 +281,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                     body <- StoresOrderPostBodyGenerator
                 } yield body
@@ -286,9 +289,9 @@ import Generators._
                 new StoresOrderPostValidator(body).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                 body <- StoresOrderPostBodyGenerator
             } yield body
@@ -296,13 +299,13 @@ import Generators._
                 new StoresOrderPostValidator(body).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "POST /v2/users/createWithArray" should {
-        def testInvalidInput(body: UsersCreateWithListPostBody) = {
+        def testInvalidInput(body: UsersCreateWithListPostBody): Prop = {
 
 
             val url = s"""/v2/users/createWithArray"""
@@ -350,7 +353,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(body: UsersCreateWithListPostBody) = {
+        def testValidInput(body: UsersCreateWithListPostBody): Prop = {
             
             val parsed_body = parserConstructor("Null").writeValueAsString(body)
             
@@ -402,7 +405,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                     body <- UsersCreateWithListPostBodyGenerator
                 } yield body
@@ -410,9 +413,9 @@ import Generators._
                 new UsersCreateWithArrayPostValidator(body).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                 body <- UsersCreateWithListPostBodyGenerator
             } yield body
@@ -420,13 +423,13 @@ import Generators._
                 new UsersCreateWithArrayPostValidator(body).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "GET /v2/users/login" should {
-        def testInvalidInput(input: (OrderStatus, OrderStatus)) = {
+        def testInvalidInput(input: (OrderStatus, OrderStatus)): Prop = {
 
             val (username, password) = input
 
@@ -474,7 +477,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (OrderStatus, OrderStatus)) = {
+        def testValidInput(input: (OrderStatus, OrderStatus)): Prop = {
             val (username, password) = input
             
             val url = s"""/v2/users/login?${toQuery("username", username)}&${toQuery("password", password)}"""
@@ -528,7 +531,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                         username <- OrderStatusGenerator
                         password <- OrderStatusGenerator
@@ -538,9 +541,9 @@ import Generators._
                 new UsersLoginGetValidator(username, password).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                     username <- OrderStatusGenerator
                     password <- OrderStatusGenerator
@@ -550,13 +553,13 @@ import Generators._
                 new UsersLoginGetValidator(username, password).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "GET /v2/stores/order/{orderId}" should {
-        def testInvalidInput(orderId: String) = {
+        def testInvalidInput(orderId: String): Prop = {
 
 
             val url = s"""/v2/stores/order/${toPath(orderId)}"""
@@ -603,7 +606,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(orderId: String) = {
+        def testValidInput(orderId: String): Prop = {
             
             val url = s"""/v2/stores/order/${toPath(orderId)}"""
             val contentTypes: Seq[String] = Seq()
@@ -657,7 +660,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                     orderId <- StringGenerator
                 } yield orderId
@@ -665,9 +668,9 @@ import Generators._
                 new StoresOrderOrderIdGetValidator(orderId).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                 orderId <- StringGenerator
             } yield orderId
@@ -675,13 +678,13 @@ import Generators._
                 new StoresOrderOrderIdGetValidator(orderId).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "GET /v2/users/{username}" should {
-        def testInvalidInput(username: String) = {
+        def testInvalidInput(username: String): Prop = {
 
 
             val url = s"""/v2/users/${toPath(username)}"""
@@ -728,7 +731,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(username: String) = {
+        def testValidInput(username: String): Prop = {
             
             val url = s"""/v2/users/${toPath(username)}"""
             val contentTypes: Seq[String] = Seq()
@@ -782,7 +785,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                     username <- StringGenerator
                 } yield username
@@ -790,9 +793,9 @@ import Generators._
                 new UsersUsernameGetValidator(username).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                 username <- StringGenerator
             } yield username
@@ -800,13 +803,13 @@ import Generators._
                 new UsersUsernameGetValidator(username).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "POST /v2/users/createWithList" should {
-        def testInvalidInput(body: UsersCreateWithListPostBody) = {
+        def testInvalidInput(body: UsersCreateWithListPostBody): Prop = {
 
 
             val url = s"""/v2/users/createWithList"""
@@ -854,7 +857,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(body: UsersCreateWithListPostBody) = {
+        def testValidInput(body: UsersCreateWithListPostBody): Prop = {
             
             val parsed_body = parserConstructor("Null").writeValueAsString(body)
             
@@ -906,7 +909,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                     body <- UsersCreateWithListPostBodyGenerator
                 } yield body
@@ -914,9 +917,9 @@ import Generators._
                 new UsersCreateWithListPostValidator(body).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                 body <- UsersCreateWithListPostBodyGenerator
             } yield body
@@ -924,13 +927,13 @@ import Generators._
                 new UsersCreateWithListPostValidator(body).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "DELETE /v2/users/{username}" should {
-        def testInvalidInput(username: String) = {
+        def testInvalidInput(username: String): Prop = {
 
 
             val url = s"""/v2/users/${toPath(username)}"""
@@ -977,7 +980,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(username: String) = {
+        def testValidInput(username: String): Prop = {
             
             val url = s"""/v2/users/${toPath(username)}"""
             val contentTypes: Seq[String] = Seq()
@@ -1030,7 +1033,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                     username <- StringGenerator
                 } yield username
@@ -1038,9 +1041,9 @@ import Generators._
                 new UsersUsernameDeleteValidator(username).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                 username <- StringGenerator
             } yield username
@@ -1048,13 +1051,13 @@ import Generators._
                 new UsersUsernameDeleteValidator(username).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "DELETE /v2/stores/order/{orderId}" should {
-        def testInvalidInput(orderId: String) = {
+        def testInvalidInput(orderId: String): Prop = {
 
 
             val url = s"""/v2/stores/order/${toPath(orderId)}"""
@@ -1101,7 +1104,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(orderId: String) = {
+        def testValidInput(orderId: String): Prop = {
             
             val url = s"""/v2/stores/order/${toPath(orderId)}"""
             val contentTypes: Seq[String] = Seq()
@@ -1154,7 +1157,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                     orderId <- StringGenerator
                 } yield orderId
@@ -1162,9 +1165,9 @@ import Generators._
                 new StoresOrderOrderIdDeleteValidator(orderId).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                 orderId <- StringGenerator
             } yield orderId
@@ -1172,13 +1175,13 @@ import Generators._
                 new StoresOrderOrderIdDeleteValidator(orderId).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
 
     "PUT /v2/users/{username}" should {
-        def testInvalidInput(input: (String, UsersUsernamePutBody)) = {
+        def testInvalidInput(input: (String, UsersUsernamePutBody)): Prop = {
 
             val (username, body) = input
 
@@ -1227,7 +1230,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, UsersUsernamePutBody)) = {
+        def testValidInput(input: (String, UsersUsernamePutBody)): Prop = {
             val (username, body) = input
             
             val parsed_body = parserConstructor("application/json").writeValueAsString(body)
@@ -1283,7 +1286,7 @@ import Generators._
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        "discard invalid data" in new WithApplication {
+        "discard invalid data" in {
             val genInputs = for {
                         username <- StringGenerator
                         body <- UsersUsernamePutBodyGenerator
@@ -1293,9 +1296,9 @@ import Generators._
                 new UsersUsernamePutValidator(username, body).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
-        "do something with valid data" in new WithApplication {
+        "do something with valid data" in {
             val genInputs = for {
                     username <- StringGenerator
                     body <- UsersUsernamePutBodyGenerator
@@ -1305,7 +1308,7 @@ import Generators._
                 new UsersUsernamePutValidator(username, body).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
-            checkResult(props)
+            assert(checkResult(props) == Success())
         }
 
     }
