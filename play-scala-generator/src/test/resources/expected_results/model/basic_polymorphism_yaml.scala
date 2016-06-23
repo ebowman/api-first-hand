@@ -23,11 +23,11 @@ package object yaml {
     case class Pet(name: String, petType: String) extends IPet
     case class Labrador(name: String, petType: String, packSize: Int, cuteness: Int) extends IPet
 
-    sealed trait CatHuntingSkill { def value: String }
-    case object Clueless extends CatHuntingSkill { val value = "clueless" }
-    case object Lazy extends CatHuntingSkill { val value = "lazy" }
-    case object Adventurous extends CatHuntingSkill { val value = "adventurous" }
-    case object Aggressive extends CatHuntingSkill { val value = "aggressive" }
+    case class CatHuntingSkill(value: String) extends AnyVal
+    val Clueless = CatHuntingSkill("clueless")
+    val Lazy = CatHuntingSkill("lazy")
+    val Adventurous = CatHuntingSkill("adventurous")
+    val Aggressive = CatHuntingSkill("aggressive")
     implicit def stringToCatHuntingSkill(in: String): CatHuntingSkill = in match {
         case "clueless" => Clueless
         case "lazy" => Lazy

@@ -27,9 +27,9 @@ package object {{main_package_suffix}} {
 {{/for}}
 
 {{for enum in enums}}
-    sealed trait {{enum.name}} { def value: {{enum.type_name}} }
+    case class {{enum.name}}(value: {{enum.type_name}}) extends AnyVal
     {{for leaf in enum.leaves}}
-    case object {{leaf.name}} extends {{enum.name}} { val value = {{leaf.value}} }
+    val {{leaf.name}} = {{enum.name}}({{leaf.value}})
     {{/for}}
     implicit def stringTo{{enum.name}}(in: String): {{enum.name}} = in match {
     {{for leaf in enum.leaves}}
