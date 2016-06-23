@@ -74,12 +74,12 @@ package object yaml {
     case class LocationsSearchGetResponses200(data: LocationsSearchGetResponses200Data) 
     case class MediaImagesOpt(low_resolution: MediaMedia_idGetResponses200VideosStandard_resolution, thumbnail: MediaMedia_idGetResponses200VideosStandard_resolution, standard_resolution: MediaMedia_idGetResponses200VideosStandard_resolution) 
 
-    sealed trait UsersUser_idRelationshipPostActionOpt { def value: String }
-    case object Unfollow extends UsersUser_idRelationshipPostActionOpt { val value = "unfollow" }
-    case object Approve extends UsersUser_idRelationshipPostActionOpt { val value = "approve" }
-    case object Block extends UsersUser_idRelationshipPostActionOpt { val value = "block" }
-    case object Unblock extends UsersUser_idRelationshipPostActionOpt { val value = "unblock" }
-    case object Follow extends UsersUser_idRelationshipPostActionOpt { val value = "follow" }
+    case class UsersUser_idRelationshipPostActionOpt(value: String) extends AnyVal
+    val Unfollow = UsersUser_idRelationshipPostActionOpt("unfollow")
+    val Approve = UsersUser_idRelationshipPostActionOpt("approve")
+    val Block = UsersUser_idRelationshipPostActionOpt("block")
+    val Unblock = UsersUser_idRelationshipPostActionOpt("unblock")
+    val Follow = UsersUser_idRelationshipPostActionOpt("follow")
     implicit def stringToUsersUser_idRelationshipPostActionOpt(in: String): UsersUser_idRelationshipPostActionOpt = in match {
         case "unfollow" => Unfollow
         case "approve" => Approve
