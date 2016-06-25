@@ -1,12 +1,13 @@
 package heroku.petstore.api
 
-package object yaml {
 
     import scala.math.BigInt
 
     import de.zalando.play.controllers.PlayPathBindables
 
 
+//noinspection ScalaStyle
+package object yaml {
 
     type PetName = Option[String]
     type PetIdGetPetId = String
@@ -17,10 +18,15 @@ package object yaml {
     type GetResponses200 = Seq[Pet]
 
 
-    case class Pet(name: PetName, birthday: PetBirthday) 
-
-
     implicit val bindable_BigIntQuery = PlayPathBindables.queryBindableBigInt
+
+
+}
+//noinspection ScalaStyle
+package yaml {
+
+
+    case class Pet(name: PetName, birthday: PetBirthday) 
 
 
 }

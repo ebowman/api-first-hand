@@ -1,16 +1,22 @@
 
-package object options_yaml {
 
     import de.zalando.play.controllers.ArrayWrapper
 
 
+//noinspection ScalaStyle
+package object options_yaml {
 
     type BasicRequired = ArrayWrapper[String]
     type BasicOptional = Option[BasicRequired]
 
 
-    case class Basic(id: Long, required: BasicRequired, optional: BasicOptional) 
 
+}
+//noinspection ScalaStyle
+package options_yaml {
+
+
+    case class Basic(id: Long, required: BasicRequired, optional: BasicOptional) 
 
 
 }

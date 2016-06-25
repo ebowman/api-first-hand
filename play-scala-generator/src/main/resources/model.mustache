@@ -1,6 +1,5 @@
 {{if main_package_prefix}}package {{main_package_prefix}}
 {{/if}}
-package object {{main_package_suffix}} {
 
 {{for import in imports}}
     import {{import.name}}
@@ -9,10 +8,30 @@ package object {{main_package_suffix}} {
     import {{import.name}}
 {{/for}}
 
+//noinspection ScalaStyle
+package object {{main_package_suffix}} {
 
 {{for alias in aliases}}
     type {{alias.name}} = {{alias.alias}}{{alias.underlying_type}}
 {{/for}}
+
+{{for enum in enums}}
+    {{for leaf in enum.leaves}}
+    val {{leaf.name}} = {{enum.name}}({{leaf.value}})
+    {{/for}}
+    implicit def stringTo{{enum.name}}(in: String): {{enum.name}} = in match {
+    {{for leaf in enum.leaves}}
+        case {{leaf.value}} => {{leaf.name}}
+    {{/for}}
+    }
+{{/for}}
+{{for binding in model_bindings}}
+    {{binding.full_name}}
+{{/for}}
+
+}
+//noinspection ScalaStyle
+package {{main_package_suffix}} {
 
 {{for trait in traits}}
     trait {{trait.abstract_name}} {
@@ -28,17 +47,6 @@ package object {{main_package_suffix}} {
 
 {{for enum in enums}}
     case class {{enum.name}}(value: {{enum.type_name}}) extends AnyVal
-    {{for leaf in enum.leaves}}
-    val {{leaf.name}} = {{enum.name}}({{leaf.value}})
-    {{/for}}
-    implicit def stringTo{{enum.name}}(in: String): {{enum.name}} = in match {
-    {{for leaf in enum.leaves}}
-        case {{leaf.value}} => {{leaf.name}}
-    {{/for}}
-    }
-{{/for}}
-{{for binding in model_bindings}}
-    {{binding.full_name}}
 {{/for}}
 
 }

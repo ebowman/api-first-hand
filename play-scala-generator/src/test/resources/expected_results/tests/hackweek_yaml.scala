@@ -30,7 +30,7 @@ import Generators._
 import de.zalando.play.controllers.ArrayWrapper
 import scala.math.BigInt
 
-
+//noinspection ScalaStyle
 class Hackweek_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
     def toPath[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
     def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
@@ -76,11 +76,10 @@ class Hackweek_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new SchemaModelGetValidator(root).errors
 
@@ -119,11 +118,10 @@ class Hackweek_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new SchemaModelGetValidator(root).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(

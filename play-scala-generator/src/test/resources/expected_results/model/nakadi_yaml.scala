@@ -1,6 +1,5 @@
 package nakadi
 
-package object yaml {
 
     import de.zalando.play.controllers.ArrayWrapper
     import java.util.UUID
@@ -8,6 +7,8 @@ package object yaml {
     import de.zalando.play.controllers.PlayPathBindables
 
 
+//noinspection ScalaStyle
+package object yaml {
 
     type TopicsTopicEventsBatchPostTopic = String
     type TopicsTopicEventsGetStream_timeout = Option[Int]
@@ -25,6 +26,14 @@ package object yaml {
     type TopicsGetResponses200 = Seq[Topic]
 
 
+    implicit val bindable_OptionIntQuery = PlayPathBindables.createOptionQueryBindable[Int]
+
+
+}
+//noinspection ScalaStyle
+package yaml {
+
+
     case class EventMetaDataNameClash(root_id: EventMetaDataParent_id, parent_id: EventMetaDataParent_id, scopes: EventMetaDataScopes, id: EventMetaDataParent_id, created: EventEvent_type) 
     case class Topic(name: String) 
     case class Metrics(name: EventEvent_type) 
@@ -33,9 +42,6 @@ package object yaml {
     case class Problem(detail: String) 
     case class TopicPartition(partition: String, oldest_available_offset: String, newest_available_offset: String) 
     case class SimpleStreamEvent(cursor: Cursor, events: SimpleStreamEventEvents) 
-
-
-    implicit val bindable_OptionIntQuery = PlayPathBindables.createOptionQueryBindable[Int]
 
 
 }

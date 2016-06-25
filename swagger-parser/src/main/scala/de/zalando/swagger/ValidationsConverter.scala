@@ -1,6 +1,7 @@
 package de.zalando.swagger
 
 import de.zalando.swagger.strictModel._
+import org.slf4j.LoggerFactory
 
 /**
  * @author  slasch
@@ -8,6 +9,8 @@ import de.zalando.swagger.strictModel._
  */
 
 object ValidationsConverter {
+
+  lazy val log = LoggerFactory.getLogger(this.getClass)
 
   def toValidations(s: Schema[_]): Seq[String] = validationsPF(s)
 
@@ -52,7 +55,7 @@ object ValidationsConverter {
       emailConstraint
     ).flatten
     if (result.nonEmpty && format.filter(_ != null).map(_.toLowerCase()).exists(s => s == "date-time" || s == "date" || s == "uuid")) {
-      println(s"WARN: Ignoring nonsense validations for ${format.get}: ${result.mkString(", ")}")
+      log.warn(s"Ignoring nonsense validations for ${format.get}: ${result.mkString(", ")}")
       Seq.empty[String]
     } else {
       result

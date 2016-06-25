@@ -31,9 +31,13 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
       val result = new ScalaGenerator(model).generateModel("test-file.scala", "`test-file`.scala")
       result mustBeAs
         """package `test-file`
+          |//noinspection ScalaStyle
           |package object scala {
           |type Opti = Option[Long]
           |type Stri = Option[String]
+          |}
+          |//noinspection ScalaStyle
+          |package scala {
           |}
           | """
     }
@@ -45,9 +49,13 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
       )
       new ScalaGenerator(model).generateModel("overloaded.txt", "overloaded.txt") mustBeAs
         """package overloaded
+          |//noinspection ScalaStyle
           |package object txt {
           |type Option = Option[Long]
           |type String = Option[String]
+          |}
+          |//noinspection ScalaStyle
+          |package txt {
           |}
           | """
     }
@@ -60,11 +68,15 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
       )
       new ScalaGenerator(model).generateModel("test.scala", "test.scala") mustBeAs
         """package test
-          |package object scala {
           |import de.zalando.play.controllers.ArrayWrapper
+          |//noinspection ScalaStyle
+          |package object scala {
           |type Int = ArrayWrapper[Int]
           |type Dbl = ArrayWrapper[Double]
           |type Flt = ArrayWrapper[Float]
+          |}
+          |//noinspection ScalaStyle
+          |package scala {
           |}
           | """
     }
@@ -75,9 +87,13 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
       )
       new ScalaGenerator(model).generateModel("test.scala", "test.scala") mustBeAs
         """package test
-          |package object scala {
           |import scala.collection.immutable.Map
+          |//noinspection ScalaStyle
+          |package object scala {
           |type All = Map[String, Boolean]
+          |}
+          |//noinspection ScalaStyle
+          |package scala {
           |}
           | """
     }
@@ -100,7 +116,11 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
       )
       new ScalaGenerator(model).generateModel("test.scala", "test.scala") mustBeAs
         """package test
+          |//noinspection ScalaStyle
           |package object scala {
+          |}
+          |//noinspection ScalaStyle
+          |package scala {
           |case class User(name: String, id: Long)
           |}
           | """
@@ -113,10 +133,14 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
       )
       new ScalaGenerator(model).generateModel("test.scala", "test.scala") mustBeAs
         """package test
-          |package object scala {
           |import de.zalando.play.controllers.ArrayWrapper
+          |//noinspection ScalaStyle
+          |package object scala {
           |type OptionalData = Option[Passwords]
           |type Passwords = ArrayWrapper[String]
+          |}
+          |//noinspection ScalaStyle
+          |package scala {
           |}
           | """
     }
@@ -175,19 +199,19 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
 
       result mustBeAs
         """package overriden.package
+          |//noinspection ScalaStyle
           |package object scala {
+          |}
+          |//noinspection ScalaStyle
+          |package scala {
           |trait IPet {
           |    def name: String
           |    def petType: String
           |}
           |case class Cat(name: String, petType: String, huntingSkill: String) extends IPet
-          |
           |case class Dog(name: String, petType: String, packSize: Int) extends IPet
-          |
           |case class CatNDog(name: String, petType: String, packSize: Int, huntingSkill: String) extends IPet
-          |
           |case class Pet(name: String, petType: String) extends IPet
-          |
           |case class Labrador(name: String, petType: String, packSize: Int, cuteness: Int) extends IPet
           |}
           | """
@@ -212,9 +236,12 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
       )
       new ScalaGenerator(model).generateModel("test.scala", "test.scala") mustBeAs
         """package test
+          |//noinspection ScalaStyle
           |package object scala {
+          |}
+          |//noinspection ScalaStyle
+          |package scala {
           |case class ErrorModel(message: String, code: Int)
-          |
           |case class ExtendedErrorModel(message: String, code: Int, rootCause: String)
           |}
           | """

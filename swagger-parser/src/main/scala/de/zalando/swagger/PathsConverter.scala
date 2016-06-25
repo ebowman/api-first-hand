@@ -9,6 +9,7 @@ import de.zalando.apifirst.Security.Constraint
 import de.zalando.apifirst._
 import de.zalando.apifirst.naming.{ Path, Reference }
 import de.zalando.swagger.strictModel._
+import org.slf4j.LoggerFactory
 
 /**
  * @author  slasch
@@ -18,6 +19,8 @@ class PathsConverter(val base: URI, val model: SwaggerModel, val keyPrefix: Stri
   params: ParameterLookupTable, securityDefinitions: SecurityDefinitionsTable,
   val definitionFileName: Option[String] = None, val useFileNameAsPackage: Boolean = true)
     extends ParameterNaming with HandlerGenerator with ParameterReferenceGenerator {
+
+  lazy val log = LoggerFactory.getLogger(this.getClass)
 
   lazy val convert = fromPaths(model.paths, model.basePath)
 
@@ -67,7 +70,7 @@ class PathsConverter(val base: URI, val model: SwaggerModel, val keyPrefix: Stri
         Some((code.toInt, (ParameterRef(prefix / Reference.responses / code), targetState(definition))))
       case ("default", definition) => None
       case (other, _) =>
-        println(s"Expected numeric error code or 'default' for response, but was $other")
+        log.info(s"Expected numeric error code or 'default' for response, but was $other")
         None
     }
     val resultMap = responses.flatten.toMap

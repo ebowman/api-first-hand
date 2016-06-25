@@ -1,6 +1,5 @@
 package instagram.api
 
-package object yaml {
 
     import scala.math.BigInt
     import scala.math.BigDecimal
@@ -8,6 +7,8 @@ package object yaml {
     import de.zalando.play.controllers.PlayPathBindables
 
 
+//noinspection ScalaStyle
+package object yaml {
 
     type TagsSearchGetResponses200Meta = Option[UsersSelfRequested_byGetResponses200MetaOpt]
     type LocationsLocation_idLocation_id = BigInt
@@ -44,6 +45,44 @@ package object yaml {
     type UserCounts = Option[UserCountsOpt]
     type Tag_nameTag_name = String
 
+    
+    val Unfollow = UsersUser_idRelationshipPostActionOpt("unfollow")
+    
+    val Approve = UsersUser_idRelationshipPostActionOpt("approve")
+    
+    val Block = UsersUser_idRelationshipPostActionOpt("block")
+    
+    val Unblock = UsersUser_idRelationshipPostActionOpt("unblock")
+    
+    val Follow = UsersUser_idRelationshipPostActionOpt("follow")
+    
+    implicit def stringToUsersUser_idRelationshipPostActionOpt(in: String): UsersUser_idRelationshipPostActionOpt = in match {
+        case "unfollow" => Unfollow
+        case "approve" => Approve
+        case "block" => Block
+        case "unblock" => Unblock
+        case "follow" => Follow
+    }
+
+    implicit val bindable_BigIntQuery = PlayPathBindables.queryBindableBigInt
+
+    implicit val bindable_BigDecimalPath = PlayPathBindables.pathBindableBigDecimal
+
+    implicit val bindable_BigIntPath = PlayPathBindables.pathBindableBigInt
+
+    implicit val bindable_BigDecimalQuery = PlayPathBindables.queryBindableBigDecimal
+
+    implicit val bindable_OptionStringQuery = PlayPathBindables.createOptionQueryBindable[String]
+
+    implicit val bindable_OptionBigIntQuery = PlayPathBindables.createOptionQueryBindable[BigInt]
+
+    implicit val bindable_OptionBigDecimalQuery = PlayPathBindables.createOptionQueryBindable[BigDecimal]
+
+
+}
+//noinspection ScalaStyle
+package yaml {
+
 
     case class UsersSelfFeedGetResponses200(data: UsersSelfFeedGetResponses200Data) 
     case class MediaMedia_idCommentsDeleteResponses200(meta: MediaMedia_idCommentsDeleteResponses200Meta, data: MediaFilter) 
@@ -75,32 +114,5 @@ package object yaml {
     case class MediaImagesOpt(low_resolution: MediaMedia_idGetResponses200VideosStandard_resolution, thumbnail: MediaMedia_idGetResponses200VideosStandard_resolution, standard_resolution: MediaMedia_idGetResponses200VideosStandard_resolution) 
 
     case class UsersUser_idRelationshipPostActionOpt(value: String) extends AnyVal
-    val Unfollow = UsersUser_idRelationshipPostActionOpt("unfollow")
-    val Approve = UsersUser_idRelationshipPostActionOpt("approve")
-    val Block = UsersUser_idRelationshipPostActionOpt("block")
-    val Unblock = UsersUser_idRelationshipPostActionOpt("unblock")
-    val Follow = UsersUser_idRelationshipPostActionOpt("follow")
-    implicit def stringToUsersUser_idRelationshipPostActionOpt(in: String): UsersUser_idRelationshipPostActionOpt = in match {
-        case "unfollow" => Unfollow
-        case "approve" => Approve
-        case "block" => Block
-        case "unblock" => Unblock
-        case "follow" => Follow
-    }
-
-    implicit val bindable_BigIntQuery = PlayPathBindables.queryBindableBigInt
-
-    implicit val bindable_BigDecimalPath = PlayPathBindables.pathBindableBigDecimal
-
-    implicit val bindable_BigIntPath = PlayPathBindables.pathBindableBigInt
-
-    implicit val bindable_BigDecimalQuery = PlayPathBindables.queryBindableBigDecimal
-
-    implicit val bindable_OptionStringQuery = PlayPathBindables.createOptionQueryBindable[String]
-
-    implicit val bindable_OptionBigIntQuery = PlayPathBindables.createOptionQueryBindable[BigInt]
-
-    implicit val bindable_OptionBigDecimalQuery = PlayPathBindables.createOptionQueryBindable[BigDecimal]
-
 
 }

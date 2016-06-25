@@ -1,6 +1,5 @@
 package string_formats_validation
 
-package object yaml {
 
     import org.joda.time.DateTime
     import org.joda.time.LocalDate
@@ -12,6 +11,8 @@ package object yaml {
     import de.zalando.play.controllers.PlayPathBindables
 
 
+//noinspection ScalaStyle
+package object yaml {
 
     type StringPostString_optional = Option[String]
     type StringPostDate_time_required = DateTime
@@ -26,8 +27,6 @@ package object yaml {
     type StringPostBase64required = Base64String
     type StringPostDate_time_optional = Option[DateTime]
     type StringPostBase64optional = Option[Base64String]
-
-
 
 
     implicit val bindable_DateTimeQuery = PlayPathBindables.queryBindableDateTime
@@ -45,6 +44,13 @@ package object yaml {
     implicit val bindable_OptionDateTimeQuery = PlayPathBindables.createOptionQueryBindable[DateTime]
 
     implicit val bindable_OptionBase64StringQuery = PlayPathBindables.createOptionQueryBindable[Base64String]
+
+
+}
+//noinspection ScalaStyle
+package yaml {
+
+
 
 
 }

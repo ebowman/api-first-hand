@@ -29,7 +29,7 @@ import Generators._
 
 import scala.math.BigInt
 
-
+//noinspection ScalaStyle
 class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
     def toPath[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
     def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
@@ -78,11 +78,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUser_idDeleteValidator(user_id, user).errors
 
@@ -124,11 +123,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUser_idDeleteValidator(user_id, user).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -206,11 +204,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersPostValidator(signin_data).errors
 
@@ -251,11 +248,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersPostValidator(signin_data).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -327,11 +323,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idWater_needsGetValidator(plant_id).errors
 
@@ -370,11 +365,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idWater_needsGetValidator(plant_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -448,11 +442,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idSunlight_needsPutValidator(plant_id, sunlight_needs).errors
 
@@ -494,11 +487,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idSunlight_needsPutValidator(plant_id, sunlight_needs).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -575,11 +567,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idGetValidator(plant_id).errors
 
@@ -618,11 +609,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idGetValidator(plant_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -696,11 +686,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idWateringsWatering_idGetValidator(plant_id, watering_id).errors
 
@@ -740,11 +729,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idWateringsWatering_idGetValidator(plant_id, watering_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -823,11 +811,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idWater_needsPutValidator(plant_id, water_needs).errors
 
@@ -869,11 +856,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idWater_needsPutValidator(plant_id, water_needs).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -950,11 +936,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idLocationGetValidator(plant_id).errors
 
@@ -993,11 +978,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idLocationGetValidator(plant_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -1071,11 +1055,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UserUser_idPlantsGetValidator(user_id, limit, offset).errors
 
@@ -1115,11 +1098,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UserUser_idPlantsGetValidator(user_id, limit, offset).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -1198,11 +1180,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUser_idGetValidator(user_id).errors
 
@@ -1241,11 +1222,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUser_idGetValidator(user_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -1320,11 +1300,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idLocationPutValidator(plant_id, location).errors
 
@@ -1366,11 +1345,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idLocationPutValidator(plant_id, location).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -1448,11 +1426,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idWateringsGetValidator(plant_id, limit, offset).errors
 
@@ -1492,11 +1469,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idWateringsGetValidator(plant_id, limit, offset).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -1576,11 +1552,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idWateringsWatering_idPutValidator(plant_id, watering_id).errors
 
@@ -1620,11 +1595,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idWateringsWatering_idPutValidator(plant_id, watering_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -1703,11 +1677,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersGetValidator(limit, offset).errors
 
@@ -1747,11 +1720,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersGetValidator(limit, offset).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -1827,11 +1799,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUser_idPictureGetValidator(user_id).errors
 
@@ -1870,11 +1841,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUser_idPictureGetValidator(user_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -1949,11 +1919,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUser_idPutValidator(user_id, user).errors
 
@@ -1995,11 +1964,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUser_idPutValidator(user_id, user).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -2077,11 +2045,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idPicturesPicture_idDeleteValidator(plant_id, picture_id).errors
 
@@ -2121,11 +2088,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idPicturesPicture_idDeleteValidator(plant_id, picture_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -2202,11 +2168,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new AreasArea_idPutValidator(area_id).errors
 
@@ -2245,11 +2210,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new AreasArea_idPutValidator(area_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -2323,11 +2287,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsGetValidator(limit, offset).errors
 
@@ -2367,11 +2330,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsGetValidator(limit, offset).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -2447,11 +2409,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUser_idPicturePutValidator(user_id).errors
 
@@ -2490,11 +2451,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUser_idPicturePutValidator(user_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -2568,11 +2528,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idLocationDeleteValidator(plant_id).errors
 
@@ -2611,11 +2570,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idLocationDeleteValidator(plant_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -2688,11 +2646,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idDeleteValidator(plant_id).errors
 
@@ -2731,11 +2688,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idDeleteValidator(plant_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -2810,11 +2766,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idPutValidator(plant_id, plant).errors
 
@@ -2856,11 +2811,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idPutValidator(plant_id, plant).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -2939,11 +2893,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new AreasGetValidator(limit, offset).errors
 
@@ -2983,11 +2936,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new AreasGetValidator(limit, offset).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -3064,11 +3016,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idPicturesPicture_idPutValidator(plant_id, picture_id).errors
 
@@ -3108,11 +3059,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idPicturesPicture_idPutValidator(plant_id, picture_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -3190,11 +3140,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idSunlight_needsGetValidator(plant_id).errors
 
@@ -3233,11 +3182,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idSunlight_needsGetValidator(plant_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -3310,11 +3258,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new AreasArea_idDeleteValidator(area_id).errors
 
@@ -3353,11 +3300,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new AreasArea_idDeleteValidator(area_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -3429,11 +3375,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUser_idPictureDeleteValidator(user_id).errors
 
@@ -3472,11 +3417,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUser_idPictureDeleteValidator(user_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -3550,11 +3494,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idPicturesPicture_idGetValidator(plant_id, picture_id).errors
 
@@ -3594,11 +3537,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idPicturesPicture_idGetValidator(plant_id, picture_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -3675,11 +3617,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new AreasArea_idGetValidator(area_id).errors
 
@@ -3718,11 +3659,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new AreasArea_idGetValidator(area_id).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -3795,11 +3735,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idPicturesGetValidator(plant_id, limit, offset).errors
 
@@ -3839,11 +3778,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PlantsPlant_idPicturesGetValidator(plant_id, limit, offset).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(

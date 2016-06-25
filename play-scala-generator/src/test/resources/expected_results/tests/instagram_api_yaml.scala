@@ -30,7 +30,7 @@ import Generators._
 import scala.math.BigInt
 import scala.math.BigDecimal
 
-
+//noinspection ScalaStyle
 class Instagram_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
     def toPath[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
     def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")

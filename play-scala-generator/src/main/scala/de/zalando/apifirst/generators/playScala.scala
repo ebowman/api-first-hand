@@ -6,6 +6,7 @@ import de.zalando.apifirst.ScalaName._
 import de.zalando.apifirst.generators.DenotationNames.DenotationTable
 import PlayScalaControllerAnalyzer._
 import de.zalando.apifirst.StringUtil
+import org.slf4j.LoggerFactory
 
 import scala.collection.Iterable
 
@@ -255,10 +256,13 @@ class ScalaGenerator(
 
 object PlayScalaControllersGenerator {
 
+  lazy val log = LoggerFactory.getLogger(this.getClass)
+
   val baseControllersSuffix = "Base"
   val securityTraitSuffix = "Security"
 
-  def controllers(allCalls: Seq[ApiCall], unmanagedParts: Map[ApiCall, UnmanagedPart], packageName: String, deadCode: Map[String, String])(table: DenotationTable): Iterable[Map[String, Object]] = {
+  def controllers(allCalls: Seq[ApiCall], unmanagedParts: Map[ApiCall, UnmanagedPart], packageName: String,
+    deadCode: Map[String, String])(table: DenotationTable): Iterable[Map[String, Object]] = {
     allCalls groupBy { c =>
       (c.handler.packageName, c.handler.controller)
     } map {
@@ -267,7 +271,7 @@ object PlayScalaControllersGenerator {
           singleMethod(unmanagedParts, table)
         }
         if (packageName != controller._1) {
-          println(s"WARN: Ignoring package part of the handler name '${controller._1}', using '$packageName' instead. \n\t" +
+          log.warn(s"Ignoring package part of the handler name '${controller._1}', using '$packageName' instead. \n\t" +
             "Current plugin version only supports single package definition per specification.\n\t" +
             "Play's route files will fail to compile.")
         }
