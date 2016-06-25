@@ -53,9 +53,9 @@ object PlayBodyParsing extends PlayBodyParsing {
     mimeType: Option[MediaType] => String,
     customParsers: Seq[(String, Parser[Option[T]])],
     errorMsg: String,
-    maxLength: Long = parse.DefaultMaxTextLength.toLong
+    maxLength: Int = parse.DefaultMaxTextLength
   )(requestHeader: RequestHeader)(implicit oTag: ClassTag[Option[T]], tag: ClassTag[T]): BodyParser[Option[T]] =
-    parse.raw(maxLength = maxLength).map {
+    parse.raw(maxLength = maxLength.toLong).map {
       _.asBytes(maxLength).flatMap { byteString =>
         if (byteString.nonEmpty) {
           parserCore(mimeType, customParsers, byteString, requestHeader.mediaType)
@@ -79,10 +79,10 @@ object PlayBodyParsing extends PlayBodyParsing {
     mimeType: Option[MediaType] => String,
     customParsers: Seq[(String, Parser[T])],
     errorMsg: String,
-    maxLength: Long = parse.DefaultMaxTextLength.toLong
+    maxLength: Int = parse.DefaultMaxTextLength
   )(requestHeader: RequestHeader)(implicit tag: ClassTag[T]): BodyParser[T] =
-    parse.raw(maxLength = maxLength).map { rawBuffer =>
-      parserCore(mimeType, customParsers, rawBuffer.asBytes(maxLength).getOrElse(ByteString.empty), requestHeader.mediaType)
+    parse.raw(maxLength = maxLength.toLong).map { rawBuffer =>
+      parserCore(mimeType, customParsers, rawBuffer.asBytes(maxLength.toLong).getOrElse(ByteString.empty), requestHeader.mediaType)
     }
 
   private def parserCore[T](

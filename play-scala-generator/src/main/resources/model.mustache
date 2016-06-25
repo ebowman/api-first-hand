@@ -1,6 +1,5 @@
 {{if main_package_prefix}}package {{main_package_prefix}}
 {{/if}}
-package object {{main_package_suffix}} {
 
 {{for import in imports}}
     import {{import.name}}
@@ -9,11 +8,34 @@ package object {{main_package_suffix}} {
     import {{import.name}}
 {{/for}}
 
+package object {{main_package_suffix}} {
 
 {{for alias in aliases}}
     type {{alias.name}} = {{alias.alias}}{{alias.underlying_type}}
 {{/for}}
 
+
+
+
+
+{{for enum in enums}}
+    sealed trait {{enum.name}} { def value: {{enum.type_name}} }
+    {{for leaf in enum.leaves}}
+    case object {{leaf.name}} extends {{enum.name}} { val value = {{leaf.value}} }
+    {{/for}}
+    implicit def stringTo{{enum.name}}(in: String): {{enum.name}} = in match {
+    {{for leaf in enum.leaves}}
+        case {{leaf.value}} => {{leaf.name}}
+    {{/for}}
+    }
+{{/for}}
+{{for binding in model_bindings}}
+    {{binding.full_name}}
+{{/for}}
+
+}
+
+package {{main_package_suffix}} {
 {{for trait in traits}}
     trait {{trait.abstract_name}} {
     {{for field in trait.fields}}
@@ -37,8 +59,4 @@ package object {{main_package_suffix}} {
     {{/for}}
     }
 {{/for}}
-{{for binding in model_bindings}}
-    {{binding.full_name}}
-{{/for}}
-
 }

@@ -26,6 +26,7 @@ object ApiFirstPlayScalaCodeGenerator extends AutoPlugin {
   object autoImport {
     lazy val playScalaCustomTemplateLocation = settingKey[Option[File]]("The location of custom templates (if needed)")
     lazy val playScalaTarget = settingKey[File]("Target folder to save generated files")
+    lazy val playScalaAutogenerateTests = settingKey[Boolean]("Flag enabling or disabling test generation")
     lazy val playScalaAutogenerateControllers = settingKey[Boolean]("Auto - generate Play controllers")
 
     lazy val playScalaMarshallers = taskKey[Seq[File]]("Generate marshallers from api definitions")
@@ -72,6 +73,8 @@ object ApiFirstPlayScalaCodeGenerator extends AutoPlugin {
 
     playScalaAutogenerateControllers := true,
 
+    playScalaAutogenerateTests := true,
+
     playScalaCompilationTasks <<= apiFirstPreparedData map { task =>
       val version = if (BuildInfo.version.endsWith("-SNAPSHOT")) {
         // This essentially disables incremental compilation if we're using a SNAPSHOT version of the playScala plugin.
@@ -97,8 +100,12 @@ object ApiFirstPlayScalaCodeGenerator extends AutoPlugin {
   def playScalaTestSettings: Seq[Setting[_]] = Seq(
     target in playScalaTests := crossTarget.value / "routes" / Defaults.nameForSrc(Test.name),
     playScalaTests := {
-      val rout = playScalaRoutes.value
-      playScalaGenerateTests.value
+      if (playScalaAutogenerateTests.value) {
+        val rout = playScalaRoutes.value
+        playScalaGenerateTests.value
+      } else {
+        Nil
+      }
     },
     managedSources ++= playScalaTests.value
   )
