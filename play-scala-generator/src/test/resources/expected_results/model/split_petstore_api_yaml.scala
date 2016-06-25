@@ -1,6 +1,5 @@
 package split.petstore.api
 
-package object yaml {
 
     import de.zalando.play.controllers.ArrayWrapper
     import org.joda.time.DateTime
@@ -8,6 +7,8 @@ package object yaml {
     import de.zalando.play.controllers.PlayPathBindables
 
 
+//noinspection ScalaStyle
+package object yaml {
 
     type UsersUsernameGetUsername = String
     type UsersCreateWithListPostResponsesDefault = Null
@@ -31,17 +32,22 @@ package object yaml {
     type PetTagsOpt = Seq[PetCategoryOpt]
 
 
-    case class PetCategoryOpt(id: OrderPetId, name: OrderStatus) 
-    case class Pet(name: String, tags: PetTags, photoUrls: PetPhotoUrls, id: OrderPetId, status: OrderStatus, category: PetCategory) 
-    case class User(email: OrderStatus, username: OrderStatus, userStatus: OrderQuantity, lastName: OrderStatus, firstName: OrderStatus, id: OrderPetId, phone: OrderStatus, password: OrderStatus) 
-    case class Order(shipDate: OrderShipDate, quantity: OrderQuantity, petId: OrderPetId, id: OrderPetId, complete: OrderComplete, status: OrderStatus) 
-
-
     implicit val bindable_OptionStringQuery = PlayPathBindables.createOptionQueryBindable[String]
 
     implicit val bindable_ArrayWrapperStringQuery = PlayPathBindables.createArrayWrapperQueryBindable[String]("multi")
 
     implicit val bindable_OptionPetsFindByStatusGetStatusOptQuery = PlayPathBindables.createOptionQueryBindable[PetsFindByStatusGetStatusOpt]
+
+
+}
+//noinspection ScalaStyle
+package yaml {
+
+
+    case class PetCategoryOpt(id: OrderPetId, name: OrderStatus) 
+    case class Pet(name: String, tags: PetTags, photoUrls: PetPhotoUrls, id: OrderPetId, status: OrderStatus, category: PetCategory) 
+    case class User(email: OrderStatus, username: OrderStatus, userStatus: OrderQuantity, lastName: OrderStatus, firstName: OrderStatus, id: OrderPetId, phone: OrderStatus, password: OrderStatus) 
+    case class Order(shipDate: OrderShipDate, quantity: OrderQuantity, petId: OrderPetId, id: OrderPetId, complete: OrderComplete, status: OrderStatus) 
 
 
 }

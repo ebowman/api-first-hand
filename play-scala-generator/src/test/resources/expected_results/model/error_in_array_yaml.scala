@@ -1,11 +1,12 @@
 package error_in_array
 
-package object yaml {
 
     import de.zalando.play.controllers.ArrayWrapper
     import scala.math.BigInt
 
 
+//noinspection ScalaStyle
+package object yaml {
 
     type ModelSchemaSpecialDescriptionsOpt = Seq[String]
     type MetaCopyright = Option[String]
@@ -22,120 +23,208 @@ package object yaml {
     type ModelSchemaAgeGroups = ArrayWrapper[ModelSchemaAgeGroupsArr]
     type ModelSchemaRootMeta = Option[Meta]
 
-
-    case class ModelSchemaRoot(data: ModelSchemaRootData, meta: ModelSchemaRootMeta, links: ModelSchemaRootLinks) 
-    case class Errors(errors: ErrorsErrors) 
-    case class ErrorSourceNameClash(pointer: MetaCopyright, parameter: MetaCopyright) 
-    case class Meta(copyright: MetaCopyright) 
-    case class ModelSchema(name: String, sizeRegister: String, brand: String, partnerArticleModelId: BigInt, description: MetaCopyright, ageGroups: ModelSchemaAgeGroups, keywords: ModelSchemaKeywords, lengthRegister: ModelSchemaLengthRegister, silhouetteId: ModelSchemaSilhouetteId, specialDescriptions: ModelSchemaSpecialDescriptions, articleModelAttributes: ModelSchemaArticleModelAttributes) 
-    case class Error(source: ErrorSource, code: MetaCopyright, status: MetaCopyright, detail: MetaCopyright, title: MetaCopyright) 
-    case class Links(self: MetaCopyright, related: MetaCopyright) 
-
-    case class ModelSchemaAgeGroupsArr(value: String) extends AnyVal
+    
     val Baby = ModelSchemaAgeGroupsArr("baby")
+    
     val Kid = ModelSchemaAgeGroupsArr("kid")
+    
     val Teen = ModelSchemaAgeGroupsArr("teen")
+    
     val Adult = ModelSchemaAgeGroupsArr("adult")
+    
     implicit def stringToModelSchemaAgeGroupsArr(in: String): ModelSchemaAgeGroupsArr = in match {
         case "baby" => Baby
         case "kid" => Kid
         case "teen" => Teen
         case "adult" => Adult
     }
-    case class ModelSchemaSilhouetteId(value: String) extends AnyVal
+    
     val Backpack = ModelSchemaSilhouetteId("backpack")
+    
     val Keychain = ModelSchemaSilhouetteId("keychain")
+    
     val Bra = ModelSchemaSilhouetteId("bra")
+    
     val Skincare = ModelSchemaSilhouetteId("skincare")
+    
     val One_piece_beachwear = ModelSchemaSilhouetteId("one_piece_beachwear")
+    
     val Dress = ModelSchemaSilhouetteId("dress")
+    
     val Sleeping_bag = ModelSchemaSilhouetteId("sleeping_bag")
+    
     val Eye_cosmetic = ModelSchemaSilhouetteId("eye_cosmetic")
+    
     val Fitness = ModelSchemaSilhouetteId("fitness")
+    
     val T_shirt_top = ModelSchemaSilhouetteId("t_shirt_top")
+    
     val Night_trouser = ModelSchemaSilhouetteId("night_trouser")
+    
     val Umbrella = ModelSchemaSilhouetteId("umbrella")
+    
     val Living = ModelSchemaSilhouetteId("living")
+    
     val Beach_shirt = ModelSchemaSilhouetteId("beach_shirt")
+    
     val Lip_cosmetic = ModelSchemaSilhouetteId("lip_cosmetic")
+    
     val Hair = ModelSchemaSilhouetteId("hair")
+    
     val One_piece_underwear = ModelSchemaSilhouetteId("one_piece_underwear")
+    
     val Bicycle = ModelSchemaSilhouetteId("bicycle")
+    
     val Skirt = ModelSchemaSilhouetteId("skirt")
+    
     val Other_accessoires = ModelSchemaSilhouetteId("other_accessoires")
+    
     val Travel_equipment = ModelSchemaSilhouetteId("travel_equipment")
+    
     val Bikini_combination = ModelSchemaSilhouetteId("bikini_combination")
+    
     val Tent = ModelSchemaSilhouetteId("tent")
+    
     val Wallet = ModelSchemaSilhouetteId("wallet")
+    
     val Sandals = ModelSchemaSilhouetteId("sandals")
+    
     val Boots = ModelSchemaSilhouetteId("boots")
+    
     val Underpant = ModelSchemaSilhouetteId("underpant")
+    
     val Bathrobe = ModelSchemaSilhouetteId("bathrobe")
+    
     val Undershirt = ModelSchemaSilhouetteId("undershirt")
+    
     val Headphones = ModelSchemaSilhouetteId("headphones")
+    
     val Underwear_combination = ModelSchemaSilhouetteId("underwear_combination")
+    
     val Tights = ModelSchemaSilhouetteId("tights")
+    
     val Sneaker = ModelSchemaSilhouetteId("sneaker")
+    
     val Lounge = ModelSchemaSilhouetteId("lounge")
+    
     val First_shoe = ModelSchemaSilhouetteId("first_shoe")
+    
     val Cardigan = ModelSchemaSilhouetteId("cardigan")
+    
     val Beauty_equipment = ModelSchemaSilhouetteId("beauty_equipment")
+    
     val Boards = ModelSchemaSilhouetteId("boards")
+    
     val Backless_slipper = ModelSchemaSilhouetteId("backless_slipper")
+    
     val Beach_accessoires = ModelSchemaSilhouetteId("beach_accessoires")
+    
     val Nightdress = ModelSchemaSilhouetteId("nightdress")
+    
     val Nightwear_combination = ModelSchemaSilhouetteId("nightwear_combination")
+    
     val Shirt = ModelSchemaSilhouetteId("shirt")
+    
     val Bag = ModelSchemaSilhouetteId("bag")
+    
     val Headgear = ModelSchemaSilhouetteId("headgear")
+    
     val Suit_accessoires = ModelSchemaSilhouetteId("suit_accessoires")
+    
     val Low_shoe = ModelSchemaSilhouetteId("low_shoe")
+    
     val Protector = ModelSchemaSilhouetteId("protector")
+    
     val Ball = ModelSchemaSilhouetteId("ball")
+    
     val Fragrance = ModelSchemaSilhouetteId("fragrance")
+    
     val Toys = ModelSchemaSilhouetteId("toys")
+    
     val Corsage = ModelSchemaSilhouetteId("corsage")
+    
     val System = ModelSchemaSilhouetteId("system")
+    
     val Vest = ModelSchemaSilhouetteId("vest")
+    
     val Bustier = ModelSchemaSilhouetteId("bustier")
+    
     val Pumps = ModelSchemaSilhouetteId("pumps")
+    
     val Jacket = ModelSchemaSilhouetteId("jacket")
+    
     val Coat = ModelSchemaSilhouetteId("coat")
+    
     val Skates = ModelSchemaSilhouetteId("skates")
+    
     val Kitchen = ModelSchemaSilhouetteId("kitchen")
+    
     val Ballerina_shoe = ModelSchemaSilhouetteId("ballerina_shoe")
+    
     val Gloves = ModelSchemaSilhouetteId("gloves")
+    
     val One_piece_nightwear = ModelSchemaSilhouetteId("one_piece_nightwear")
+    
     val One_piece_suit = ModelSchemaSilhouetteId("one_piece_suit")
+    
     val Glasses = ModelSchemaSilhouetteId("glasses")
+    
     val Bikini_top = ModelSchemaSilhouetteId("bikini_top")
+    
     val Nail = ModelSchemaSilhouetteId("nail")
+    
     val Trouser = ModelSchemaSilhouetteId("trouser")
+    
     val Peeling = ModelSchemaSilhouetteId("peeling")
+    
     val Bedroom = ModelSchemaSilhouetteId("bedroom")
+    
     val Scarf = ModelSchemaSilhouetteId("scarf")
+    
     val Other_equipment = ModelSchemaSilhouetteId("other_equipment")
+    
     val Beach_trouser = ModelSchemaSilhouetteId("beach_trouser")
+    
     val Shave = ModelSchemaSilhouetteId("shave")
+    
     val Ankle_boots = ModelSchemaSilhouetteId("ankle_boots")
+    
     val Bathroom = ModelSchemaSilhouetteId("bathroom")
+    
     val Face_cosmetic = ModelSchemaSilhouetteId("face_cosmetic")
+    
     val Belt = ModelSchemaSilhouetteId("belt")
+    
     val Cleansing = ModelSchemaSilhouetteId("cleansing")
+    
     val Voucher = ModelSchemaSilhouetteId("voucher")
+    
     val Bicycle_equipment = ModelSchemaSilhouetteId("bicycle_equipment")
+    
     val Night_shirt = ModelSchemaSilhouetteId("night_shirt")
+    
     val Combination_clothing = ModelSchemaSilhouetteId("combination_clothing")
+    
     val Racket = ModelSchemaSilhouetteId("racket")
+    
     val Ski = ModelSchemaSilhouetteId("ski")
+    
     val Shoe_accessoires = ModelSchemaSilhouetteId("shoe_accessoires")
+    
     val Jewellery = ModelSchemaSilhouetteId("jewellery")
+    
     val Watch = ModelSchemaSilhouetteId("watch")
+    
     val Sun = ModelSchemaSilhouetteId("sun")
+    
     val Pullover = ModelSchemaSilhouetteId("pullover")
+    
     val Stocking = ModelSchemaSilhouetteId("stocking")
+    
     val Case = ModelSchemaSilhouetteId("case")
+    
     val Etui = ModelSchemaSilhouetteId("etui")
+    
     implicit def stringToModelSchemaSilhouetteId(in: String): ModelSchemaSilhouetteId = in match {
         case "backpack" => Backpack
         case "keychain" => Keychain
@@ -232,5 +321,21 @@ package object yaml {
         case "etui" => Etui
     }
 
+
+}
+//noinspection ScalaStyle
+package yaml {
+
+
+    case class ModelSchemaRoot(data: ModelSchemaRootData, meta: ModelSchemaRootMeta, links: ModelSchemaRootLinks) 
+    case class Errors(errors: ErrorsErrors) 
+    case class ErrorSourceNameClash(pointer: MetaCopyright, parameter: MetaCopyright) 
+    case class Meta(copyright: MetaCopyright) 
+    case class ModelSchema(name: String, sizeRegister: String, brand: String, partnerArticleModelId: BigInt, description: MetaCopyright, ageGroups: ModelSchemaAgeGroups, keywords: ModelSchemaKeywords, lengthRegister: ModelSchemaLengthRegister, silhouetteId: ModelSchemaSilhouetteId, specialDescriptions: ModelSchemaSpecialDescriptions, articleModelAttributes: ModelSchemaArticleModelAttributes) 
+    case class Error(source: ErrorSource, code: MetaCopyright, status: MetaCopyright, detail: MetaCopyright, title: MetaCopyright) 
+    case class Links(self: MetaCopyright, related: MetaCopyright) 
+
+    case class ModelSchemaAgeGroupsArr(value: String) extends AnyVal
+    case class ModelSchemaSilhouetteId(value: String) extends AnyVal
 
 }

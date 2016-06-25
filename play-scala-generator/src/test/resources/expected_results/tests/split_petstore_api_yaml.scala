@@ -30,7 +30,7 @@ import Generators._
 import de.zalando.play.controllers.ArrayWrapper
 import org.joda.time.DateTime
 
-
+//noinspection ScalaStyle
 class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
     def toPath[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
     def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
@@ -80,11 +80,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersPostValidator(body).errors
 
@@ -127,11 +126,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersPostValidator(body).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map.empty[Int,Class[Any]]
@@ -204,11 +202,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new StoresOrderPostValidator(body).errors
 
@@ -251,11 +248,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new StoresOrderPostValidator(body).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -331,11 +327,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersCreateWithArrayPostValidator(body).errors
 
@@ -378,11 +373,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersCreateWithArrayPostValidator(body).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map.empty[Int,Class[Any]]
@@ -455,11 +449,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersLoginGetValidator(username, password).errors
 
@@ -501,11 +494,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersLoginGetValidator(username, password).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -584,11 +576,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new StoresOrderOrderIdGetValidator(orderId).errors
 
@@ -629,11 +620,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new StoresOrderOrderIdGetValidator(orderId).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -709,11 +699,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUsernameGetValidator(username).errors
 
@@ -754,11 +743,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUsernameGetValidator(username).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -835,11 +823,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersCreateWithListPostValidator(body).errors
 
@@ -882,11 +869,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersCreateWithListPostValidator(body).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map.empty[Int,Class[Any]]
@@ -958,11 +944,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUsernameDeleteValidator(username).errors
 
@@ -1003,11 +988,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUsernameDeleteValidator(username).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -1082,11 +1066,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new StoresOrderOrderIdDeleteValidator(orderId).errors
 
@@ -1127,11 +1110,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new StoresOrderOrderIdDeleteValidator(orderId).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -1208,11 +1190,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUsernamePutValidator(username, body).errors
 
@@ -1256,11 +1237,10 @@ class Split_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScal
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new UsersUsernamePutValidator(username, body).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(

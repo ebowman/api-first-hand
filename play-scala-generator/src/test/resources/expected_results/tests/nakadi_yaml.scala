@@ -30,7 +30,7 @@ import Generators._
 import de.zalando.play.controllers.ArrayWrapper
 import java.util.UUID
 
-
+//noinspection ScalaStyle
 class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
     def toPath[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
     def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
@@ -80,11 +80,10 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new TopicsTopicPartitionsPartitionGetValidator(topic, partition).errors
 
@@ -126,11 +125,10 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new TopicsTopicPartitionsPartitionGetValidator(topic, partition).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -211,11 +209,10 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new TopicsTopicEventsGetValidator(stream_timeout, stream_limit, batch_flush_timeout, x_nakadi_cursors, batch_limit, batch_keep_alive_limit, topic).errors
 
@@ -259,11 +256,10 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new TopicsTopicEventsGetValidator(stream_timeout, stream_limit, batch_flush_timeout, x_nakadi_cursors, batch_limit, batch_keep_alive_limit, topic).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -356,11 +352,10 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new TopicsTopicPartitionsPartitionEventsGetValidator(start_from, partition, stream_limit, topic, batch_limit, batch_flush_timeout, stream_timeout, batch_keep_alive_limit).errors
 
@@ -402,11 +397,10 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new TopicsTopicPartitionsPartitionEventsGetValidator(start_from, partition, stream_limit, topic, batch_limit, batch_flush_timeout, stream_timeout, batch_keep_alive_limit).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -502,11 +496,10 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new TopicsTopicEventsPostValidator(topic, event).errors
 
@@ -550,11 +543,10 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new TopicsTopicEventsPostValidator(topic, event).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -636,11 +628,10 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new TopicsTopicPartitionsGetValidator(topic).errors
 
@@ -681,11 +672,10 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new TopicsTopicPartitionsGetValidator(topic).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -761,11 +751,10 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new TopicsTopicEventsBatchPostValidator(topic, event).errors
 
@@ -809,11 +798,10 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new TopicsTopicEventsBatchPostValidator(topic, event).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(

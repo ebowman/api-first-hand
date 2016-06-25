@@ -56,7 +56,7 @@ object PlayBodyParsing extends PlayBodyParsing {
     maxLength: Int = parse.DefaultMaxTextLength
   )(requestHeader: RequestHeader)(implicit oTag: ClassTag[Option[T]], tag: ClassTag[T]): BodyParser[Option[T]] =
     parse.raw(maxLength = maxLength.toLong).map {
-      _.asBytes(maxLength).flatMap { byteString =>
+      _.asBytes(maxLength.toLong).flatMap { byteString =>
         if (byteString.nonEmpty) {
           parserCore(mimeType, customParsers, byteString, requestHeader.mediaType)
         } else

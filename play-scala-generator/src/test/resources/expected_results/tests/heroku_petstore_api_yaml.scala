@@ -29,7 +29,7 @@ import Generators._
 
 import scala.math.BigInt
 
-
+//noinspection ScalaStyle
 class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
     def toPath[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
     def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
@@ -83,11 +83,10 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PutValidator(pet).errors
 
@@ -134,11 +133,10 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PutValidator(pet).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -216,11 +214,10 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new GetValidator(limit).errors
 
@@ -265,11 +262,10 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new GetValidator(limit).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -347,11 +343,10 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PetIdGetValidator(petId).errors
 
@@ -396,11 +391,10 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PetIdGetValidator(petId).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
@@ -479,11 +473,10 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PostValidator(pet).errors
 
@@ -530,11 +523,10 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
                         val data = Map.empty[String, Seq[String]] 
                         val form = new MultipartFormData(data, files, Nil)
 
-                        route(request.withMultipartFormDataBody(form)).get
+                        route(app, request.withMultipartFormDataBody(form)).get
                     } else if (contentType == "application/x-www-form-urlencoded") {
-                        val form =  Nil
-                        route(request.withFormUrlEncodedBody(form:_*)).get
-                    } else route(request).get
+                        route(app, request.withFormUrlEncodedBody()).get
+                    } else route(app, request).get
 
                 val errors = new PostValidator(pet).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(

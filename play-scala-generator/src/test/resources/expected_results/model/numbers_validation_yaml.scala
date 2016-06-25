@@ -1,11 +1,12 @@
 package numbers_validation
 
-package object yaml {
 
 
     import de.zalando.play.controllers.PlayPathBindables
 
 
+//noinspection ScalaStyle
+package object yaml {
 
     type GetDouble_optional = Option[Double]
     type GetInteger_required = Int
@@ -18,8 +19,6 @@ package object yaml {
     type GetResponses200 = Null
 
 
-
-
     implicit val bindable_OptionDoubleQuery = PlayPathBindables.createOptionQueryBindable[Double]
 
     implicit val bindable_OptionIntQuery = PlayPathBindables.createOptionQueryBindable[Int]
@@ -27,6 +26,13 @@ package object yaml {
     implicit val bindable_OptionLongQuery = PlayPathBindables.createOptionQueryBindable[Long]
 
     implicit val bindable_OptionFloatQuery = PlayPathBindables.createOptionQueryBindable[Float]
+
+
+}
+//noinspection ScalaStyle
+package yaml {
+
+
 
 
 }

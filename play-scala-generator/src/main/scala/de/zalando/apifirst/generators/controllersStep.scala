@@ -9,6 +9,7 @@ import de.zalando.apifirst.ScalaName._
 import de.zalando.apifirst.StringUtil._
 import de.zalando.apifirst.generators.DenotationNames._
 import de.zalando.apifirst.naming.Reference
+import org.slf4j.Logger
 
 /**
  * @author slasch
@@ -16,6 +17,8 @@ import de.zalando.apifirst.naming.Reference
  */
 trait CallControllersStep extends EnrichmentStep[ApiCall]
     with ControllersCommons with SecurityCommons with ActionResults with ParameterData {
+
+  def log: Logger
 
   override def steps: Seq[SingleStep] = controllers +: super.steps
 
@@ -129,7 +132,7 @@ trait CallControllersStep extends EnrichmentStep[ApiCall]
     }
     val default = call.resultTypes.default.map(singleResultType(table))
     if (default.isEmpty && resultTypes.isEmpty)
-      println("Could not found any response code definition. It's not possible to define any marshallers. This will lead to the error at runtime.")
+      log.error("Could not found any response code definition. It's not possible to define any marshallers. This will lead to the error at runtime.")
     (resultTypes, default)
   }
 

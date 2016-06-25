@@ -15,7 +15,7 @@ lazy val common = (project in file("common"))
   .settings(
     scalaVersion := Scala10,
     name := "api-first-hand-common",
-    libraryDependencies ++= deps.logback +: (deps.jacksonsJava ++ deps.test)
+    libraryDependencies ++= deps.jacksonsJava ++ deps.test
   )
 
 // This is the API project, it gets added to the runtime dependencies of any
@@ -42,7 +42,7 @@ lazy val apiFirstCore = (project in file("api-first-core"))
   .settings(
     scalaVersion := Scala10,
     name := "api-first-core",
-    libraryDependencies ++= deps.logback +: deps.test
+    libraryDependencies ++= deps.test
   )
 
 lazy val swaggerParser = (project in file("swagger-parser"))

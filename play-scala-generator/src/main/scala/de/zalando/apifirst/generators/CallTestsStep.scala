@@ -4,6 +4,7 @@ import de.zalando.apifirst.Application.{ ApiCall, ParameterRef }
 import de.zalando.apifirst.Domain._
 import de.zalando.apifirst.generators.DenotationNames._
 import de.zalando.apifirst.{ ParameterPlace, ScalaName, StringUtil }
+import org.slf4j.{ Logger, LoggerFactory }
 
 /**
  * @author  slasch
@@ -14,7 +15,7 @@ trait CallTestsStep extends EnrichmentStep[ApiCall] with ActionResults with Para
   override def steps: Seq[SingleStep] = tests +: super.steps
 
   val testsSuffix = "Spec"
-
+  lazy val log = LoggerFactory.getLogger(this.getClass)
   /**
    * Puts tests related information into the denotation table
    *
@@ -29,7 +30,7 @@ trait CallTestsStep extends EnrichmentStep[ApiCall] with ActionResults with Para
   protected val tests: SingleStep = apiCall => table =>
     if (apiCall._2.handler.parameters.isEmpty) empty
     else if (apiCall._2.security.nonEmpty) {
-      println(s"INFO: Not generating tests for secure API endpoint ${apiCall._2.verb} ${apiCall._2.path.asSwagger} , " +
+      log.info(s"Not generating tests for secure API endpoint ${apiCall._2.verb} ${apiCall._2.path.asSwagger} , " +
         "this issue will be addressed in future versions of the plugin")
       empty
     } else Map("tests" -> callTest(apiCall._2)(table))
@@ -129,6 +130,8 @@ trait CallTestsStep extends EnrichmentStep[ApiCall] with ActionResults with Para
 
 trait ActionResults extends EnrichmentStep[ApiCall] {
 
+  def log: Logger
+
   import de.zalando.apifirst.ScalaName._
 
   def actionResults(call: ApiCall)(table: DenotationTable): (Seq[Map[String, Any]], Option[String]) = {
@@ -138,7 +141,7 @@ trait ActionResults extends EnrichmentStep[ApiCall] {
     }
     val default = call.resultTypes.default.map(singleResultType(table))
     if (default.isEmpty && resultTypes.isEmpty)
-      println("Could not found any response code definition. It's not possible to define any marshallers. This will lead to the error at runtime.")
+      log.warn("Could not found any response code definition. It's not possible to define any marshallers. This will lead to the error at runtime.")
     (resultTypes, default)
   }
 

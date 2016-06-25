@@ -1,10 +1,11 @@
 package nested_arrays_validation
 
-package object yaml {
 
     import de.zalando.play.controllers.ArrayWrapper
 
 
+//noinspection ScalaStyle
+package object yaml {
 
     type ExampleNestedArraysOptArr = ArrayWrapper[ExampleNestedArraysOptArrArr]
     type ExampleNestedArraysOpt = ArrayWrapper[ExampleNestedArraysOptArr]
@@ -19,9 +20,14 @@ package object yaml {
     type ActivityActions = Option[String]
 
 
+
+}
+//noinspection ScalaStyle
+package yaml {
+
+
     case class Activity(actions: ActivityActions) 
     case class Example(messages: ExampleMessages, nestedArrays: ExampleNestedArrays) 
-
 
 
 }

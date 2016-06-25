@@ -1,11 +1,12 @@
 
-package object simple_petstore_api_yaml {
 
     import de.zalando.play.controllers.ArrayWrapper
 
     import de.zalando.play.controllers.PlayPathBindables
 
 
+//noinspection ScalaStyle
+package object simple_petstore_api_yaml {
 
     type PetsIdDeleteResponses204 = Null
     type NewPetTag = Option[String]
@@ -17,16 +18,21 @@ package object simple_petstore_api_yaml {
     type PetsGetTags = Option[PetsGetTagsOpt]
 
 
-    case class ErrorModel(code: Int, message: String) 
-    case class Pet(id: Long, name: String, tag: NewPetTag) 
-    case class NewPet(name: String, id: NewPetId, tag: NewPetTag) 
-
-
     implicit val bindable_OptionIntQuery = PlayPathBindables.createOptionQueryBindable[Int]
 
     implicit val bindable_ArrayWrapperStringQuery = PlayPathBindables.createArrayWrapperQueryBindable[String]("csv")
 
     implicit val bindable_OptionPetsGetTagsOptQuery = PlayPathBindables.createOptionQueryBindable[PetsGetTagsOpt]
+
+
+}
+//noinspection ScalaStyle
+package simple_petstore_api_yaml {
+
+
+    case class ErrorModel(code: Int, message: String) 
+    case class Pet(id: Long, name: String, tag: NewPetTag) 
+    case class NewPet(name: String, id: NewPetId, tag: NewPetTag) 
 
 
 }

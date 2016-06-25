@@ -1,6 +1,5 @@
 package string_formats
 
-package object yaml {
 
     import de.zalando.play.controllers.Base64String
     import Base64String._
@@ -13,6 +12,8 @@ package object yaml {
     import de.zalando.play.controllers.PlayPathBindables
 
 
+//noinspection ScalaStyle
+package object yaml {
 
     type GetBase64 = Option[Base64String]
     type GetPetId = BinaryString
@@ -20,8 +21,6 @@ package object yaml {
     type GetUuid = Option[UUID]
     type GetDate = Option[LocalDate]
     type GetResponses200 = Null
-
-
 
 
     implicit val bindable_Base64StringQuery = PlayPathBindables.queryBindableBase64String
@@ -39,6 +38,13 @@ package object yaml {
     implicit val bindable_OptionUUIDQuery = PlayPathBindables.createOptionQueryBindable[UUID]
 
     implicit val bindable_OptionLocalDateQuery = PlayPathBindables.createOptionQueryBindable[LocalDate]
+
+
+}
+//noinspection ScalaStyle
+package yaml {
+
+
 
 
 }
