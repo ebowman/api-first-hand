@@ -1,0 +1,28 @@
+swagger: '2.0'
+info:
+  version: "1.0.0"
+  title: wrong field name if enum is referenced
+basePath: /status
+paths:
+  /:
+    get:
+      responses:
+        200:
+          description: StatusAndCode
+          schema:
+            $ref: '#/definitions/StatusAndCode'
+
+definitions:
+  Status:
+    type: string
+    enum: ["OK", "WARNING", "ERROR"]
+
+  StatusAndCode:
+    required:
+      - code
+      - message
+    properties:
+      code:
+        $ref: '#/definitions/Status'
+      message:
+        type: string

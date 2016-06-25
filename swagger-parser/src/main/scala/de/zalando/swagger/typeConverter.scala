@@ -112,8 +112,19 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
     val tpe = if (param.`type` != null) param.`type` else PrimitiveType.OBJECT
     tpe match {
       case t: ArrayJsonSchemaType => Seq(fromArrayJsonSchema(name, param, t))
+      case p: PrimitiveType.Val if param.enum.isDefined => fromEnum(name, param, p, required)
       case p: PrimitiveType.Val => fromPrimitiveType(name, param, p, required)
     }
+  }
+  private def fromEnum(name: Reference, param: Schema[_], p: PrimitiveType.Val, required: Option[Seq[String]]): NamedTypes = {
+    val meta = enumTypeMeta(param.enum.get.size)
+    val typeName = name
+    val primitiveType = (p, param.format)(param)
+    val leaves = param.enum.get map { value =>
+      EnumObject(primitiveType, value.toString, TypeMeta(Some(value.toString)))
+    }
+    val rootType = typeName -> EnumTrait(primitiveType, meta, leaves)
+    Seq(checkRequired(name, required, rootType, param.default))
   }
 
   private def fromPrimitiveType(name: Reference, param: Schema[_], p: PrimitiveType.Val, required: Option[Seq[String]]): NamedTypes = {
@@ -136,15 +147,6 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
           checkRequired(name, required, types, param.default)
         }
         Seq(obj)
-      case tpe if param.enum.isDefined =>
-        val meta = enumTypeMeta(param.enum.get.size)
-        val typeName = typeNameFromInlinedReference(param) getOrElse name
-        val primitiveType = (p, param.format)(param)
-        val leaves = param.enum.get map { value =>
-          EnumObject(primitiveType, value.toString, TypeMeta(Some(value.toString)))
-        }
-        val rootType = typeName -> EnumTrait(primitiveType, meta, leaves)
-        Seq(checkRequired(name, required, rootType, param.default))
       case _ =>
         val primitiveType = name -> (p, param.format)(param)
         Seq(checkRequired(name, required, primitiveType, param.default))

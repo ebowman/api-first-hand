@@ -1,0 +1,10 @@
+"definitions" / "Status" ->
+	EnumTrait(Str)
+"definitions" / "StatusAndCode" ->
+	TypeDef("definitions" / "StatusAndCode", Seq(
+		Field("definitions" / "StatusAndCode" / "code", EnumTrait(Str)),
+		Field("definitions" / "StatusAndCode" / "message", Str)))
+"paths" / "/" / "get" / "responses" / "200" ->
+	TypeDef("definitions" / "StatusAndCode", Seq(
+		Field("definitions" / "StatusAndCode" / "code", EnumTrait(Str)),
+		Field("definitions" / "StatusAndCode" / "message", Str)))
