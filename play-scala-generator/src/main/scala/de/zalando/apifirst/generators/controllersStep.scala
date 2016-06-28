@@ -254,7 +254,7 @@ trait ParameterData {
       "optional" -> parser.replaceAll("anyParser", ""),
       "real_name" -> param.simple,
       "is_file" -> (if (parserType == "File") parserType else ""),
-      "default" -> "" // FIXME
+      "default" -> parameter.default.map('"' + _ + '"').toString
     )
   }
 

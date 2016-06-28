@@ -70,7 +70,7 @@ def {{m.action}}[T] = (f: {{m.action_type}}[T]) =>{{if m.non_body_params}} ({{/i
             {{/for}}
             {{for header in m.header_params}}
             val {{header.field_name}}: Either[String,{{header.type_name}}] =
-            fromParameters{{if header.optional}}Optional{{/if}}[{{header.type_name}}]("header")("{{header.real_name}}", request.headers.toMap{{if header.default}}, Some({{header.default}}{{/if}})
+            fromParameters{{if header.optional}}Optional{{/if}}[{{header.type_name}}]("header")("{{header.real_name}}", request.headers.toMap{{if header.default}}, {{header.default}}{{/if}})
             {{/for}}
             {{if m.form_parameters}}
             val eitherFormParameters = FormDataParser.{{m.form_parser_name}}(request)
