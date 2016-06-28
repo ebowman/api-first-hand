@@ -17,6 +17,7 @@ import de.zalando.play.controllers.PlayPathBindables
 
 
 
+//noinspection ScalaStyle
 trait NakadiYamlBase extends Controller with PlayBodyParsing {
     sealed trait NakadiHackGet_metricsType[T] extends ResultWrapper[T]
     case class NakadiHackGet_metrics401(result: Problem)(implicit val writer: String => Option[Writeable[Problem]]) extends NakadiHackGet_metricsType[Problem] { val statusCode = 401 }
@@ -170,7 +171,7 @@ def nakadiHackGet_events_from_multiple_partitionsAction[T] = (f: nakadiHackGet_e
         negotiateContent(request.acceptedTypes, providedTypes).map { nakadiHackGet_events_from_multiple_partitionsResponseMimeType =>
             
             val x_nakadi_cursors: Either[String,String] =
-                fromParameters[String]("header")("x_nakadi_cursors", request.headers.toMap)
+            fromParameters[String]("header")("x_nakadi_cursors", request.headers.toMap, None)
             
             
                 (x_nakadi_cursors) match {
@@ -339,6 +340,6 @@ def nakadiHackPost_eventsAction[T] = (f: nakadiHackPost_eventsActionType[T]) => 
         Results.NotAcceptable
       }
     }
-    abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with NakadiHackGet_metricsType[Result] with NakadiHackGet_events_from_single_partitionType[Result] with NakadiHackGet_partitionType[Result] with NakadiHackGet_topicsType[Result] with NakadiHackGet_events_from_multiple_partitionsType[Result] with NakadiHackPost_eventType[Result] with NakadiHackGet_partitionsType[Result] with NakadiHackPost_eventsType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.Status(statusCode)) }
+    abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with NakadiHackGet_metricsType[Result] with NakadiHackGet_events_from_single_partitionType[Result] with NakadiHackGet_partitionType[Result] with NakadiHackGet_topicsType[Result] with NakadiHackGet_events_from_multiple_partitionsType[Result] with NakadiHackPost_eventType[Result] with NakadiHackGet_partitionsType[Result] with NakadiHackPost_eventsType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(result) }
     case object NotImplementedYet extends ResultWrapper[Results.EmptyContent]  with NakadiHackGet_metricsType[Results.EmptyContent] with NakadiHackGet_events_from_single_partitionType[Results.EmptyContent] with NakadiHackGet_partitionType[Results.EmptyContent] with NakadiHackGet_topicsType[Results.EmptyContent] with NakadiHackGet_events_from_multiple_partitionsType[Results.EmptyContent] with NakadiHackPost_eventType[Results.EmptyContent] with NakadiHackGet_partitionsType[Results.EmptyContent] with NakadiHackPost_eventsType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
 }

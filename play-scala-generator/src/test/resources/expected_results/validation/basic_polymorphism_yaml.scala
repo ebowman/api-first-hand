@@ -28,6 +28,7 @@ class PetValidator(instance: IPet) extends RecursiveValidator {
         new PetPetTypeValidator(instance.petType)
     )
 }
+
 // ----- option delegating validators -----
 class PutDummyValidator(instance: PutDummy) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new PetValidator(_) }

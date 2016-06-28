@@ -14,18 +14,17 @@ package object yaml {
 
     
     val Clueless = CatHuntingSkill("clueless")
-    
     val Lazy = CatHuntingSkill("lazy")
-    
     val Adventurous = CatHuntingSkill("adventurous")
-    
     val Aggressive = CatHuntingSkill("aggressive")
-    
-    implicit def stringToCatHuntingSkill(in: String): CatHuntingSkill = in match {
+
+    implicit def stringToCatHuntingSkill: String => CatHuntingSkill = {
         case "clueless" => Clueless
         case "lazy" => Lazy
         case "adventurous" => Adventurous
         case "aggressive" => Aggressive
+        case other =>
+            throw new IllegalArgumentException("Couldn't parse parameter " + other)
     }
 
 
@@ -45,6 +44,8 @@ package yaml {
     case class Pet(name: String, petType: String) extends IPet
     case class Labrador(name: String, petType: String, packSize: Int, cuteness: Int) extends IPet
 
-    case class CatHuntingSkill(value: String) extends AnyVal
+    case class CatHuntingSkill(value: String) {
+        override def toString = value.toString
+    }
 
 }

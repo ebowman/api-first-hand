@@ -49,6 +49,7 @@ class GetDateOptValidator(instance: LocalDate) extends RecursiveValidator {
     override val validators = Seq(new GetDateOptConstraints(instance))
 }
 // ----- complex type validators -----
+
 // ----- option delegating validators -----
 class GetBase64Validator(instance: GetBase64) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new GetBase64OptValidator(_) }

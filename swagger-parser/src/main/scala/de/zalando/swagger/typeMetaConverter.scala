@@ -29,8 +29,8 @@ object TypeMetaConverter extends ParameterNaming {
   implicit def namedTypesTypeMeta(nb: NamedTypes): TypeMeta =
     TypeMeta(Some(s"Named types: ${nb.size}"), Nil)
 
-  implicit def enumTypeMeta(enumSize: Int): TypeMeta =
-    TypeMeta(Some(s"Enum type : $enumSize"), Nil)
+  implicit def enumTypeMeta[T](enum: EnumValidation[T]): TypeMeta =
+    TypeMeta(Some(s"Enum type : ${enum.enum.map(_.size)}"), toEnumValidations(enum))
 
   implicit def parametersListItemMeta(item: ParametersListItem): TypeMeta =
     item match {

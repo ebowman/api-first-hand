@@ -180,6 +180,7 @@ class StoresOrderPostBodyOptValidator(instance: Order) extends RecursiveValidato
         new OrderStatusValidator(instance.status)
     )
 }
+
 // ----- option delegating validators -----
 class OrderStatusValidator(instance: OrderStatus) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new OrderStatusOptValidator(_) }

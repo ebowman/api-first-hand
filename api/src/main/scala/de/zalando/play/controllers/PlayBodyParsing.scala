@@ -163,10 +163,19 @@ trait PlayBodyParsing extends BodyParsers {
   /**
    * Helper method to parse parameters sent as Headers
    */
-  def fromParameters[T](place: String)(key: String, headers: Map[String, Seq[String]], default: Option[T] = None)(implicit binder: QueryStringBindable[T]): Either[String, T] =
-    binder.bind(key, headers).getOrElse {
-      default.map(d => Right(d)).getOrElse(Left(s"Missing $place parameter(s) for '$key'"))
+  def fromParameters[T](place: String)(key: String, headers: Map[String, Seq[String]], default: Option[T] = None)(implicit binder: QueryStringBindable[T]): Either[String, T] = {
+    binder.bind(key, headers) orElse default.map(d => Right(d)) getOrElse {
+      Left(s"Missing $place parameter(s) for '$key'")
     }
+  }
+
+  def fromParametersOptional[T <: Option[_]](place: String)(key: String, headers: Map[String, Seq[String]], default: Option[T] = None)(implicit binder: QueryStringBindable[T]): Either[String, T] = {
+    val opt = binder.bind(key, headers) orElse default.map(d => Right(d))
+    opt match {
+      case Some(r) => r
+      case None => Right(None.asInstanceOf[T])
+    }
+  }
 
   /**
    * Helper methods to parse files

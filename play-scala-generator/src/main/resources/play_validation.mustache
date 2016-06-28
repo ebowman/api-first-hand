@@ -31,6 +31,14 @@ class {{v.validation_name}}(instance: {{v.type_name}}) extends RecursiveValidato
     )
 }
 {{/for}}
+{{if enum_validations}}
+// ----- enum delegating validators -----
+{{for v in enum_validations}}
+class {{v.validation_name}}(instance: {{v.type_name}}) extends RecursiveValidator {
+    override val validators = Seq(new {{v.delegate_validation_name}}(instance.value))
+}
+{{/for}}
+{{/if}}
 // ----- option delegating validators -----
 {{for v in opt_validations}}
 class {{v.validation_name}}(instance: {{v.type_name}}) extends RecursiveValidator {

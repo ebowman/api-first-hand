@@ -57,6 +57,13 @@ class MediaFilterOptConstraints(override val instance: String) extends Validatio
 class MediaFilterOptValidator(instance: String) extends RecursiveValidator {
     override val validators = Seq(new MediaFilterOptConstraints(instance))
 }
+class UsersUser_idRelationshipPostActionOptEnumConstraints(override val instance: String) extends ValidationBase[String] {
+    override def constraints: Seq[Constraint[String]] =
+        Seq(enum("approve,unblock,block,unfollow,follow"))
+}
+class UsersUser_idRelationshipPostActionOptEnumValidator(instance: String) extends RecursiveValidator {
+    override val validators = Seq(new UsersUser_idRelationshipPostActionOptEnumConstraints(instance))
+}
 class MediaMedia_idLikesGetMedia_idConstraints(override val instance: BigInt) extends ValidationBase[BigInt] {
     override def constraints: Seq[Constraint[BigInt]] =
         Seq()
@@ -170,6 +177,12 @@ class UsersUser_idMediaRecentGetUser_idValidator(instance: BigDecimal) extends R
     override val validators = Seq(new UsersUser_idMediaRecentGetUser_idConstraints(instance))
 }
 // ----- complex type validators -----
+
+// ----- enum delegating validators -----
+class UsersUser_idRelationshipPostActionOptValidator(instance: UsersUser_idRelationshipPostActionOpt) extends RecursiveValidator {
+    override val validators = Seq(new UsersUser_idRelationshipPostActionOptEnumValidator(instance.value))
+}
+
 // ----- option delegating validators -----
 class MediaIdValidator(instance: MediaId) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new MediaIdOptValidator(_) }
@@ -179,6 +192,9 @@ class LocationLatitudeValidator(instance: LocationLatitude) extends RecursiveVal
 }
 class MediaFilterValidator(instance: MediaFilter) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new MediaFilterOptValidator(_) }
+}
+class UsersUser_idRelationshipPostActionValidator(instance: UsersUser_idRelationshipPostAction) extends RecursiveValidator {
+    override val validators = instance.toSeq.map { new UsersUser_idRelationshipPostActionOptValidator(_) }
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----

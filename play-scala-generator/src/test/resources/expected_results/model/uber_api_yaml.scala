@@ -22,14 +22,12 @@ package object yaml {
     type ActivitiesHistoryOpt = ArrayWrapper[Activity]
 
 
+import play.api.mvc.{QueryStringBindable, PathBindable}
+
     implicit val bindable_UUIDQuery = PlayPathBindables.queryBindableUUID
-
-    implicit val bindable_OptionIntQuery = PlayPathBindables.createOptionQueryBindable[Int]
-
-    implicit val bindable_OptionStringQuery = PlayPathBindables.createOptionQueryBindable[String]
-
-    implicit val bindable_OptionUUIDQuery = PlayPathBindables.createOptionQueryBindable[UUID]
-
+    implicit val bindable_OptionIntQuery: QueryStringBindable[Option[Int]] = PlayPathBindables.createOptionQueryBindable[Int]
+    implicit val bindable_OptionStringQuery: QueryStringBindable[Option[String]] = PlayPathBindables.createOptionQueryBindable[String]
+    implicit val bindable_OptionUUIDQuery: QueryStringBindable[Option[UUID]] = PlayPathBindables.createOptionQueryBindable[UUID]
 
 }
 //noinspection ScalaStyle

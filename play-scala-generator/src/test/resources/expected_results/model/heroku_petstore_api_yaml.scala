@@ -18,8 +18,9 @@ package object yaml {
     type GetResponses200 = Seq[Pet]
 
 
-    implicit val bindable_BigIntQuery = PlayPathBindables.queryBindableBigInt
+import play.api.mvc.{QueryStringBindable, PathBindable}
 
+    implicit val bindable_BigIntQuery = PlayPathBindables.queryBindableBigInt
 
 }
 //noinspection ScalaStyle

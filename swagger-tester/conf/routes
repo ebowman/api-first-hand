@@ -1,2 +1,2 @@
 GET        /        controllers.Application.index
-->         /        swagger.Routes
+->          /in                   de.kaufhof.bsna.in.yaml.Routes

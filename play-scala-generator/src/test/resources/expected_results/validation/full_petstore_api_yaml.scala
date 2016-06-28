@@ -180,6 +180,7 @@ class OrderValidator(instance: Order) extends RecursiveValidator {
         new OrderStatusValidator(instance.status)
     )
 }
+
 // ----- option delegating validators -----
 class OrderStatusValidator(instance: OrderStatus) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new OrderStatusOptValidator(_) }

@@ -33,6 +33,7 @@ class ActivityValidator(instance: Activity) extends RecursiveValidator {
         new ActivityActionsValidator(instance.actions)
     )
 }
+
 // ----- option delegating validators -----
 class AnotherPostExampleValidator(instance: AnotherPostExample) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new ExampleValidator(_) }

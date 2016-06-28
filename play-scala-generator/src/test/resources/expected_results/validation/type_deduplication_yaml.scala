@@ -301,6 +301,7 @@ class SunlightNeedsValidator(instance: SunlightNeeds) extends RecursiveValidator
         new PlantPlant_idValidator(instance.amount)
     )
 }
+
 // ----- option delegating validators -----
 class UsersGetLimitValidator(instance: UsersGetLimit) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new UsersGetLimitOptValidator(_) }

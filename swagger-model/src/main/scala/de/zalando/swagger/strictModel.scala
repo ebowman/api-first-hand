@@ -6,11 +6,11 @@ import com.fasterxml.jackson.annotation.{ JsonAnySetter, JsonProperty }
 import com.fasterxml.jackson.core.`type`.TypeReference
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import com.fasterxml.jackson.module.scala.JsonScalaEnumeration
+import de.zalando.swagger.strictModel.EnumValidation.Enum
 
 import scala.collection.mutable
-import scala.util.Try
-
 import scala.language.implicitConversions
+import scala.util.Try
 /**
  * @author  slasch
  * @since   09.10.2015.
@@ -313,6 +313,7 @@ object strictModel {
     def collectionFormat: CF
     def name: String
     def in: String
+    def enum: Enum[T]
     if (collectionFormat != NULL) require(isArray)
     if (default != NULL) require(!required)
     if (isArray) require(items != NULL)
@@ -921,6 +922,13 @@ object strictModel {
     require(exclusiveMinimum.isEmpty || minimum.isDefined)
   }
 
+  object EnumValidation {
+    type Enum[T]                = Option[ManyUnique[T]]
+  }
+  trait EnumValidation[T] {
+    def enum: EnumValidation.Enum[T]
+  }
+
   object StringValidation {
     type MaxLength              = Option[Int] // length <=
     type MinLength              = Option[Int] // length >=
@@ -944,14 +952,12 @@ object strictModel {
     type MaxItems               = Option[Int]
     type MinItems               = Option[Int]
     type UniqueItems            = Option[Boolean]
-    type Enum[T]                = Option[ManyUnique[T]]
   }
   trait ArrayValidation[T] extends ValidationBase {
     import ArrayValidation._
     def maxItems:               MaxItems
     def minItems:               MinItems
     def uniqueItems:            UniqueItems
-    def enum:                   Enum[T]
     require(maxItems.forall(_>=0))
     require(minItems.forall(_>=0))
   }
@@ -967,6 +973,7 @@ object strictModel {
     require(minProperties.forall(_>=0))
   }
 
-  trait AllValidations[T] extends NumberValidation[T] with StringValidation with ArrayValidation[T]
+  trait AllValidations[T] extends NumberValidation[T]
+    with StringValidation with ArrayValidation[T] with EnumValidation[T]
 
 }

@@ -51,4 +51,6 @@ object Generators extends JsValueGenerators {
     implicit lazy val arbFile: Arbitrary[File] = Arbitrary(for {
         content <- arbitrary[String]
     } yield de.zalando.play.controllers.PlayPathBindables.tempFileFromString(content))
+    
+
 }

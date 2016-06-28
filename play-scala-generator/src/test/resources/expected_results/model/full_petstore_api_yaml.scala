@@ -32,12 +32,11 @@ package object yaml {
     type PetTagsOpt = ArrayWrapper[Tag]
 
 
-    implicit val bindable_OptionStringQuery = PlayPathBindables.createOptionQueryBindable[String]
+import play.api.mvc.{QueryStringBindable, PathBindable}
 
-    implicit val bindable_ArrayWrapperStringQuery = PlayPathBindables.createArrayWrapperQueryBindable[String]("multi")
-
-    implicit val bindable_OptionPetsFindByStatusGetStatusOptQuery = PlayPathBindables.createOptionQueryBindable[PetsFindByStatusGetStatusOpt]
-
+    implicit val bindable_OptionStringQuery: QueryStringBindable[Option[String]] = PlayPathBindables.createOptionQueryBindable[String]
+    implicit val bindable_ArrayWrapperStringQuery: QueryStringBindable[ArrayWrapper[String]] = PlayPathBindables.createArrayWrapperQueryBindable[String]("multi")
+    implicit val bindable_OptionPetsFindByStatusGetStatusOptQuery: QueryStringBindable[Option[PetsFindByStatusGetStatusOpt]] = PlayPathBindables.createOptionQueryBindable[PetsFindByStatusGetStatusOpt]
 
 }
 //noinspection ScalaStyle

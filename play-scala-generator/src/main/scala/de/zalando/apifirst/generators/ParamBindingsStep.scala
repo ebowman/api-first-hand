@@ -36,7 +36,7 @@ trait ParamBindingsStep extends EnrichmentStep[Parameter] {
         bindingForPlace(paramPair, table, place)
       case ParameterPlace.HEADER =>
         // headers are handled in the same way path parameters are
-        val place = "Path"
+        val place = "Query"
         bindingForPlace(paramPair, table, place)
       case other =>
         val place = other.toString.capitalize
@@ -47,10 +47,12 @@ trait ParamBindingsStep extends EnrichmentStep[Parameter] {
     Map("binding" -> forType(place, paramPair._1, paramPair._2.typeName, table))
   }
 
-  val providedBindings = Seq(classOf[Flt], classOf[Intgr], classOf[Lng], classOf[Dbl], classOf[Bool], classOf[Str])
+  val providedBindings = Seq(classOf[Flt], classOf[Intgr], classOf[Lng], classOf[Dbl],
+    classOf[Bool], classOf[Str], classOf[EnumObject])
 
   def forType(tpe: String, k: Reference, typeName: Type, table: DenotationTable): Seq[Map[String, Any]] = typeName match {
     case i if providedBindings.contains(i.getClass) => Nil
+    case d: EnumTrait => forEnum(tpe, table, k)
     case someTpe if someTpe.nestedTypes.nonEmpty => forNestedTypes(tpe, table, someTpe)
     case TypeRef(ref) => forType(tpe, ref, app.findType(ref), table)
     case d: Date => forDateType(tpe)
@@ -68,7 +70,10 @@ trait ParamBindingsStep extends EnrichmentStep[Parameter] {
   def forNestedTypes(tpe: String, table: DenotationTable, someTpe: Type): Seq[Map[String, Any]] = {
     val alias = someTpe.name.simple
     val underlyingType = someTpe.nestedTypes.map { t => typeNameDenotation(table, t.name) }.mkString(", ")
-    val bindable = s"""implicit val bindable_$alias$underlyingType$tpe = PlayPathBindables.create$alias${tpe}Bindable[$underlyingType]"""
+    val binding = if (tpe == "Path") tpe else "QueryString"
+    val bindable =
+      s"""implicit val bindable_$alias$underlyingType$tpe: ${binding}Bindable[$alias[$underlyingType]] = """ +
+        s"""PlayPathBindables.create$alias${tpe}Bindable[$underlyingType]"""
     val format = someTpe match {
       case arr: Arr => "(\"" + arr.format + "\")"
       case _ => ""
@@ -86,6 +91,15 @@ trait ParamBindingsStep extends EnrichmentStep[Parameter] {
   def forPasswordType: Seq[Map[String, Object]] = {
     Seq(Map(
       "name" -> "", "format" -> "",
+      "binding_imports" -> Set("de.zalando.play.controllers.PlayPathBindables")
+    ))
+  }
+  private def forEnum(name: String, table: DenotationTable, k: Reference): Seq[Map[String, Object]] = {
+    val tpe = memberNameDenotation(table, k)
+    val binding = if (name == "Path") name else "QueryString"
+    Seq(Map(
+      "name" -> "",
+      "format" -> s"""implicit val bindable_$name$tpe: ${binding}Bindable[$tpe] = new PlayPathBindables.createEnum${name}Bindable(stringTo$tpe)""",
       "binding_imports" -> Set("de.zalando.play.controllers.PlayPathBindables")
     ))
   }

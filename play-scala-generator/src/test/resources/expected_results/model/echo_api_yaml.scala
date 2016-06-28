@@ -12,8 +12,9 @@ package object echo {
     type Test_pathIdGetId = String
 
 
-    implicit val bindable_OptionStringQuery = PlayPathBindables.createOptionQueryBindable[String]
+import play.api.mvc.{QueryStringBindable, PathBindable}
 
+    implicit val bindable_OptionStringQuery: QueryStringBindable[Option[String]] = PlayPathBindables.createOptionQueryBindable[String]
 
 }
 //noinspection ScalaStyle

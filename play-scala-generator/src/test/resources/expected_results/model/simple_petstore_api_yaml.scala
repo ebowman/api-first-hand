@@ -18,12 +18,11 @@ package object simple_petstore_api_yaml {
     type PetsGetTags = Option[PetsGetTagsOpt]
 
 
-    implicit val bindable_OptionIntQuery = PlayPathBindables.createOptionQueryBindable[Int]
+import play.api.mvc.{QueryStringBindable, PathBindable}
 
-    implicit val bindable_ArrayWrapperStringQuery = PlayPathBindables.createArrayWrapperQueryBindable[String]("csv")
-
-    implicit val bindable_OptionPetsGetTagsOptQuery = PlayPathBindables.createOptionQueryBindable[PetsGetTagsOpt]
-
+    implicit val bindable_OptionIntQuery: QueryStringBindable[Option[Int]] = PlayPathBindables.createOptionQueryBindable[Int]
+    implicit val bindable_ArrayWrapperStringQuery: QueryStringBindable[ArrayWrapper[String]] = PlayPathBindables.createArrayWrapperQueryBindable[String]("csv")
+    implicit val bindable_OptionPetsGetTagsOptQuery: QueryStringBindable[Option[PetsGetTagsOpt]] = PlayPathBindables.createOptionQueryBindable[PetsGetTagsOpt]
 
 }
 //noinspection ScalaStyle

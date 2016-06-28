@@ -47,37 +47,30 @@ package object yaml {
 
     
     val Unfollow = UsersUser_idRelationshipPostActionOpt("unfollow")
-    
     val Approve = UsersUser_idRelationshipPostActionOpt("approve")
-    
     val Block = UsersUser_idRelationshipPostActionOpt("block")
-    
     val Unblock = UsersUser_idRelationshipPostActionOpt("unblock")
-    
     val Follow = UsersUser_idRelationshipPostActionOpt("follow")
-    
-    implicit def stringToUsersUser_idRelationshipPostActionOpt(in: String): UsersUser_idRelationshipPostActionOpt = in match {
+
+    implicit def stringToUsersUser_idRelationshipPostActionOpt: String => UsersUser_idRelationshipPostActionOpt = {
         case "unfollow" => Unfollow
         case "approve" => Approve
         case "block" => Block
         case "unblock" => Unblock
         case "follow" => Follow
+        case other =>
+            throw new IllegalArgumentException("Couldn't parse parameter " + other)
     }
 
+import play.api.mvc.{QueryStringBindable, PathBindable}
+
     implicit val bindable_BigIntQuery = PlayPathBindables.queryBindableBigInt
-
     implicit val bindable_BigDecimalPath = PlayPathBindables.pathBindableBigDecimal
-
     implicit val bindable_BigIntPath = PlayPathBindables.pathBindableBigInt
-
     implicit val bindable_BigDecimalQuery = PlayPathBindables.queryBindableBigDecimal
-
-    implicit val bindable_OptionStringQuery = PlayPathBindables.createOptionQueryBindable[String]
-
-    implicit val bindable_OptionBigIntQuery = PlayPathBindables.createOptionQueryBindable[BigInt]
-
-    implicit val bindable_OptionBigDecimalQuery = PlayPathBindables.createOptionQueryBindable[BigDecimal]
-
+    implicit val bindable_OptionStringQuery: QueryStringBindable[Option[String]] = PlayPathBindables.createOptionQueryBindable[String]
+    implicit val bindable_OptionBigIntQuery: QueryStringBindable[Option[BigInt]] = PlayPathBindables.createOptionQueryBindable[BigInt]
+    implicit val bindable_OptionBigDecimalQuery: QueryStringBindable[Option[BigDecimal]] = PlayPathBindables.createOptionQueryBindable[BigDecimal]
 
 }
 //noinspection ScalaStyle
@@ -113,6 +106,8 @@ package yaml {
     case class LocationsSearchGetResponses200(data: LocationsSearchGetResponses200Data) 
     case class MediaImagesOpt(low_resolution: MediaMedia_idGetResponses200VideosStandard_resolution, thumbnail: MediaMedia_idGetResponses200VideosStandard_resolution, standard_resolution: MediaMedia_idGetResponses200VideosStandard_resolution) 
 
-    case class UsersUser_idRelationshipPostActionOpt(value: String) extends AnyVal
+    case class UsersUser_idRelationshipPostActionOpt(value: String) {
+        override def toString = value.toString
+    }
 
 }

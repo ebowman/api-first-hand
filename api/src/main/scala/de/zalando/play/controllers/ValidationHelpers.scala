@@ -69,20 +69,21 @@ object PlayValidations extends Constraints {
   }
 
   /**
-   * Defines a ‘enum’ constraint for `Array` values
+   * Defines a ‘enum’ constraint
    * Items must be comma-separated, commas inside of the elements of the list must be escaped with comma
    *
    * '''name'''[constraint.enum]
    * '''error'''[error.enum]
    */
   def enum[T <: String](commaSeparatedList: String): Constraint[T] = Constraint[T]("constraint.enum") { o =>
-    def onlyAllowedItems: Boolean = {
-      val items: Seq[String] = commaSeparatedList.split(",[^,]").map(_.replaceAll(",,", ",")).toSeq
-      o.map { _.toString }.forall { s => items.contains(s) }
+    lazy val items: Seq[String] = {
+      val replacement = (commaSeparatedList.max + 1).toChar.toString
+      commaSeparatedList.replaceAllLiterally(",,", replacement).split(",").map(_.replaceAll(replacement, ",")).toSeq
     }
+    lazy val onlyAllowedValue: Boolean = items.contains(o)
     if (o == null) Invalid(ValidationError("error.required"))
     else if (commaSeparatedList.isEmpty) Invalid(ValidationError("error.enum.empty"))
-    else if (onlyAllowedItems) Valid
+    else if (onlyAllowedValue) Valid
     else Invalid(ValidationError("error.enum.not.allowed", o))
 
   }

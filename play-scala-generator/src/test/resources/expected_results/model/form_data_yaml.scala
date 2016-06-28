@@ -17,14 +17,12 @@ package object yaml {
     type BothPostYear = Option[BigInt]
 
 
+import play.api.mvc.{QueryStringBindable, PathBindable}
+
     implicit val bindable_FileQuery = PlayPathBindables.queryBindableFile
-
     implicit val bindable_BigIntQuery = PlayPathBindables.queryBindableBigInt
-
-    implicit val bindable_OptionFileQuery = PlayPathBindables.createOptionQueryBindable[File]
-
-    implicit val bindable_OptionBigIntQuery = PlayPathBindables.createOptionQueryBindable[BigInt]
-
+    implicit val bindable_OptionFileQuery: QueryStringBindable[Option[File]] = PlayPathBindables.createOptionQueryBindable[File]
+    implicit val bindable_OptionBigIntQuery: QueryStringBindable[Option[BigInt]] = PlayPathBindables.createOptionQueryBindable[BigInt]
 
 }
 //noinspection ScalaStyle

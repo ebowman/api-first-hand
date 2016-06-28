@@ -137,6 +137,7 @@ class EventMetaDataValidator(instance: EventMetaDataNameClash) extends Recursive
         new EventEvent_typeValidator(instance.created)
     )
 }
+
 // ----- option delegating validators -----
 class TopicsTopicEventsGetStream_timeoutValidator(instance: TopicsTopicEventsGetStream_timeout) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new TopicsTopicEventsGetStream_timeoutOptValidator(_) }

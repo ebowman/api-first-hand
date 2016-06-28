@@ -20,7 +20,8 @@ trait ExpectedResults {
     basic_extension_yaml,
     expanded_polymorphism_yaml,
     nested_objects_yaml,
-    options_yaml
+    options_yaml,
+    wrong_field_name_yaml
   )
   val examples = Seq[WithModel](
     basic_auth_api_yaml,
