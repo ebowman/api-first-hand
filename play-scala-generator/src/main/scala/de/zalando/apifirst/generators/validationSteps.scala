@@ -102,7 +102,7 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
       case (r: Reference, t: Opt) =>
         tpeConstraints(r, t, "Opt", "opt")
       case (r: Reference, t: EnumType) =>
-        Nil
+        tpeConstraints(r, t, "Enum", "enum")
       case (r, t: TypeDef) =>
         typeDefConstraints(r, t)
       case (r, TypeRef(ref)) if !app.findType(ref).isInstanceOf[TypeRef] =>
@@ -149,17 +149,20 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
       }
     )
 
-  private def optValidations(r: Reference, t: Container, delegateName: Reference)(implicit table: DenotationTable) =
+  private def optValidations(r: Reference, t: Container, delegateName: Reference)(implicit table: DenotationTable) = {
+    val typeName = typeNameDenotation(table, r)
+    val nonEmptyConstraints = t.meta.constraints.filterNot(_.isEmpty)
     Map(
-      "restrictions" -> t.meta.constraints.filterNot(_.isEmpty).zipWithIndex.map {
+      "restrictions" -> nonEmptyConstraints.zipWithIndex.map {
         case (c, i) =>
-          Map("name" -> c, "last" -> (i == t.meta.constraints.length - 1))
+          Map("name" -> c, "last" -> (i == nonEmptyConstraints.length - 1))
       },
       "constraint_name" -> constraint(r, table), // restrictions and constraint_name are needed for Arr, not needed for Opt
       "delegate_validation_name" -> validator(delegateName, table),
       "validation_name" -> validator(r, table),
-      "type_name" -> typeNameDenotation(table, r)
+      "type_name" -> typeName
     )
+  }
 
   private def typeConstraints(r: Reference, t: Type)(implicit table: DenotationTable) = {
     val typeName = t match {
@@ -180,9 +183,7 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
         Seq.empty[String]
     }
     Map(
-      "restrictions" -> t.meta.constraints.filterNot(_.isEmpty).map { c =>
-        Map("name" -> c)
-      },
+      "restrictions" -> t.meta.constraints.filterNot(_.isEmpty).map { c => Map("name" -> c) },
       "constraint_name" -> constraint(r, table),
       "validation_name" -> validator(r, table),
       "type_name" -> typeName,

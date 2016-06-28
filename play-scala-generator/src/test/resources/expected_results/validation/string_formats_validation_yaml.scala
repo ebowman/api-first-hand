@@ -97,6 +97,7 @@ class StringPostBase64optionalOptValidator(instance: Base64String) extends Recur
     override val validators = Seq(new StringPostBase64optionalOptConstraints(instance))
 }
 // ----- complex type validators -----
+
 // ----- option delegating validators -----
 class StringPostString_optionalValidator(instance: StringPostString_optional) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new StringPostString_optionalOptValidator(_) }

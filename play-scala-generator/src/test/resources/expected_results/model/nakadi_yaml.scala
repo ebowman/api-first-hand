@@ -26,8 +26,9 @@ package object yaml {
     type TopicsGetResponses200 = Seq[Topic]
 
 
-    implicit val bindable_OptionIntQuery = PlayPathBindables.createOptionQueryBindable[Int]
+import play.api.mvc.{QueryStringBindable, PathBindable}
 
+    implicit val bindable_OptionIntQuery: QueryStringBindable[Option[Int]] = PlayPathBindables.createOptionQueryBindable[Int]
 
 }
 //noinspection ScalaStyle

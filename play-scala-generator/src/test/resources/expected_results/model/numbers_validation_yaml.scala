@@ -19,14 +19,12 @@ package object yaml {
     type GetResponses200 = Null
 
 
-    implicit val bindable_OptionDoubleQuery = PlayPathBindables.createOptionQueryBindable[Double]
+import play.api.mvc.{QueryStringBindable, PathBindable}
 
-    implicit val bindable_OptionIntQuery = PlayPathBindables.createOptionQueryBindable[Int]
-
-    implicit val bindable_OptionLongQuery = PlayPathBindables.createOptionQueryBindable[Long]
-
-    implicit val bindable_OptionFloatQuery = PlayPathBindables.createOptionQueryBindable[Float]
-
+    implicit val bindable_OptionDoubleQuery: QueryStringBindable[Option[Double]] = PlayPathBindables.createOptionQueryBindable[Double]
+    implicit val bindable_OptionIntQuery: QueryStringBindable[Option[Int]] = PlayPathBindables.createOptionQueryBindable[Int]
+    implicit val bindable_OptionLongQuery: QueryStringBindable[Option[Long]] = PlayPathBindables.createOptionQueryBindable[Long]
+    implicit val bindable_OptionFloatQuery: QueryStringBindable[Option[Float]] = PlayPathBindables.createOptionQueryBindable[Float]
 
 }
 //noinspection ScalaStyle

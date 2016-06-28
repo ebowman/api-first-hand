@@ -56,6 +56,7 @@ class NewPetValidator(instance: NewPet) extends RecursiveValidator {
         new NewPetTagValidator(instance.tag)
     )
 }
+
 // ----- option delegating validators -----
 class PetsGetLimitValidator(instance: PetsGetLimit) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new PetsGetLimitOptValidator(_) }

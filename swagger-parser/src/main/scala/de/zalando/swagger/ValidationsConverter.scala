@@ -24,6 +24,7 @@ object ValidationsConverter {
 
   private val allValidations = Seq[PartialFunction[ValidationBase, Seq[String]]](
     { case v: ArrayValidation[_] => toArrayValidations(v) },
+    { case v: EnumValidation[_] => toEnumValidations(v) },
     { case v: StringValidation => toStringValidations(v) },
     { case n: NumberValidation[_] => toNumberValidations(n) },
     { case o: ObjectValidation => toObjectValidations(o) }
@@ -38,8 +39,12 @@ object ValidationsConverter {
     Seq(
       ifDefined(a.maxItems, s"maxItems(${a.maxItems.get})"),
       ifDefined(a.minItems, s"minItems(${a.minItems.get})"),
-      ifDefined(a.uniqueItems, s"uniqueItems(${a.uniqueItems.get})"),
-      ifDefined(a.enum, "enum(\"" + a.enum.get.map(a => a.toString.replaceAll(",", ",,")).mkString(",") + "\")")
+      ifDefined(a.uniqueItems, s"uniqueItems(${a.uniqueItems.get})")
+    ).flatten
+
+  def toEnumValidations[T](a: EnumValidation[T]): Seq[String] =
+    Seq(
+      ifDefined(a.enum, "enum(" + '"' + a.enum.get.map(a => a.toString.replaceAll(",", ",,")).mkString(",") + "\")")
     ).flatten
 
   private def toStringValidations(p: StringValidation): Seq[String] = {

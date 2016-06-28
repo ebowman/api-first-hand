@@ -23,22 +23,16 @@ package object yaml {
     type GetResponses200 = Null
 
 
+import play.api.mvc.{QueryStringBindable, PathBindable}
+
     implicit val bindable_Base64StringQuery = PlayPathBindables.queryBindableBase64String
-
     implicit val bindable_DateTimeQuery = PlayPathBindables.queryBindableDateTime
-
     implicit val bindable_UUIDQuery = PlayPathBindables.queryBindableUUID
-
     implicit val bindable_LocalDateQuery = PlayPathBindables.queryBindableLocalDate
-
-    implicit val bindable_OptionBase64StringQuery = PlayPathBindables.createOptionQueryBindable[Base64String]
-
-    implicit val bindable_OptionDateTimeQuery = PlayPathBindables.createOptionQueryBindable[DateTime]
-
-    implicit val bindable_OptionUUIDQuery = PlayPathBindables.createOptionQueryBindable[UUID]
-
-    implicit val bindable_OptionLocalDateQuery = PlayPathBindables.createOptionQueryBindable[LocalDate]
-
+    implicit val bindable_OptionBase64StringQuery: QueryStringBindable[Option[Base64String]] = PlayPathBindables.createOptionQueryBindable[Base64String]
+    implicit val bindable_OptionDateTimeQuery: QueryStringBindable[Option[DateTime]] = PlayPathBindables.createOptionQueryBindable[DateTime]
+    implicit val bindable_OptionUUIDQuery: QueryStringBindable[Option[UUID]] = PlayPathBindables.createOptionQueryBindable[UUID]
+    implicit val bindable_OptionLocalDateQuery: QueryStringBindable[Option[LocalDate]] = PlayPathBindables.createOptionQueryBindable[LocalDate]
 
 }
 //noinspection ScalaStyle

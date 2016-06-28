@@ -17,6 +17,7 @@ import de.zalando.play.controllers.PlayPathBindables
 
 
 
+//noinspection ScalaStyle
 trait Form_dataYamlBase extends Controller with PlayBodyParsing {
     sealed trait PostmultipartType[T] extends ResultWrapper[T]
     case class Postmultipart200(result: MultipartPostResponses200)(implicit val writer: String => Option[Writeable[MultipartPostResponses200]]) extends PostmultipartType[MultipartPostResponses200] { val statusCode = 200 }
@@ -150,6 +151,6 @@ def postbothAction[T] = (f: postbothActionType[T]) => postbothActionConstructor 
         Results.NotAcceptable
       }
     }
-    abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with PostmultipartType[Result] with Posturl_encodedType[Result] with PostbothType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.Status(statusCode)) }
+    abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with PostmultipartType[Result] with Posturl_encodedType[Result] with PostbothType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(result) }
     case object NotImplementedYet extends ResultWrapper[Results.EmptyContent]  with PostmultipartType[Results.EmptyContent] with Posturl_encodedType[Results.EmptyContent] with PostbothType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
 }

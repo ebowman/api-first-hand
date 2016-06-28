@@ -76,7 +76,7 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
 
   private def fromParamListItem[T](name: Reference, param: ParametersListItem): NamedTypes = param match {
     case r: JsonReference => Seq(fromReference(name, r, None))
-    case nb: NonBodyParameterCommons[_, _] => Seq(fromNonBodyParameter(name, nb))
+    case nb: NonBodyParameterCommons[_, _] => fromNonBodyParameter(name, nb)
     case bp: BodyParameter[_] => fromBodyParameter(name, bp)
     case nbp: NonBodyParameter[_] =>
       throw new IllegalStateException("Something went wrong, this case should not be reachable")
@@ -112,19 +112,8 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
     val tpe = if (param.`type` != null) param.`type` else PrimitiveType.OBJECT
     tpe match {
       case t: ArrayJsonSchemaType => Seq(fromArrayJsonSchema(name, param, t))
-      case p: PrimitiveType.Val if param.enum.isDefined => fromEnum(name, param, p, required)
       case p: PrimitiveType.Val => fromPrimitiveType(name, param, p, required)
     }
-  }
-  private def fromEnum(name: Reference, param: Schema[_], p: PrimitiveType.Val, required: Option[Seq[String]]): NamedTypes = {
-    val meta = enumTypeMeta(param.enum.get.size)
-    val typeName = name
-    val primitiveType = (p, param.format)(param)
-    val leaves = param.enum.get map { value =>
-      EnumObject(primitiveType, value.toString, TypeMeta(Some(value.toString)))
-    }
-    val rootType = typeName -> EnumTrait(primitiveType, meta, leaves)
-    Seq(checkRequired(name, required, rootType, param.default))
   }
 
   private def fromPrimitiveType(name: Reference, param: Schema[_], p: PrimitiveType.Val, required: Option[Seq[String]]): NamedTypes = {
@@ -133,28 +122,31 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
         require(param.items.nonEmpty, s"Items should not be empty for $name")
         val types = fromSchemaOrSchemaArray(name, param.items.get, None)
         val meta = arrayTypeMeta(param.comment.getOrElse(param.format), param)
-        checkRequired(name, required, wrapInArray(types.head, meta, None), param.default) +: types.tail
+        checkRequired(name, required, param.default)(wrapInArray(types, meta, None))
       case PrimitiveType.OBJECT =>
         val obj = param.allOf map { p =>
           val everythingIsRequired = None
-          extensionType(name, everythingIsRequired)(p)
+          Seq(extensionType(name, everythingIsRequired)(p))
         } getOrElse {
           val typeName = typeNameFromInlinedReference(param) getOrElse name
           val catchAll = fromSchemaOrBoolean(name / "additionalProperties", param.additionalProperties, param)
           val normal = fromSchemaProperties(name, param.properties, paramRequired(param.required, param.default))
           val types = fromTypes(name, normal ++ catchAll.toSeq.flatten, typeName)
           Option(param.discriminator) foreach { d => memoizeDiscriminator(name, typeName / d) }
-          checkRequired(name, required, types, param.default)
+          checkRequired(name, required, param.default)(Seq(types))
         }
-        Seq(obj)
+        obj
       case _ =>
-        val primitiveType = name -> (p, param.format)(param)
-        Seq(checkRequired(name, required, primitiveType, param.default))
+        val typeName = typeNameFromInlinedReference(param) getOrElse name
+        val primitiveType = fromPrimitiveType(name, p, param.format, param)(required, typeName, param.default, param.enum)
+        Seq(primitiveType)
     }
   }
 
   private def typeNameFromInlinedReference(param: Schema[_]): Option[Reference] =
-    param.vendorExtensions.get("x-$ref").map(Reference.deref).map(Reference(base.toString, _))
+    param.vendorExtensions.get("x-$ref").map(Reference.deref).map { r =>
+      Reference(base.toString, r)
+    }
 
   private def fromSchemaProperties[T](name: Reference, param: SchemaProperties, required: Option[Seq[String]]): NamedTypes =
     Option(param).toSeq.flatten flatMap { p =>
@@ -189,37 +181,43 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
 
   private def fromReference(name: Reference, ref: JsonReference, required: Option[Seq[String]]): NamedType = {
     assert(ref != null && ref.$ref != null)
-    checkRequired(name, required, name -> TypeRef(base / Reference.deref(ref.$ref)), null: Default[String])
-  }
-
-  private def fromPrimitivesItems[T](name: Reference, items: PrimitivesItems[T]): NamedType = {
-    if (items.isArray) {
-      val meta = arrayTypeMeta(items.comment.getOrElse(items.format), items)
-      wrapInArray(fromPrimitivesItems(name, items.items), meta, Option(items.collectionFormat).map(_.toString))
-    } else {
-      name -> (items.`type`, items.format)(items)
-    }
+    val tpe = name -> TypeRef(base / Reference.deref(ref.$ref))
+    checkSingleRequired(name, required, null: Default[String])(tpe)
   }
 
   private def fromArrayJsonSchema[T](name: Reference, param: Schema[_], t: ArrayJsonSchemaType): NamedType = {
     val descendants = t.toSeq map { d =>
       val typeDef = PrimitiveType.fromString(d)
-      fromPrimitiveType(typeDef, param.format)(param)
+      val typeName = typeNameFromInlinedReference(param) getOrElse name
+      fromPrimitiveType(name, typeDef, param.format, param)(Some(param.required), typeName, param.default, param.enum)
     }
-    name -> OneOf(name, param, descendants)
+    name -> OneOf(name, param, descendants.map(_._2))
   }
 
-  private def fromNonBodyParameter[T, CF](name: Reference, param: NonBodyParameterCommons[T, CF]): NamedType = {
+  private def fromNonBodyParameter[T, CF](name: Reference, param: NonBodyParameterCommons[T, CF]): NamedTypes = {
     val fullName = name / param.name
-    val result =
-      if (param.isArray) {
-        val meta = arrayTypeMeta(param.comment.getOrElse(param.format), param.items)
-        wrapInArray(fromPrimitivesItems(fullName, param.items), meta, Option(param.collectionFormat).map(_.toString))
-      } else {
-        fullName -> (param.`type`, param.format)(param)
-      }
-    if (!param.required && param.default == null) wrapInOption(result) else result
+    if (param.isArray) {
+      val meta = arrayTypeMeta(param.comment.getOrElse(param.format), param.items)
+      val result = wrapInArray(fromPrimitivesItems(fullName, param.items), meta, Option(param.collectionFormat).map(_.toString))
+      if (!param.required && param.default == null && result.nonEmpty)
+        wrapInOption(result.head) +: result.tail
+      else
+        result
+    } else {
+      val required = if (param.required) Some(Seq(param.name)) else Some(Nil)
+      Seq(fromParameterType(fullName, param.`type`, param.format, param)(required, fullName, param.default, param.enum))
+    }
   }
+
+  private def fromPrimitivesItems[T](name: Reference, items: PrimitivesItems[T]): NamedTypes =
+    if (items.isArray) {
+      val meta = arrayTypeMeta(items.comment.getOrElse(items.format), items)
+      wrapInArray(fromPrimitivesItems(name, items), meta, Option(items.collectionFormat).map(_.toString))
+    } else {
+      val typeName = name
+      val required = None
+      Seq(fromPrimitiveType(name, items.`type`, items.format, items)(required, typeName, items.default, items.enum))
+    }
 
   private def fromTypes(name: Reference, types: NamedTypes, typeName: Reference): NamedType = {
     val fields = types map { t => Field(typeName / t._1.simple, t._2) }
@@ -229,28 +227,25 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
   private def fromFileSchema[T](schema: FileSchema[T], required: Option[Seq[String]]): NamedType = ???
 
   // ------------------------------------ Primitives ------------------------------------
+  private def fromPrimitiveType(name: Reference, tpe: PrimitiveType.Val, format: String, meta: TypeMeta)(required: Option[Seq[String]], typeName: Reference,
+    default: Default[_], enum: EnumValidation.Enum[_]): NamedType = {
+    val pType = fromPrimitiveTypePlain((tpe, format))(meta)
+    if (enum.isDefined)
+      enumFromPrimitiveType(name, enum.get, required, meta, typeName, pType, default)
+    else
+      checkSingleRequired(name, required, default)(name -> pType)
+  }
 
-  private implicit def fromParameterType(tpe: (ParameterType.Value, String)): TypeConstructor =
-    (tpe._1, Option(tpe._2).map(_.toLowerCase)) match {
-      case (ParameterType.INTEGER, Some("int64")) => Domain.Lng
-      case (ParameterType.INTEGER, Some("int32")) => Domain.Intgr
-      case (ParameterType.INTEGER, _) => Domain.BInt
-      case (ParameterType.NUMBER, Some("float")) => Domain.Flt
-      case (ParameterType.NUMBER, Some("double")) => Domain.Dbl
-      case (ParameterType.NUMBER, _) => Domain.BDcml
-      case (ParameterType.BOOLEAN, _) => Domain.Bool
-      case (ParameterType.STRING, Some("binary")) => Domain.BinaryString
-      case (ParameterType.STRING, Some("byte")) => Domain.Base64String
-      case (ParameterType.STRING, Some("date")) => Domain.Date
-      case (ParameterType.STRING, Some("date-time")) => Domain.DateTime
-      case (ParameterType.STRING, Some("password")) => Domain.Password
-      case (ParameterType.STRING, Some("uuid")) => Domain.UUID
-      case (ParameterType.STRING, fmt) => Domain.Str.curried(fmt)
-      case (ParameterType.FILE, _) => Domain.File
-      case (a, b) => throw new IllegalArgumentException(s"Combination if $a and $b is not supported")
+  private def enumFromPrimitiveType(name: Reference, enum: ManyUnique[_], required: Option[Seq[String]],
+    meta: TypeMeta, typeName: Reference, primitiveType: Type, default: Default[_]): NamedType = {
+    val leaves = enum map { value =>
+      EnumObject(primitiveType, value.toString, TypeMeta(Some(value.toString)))
     }
+    val rootType = typeName -> EnumTrait(primitiveType, meta, leaves)
+    checkSingleRequired(name, required, default)(rootType)
+  }
 
-  private implicit def fromPrimitiveType(tpe: (PrimitiveType.Val, String)): TypeConstructor =
+  private def fromPrimitiveTypePlain(tpe: (PrimitiveType.Val, String)): TypeConstructor =
     (tpe._1, Option(tpe._2).map(_.toLowerCase)) match {
       case (PrimitiveType.INTEGER, Some("int64")) => Domain.Lng
       case (PrimitiveType.INTEGER, Some("int32")) => Domain.Intgr
@@ -270,11 +265,45 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
       case (a, b) => throw new IllegalArgumentException(s"Combination if $a and $b is not supported")
     }
 
-  // ------------------------------------ Wrappers ------------------------------------
+  private def fromParameterType(name: Reference, tpe: ParameterType.Value, format: String, meta: TypeMeta)(required: Option[Seq[String]], typeName: Reference,
+    default: Default[_], enum: EnumValidation.Enum[_]): NamedType = {
+    val result = fromParameterTypePlain(tpe, format)(meta)
+    if (enum.isDefined)
+      enumFromPrimitiveType(name, enum.get, required, meta, typeName, result, default)
+    else
+      checkSingleRequired(name, required, default)(name -> result)
+  }
 
-  private def wrapInArray(t: NamedType, m: TypeMeta, collectionFormat: Option[String]): NamedType = {
+  private def fromParameterTypePlain(tpe: (ParameterType.Value, String)): TypeConstructor =
+    (tpe._1, Option(tpe._2).map(_.toLowerCase)) match {
+      case (ParameterType.INTEGER, Some("int64")) => Domain.Lng
+      case (ParameterType.INTEGER, Some("int32")) => Domain.Intgr
+      case (ParameterType.INTEGER, _) => Domain.BInt
+      case (ParameterType.NUMBER, Some("float")) => Domain.Flt
+      case (ParameterType.NUMBER, Some("double")) => Domain.Dbl
+      case (ParameterType.NUMBER, _) => Domain.BDcml
+      case (ParameterType.BOOLEAN, _) => Domain.Bool
+      case (ParameterType.STRING, Some("binary")) => Domain.BinaryString
+      case (ParameterType.STRING, Some("byte")) => Domain.Base64String
+      case (ParameterType.STRING, Some("date")) => Domain.Date
+      case (ParameterType.STRING, Some("date-time")) => Domain.DateTime
+      case (ParameterType.STRING, Some("password")) => Domain.Password
+      case (ParameterType.STRING, Some("uuid")) => Domain.UUID
+      case (ParameterType.STRING, fmt) => Domain.Str.curried(fmt)
+      case (ParameterType.FILE, _) => Domain.File
+      case (a, b) => throw new IllegalArgumentException(s"Combination if $a and $b is not supported")
+    }
+
+  // ------------------------------------ Wrappers ------------------------------------
+  private def wrapInArray(t: NamedTypes, m: TypeMeta, collectionFormat: Option[String]): NamedTypes =
+    t match {
+      case e if e.isEmpty => t
+      case head :: tail => wrapSingleInArray(head, m, collectionFormat) :: tail
+    }
+
+  private def wrapSingleInArray(t: NamedType, m: TypeMeta, collectionFormat: Option[String]): NamedType = {
     val wrapper =
-      if (t._1.isResponsePath) Domain.ArrResult(t._2, m)
+      if (t._1.isResponsePath) Domain.ArrResult(t._2, m) // FIXME do this somehow better
       else Domain.Arr(t._2, m, collectionFormat.map(_.toString).getOrElse(CollectionFormat.default.toString))
     t._1 -> wrapper
   }
@@ -290,7 +319,10 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
   private def paramRequired(required: Seq[String], default: Default[_]) =
     Some(if (default != null || required == null) Nil else required)
 
-  private def checkRequired(name: Reference, required: Option[Seq[String]], tpe: NamedType, default: Default[_]): NamedType =
+  private def checkRequired(name: Reference, required: Option[Seq[String]], default: Default[_])(tpes: NamedTypes): NamedTypes =
+    tpes map checkSingleRequired(name, required, default)
+
+  private def checkSingleRequired(name: Reference, required: Option[Seq[String]], default: Default[_])(tpe: NamedType): NamedType =
     if (isRequired(name, required, default)) tpe else wrapInOption(tpe)
 
   // Use required = None if everything is required
@@ -308,7 +340,7 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
 trait DiscriminatorMemoizer {
   val discriminators = new mutable.HashMap[Reference, Reference]()
 
-  def memoizeDiscriminator(name: Reference, discriminator: Reference) =
+  def memoizeDiscriminator(name: Reference, discriminator: Reference): Option[discriminators.type] =
     Option(discriminator) map {
       discriminators += name -> _
     }

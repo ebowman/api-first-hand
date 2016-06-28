@@ -6,6 +6,7 @@ import java.util.UUID
 import com.fasterxml.jackson.databind.{ MappingIterator, ObjectReader, ObjectWriter }
 import com.fasterxml.jackson.dataformat.csv.{ CsvMapper, CsvParser, CsvSchema }
 import org.joda.time.{ DateTime, LocalDate }
+import org.slf4j.LoggerFactory
 import play.api.mvc.{ PathBindable, QueryStringBindable }
 
 import scala.io.Source
@@ -15,6 +16,8 @@ import scala.io.Source
  * @since 03.01.2016.
  */
 object PlayPathBindables {
+
+  lazy val log = LoggerFactory.getLogger(this.getClass)
 
   private def schema[T](wrapper: ArrayWrapper[T]) =
     CsvSchema.emptySchema().withColumnSeparator(wrapper.separator).withLineSeparator("\n")
@@ -36,6 +39,18 @@ object PlayPathBindables {
 
   private[controllers] def writeArray(writer: ObjectWriter)(items: Seq[String]): String =
     writer.writeValueAsString(items.toArray)
+
+  class createEnumQueryBindable[T](constructor: String => T) extends QueryStringBindable.Parsing[T](
+    constructor,
+    out => out.toString,
+    (key: String, e: Exception) => "Cannot parse parameter %s as AnyVal: %s".format(key, e.getMessage)
+  )
+
+  class createEnumPathBindable[T](constructor: String => T) extends PathBindable.Parsing[T](
+    constructor,
+    out => out.toString,
+    (key: String, e: Exception) => "Cannot parse parameter %s as AnyVal: %s".format(key, e.getMessage)
+  )
 
   implicit object pathBindableDateTime extends PathBindable.Parsing[DateTime](
     Rfc3339Util.parseDateTime,
@@ -227,39 +242,45 @@ object PlayPathBindables {
    * @tparam T       the type of array items
    * @return
    */
-  def createArrQueryBindable[T](wrapper: ArrayWrapper[T])(implicit tBinder: QueryStringBindable[T]): QueryStringBindable[ArrayWrapper[T]] = new QueryStringBindable[ArrayWrapper[T]] {
+  def createArrQueryBindable[T](wrapper: ArrayWrapper[T])(implicit tBinder: QueryStringBindable[T]): QueryStringBindable[ArrayWrapper[T]] =
+    new QueryStringBindable[ArrayWrapper[T]] {
 
-    val mapper = createMapper
-    val reader = createReader(mapper, wrapper)
-    val writer = createWriter(mapper, wrapper)
+      val mapper = createMapper
+      val reader = createReader(mapper, wrapper)
+      val writer = createWriter(mapper, wrapper)
 
-    def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, ArrayWrapper[T]]] = Some(try {
-      val line: Option[Seq[String]] = params.get(key) flatMap {
-        case Nil => None
-        case null => None
-        case single :: Nil if wrapper.separator == '&' => Some(Seq(single))
-        case single :: Nil => Some(readArray(reader)(single))
-        case multiple if wrapper.separator == '&' => Some(multiple)
-        case _ =>
-          throw new IllegalArgumentException("Got multiple parameters with the same name, but parameter type is not 'multi'")
-      }
-      val xs = line flatMap { l => tBinder.bind(key, Map(key -> l)) }
-      val lefts = xs collect { case Left(x) => x }
-      lazy val rights = xs collect { case Right(x) => x }
-      lazy val success = wrapper.copy(rights.toSeq)
-      if (lefts.isEmpty) Right(success) else Left(lefts.mkString("\n"))
-    } catch {
-      case e: Exception => Left(e.getMessage)
-    })
+      def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, ArrayWrapper[T]]] = Some(try {
+        val line: Option[Seq[String]] = params.get(key) flatMap {
+          case Nil => None
+          case null => None
+          case single if single.length == 1 && wrapper.separator == '&' => Some(Seq(single.head))
+          case single if single.length == 1 => Some(readArray(reader)(single.head))
+          case multiple if wrapper.separator == '&' => Some(multiple)
+          case other =>
+            log.info("Unexpected parameters: " + other.mkString(","))
+            throw new IllegalArgumentException(
+              s"Got multiple (${other.size}) parameters with the same name $key, but parameter type is not 'multi'"
+            )
+        }
+        val xs = line.toSeq flatMap {
+          _.map { k => tBinder.bind(key, Map(key -> Seq(k))) }.filter(_.isDefined).map(_.get)
+        }
+        val lefts = xs collect { case Left(x) => x }
+        lazy val rights = xs collect { case Right(x) => x }
+        lazy val success = wrapper.copy(rights.toSeq)
+        if (lefts.isEmpty) Right(success) else Left(lefts.mkString("\n"))
+      } catch {
+        case e: Exception => Left(e.getMessage)
+      })
 
-    /**
-     * Unbind method converts an ArrayWrapper to the Path string
-     *
-     * @param key  parameter name
-     * @param w    wrapper to convert
-     * @return
-     */
-    def unbind(key: String, w: ArrayWrapper[T]): String = writeArray(writer)(w.items map (tBinder.unbind(key, _)))
+      /**
+       * Unbind method converts an ArrayWrapper to the Path string
+       *
+       * @param key  parameter name
+       * @param w    wrapper to convert
+       * @return
+       */
+      def unbind(key: String, w: ArrayWrapper[T]): String = writeArray(writer)(w.items map (tBinder.unbind(key, _)))
 
-  }
+    }
 }

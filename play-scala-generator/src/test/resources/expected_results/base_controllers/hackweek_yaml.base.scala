@@ -18,6 +18,7 @@ import de.zalando.play.controllers.ResponseWriters
 
 
 
+//noinspection ScalaStyle
 trait HackweekYamlBase extends Controller with PlayBodyParsing {
     sealed trait GetschemaModelType[T] extends ResultWrapper[T]
     case class GetschemaModel200(result: ModelSchemaRoot)(implicit val writer: String => Option[Writeable[ModelSchemaRoot]]) extends GetschemaModelType[ModelSchemaRoot] { val statusCode = 200 }
@@ -68,6 +69,6 @@ def getschemaModelAction[T] = (f: getschemaModelActionType[T]) => getschemaModel
         Results.NotAcceptable
       }
     }
-    abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with GetschemaModelType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.Status(statusCode)) }
+    abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with GetschemaModelType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(result) }
     case object NotImplementedYet extends ResultWrapper[Results.EmptyContent]  with GetschemaModelType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
 }

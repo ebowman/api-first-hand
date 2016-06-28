@@ -23,10 +23,10 @@ package object yaml {
     type PlantsPlant_idWateringsGetResponses200 = Seq[Watering]
 
 
+import play.api.mvc.{QueryStringBindable, PathBindable}
+
     implicit val bindable_BigIntQuery = PlayPathBindables.queryBindableBigInt
-
-    implicit val bindable_OptionBigIntQuery = PlayPathBindables.createOptionQueryBindable[BigInt]
-
+    implicit val bindable_OptionBigIntQuery: QueryStringBindable[Option[BigInt]] = PlayPathBindables.createOptionQueryBindable[BigInt]
 
 }
 //noinspection ScalaStyle

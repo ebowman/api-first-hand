@@ -6,6 +6,17 @@ basePath: /status
 paths:
   /:
     get:
+      parameters:
+      - name: optCodes
+        in: header
+        required: false
+        type: string
+        enum: ["put", "PUT", "Put"]
+      - name: codes
+        in: header
+        required: true
+        type: string
+        enum: ["Get", "GET", "get"]
       responses:
         200:
           description: StatusAndCode

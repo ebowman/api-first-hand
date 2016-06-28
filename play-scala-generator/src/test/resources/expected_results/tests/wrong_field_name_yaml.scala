@@ -1,4 +1,4 @@
-package string_formats.yaml
+package wrong_field_name.yaml
 
 import de.zalando.play.controllers._
 import org.scalacheck._
@@ -27,16 +27,9 @@ import org.scalatestplus.play.{OneAppPerTest, WsScalaTestClient}
 
 import Generators._
 
-import de.zalando.play.controllers.Base64String
-import Base64String._
-import de.zalando.play.controllers.BinaryString
-import BinaryString._
-import org.joda.time.DateTime
-import java.util.UUID
-import org.joda.time.LocalDate
 
 //noinspection ScalaStyle
-class String_formats_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
+class Wrong_field_name_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
     def toPath[T](value: T)(implicit binder: PathBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
     def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
     def toHeader[T](value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
@@ -58,26 +51,25 @@ class String_formats_yamlSpec extends WordSpec with OptionValues with WsScalaTes
     mapper.readValue(content, expectedType)
 
 
-    "GET /" should {
-        def testInvalidInput(input: (GetDate_time, GetDate, GetBase64, GetUuid, BinaryString)): Prop = {
+    "GET /status/" should {
+        def testInvalidInput(input: (GetOptCodes, GetCodes)): Prop = {
 
-            val (date_time, date, base64, uuid, petId) = input
+            val (optCodes, codes) = input
 
-            val url = s"""/?${toQuery("date_time", date_time)}&${toQuery("date", date)}&${toQuery("base64", base64)}&${toQuery("uuid", uuid)}"""
+            val url = s"""/status/"""
             val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "application/json", 
-            
-               "application/yaml"
-            )
+            val acceptHeaders: Seq[String] = Seq()
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq(
+                        "optCodes" -> toHeader(optCodes), 
+                        
+                        "codes" -> toHeader(codes)
+                        ) :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
 
-                    val parsed_petId = PlayBodyParsing.jacksonMapper("application/json").writeValueAsString(petId)
 
-                val request = FakeRequest(GET, url).withHeaders(headers:_*).withBody(parsed_petId)
+                val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
                     if (contentType == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
@@ -91,13 +83,13 @@ class String_formats_yamlSpec extends WordSpec with OptionValues with WsScalaTes
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
-                val errors = new GetValidator(date_time, date, base64, uuid, petId).errors
+                val errors = new GetValidator(optCodes, codes).errors
 
                 lazy val validations = errors flatMap { _.messages } map { m =>
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_petId + "]") |: all(
+                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
                     s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
@@ -107,24 +99,22 @@ class String_formats_yamlSpec extends WordSpec with OptionValues with WsScalaTes
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (GetDate_time, GetDate, GetBase64, GetUuid, BinaryString)): Prop = {
-            val (date_time, date, base64, uuid, petId) = input
+        def testValidInput(input: (GetOptCodes, GetCodes)): Prop = {
+            val (optCodes, codes) = input
             
-            val parsed_petId = parserConstructor("application/json").writeValueAsString(petId)
-            
-            val url = s"""/?${toQuery("date_time", date_time)}&${toQuery("date", date)}&${toQuery("base64", base64)}&${toQuery("uuid", uuid)}"""
+            val url = s"""/status/"""
             val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-                "application/json", 
-            
-                "application/yaml"
-            )
+            val acceptHeaders: Seq[String] = Seq()
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq(
+                        "optCodes" -> toHeader(optCodes), 
+                    
+                        "codes" -> toHeader(codes)
+                    ) :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
 
-                val request = FakeRequest(GET, url).withHeaders(headers:_*).withBody(parsed_petId)
+                val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
                     if (contentType == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
@@ -138,9 +128,9 @@ class String_formats_yamlSpec extends WordSpec with OptionValues with WsScalaTes
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
-                val errors = new GetValidator(date_time, date, base64, uuid, petId).errors
+                val errors = new GetValidator(optCodes, codes).errors
                 val possibleResponseTypes: Map[Int,Class[_ <: Any]] = Map(
-                    200 -> classOf[Null]
+                    200 -> classOf[StatusAndCode]
                 )
 
                 val expectedCode = requestStatusCode_(path)
@@ -151,7 +141,7 @@ class String_formats_yamlSpec extends WordSpec with OptionValues with WsScalaTes
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_petId + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
                     s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
@@ -163,30 +153,24 @@ class String_formats_yamlSpec extends WordSpec with OptionValues with WsScalaTes
         }
         "discard invalid data" in {
             val genInputs = for {
-                        date_time <- GetDate_timeGenerator
-                        date <- GetDateGenerator
-                        base64 <- GetBase64Generator
-                        uuid <- GetUuidGenerator
-                        petId <- BinaryStringGenerator
+                        optCodes <- GetOptCodesGenerator
+                        codes <- GetCodesGenerator
                     
-                } yield (date_time, date, base64, uuid, petId)
-            val inputs = genInputs suchThat { case (date_time, date, base64, uuid, petId) =>
-                new GetValidator(date_time, date, base64, uuid, petId).errors.nonEmpty
+                } yield (optCodes, codes)
+            val inputs = genInputs suchThat { case (optCodes, codes) =>
+                new GetValidator(optCodes, codes).errors.nonEmpty
             }
             val props = forAll(inputs) { i => testInvalidInput(i) }
             assert(checkResult(props) == Success())
         }
         "do something with valid data" in {
             val genInputs = for {
-                    date_time <- GetDate_timeGenerator
-                    date <- GetDateGenerator
-                    base64 <- GetBase64Generator
-                    uuid <- GetUuidGenerator
-                    petId <- BinaryStringGenerator
+                    optCodes <- GetOptCodesGenerator
+                    codes <- GetCodesGenerator
                 
-            } yield (date_time, date, base64, uuid, petId)
-            val inputs = genInputs suchThat { case (date_time, date, base64, uuid, petId) =>
-                new GetValidator(date_time, date, base64, uuid, petId).errors.isEmpty
+            } yield (optCodes, codes)
+            val inputs = genInputs suchThat { case (optCodes, codes) =>
+                new GetValidator(optCodes, codes).errors.isEmpty
             }
             val props = forAll(inputs) { i => testValidInput(i) }
             assert(checkResult(props) == Success())

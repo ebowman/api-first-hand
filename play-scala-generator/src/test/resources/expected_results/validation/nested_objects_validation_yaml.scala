@@ -47,6 +47,7 @@ class NestedObjectsNestedNested2Nested3OptValidator(instance: NestedObjectsNeste
         new NestedObjectsNestedNested2Nested3BottomValidator(instance.bottom)
     )
 }
+
 // ----- option delegating validators -----
 class NestedObjectsPlainValidator(instance: NestedObjectsPlain) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new NestedObjectsPlainOptValidator(_) }

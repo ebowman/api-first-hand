@@ -18,6 +18,7 @@ import de.zalando.play.controllers.PlayPathBindables
 
 
 
+//noinspection ScalaStyle
 trait UberApiYamlBase extends Controller with PlayBodyParsing {
     sealed trait GetmeType[T] extends ResultWrapper[T]
     case class Getme200(result: Profile)(implicit val writer: String => Option[Writeable[Profile]]) extends GetmeType[Profile] { val statusCode = 200 }
@@ -183,6 +184,6 @@ def gethistoryAction[T] = (f: gethistoryActionType[T]) => (offset: ErrorCode, li
         Results.NotAcceptable
       }
     }
-    abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with GetmeType[Result] with GetproductsType[Result] with GetestimatesTimeType[Result] with GetestimatesPriceType[Result] with GethistoryType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.Status(statusCode)) }
+    abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with GetmeType[Result] with GetproductsType[Result] with GetestimatesTimeType[Result] with GetestimatesPriceType[Result] with GethistoryType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(result) }
     case object NotImplementedYet extends ResultWrapper[Results.EmptyContent]  with GetmeType[Results.EmptyContent] with GetproductsType[Results.EmptyContent] with GetestimatesTimeType[Results.EmptyContent] with GetestimatesPriceType[Results.EmptyContent] with GethistoryType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
 }

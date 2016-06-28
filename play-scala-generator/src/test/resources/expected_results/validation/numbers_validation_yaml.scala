@@ -67,6 +67,7 @@ class GetLong_requiredValidator(instance: Long) extends RecursiveValidator {
     override val validators = Seq(new GetLong_requiredConstraints(instance))
 }
 // ----- complex type validators -----
+
 // ----- option delegating validators -----
 class GetDouble_optionalValidator(instance: GetDouble_optional) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new GetDouble_optionalOptValidator(_) }

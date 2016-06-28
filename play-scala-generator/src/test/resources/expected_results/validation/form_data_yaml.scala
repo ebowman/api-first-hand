@@ -58,6 +58,7 @@ class Url_encodedPostAvatarValidator(instance: File) extends RecursiveValidator 
     override val validators = Seq(new Url_encodedPostAvatarConstraints(instance))
 }
 // ----- complex type validators -----
+
 // ----- option delegating validators -----
 class MultipartPostAvatarValidator(instance: MultipartPostAvatar) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new MultipartPostAvatarOptValidator(_) }

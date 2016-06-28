@@ -16,6 +16,7 @@ import de.zalando.play.controllers.PlayPathBindables
 
 
 
+//noinspection ScalaStyle
 trait HerokuPetstoreApiYamlBase extends Controller with PlayBodyParsing {
     sealed trait GetType[T] extends ResultWrapper[T]
     case class Get200(result: Seq[Pet])(implicit val writer: String => Option[Writeable[Seq[Pet]]]) extends GetType[Seq[Pet]] { val statusCode = 200 }
@@ -184,6 +185,6 @@ def getbyPetIdAction[T] = (f: getbyPetIdActionType[T]) => (petId: String) => get
         Results.NotAcceptable
       }
     }
-    abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with GetType[Result] with PutType[Result] with PostType[Result] with GetbyPetIdType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.Status(statusCode)) }
+    abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with GetType[Result] with PutType[Result] with PostType[Result] with GetbyPetIdType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(result) }
     case object NotImplementedYet extends ResultWrapper[Results.EmptyContent]  with GetType[Results.EmptyContent] with PutType[Results.EmptyContent] with PostType[Results.EmptyContent] with GetbyPetIdType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
 }

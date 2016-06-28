@@ -87,6 +87,7 @@ class EstimatesPriceGetStart_longitudeValidator(instance: Double) extends Recurs
     override val validators = Seq(new EstimatesPriceGetStart_longitudeConstraints(instance))
 }
 // ----- complex type validators -----
+
 // ----- option delegating validators -----
 class ErrorCodeValidator(instance: ErrorCode) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new ErrorCodeOptValidator(_) }

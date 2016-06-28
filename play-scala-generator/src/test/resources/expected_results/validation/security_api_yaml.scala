@@ -15,6 +15,7 @@ class PetsIdGetIdArrValidator(instance: String) extends RecursiveValidator {
     override val validators = Seq(new PetsIdGetIdArrConstraints(instance))
 }
 // ----- complex type validators -----
+
 // ----- option delegating validators -----
 // ----- array delegating validators -----
 class PetsIdGetIdConstraints(override val instance: PetsIdGetId) extends ValidationBase[PetsIdGetId] {

@@ -24,6 +24,7 @@ class BasicOptionalOptValidator(instance: BasicOptionalOpt) extends RecursiveVal
         new BasicOptionalNested_optionalValidator(instance.nested_optional)
     )
 }
+
 // ----- option delegating validators -----
 class BasicOptionalValidator(instance: BasicOptional) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new BasicOptionalOptValidator(_) }

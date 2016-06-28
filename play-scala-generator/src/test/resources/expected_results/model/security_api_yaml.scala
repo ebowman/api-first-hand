@@ -14,8 +14,9 @@ package object yaml {
     type PetTag = Option[String]
 
 
-    implicit val bindable_ArrayWrapperStringPath = PlayPathBindables.createArrayWrapperPathBindable[String]("csv")
+import play.api.mvc.{QueryStringBindable, PathBindable}
 
+    implicit val bindable_ArrayWrapperStringPath: PathBindable[ArrayWrapper[String]] = PlayPathBindables.createArrayWrapperPathBindable[String]("csv")
 
 }
 //noinspection ScalaStyle
