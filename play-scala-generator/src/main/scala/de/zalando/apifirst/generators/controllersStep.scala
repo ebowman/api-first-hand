@@ -253,7 +253,8 @@ trait ParameterData {
       "body_parser" -> parser,
       "optional" -> parser.replaceAll("anyParser", ""),
       "real_name" -> param.simple,
-      "is_file" -> (if (parserType == "File") parserType else "")
+      "is_file" -> (if (parserType == "File") parserType else ""),
+      "default" -> "" // FIXME
     )
   }
 
