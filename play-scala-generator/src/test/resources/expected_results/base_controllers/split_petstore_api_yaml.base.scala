@@ -713,7 +713,7 @@ def deletePetAction[T] = (f: deletePetActionType[T]) => (petId: Long) => deleteP
         negotiateContent(request.acceptedTypes, providedTypes).map { deletePetResponseMimeType =>
             
             val api_key: Either[String,String] =
-                fromParameters[String]("header")("api_key", request.headers.toMap)
+            fromParameters[String]("header")("api_key", request.headers.toMap, None)
             
             
                 (api_key) match {

@@ -171,7 +171,7 @@ def nakadiHackGet_events_from_multiple_partitionsAction[T] = (f: nakadiHackGet_e
         negotiateContent(request.acceptedTypes, providedTypes).map { nakadiHackGet_events_from_multiple_partitionsResponseMimeType =>
             
             val x_nakadi_cursors: Either[String,String] =
-                fromParameters[String]("header")("x_nakadi_cursors", request.headers.toMap)
+            fromParameters[String]("header")("x_nakadi_cursors", request.headers.toMap, None)
             
             
                 (x_nakadi_cursors) match {

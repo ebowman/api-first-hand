@@ -36,10 +36,10 @@ def getAction[T] = (f: getActionType[T]) => getActionConstructor { request =>
         negotiateContent(request.acceptedTypes, providedTypes).map { getResponseMimeType =>
             
             val optCodes: Either[String,GetOptCodes] =
-            fromParametersOptional[GetOptCodes]("header")("optCodes", request.headers.toMap)
+            fromParametersOptional[GetOptCodes]("header")("optCodes", request.headers.toMap, None)
             
             val codes: Either[String,GetCodes] =
-            fromParameters[GetCodes]("header")("codes", request.headers.toMap)
+            fromParameters[GetCodes]("header")("codes", request.headers.toMap, None)
             
             
                 (optCodes, codes) match {
