@@ -106,7 +106,7 @@ package yaml {
     case class LocationsSearchGetResponses200(data: LocationsSearchGetResponses200Data) 
     case class MediaImagesOpt(low_resolution: MediaMedia_idGetResponses200VideosStandard_resolution, thumbnail: MediaMedia_idGetResponses200VideosStandard_resolution, standard_resolution: MediaMedia_idGetResponses200VideosStandard_resolution) 
 
-    case class UsersUser_idRelationshipPostActionOpt(value: String) {
+    case class UsersUser_idRelationshipPostActionOpt(value: String) extends AnyVal {
         override def toString = value.toString
     }
 

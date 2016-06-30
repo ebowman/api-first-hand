@@ -8,7 +8,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
  */
 object WriterFactories {
   private val jsonFactory = new JsonFactory()
-
   /**
    * Contains proper Jackson Factories for different mime types
    * JsonFactory is a default

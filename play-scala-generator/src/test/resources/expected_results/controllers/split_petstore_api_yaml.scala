@@ -3,6 +3,8 @@ import play.api.mvc.{Action, Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+
 import de.zalando.play.controllers._
 
 import PlayBodyParsing._
@@ -10,6 +12,8 @@ import PlayBodyParsing._
 import PlayValidations._
 
 import scala.util._
+
+import javax.inject._
 
 
 /**
@@ -19,7 +23,9 @@ import scala.util._
 
 package split.petstore.api.yaml {
 
-    class SplitPetstoreApiYaml extends SplitPetstoreApiYamlBase {
+    class SplitPetstoreApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends SplitPetstoreApiYamlBase {
+    // ----- Start of unmanaged code area for constructor SplitPetstoreApiYaml
+    // ----- End of unmanaged code area for constructor SplitPetstoreApiYaml
         val findPetsByTags = findPetsByTagsAction { (tags: PetsFindByStatusGetStatus) =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.findPetsByTags
             NotImplementedYet

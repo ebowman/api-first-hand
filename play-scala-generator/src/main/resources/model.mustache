@@ -51,7 +51,7 @@ package {{main_package_suffix}} {
 {{/for}}
 
 {{for enum in enums}}
-    case class {{enum.name}}(value: {{enum.type_name}}) {
+    case class {{enum.name}}(value: {{enum.type_name}}) extends AnyVal {
         override def toString = value.toString
     }
 {{/for}}

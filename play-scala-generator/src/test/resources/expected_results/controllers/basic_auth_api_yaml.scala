@@ -3,6 +3,8 @@ import play.api.mvc.{Action, Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+
 import de.zalando.play.controllers._
 
 import PlayBodyParsing._
@@ -10,6 +12,8 @@ import PlayBodyParsing._
 import PlayValidations._
 
 import scala.util._
+
+import javax.inject._
 
 
 /**
@@ -19,7 +23,9 @@ import scala.util._
 
 package basic.auth.api.yaml {
 
-    class BasicAuthApiYaml extends BasicAuthApiYamlBase {
+    class BasicAuthApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends BasicAuthApiYamlBase {
+    // ----- Start of unmanaged code area for constructor BasicAuthApiYaml
+    // ----- End of unmanaged code area for constructor BasicAuthApiYaml
         val get = getAction {  _ =>  
             // ----- Start of unmanaged code area for action  BasicAuthApiYaml.get
             NotImplementedYet

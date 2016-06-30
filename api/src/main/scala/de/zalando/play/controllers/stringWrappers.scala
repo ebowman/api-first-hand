@@ -13,9 +13,16 @@ case class Base64String(value: String) {
 
 object Base64String {
   implicit def string2base64string(s: String): Base64String =
-    Base64String(new String(Base64.getEncoder.encode(s.getBytes)))
+    fromBytes(s.getBytes)
+
   implicit def base64string2string(s: Base64String): String =
-    new String(Base64.getDecoder.decode(s.value))
+    new String(toBytes(s))
+
+  def toBytes(s: Base64String): Array[Byte] =
+    Base64.getDecoder.decode(s.value)
+
+  def fromBytes(b: Array[Byte]): Base64String =
+    Base64String(new String(Base64.getEncoder.encode(b)))
 }
 
 case class BinaryString(value: Array[Byte])

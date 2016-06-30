@@ -44,7 +44,7 @@ package yaml {
     case class Pet(name: String, petType: String) extends IPet
     case class Labrador(name: String, petType: String, packSize: Int, cuteness: Int) extends IPet
 
-    case class CatHuntingSkill(value: String) {
+    case class CatHuntingSkill(value: String) extends AnyVal {
         override def toString = value.toString
     }
 

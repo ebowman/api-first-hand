@@ -3,6 +3,8 @@ import play.api.mvc.{Action, Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+
 import de.zalando.play.controllers._
 
 import PlayBodyParsing._
@@ -10,6 +12,8 @@ import PlayBodyParsing._
 import PlayValidations._
 
 import scala.util._
+
+import javax.inject._
 
 
 /**
@@ -19,7 +23,9 @@ import scala.util._
 
 package wrong_field_name.yaml {
 
-    class Wrong_field_nameYaml extends Wrong_field_nameYamlBase {
+    class Wrong_field_nameYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends Wrong_field_nameYamlBase {
+    // ----- Start of unmanaged code area for constructor Wrong_field_nameYaml
+    // ----- End of unmanaged code area for constructor Wrong_field_nameYaml
         val get = getAction { input: (GetOptCodes, GetCodes) =>
             val (optCodes, codes) = input
             // ----- Start of unmanaged code area for action  Wrong_field_nameYaml.get

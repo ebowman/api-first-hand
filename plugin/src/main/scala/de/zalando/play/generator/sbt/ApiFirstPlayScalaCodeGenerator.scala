@@ -73,8 +73,6 @@ object ApiFirstPlayScalaCodeGenerator extends AutoPlugin {
 
     playScalaAutogenerateControllers := true,
 
-    playScalaAutogenerateTests := true,
-
     playScalaCompilationTasks <<= apiFirstPreparedData map { task =>
       val version = if (BuildInfo.version.endsWith("-SNAPSHOT")) {
         // This essentially disables incremental compilation if we're using a SNAPSHOT version of the playScala plugin.
@@ -97,18 +95,17 @@ object ApiFirstPlayScalaCodeGenerator extends AutoPlugin {
     managedSources ++= playScalaBase.value
   )
 
-  def playScalaTestSettings: Seq[Setting[_]] = Seq(
-    target in playScalaTests := crossTarget.value / "routes" / Defaults.nameForSrc(Test.name),
-    playScalaTests := {
-      if (playScalaAutogenerateTests.value) {
-        val rout = playScalaRoutes.value
-        playScalaGenerateTests.value
-      } else {
-        Nil
-      }
-    },
-    managedSources ++= playScalaTests.value
-  )
+  def playScalaTestSettings: Seq[Setting[_]] =
+    Seq(
+      target in playScalaTests := crossTarget.value / "routes" / Defaults.nameForSrc(Test.name),
+      playScalaTests := {
+        if (playScalaAutogenerateTests.value) {
+          val rout = playScalaRoutes.value
+          playScalaGenerateTests.value
+        } else Nil
+      },
+      managedSources ++= playScalaTests.value
+    )
 
   def playScalaControllerSettings: Seq[Setting[_]] = Seq(
     target in playScalaControllers := scalaSource.value,
@@ -149,7 +146,9 @@ object ApiFirstPlayScalaCodeGenerator extends AutoPlugin {
   val providedWriterFactories = WriterFactories.factories.keySet
 
   val playScalaGenerateBase = commonPlayScalaCompile(PlayScalaCompiler.compileBase, playScalaBase, playScalaCompilationTasks)
+
   def playScalaGenerateRoutes(generator: RoutesGenerator) = commonPlayScalaCompile(PlayScalaRoutesCompiler.compileRoutes(generator), playScalaRoutes, playScalaCompilationTasks)
+
   val playScalaGenerateTests = commonPlayScalaCompile(PlayScalaCompiler.compileTests, playScalaTests, playScalaCompilationTasks)
   val playScalaGenerateControllers = commonPlayScalaCompile(PlayScalaCompiler.compileControllers, playScalaControllers, playScalaCompilationTasks)
   val playScalaGenerateMarshallers = commonPlayScalaCompile(PlayScalaCompiler.compileMarshallers, playScalaMarshallers, playScalaCompilationTasks)

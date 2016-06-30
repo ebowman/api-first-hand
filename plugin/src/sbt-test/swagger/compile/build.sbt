@@ -17,6 +17,8 @@ libraryDependencies ++= Seq(
 
 apiFirstParsers := Seq(ApiFirstSwaggerParser.swaggerSpec2Ast.value).flatten
 
+playScalaAutogenerateTests := true
+
 logLevel := sbt.Level.Warn
 
 crossPaths := false

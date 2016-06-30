@@ -243,10 +243,10 @@ package yaml {
     case class Pet(name: String, tags: PetTags, photoUrls: PetPhotoUrls, id: PetId, status: MetaCopyright, category: PetCategory) 
     case class ModelSchemaRootLinksOpt(self: MetaCopyright, related: MetaCopyright) 
 
-    case class ModelSchemaAgeGroupsArr(value: String) {
+    case class ModelSchemaAgeGroupsArr(value: String) extends AnyVal {
         override def toString = value.toString
     }
-    case class ModelSchemaSilhouetteId(value: String) {
+    case class ModelSchemaSilhouetteId(value: String) extends AnyVal {
         override def toString = value.toString
     }
 

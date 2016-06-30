@@ -3,6 +3,8 @@ import play.api.mvc.{Action, Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+
 import de.zalando.play.controllers._
 
 import PlayBodyParsing._
@@ -10,6 +12,8 @@ import PlayBodyParsing._
 import PlayValidations._
 
 import scala.util._
+
+import javax.inject._
 
 
 /**
@@ -19,7 +23,9 @@ import scala.util._
 
 package hackweek.yaml {
 
-    class HackweekYaml extends HackweekYamlBase {
+    class HackweekYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends HackweekYamlBase {
+    // ----- Start of unmanaged code area for constructor HackweekYaml
+    // ----- End of unmanaged code area for constructor HackweekYaml
         val getschemaModel = getschemaModelAction { (root: ModelSchemaRoot) =>  
             // ----- Start of unmanaged code area for action  HackweekYaml.getschemaModel
             NotImplementedYet
