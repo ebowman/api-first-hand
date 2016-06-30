@@ -10,13 +10,14 @@ import de.zalando.apifirst.StringUtil._
 import de.zalando.apifirst.generators.DenotationNames._
 import de.zalando.apifirst.naming.Reference
 import org.slf4j.Logger
+import ControllersCommons._
 
 /**
  * @author slasch
  * @since 31.12.2015.
  */
 trait CallControllersStep extends EnrichmentStep[ApiCall]
-    with ControllersCommons with SecurityCommons with ActionResults with ParameterData {
+    with SecurityCommons with ActionResults with ParameterData {
 
   def log: Logger
 
@@ -183,17 +184,19 @@ trait CallControllersStep extends EnrichmentStep[ApiCall]
 
 }
 
-object PlayScalaControllerAnalyzer extends ControllersCommons {
+object PlayScalaControllerAnalyzer {
 
   case class UnmanagedPart(marker: ApiCall, relevantCode: Seq[String])
 
   val controllerImports = Seq(
     "play.api.mvc.{Action, Controller}",
     "play.api.data.validation.Constraint",
+    "play.api.inject.{ApplicationLifecycle,ConfigurationProvider}",
     "de.zalando.play.controllers._",
     "PlayBodyParsing._",
     "PlayValidations._",
-    "scala.util._"
+    "scala.util._",
+    "javax.inject._"
   )
 
   def analyzeController(calls: Seq[ApiCall], codeParts: Map[String, Seq[String]]): Map[ApiCall, UnmanagedPart] =
@@ -217,7 +220,9 @@ object PlayScalaControllerAnalyzer extends ControllersCommons {
     }.toSeq.flatten
 
   def collectImplementations(currentVersion: Seq[String], start: String, end: String): Map[String, Seq[String]] = {
-    val actionIndexes = currentVersion.zipWithIndex.filter(_._1.trim.startsWith(start)).map { case (line, idx) => line.replace(start, "") -> idx }
+    val actionIndexes = currentVersion.zipWithIndex.filter(_._1.trim.startsWith(start)).map {
+      case (line, idx) => line.replace(start, "") -> idx
+    }
     val codeParts = actionIndexes map {
       case (action, idx) =>
         val fromStart = currentVersion.drop(idx)
@@ -269,12 +274,15 @@ trait ParameterData {
 
 }
 
-trait ControllersCommons {
+object ControllersCommons {
 
   val controllersSuffix = "Action"
   val formParserSuffix = "ParseForm"
 
   val eof = "// ----- End of unmanaged code area for action "
   val sof = "// ----- Start of unmanaged code area for action "
+
+  val ceof = "// ----- End of unmanaged code area for constructor "
+  val csof = "// ----- Start of unmanaged code area for constructor "
 
 }

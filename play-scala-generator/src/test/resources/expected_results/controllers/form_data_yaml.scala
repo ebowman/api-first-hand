@@ -3,6 +3,8 @@ import play.api.mvc.{Action, Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+
 import de.zalando.play.controllers._
 
 import PlayBodyParsing._
@@ -10,6 +12,8 @@ import PlayBodyParsing._
 import PlayValidations._
 
 import scala.util._
+
+import javax.inject._
 
 import java.io.File
 
@@ -21,7 +25,9 @@ import java.io.File
 
 package form_data.yaml {
 
-    class Form_dataYaml extends Form_dataYamlBase {
+    class Form_dataYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends Form_dataYamlBase {
+    // ----- Start of unmanaged code area for constructor Form_dataYaml
+    // ----- End of unmanaged code area for constructor Form_dataYaml
         val postmultipart = postmultipartAction { input: (String, BothPostYear, MultipartPostAvatar) =>
             val (name, year, avatar) = input
             // ----- Start of unmanaged code area for action  Form_dataYaml.postmultipart

@@ -3,6 +3,8 @@ import play.api.mvc.{Action, Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+
 import de.zalando.play.controllers._
 
 import PlayBodyParsing._
@@ -10,6 +12,8 @@ import PlayBodyParsing._
 import PlayValidations._
 
 import scala.util._
+
+import javax.inject._
 
 
 /**
@@ -19,7 +23,9 @@ import scala.util._
 
 package echo {
 
-    class EchoHandler extends EchoHandlerBase {
+    class EchoHandler @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends EchoHandlerBase {
+    // ----- Start of unmanaged code area for constructor EchoHandler
+    // ----- End of unmanaged code area for constructor EchoHandler
         val method = methodAction {  _ =>  
             // ----- Start of unmanaged code area for action  EchoHandler.method
             NotImplementedYet
@@ -30,7 +36,9 @@ package echo {
 }
 package echo {
 
-    class EchoApiYaml extends EchoApiYamlBase {
+    class EchoApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends EchoApiYamlBase {
+    // ----- Start of unmanaged code area for constructor EchoApiYaml
+    // ----- End of unmanaged code area for constructor EchoApiYaml
         val post = postAction { input: (PostName, PostName) =>
             val (name, year) = input
             // ----- Start of unmanaged code area for action  EchoApiYaml.post

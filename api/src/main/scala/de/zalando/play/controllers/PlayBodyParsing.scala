@@ -91,8 +91,11 @@ object PlayBodyParsing extends PlayBodyParsing {
     bytes: ByteString, mediaType: Option[MediaType]
   )(implicit tag: ClassTag[T]): T = {
     val mimeTypeName = mimeType(mediaType)
-    val jacksonParser: Parser[T] =
-      byteString => jacksonMapper(mimeTypeName).readValue(bytes.toArray, tag.runtimeClass.asInstanceOf[Class[T]])
+    val jacksonParser: Parser[T] = byteString =>
+      if (tag.runtimeClass == classOf[String]) new String(byteString.toArray).asInstanceOf[T]
+      else if (tag.runtimeClass == classOf[BinaryString]) BinaryString.byteArray2binaryString(byteString.toArray).asInstanceOf[T]
+      else if (tag.runtimeClass == classOf[Base64String]) Base64String.fromBytes(byteString.toArray).asInstanceOf[T]
+      else jacksonMapper(mimeTypeName).readValue(bytes.toArray, tag.runtimeClass.asInstanceOf[Class[T]])
     // TODO default play parsers could be used here as well
     val parser = customParsers.find(_._1 == mimeTypeName).map(_._2).getOrElse {
       jacksonParser

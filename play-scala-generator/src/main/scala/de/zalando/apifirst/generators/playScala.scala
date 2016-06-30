@@ -7,6 +7,7 @@ import de.zalando.apifirst.generators.DenotationNames.DenotationTable
 import PlayScalaControllerAnalyzer._
 import de.zalando.apifirst.StringUtil
 import org.slf4j.LoggerFactory
+import ControllersCommons._
 
 import scala.collection.Iterable
 
@@ -106,6 +107,7 @@ class ScalaGenerator(
     nonEmptyTemplate(fileName, packageName, templateName, currentController)
   }
 
+  //noinspection ScalaStyle
   private def nonEmptyTemplate(fileName: String, packageName: String, templateName: String, currentController: String): String = {
 
     assert(packageName.contains('-') == packageName.contains('`'), packageName)
@@ -144,7 +146,14 @@ class ScalaGenerator(
     val securityExtractors = ReShaper.filterByType("security_extractors", denotationTable)
     val extractors = ReShaper.groupByType(securityExtractors.toSeq).toMap
 
-    val codeParts = collectImplementations(currentController.split("\n"), sof, eof)
+    val controllerLines = currentController.split("\n")
+    val codeParts = collectImplementations(controllerLines, sof, eof)
+    val constructors = collectImplementations(controllerLines, csof, ceof)
+
+    val constructorCode = constructors map {
+      case (k, v) =>
+        k -> v.filterNot(l => l.trim.startsWith(csof) || l.trim.startsWith(ceof)).mkString("\n")
+    } withDefaultValue ""
 
     val unmanagedParts = analyzeController(modelCalls, codeParts)
 
@@ -169,7 +178,8 @@ class ScalaGenerator(
       "form_parsers_required" -> formParsersRequired
     )
 
-    val controllersList = PlayScalaControllersGenerator.controllers(modelCalls, unmanagedParts, pckg, deadCode)(denotationTable)
+    val controllersList = PlayScalaControllersGenerator.
+      controllers(modelCalls, unmanagedParts, pckg, deadCode, constructorCode)(denotationTable)
 
     val stdImports = standardImports(modelTypes).map(i => Map("name" -> i))
 
@@ -262,7 +272,7 @@ object PlayScalaControllersGenerator {
   val securityTraitSuffix = "Security"
 
   def controllers(allCalls: Seq[ApiCall], unmanagedParts: Map[ApiCall, UnmanagedPart], packageName: String,
-    deadCode: Map[String, String])(table: DenotationTable): Iterable[Map[String, Object]] = {
+    deadCode: Map[String, String], constructorCode: Map[String, String])(table: DenotationTable): Iterable[Map[String, Object]] = {
     allCalls groupBy { c =>
       (c.handler.packageName, c.handler.controller)
     } map {
@@ -280,13 +290,17 @@ object PlayScalaControllersGenerator {
           case (k, v) =>
             Map("name" -> k, "code" -> v)
         }
+        val controllerName = escape(controller._2)
         Map(
           "effective_package" -> packageName,
-          "controller" -> escape(controller._2),
+          "controller" -> controllerName,
           "base" -> escape(controller._2 + baseControllersSuffix),
           "methods" -> methods,
           "security_trait" -> securityTrait,
-          "dead_code" -> deadCodeParts
+          "dead_code" -> deadCodeParts,
+          "start_comment" -> (csof + controllerName),
+          "end_comment" -> (ceof + controllerName),
+          "constructor_code" -> constructorCode(controller._2)
         )
     }
   }

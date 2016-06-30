@@ -3,6 +3,8 @@ import play.api.mvc.{Action, Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+
 import de.zalando.play.controllers._
 
 import PlayBodyParsing._
@@ -10,6 +12,8 @@ import PlayBodyParsing._
 import PlayValidations._
 
 import scala.util._
+
+import javax.inject._
 
 import scala.math.BigInt
 
@@ -25,7 +29,9 @@ import scala.math.BigDecimal
 
 package instagram.api.yaml {
 
-    class InstagramApiYaml extends InstagramApiYamlBase {
+    class InstagramApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends InstagramApiYamlBase {
+    // ----- Start of unmanaged code area for constructor InstagramApiYaml
+    // ----- End of unmanaged code area for constructor InstagramApiYaml
         val getmediaByMedia_idLikes = getmediaByMedia_idLikesAction { (media_id: BigInt) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.getmediaByMedia_idLikes
             NotImplementedYet

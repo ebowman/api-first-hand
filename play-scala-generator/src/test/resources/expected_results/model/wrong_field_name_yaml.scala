@@ -60,13 +60,13 @@ package yaml {
 
     case class StatusAndCode(message: String, code: Status) 
 
-    case class GetCodes(value: String) {
+    case class GetCodes(value: String) extends AnyVal {
         override def toString = value.toString
     }
-    case class GetOptCodesOpt(value: String) {
+    case class GetOptCodesOpt(value: String) extends AnyVal {
         override def toString = value.toString
     }
-    case class Status(value: String) {
+    case class Status(value: String) extends AnyVal {
         override def toString = value.toString
     }
 

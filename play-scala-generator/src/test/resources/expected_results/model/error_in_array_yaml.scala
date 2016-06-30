@@ -244,10 +244,10 @@ package yaml {
     case class Error(source: ErrorSource, code: MetaCopyright, status: MetaCopyright, detail: MetaCopyright, title: MetaCopyright) 
     case class Links(self: MetaCopyright, related: MetaCopyright) 
 
-    case class ModelSchemaAgeGroupsArr(value: String) {
+    case class ModelSchemaAgeGroupsArr(value: String) extends AnyVal {
         override def toString = value.toString
     }
-    case class ModelSchemaSilhouetteId(value: String) {
+    case class ModelSchemaSilhouetteId(value: String) extends AnyVal {
         override def toString = value.toString
     }
 

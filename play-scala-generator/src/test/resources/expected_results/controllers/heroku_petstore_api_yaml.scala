@@ -3,6 +3,8 @@ import play.api.mvc.{Action, Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+
 import de.zalando.play.controllers._
 
 import PlayBodyParsing._
@@ -10,6 +12,8 @@ import PlayBodyParsing._
 import PlayValidations._
 
 import scala.util._
+
+import javax.inject._
 
 import scala.math.BigInt
 
@@ -21,7 +25,9 @@ import scala.math.BigInt
 
 package heroku.petstore.api.yaml {
 
-    class HerokuPetstoreApiYaml extends HerokuPetstoreApiYamlBase {
+    class HerokuPetstoreApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends HerokuPetstoreApiYamlBase {
+    // ----- Start of unmanaged code area for constructor HerokuPetstoreApiYaml
+    // ----- End of unmanaged code area for constructor HerokuPetstoreApiYaml
         val get = getAction { (limit: BigInt) =>  
             // ----- Start of unmanaged code area for action  HerokuPetstoreApiYaml.get
             NotImplementedYet
