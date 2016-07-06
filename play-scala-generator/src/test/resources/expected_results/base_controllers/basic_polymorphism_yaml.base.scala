@@ -6,6 +6,7 @@ import play.api.http._
 import de.zalando.play.controllers._
 import Results.Status
 import PlayBodyParsing._
+import scala.concurrent.Future
 
 import scala.util._
 import de.zalando.play.controllers.ArrayWrapper
@@ -19,13 +20,15 @@ import de.zalando.play.controllers.ResponseWriters
 
 //noinspection ScalaStyle
 trait Basic_polymorphismYamlBase extends Controller with PlayBodyParsing {
+    import play.api.libs.concurrent.Execution.Implicits.defaultContext
+    def success[T](t: => T) = Future.successful(t)
     sealed trait PutType[T] extends ResultWrapper[T]
     
-    case class Put200(headers: Seq[(String, String)] = Nil) extends EmptyReturn(200, headers)
+    def Put200(headers: Seq[(String, String)] = Nil) = success(new EmptyReturn(200, headers){})
     
 
     private type putActionRequestType       = (PutDummy)
-    private type putActionType[T]            = putActionRequestType => PutType[T] forSome { type T }
+    private type putActionType[T]            = putActionRequestType => Future[PutType[T] forSome { type T }]
 
         private def putParser(acceptedTypes: Seq[String], maxLength: Int = parse.DefaultMaxTextLength) = {
             def bodyMimeType: Option[MediaType] => String = mediaType => {
@@ -44,7 +47,7 @@ trait Basic_polymorphismYamlBase extends Controller with PlayBodyParsing {
 
     val putActionConstructor  = Action
 
-def putAction[T] = (f: putActionType[T]) => putActionConstructor(BodyParsers.parse.using(putParser(Seq[String]()))) { request =>
+def putAction[T] = (f: putActionType[T]) => putActionConstructor.async(BodyParsers.parse.using(putParser(Seq[String]()))) { request =>
         val providedTypes = Seq[String]()
 
         negotiateContent(request.acceptedTypes, providedTypes).map { putResponseMimeType =>
@@ -57,18 +60,17 @@ def putAction[T] = (f: putActionType[T]) => putActionConstructor(BodyParsers.par
                             case e if e.isEmpty => processValidputRequest(f)((dummy))(putResponseMimeType)
                             case l =>
                                 implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(putResponseMimeType)
-                                BadRequest(l)
+                                success(BadRequest(l))
                         }
                 result
             
-        }.getOrElse(Status(415)("The server doesn't support any of the requested mime types"))
+        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
     private def processValidputRequest[T](f: putActionType[T])(request: putActionRequestType)(mimeType: String) = {
-      f(request).toResult(mimeType).getOrElse {
-        Results.NotAcceptable
-      }
+        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
     }
     abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with PutType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(result) }
-    case object NotImplementedYet extends ResultWrapper[Results.EmptyContent]  with PutType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
+    case object NotImplementedYetSync extends ResultWrapper[Results.EmptyContent]  with PutType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
+    lazy val NotImplementedYet = Future.successful(NotImplementedYetSync)
 }

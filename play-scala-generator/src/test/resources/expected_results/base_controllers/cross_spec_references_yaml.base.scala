@@ -6,6 +6,7 @@ import play.api.http._
 import de.zalando.play.controllers._
 import Results.Status
 import PlayBodyParsing._
+import scala.concurrent.Future
 
 import scala.util._
 import de.zalando.play.controllers.ArrayWrapper
@@ -20,12 +21,15 @@ import de.zalando.play.controllers.ResponseWriters
 
 //noinspection ScalaStyle
 trait Cross_spec_referencesYamlBase extends Controller with PlayBodyParsing {
+    import play.api.libs.concurrent.Execution.Implicits.defaultContext
+    def success[T](t: => T) = Future.successful(t)
     sealed trait PostType[T] extends ResultWrapper[T]
-    case class Post200(result: Pet)(implicit val writer: String => Option[Writeable[Pet]]) extends PostType[Pet] { val statusCode = 200 }
+    def Post200(resultP: Pet)(implicit writerP: String => Option[Writeable[Pet]]) = success(new PostType[Pet] { val statusCode = 200; val result = resultP; val writer = writerP })
+    def Post200(resultF: Future[Pet])(implicit writerP: String => Option[Writeable[Pet]]) = resultF map { resultP => (new PostType[Pet] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
     private type postActionRequestType       = (ModelSchemaRoot)
-    private type postActionType[T]            = postActionRequestType => PostType[T] forSome { type T }
+    private type postActionType[T]            = postActionRequestType => Future[PostType[T] forSome { type T }]
 
         private def postParser(acceptedTypes: Seq[String], maxLength: Int = parse.DefaultMaxTextLength) = {
             def bodyMimeType: Option[MediaType] => String = mediaType => {
@@ -44,7 +48,7 @@ trait Cross_spec_referencesYamlBase extends Controller with PlayBodyParsing {
 
     val postActionConstructor  = Action
 
-def postAction[T] = (f: postActionType[T]) => postActionConstructor(BodyParsers.parse.using(postParser(Seq[String]()))) { request =>
+def postAction[T] = (f: postActionType[T]) => postActionConstructor.async(BodyParsers.parse.using(postParser(Seq[String]()))) { request =>
         val providedTypes = Seq[String]()
 
         negotiateContent(request.acceptedTypes, providedTypes).map { postResponseMimeType =>
@@ -57,18 +61,17 @@ def postAction[T] = (f: postActionType[T]) => postActionConstructor(BodyParsers.
                             case e if e.isEmpty => processValidpostRequest(f)((root))(postResponseMimeType)
                             case l =>
                                 implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(postResponseMimeType)
-                                BadRequest(l)
+                                success(BadRequest(l))
                         }
                 result
             
-        }.getOrElse(Status(415)("The server doesn't support any of the requested mime types"))
+        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
     private def processValidpostRequest[T](f: postActionType[T])(request: postActionRequestType)(mimeType: String) = {
-      f(request).toResult(mimeType).getOrElse {
-        Results.NotAcceptable
-      }
+        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
     }
     abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with PostType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(result) }
-    case object NotImplementedYet extends ResultWrapper[Results.EmptyContent]  with PostType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
+    case object NotImplementedYetSync extends ResultWrapper[Results.EmptyContent]  with PostType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
+    lazy val NotImplementedYet = Future.successful(NotImplementedYetSync)
 }

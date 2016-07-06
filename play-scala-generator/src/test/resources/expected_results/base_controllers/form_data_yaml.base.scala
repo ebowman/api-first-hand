@@ -6,6 +6,7 @@ import play.api.http._
 import de.zalando.play.controllers._
 import Results.Status
 import PlayBodyParsing._
+import scala.concurrent.Future
 
 import scala.util._
 import java.io.File
@@ -19,17 +20,20 @@ import de.zalando.play.controllers.PlayPathBindables
 
 //noinspection ScalaStyle
 trait Form_dataYamlBase extends Controller with PlayBodyParsing {
+    import play.api.libs.concurrent.Execution.Implicits.defaultContext
+    def success[T](t: => T) = Future.successful(t)
     sealed trait PostmultipartType[T] extends ResultWrapper[T]
-    case class Postmultipart200(result: MultipartPostResponses200)(implicit val writer: String => Option[Writeable[MultipartPostResponses200]]) extends PostmultipartType[MultipartPostResponses200] { val statusCode = 200 }
+    def Postmultipart200(resultP: MultipartPostResponses200)(implicit writerP: String => Option[Writeable[MultipartPostResponses200]]) = success(new PostmultipartType[MultipartPostResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
+    def Postmultipart200(resultF: Future[MultipartPostResponses200])(implicit writerP: String => Option[Writeable[MultipartPostResponses200]]) = resultF map { resultP => (new PostmultipartType[MultipartPostResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
     private type postmultipartActionRequestType       = (String, BothPostYear, MultipartPostAvatar)
-    private type postmultipartActionType[T]            = postmultipartActionRequestType => PostmultipartType[T] forSome { type T }
+    private type postmultipartActionType[T]            = postmultipartActionRequestType => Future[PostmultipartType[T] forSome { type T }]
 
 
     val postmultipartActionConstructor  = Action
 
-def postmultipartAction[T] = (f: postmultipartActionType[T]) => postmultipartActionConstructor { request =>
+def postmultipartAction[T] = (f: postmultipartActionType[T]) => postmultipartActionConstructor.async { request =>
         val providedTypes = Seq[String]("application/json")
 
         negotiateContent(request.acceptedTypes, providedTypes).map { postmultipartResponseMimeType =>
@@ -39,7 +43,7 @@ def postmultipartAction[T] = (f: postmultipartActionType[T]) => postmultipartAct
                 case Left(problem: Seq[String]) =>
                     val msg = problem.mkString("\n")
                     implicit val marshaller: Writeable[String] = anyToWritable(postmultipartResponseMimeType)
-                    BadRequest(msg)
+                    success(BadRequest(msg))
 
                 case Right((name, year, avatar)) =>
             
@@ -49,31 +53,30 @@ def postmultipartAction[T] = (f: postmultipartActionType[T]) => postmultipartAct
                             case e if e.isEmpty => processValidpostmultipartRequest(f)((name, year, avatar))(postmultipartResponseMimeType)
                             case l =>
                                 implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(postmultipartResponseMimeType)
-                                BadRequest(l)
+                                success(BadRequest(l))
                         }
                 result
             
             }
             
-        }.getOrElse(Status(415)("The server doesn't support any of the requested mime types"))
+        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
     private def processValidpostmultipartRequest[T](f: postmultipartActionType[T])(request: postmultipartActionRequestType)(mimeType: String) = {
-      f(request).toResult(mimeType).getOrElse {
-        Results.NotAcceptable
-      }
+        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
     }
     sealed trait Posturl_encodedType[T] extends ResultWrapper[T]
-    case class Posturl_encoded200(result: MultipartPostResponses200)(implicit val writer: String => Option[Writeable[MultipartPostResponses200]]) extends Posturl_encodedType[MultipartPostResponses200] { val statusCode = 200 }
+    def Posturl_encoded200(resultP: MultipartPostResponses200)(implicit writerP: String => Option[Writeable[MultipartPostResponses200]]) = success(new Posturl_encodedType[MultipartPostResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
+    def Posturl_encoded200(resultF: Future[MultipartPostResponses200])(implicit writerP: String => Option[Writeable[MultipartPostResponses200]]) = resultF map { resultP => (new Posturl_encodedType[MultipartPostResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
     private type posturl_encodedActionRequestType       = (String, BothPostYear, File)
-    private type posturl_encodedActionType[T]            = posturl_encodedActionRequestType => Posturl_encodedType[T] forSome { type T }
+    private type posturl_encodedActionType[T]            = posturl_encodedActionRequestType => Future[Posturl_encodedType[T] forSome { type T }]
 
 
     val posturl_encodedActionConstructor  = Action
 
-def posturl_encodedAction[T] = (f: posturl_encodedActionType[T]) => posturl_encodedActionConstructor { request =>
+def posturl_encodedAction[T] = (f: posturl_encodedActionType[T]) => posturl_encodedActionConstructor.async { request =>
         val providedTypes = Seq[String]("application/json")
 
         negotiateContent(request.acceptedTypes, providedTypes).map { posturl_encodedResponseMimeType =>
@@ -83,7 +86,7 @@ def posturl_encodedAction[T] = (f: posturl_encodedActionType[T]) => posturl_enco
                 case Left(problem: Seq[String]) =>
                     val msg = problem.mkString("\n")
                     implicit val marshaller: Writeable[String] = anyToWritable(posturl_encodedResponseMimeType)
-                    BadRequest(msg)
+                    success(BadRequest(msg))
 
                 case Right((name, year, avatar)) =>
             
@@ -93,31 +96,30 @@ def posturl_encodedAction[T] = (f: posturl_encodedActionType[T]) => posturl_enco
                             case e if e.isEmpty => processValidposturl_encodedRequest(f)((name, year, avatar))(posturl_encodedResponseMimeType)
                             case l =>
                                 implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(posturl_encodedResponseMimeType)
-                                BadRequest(l)
+                                success(BadRequest(l))
                         }
                 result
             
             }
             
-        }.getOrElse(Status(415)("The server doesn't support any of the requested mime types"))
+        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
     private def processValidposturl_encodedRequest[T](f: posturl_encodedActionType[T])(request: posturl_encodedActionRequestType)(mimeType: String) = {
-      f(request).toResult(mimeType).getOrElse {
-        Results.NotAcceptable
-      }
+        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
     }
     sealed trait PostbothType[T] extends ResultWrapper[T]
-    case class Postboth200(result: BothPostResponses200)(implicit val writer: String => Option[Writeable[BothPostResponses200]]) extends PostbothType[BothPostResponses200] { val statusCode = 200 }
+    def Postboth200(resultP: BothPostResponses200)(implicit writerP: String => Option[Writeable[BothPostResponses200]]) = success(new PostbothType[BothPostResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
+    def Postboth200(resultF: Future[BothPostResponses200])(implicit writerP: String => Option[Writeable[BothPostResponses200]]) = resultF map { resultP => (new PostbothType[BothPostResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
     private type postbothActionRequestType       = (String, BothPostYear, MultipartPostAvatar, File)
-    private type postbothActionType[T]            = postbothActionRequestType => PostbothType[T] forSome { type T }
+    private type postbothActionType[T]            = postbothActionRequestType => Future[PostbothType[T] forSome { type T }]
 
 
     val postbothActionConstructor  = Action
 
-def postbothAction[T] = (f: postbothActionType[T]) => postbothActionConstructor { request =>
+def postbothAction[T] = (f: postbothActionType[T]) => postbothActionConstructor.async { request =>
         val providedTypes = Seq[String]("application/json")
 
         negotiateContent(request.acceptedTypes, providedTypes).map { postbothResponseMimeType =>
@@ -127,7 +129,7 @@ def postbothAction[T] = (f: postbothActionType[T]) => postbothActionConstructor 
                 case Left(problem: Seq[String]) =>
                     val msg = problem.mkString("\n")
                     implicit val marshaller: Writeable[String] = anyToWritable(postbothResponseMimeType)
-                    BadRequest(msg)
+                    success(BadRequest(msg))
 
                 case Right((name, year, avatar, ringtone)) =>
             
@@ -137,20 +139,19 @@ def postbothAction[T] = (f: postbothActionType[T]) => postbothActionConstructor 
                             case e if e.isEmpty => processValidpostbothRequest(f)((name, year, avatar, ringtone))(postbothResponseMimeType)
                             case l =>
                                 implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(postbothResponseMimeType)
-                                BadRequest(l)
+                                success(BadRequest(l))
                         }
                 result
             
             }
             
-        }.getOrElse(Status(415)("The server doesn't support any of the requested mime types"))
+        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
     private def processValidpostbothRequest[T](f: postbothActionType[T])(request: postbothActionRequestType)(mimeType: String) = {
-      f(request).toResult(mimeType).getOrElse {
-        Results.NotAcceptable
-      }
+        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
     }
     abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with PostmultipartType[Result] with Posturl_encodedType[Result] with PostbothType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(result) }
-    case object NotImplementedYet extends ResultWrapper[Results.EmptyContent]  with PostmultipartType[Results.EmptyContent] with Posturl_encodedType[Results.EmptyContent] with PostbothType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
+    case object NotImplementedYetSync extends ResultWrapper[Results.EmptyContent]  with PostmultipartType[Results.EmptyContent] with Posturl_encodedType[Results.EmptyContent] with PostbothType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
+    lazy val NotImplementedYet = Future.successful(NotImplementedYetSync)
 }

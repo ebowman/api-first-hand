@@ -6,6 +6,7 @@ import play.api.http._
 import de.zalando.play.controllers._
 import Results.Status
 import PlayBodyParsing._
+import scala.concurrent.Future
 
 import scala.util._
 import de.zalando.play.controllers.ArrayWrapper
@@ -18,12 +19,15 @@ import de.zalando.play.controllers.PlayPathBindables
 
 //noinspection ScalaStyle
 trait SimplePetstoreApiYamlBase extends Controller with PlayBodyParsing {
+    import play.api.libs.concurrent.Execution.Implicits.defaultContext
+    def success[T](t: => T) = Future.successful(t)
     sealed trait AddPetType[T] extends ResultWrapper[T]
-    case class AddPet200(result: Pet)(implicit val writer: String => Option[Writeable[Pet]]) extends AddPetType[Pet] { val statusCode = 200 }
+    def AddPet200(resultP: Pet)(implicit writerP: String => Option[Writeable[Pet]]) = success(new AddPetType[Pet] { val statusCode = 200; val result = resultP; val writer = writerP })
+    def AddPet200(resultF: Future[Pet])(implicit writerP: String => Option[Writeable[Pet]]) = resultF map { resultP => (new AddPetType[Pet] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
     private type addPetActionRequestType       = (NewPet)
-    private type addPetActionType[T]            = addPetActionRequestType => AddPetType[T] forSome { type T }
+    private type addPetActionType[T]            = addPetActionRequestType => Future[AddPetType[T] forSome { type T }]
 
         private def addPetParser(acceptedTypes: Seq[String], maxLength: Int = parse.DefaultMaxTextLength) = {
             def bodyMimeType: Option[MediaType] => String = mediaType => {
@@ -41,7 +45,7 @@ trait SimplePetstoreApiYamlBase extends Controller with PlayBodyParsing {
 
     val addPetActionConstructor  = Action
 
-def addPetAction[T] = (f: addPetActionType[T]) => addPetActionConstructor(BodyParsers.parse.using(addPetParser(Seq[String]("application/json")))) { request =>
+def addPetAction[T] = (f: addPetActionType[T]) => addPetActionConstructor.async(BodyParsers.parse.using(addPetParser(Seq[String]("application/json")))) { request =>
         val providedTypes = Seq[String]("application/json")
 
         negotiateContent(request.acceptedTypes, providedTypes).map { addPetResponseMimeType =>
@@ -54,34 +58,36 @@ def addPetAction[T] = (f: addPetActionType[T]) => addPetActionConstructor(BodyPa
                             case e if e.isEmpty => processValidaddPetRequest(f)((pet))(addPetResponseMimeType)
                             case l =>
                                 implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(addPetResponseMimeType)
-                                BadRequest(l)
+                                success(BadRequest(l))
                         }
                 result
             
-        }.getOrElse(Status(415)("The server doesn't support any of the requested mime types"))
+        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
     private def processValidaddPetRequest[T](f: addPetActionType[T])(request: addPetActionRequestType)(mimeType: String) = {
-      f(request).toResult(mimeType).getOrElse {
-        Results.NotAcceptable
-      }
+        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
     }
     abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with AddPetType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(result) }
-    case object NotImplementedYet extends ResultWrapper[Results.EmptyContent]  with AddPetType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
+    case object NotImplementedYetSync extends ResultWrapper[Results.EmptyContent]  with AddPetType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
+    lazy val NotImplementedYet = Future.successful(NotImplementedYetSync)
 }
 //noinspection ScalaStyle
 trait DashboardBase extends Controller with PlayBodyParsing {
+    import play.api.libs.concurrent.Execution.Implicits.defaultContext
+    def success[T](t: => T) = Future.successful(t)
     sealed trait MethodLevelType[T] extends ResultWrapper[T]
-    case class MethodLevel200(result: Seq[Pet])(implicit val writer: String => Option[Writeable[Seq[Pet]]]) extends MethodLevelType[Seq[Pet]] { val statusCode = 200 }
+    def MethodLevel200(resultP: Seq[Pet])(implicit writerP: String => Option[Writeable[Seq[Pet]]]) = success(new MethodLevelType[Seq[Pet]] { val statusCode = 200; val result = resultP; val writer = writerP })
+    def MethodLevel200(resultF: Future[Seq[Pet]])(implicit writerP: String => Option[Writeable[Seq[Pet]]]) = resultF map { resultP => (new MethodLevelType[Seq[Pet]] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
     private type methodLevelActionRequestType       = (PetsGetTags, PetsGetLimit)
-    private type methodLevelActionType[T]            = methodLevelActionRequestType => MethodLevelType[T] forSome { type T }
+    private type methodLevelActionType[T]            = methodLevelActionRequestType => Future[MethodLevelType[T] forSome { type T }]
 
 
     val methodLevelActionConstructor  = Action
 
-def methodLevelAction[T] = (f: methodLevelActionType[T]) => (tags: PetsGetTags, limit: PetsGetLimit) => methodLevelActionConstructor { request =>
+def methodLevelAction[T] = (f: methodLevelActionType[T]) => (tags: PetsGetTags, limit: PetsGetLimit) => methodLevelActionConstructor.async { request =>
         val providedTypes = Seq[String]("application/json", "application/xml", "text/xml", "text/html")
 
         negotiateContent(request.acceptedTypes, providedTypes).map { methodLevelResponseMimeType =>
@@ -93,29 +99,28 @@ def methodLevelAction[T] = (f: methodLevelActionType[T]) => (tags: PetsGetTags, 
                             case e if e.isEmpty => processValidmethodLevelRequest(f)((tags, limit))(methodLevelResponseMimeType)
                             case l =>
                                 implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(methodLevelResponseMimeType)
-                                BadRequest(l)
+                                success(BadRequest(l))
                         }
                 result
             
-        }.getOrElse(Status(415)("The server doesn't support any of the requested mime types"))
+        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
     private def processValidmethodLevelRequest[T](f: methodLevelActionType[T])(request: methodLevelActionRequestType)(mimeType: String) = {
-      f(request).toResult(mimeType).getOrElse {
-        Results.NotAcceptable
-      }
+        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
     }
     sealed trait PathLevelGetType[T] extends ResultWrapper[T]
-    case class PathLevelGet200(result: Pet)(implicit val writer: String => Option[Writeable[Pet]]) extends PathLevelGetType[Pet] { val statusCode = 200 }
+    def PathLevelGet200(resultP: Pet)(implicit writerP: String => Option[Writeable[Pet]]) = success(new PathLevelGetType[Pet] { val statusCode = 200; val result = resultP; val writer = writerP })
+    def PathLevelGet200(resultF: Future[Pet])(implicit writerP: String => Option[Writeable[Pet]]) = resultF map { resultP => (new PathLevelGetType[Pet] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
     private type pathLevelGetActionRequestType       = (Long)
-    private type pathLevelGetActionType[T]            = pathLevelGetActionRequestType => PathLevelGetType[T] forSome { type T }
+    private type pathLevelGetActionType[T]            = pathLevelGetActionRequestType => Future[PathLevelGetType[T] forSome { type T }]
 
 
     val pathLevelGetActionConstructor  = Action
 
-def pathLevelGetAction[T] = (f: pathLevelGetActionType[T]) => (id: Long) => pathLevelGetActionConstructor { request =>
+def pathLevelGetAction[T] = (f: pathLevelGetActionType[T]) => (id: Long) => pathLevelGetActionConstructor.async { request =>
         val providedTypes = Seq[String]("application/json", "application/xml", "text/xml", "text/html")
 
         negotiateContent(request.acceptedTypes, providedTypes).map { pathLevelGetResponseMimeType =>
@@ -127,30 +132,28 @@ def pathLevelGetAction[T] = (f: pathLevelGetActionType[T]) => (id: Long) => path
                             case e if e.isEmpty => processValidpathLevelGetRequest(f)((id))(pathLevelGetResponseMimeType)
                             case l =>
                                 implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(pathLevelGetResponseMimeType)
-                                BadRequest(l)
+                                success(BadRequest(l))
                         }
                 result
             
-        }.getOrElse(Status(415)("The server doesn't support any of the requested mime types"))
+        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
     private def processValidpathLevelGetRequest[T](f: pathLevelGetActionType[T])(request: pathLevelGetActionRequestType)(mimeType: String) = {
-      f(request).toResult(mimeType).getOrElse {
-        Results.NotAcceptable
-      }
+        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
     }
     sealed trait PathLevelDeleteType[T] extends ResultWrapper[T]
     
-    case class PathLevelDelete204(headers: Seq[(String, String)] = Nil) extends EmptyReturn(204, headers)
+    def PathLevelDelete204(headers: Seq[(String, String)] = Nil) = success(new EmptyReturn(204, headers){})
     
 
     private type pathLevelDeleteActionRequestType       = (Long)
-    private type pathLevelDeleteActionType[T]            = pathLevelDeleteActionRequestType => PathLevelDeleteType[T] forSome { type T }
+    private type pathLevelDeleteActionType[T]            = pathLevelDeleteActionRequestType => Future[PathLevelDeleteType[T] forSome { type T }]
 
 
     val pathLevelDeleteActionConstructor  = Action
 
-def pathLevelDeleteAction[T] = (f: pathLevelDeleteActionType[T]) => (id: Long) => pathLevelDeleteActionConstructor { request =>
+def pathLevelDeleteAction[T] = (f: pathLevelDeleteActionType[T]) => (id: Long) => pathLevelDeleteActionConstructor.async { request =>
         val providedTypes = Seq[String]("application/json")
 
         negotiateContent(request.acceptedTypes, providedTypes).map { pathLevelDeleteResponseMimeType =>
@@ -162,18 +165,17 @@ def pathLevelDeleteAction[T] = (f: pathLevelDeleteActionType[T]) => (id: Long) =
                             case e if e.isEmpty => processValidpathLevelDeleteRequest(f)((id))(pathLevelDeleteResponseMimeType)
                             case l =>
                                 implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(pathLevelDeleteResponseMimeType)
-                                BadRequest(l)
+                                success(BadRequest(l))
                         }
                 result
             
-        }.getOrElse(Status(415)("The server doesn't support any of the requested mime types"))
+        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
     private def processValidpathLevelDeleteRequest[T](f: pathLevelDeleteActionType[T])(request: pathLevelDeleteActionRequestType)(mimeType: String) = {
-      f(request).toResult(mimeType).getOrElse {
-        Results.NotAcceptable
-      }
+        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
     }
     abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with MethodLevelType[Result] with PathLevelGetType[Result] with PathLevelDeleteType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(result) }
-    case object NotImplementedYet extends ResultWrapper[Results.EmptyContent]  with MethodLevelType[Results.EmptyContent] with PathLevelGetType[Results.EmptyContent] with PathLevelDeleteType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
+    case object NotImplementedYetSync extends ResultWrapper[Results.EmptyContent]  with MethodLevelType[Results.EmptyContent] with PathLevelGetType[Results.EmptyContent] with PathLevelDeleteType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
+    lazy val NotImplementedYet = Future.successful(NotImplementedYetSync)
 }
