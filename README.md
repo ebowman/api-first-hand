@@ -235,6 +235,7 @@ When generated as Scala, the following mapping applies:
 | date        | string       | date           | org.joda.time.LocalDate                     |
 | datetime    | string       | date-time      | org.joda.time.DateTime                      |
 | password    | string       | password       | scala.String                                |
+| uuid        | string       | uuid           | java.util.UUID                              |
 | file        | file         |                | java.io.File                                |
 
 Additionally, if a validation of type "enum" is defined for some primitive type, a trait and a set of case objects forming an ADT 
