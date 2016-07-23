@@ -30,17 +30,17 @@ object nested_arrays_yaml extends WithModel {
 	Reference("⌿definitions⌿Activity⌿actions") → 
 		Opt(Str(None, TypeMeta(Some("The text of the error message"), List())), TypeMeta(None, List())),
 	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt") → 
-		Arr(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr")), TypeMeta(None, List()), "csv"),
+		ArrResult(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult")), TypeMeta(None, List())),
 	Reference("⌿definitions⌿Example⌿messages⌿Opt") → 
-		Arr(TypeRef(Reference("⌿definitions⌿Example⌿messages⌿Opt⌿Arr")), TypeMeta(Some("The text of the error message"), List()), "csv"),
-	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr") → 
-		Arr(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr⌿Arr")), TypeMeta(None, List()), "csv"),
-	Reference("⌿definitions⌿Example⌿messages⌿Opt⌿Arr") → 
-		Arr(TypeRef(Reference("⌿definitions⌿Activity")), TypeMeta(None, List()), "csv"),
-	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr⌿Arr") → 
-		Arr(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr⌿Arr⌿Arr")), TypeMeta(None, List()), "csv"),
-	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr⌿Arr⌿Arr") → 
-		Arr(Str(Some("nested arrays"), TypeMeta(Some("nested arrays"), List())), TypeMeta(None, List()), "csv")
+		ArrResult(TypeRef(Reference("⌿definitions⌿Example⌿messages⌿Opt⌿ArrResult")), TypeMeta(Some("The text of the error message"), List())),
+	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult") → 
+		ArrResult(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult⌿ArrResult")), TypeMeta(None, List())),
+	Reference("⌿definitions⌿Example⌿messages⌿Opt⌿ArrResult") → 
+		ArrResult(TypeRef(Reference("⌿definitions⌿Activity")), TypeMeta(None, List())),
+	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult⌿ArrResult") → 
+		ArrResult(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult⌿ArrResult⌿ArrResult")), TypeMeta(None, List())),
+	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult⌿ArrResult⌿ArrResult") → 
+		ArrResult(Str(Some("nested arrays"), TypeMeta(Some("nested arrays"), List())), TypeMeta(None, List()))
 ) 
  
  def parameters = Map[ParameterRef, Parameter](

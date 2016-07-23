@@ -79,9 +79,9 @@ object nakadi_yaml extends WithModel {
 	Reference("⌿paths⌿/topics/{topic}/events⌿get⌿batch_limit") → 
 		Intgr(TypeMeta(Some("int32"), List())),
 	Reference("⌿definitions⌿SimpleStreamEvent⌿events⌿Opt") → 
-		Arr(TypeRef(Reference("⌿definitions⌿Event")), TypeMeta(None, List()), "csv"),
+		ArrResult(TypeRef(Reference("⌿definitions⌿Event")), TypeMeta(None, List())),
 	Reference("⌿definitions⌿EventMetaData⌿scopes⌿Opt") → 
-		Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv"),
+		ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List())),
 	Reference("⌿paths⌿/topics/{topic}/events/batch⌿post⌿event") → 
 		Opt(TypeRef(Reference("⌿definitions⌿Event")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/topics/{topic}/events⌿post⌿responses⌿201") → 

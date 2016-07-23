@@ -24,8 +24,9 @@ import javax.inject._
 package type_deduplication.yaml {
 
     class Type_deduplicationYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends Type_deduplicationYamlBase {
-    // ----- Start of unmanaged code area for constructor Type_deduplicationYaml
-    // ----- End of unmanaged code area for constructor Type_deduplicationYaml
+        // ----- Start of unmanaged code area for constructor Type_deduplicationYaml
+
+        // ----- End of unmanaged code area for constructor Type_deduplicationYaml
         val getplantsByPlant_idWateringsByWatering_id = getplantsByPlant_idWateringsByWatering_idAction { input: (String, String) =>
             val (plant_id, watering_id) = input
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.getplantsByPlant_idWateringsByWatering_id

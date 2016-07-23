@@ -24,8 +24,9 @@ import javax.inject._
 package uber.api.yaml {
 
     class UberApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends UberApiYamlBase {
-    // ----- Start of unmanaged code area for constructor UberApiYaml
-    // ----- End of unmanaged code area for constructor UberApiYaml
+        // ----- Start of unmanaged code area for constructor UberApiYaml
+
+        // ----- End of unmanaged code area for constructor UberApiYaml
         val getme = getmeAction {  _ =>  
             // ----- Start of unmanaged code area for action  UberApiYaml.getme
             NotImplementedYet

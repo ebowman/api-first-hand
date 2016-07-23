@@ -1,3 +1,3 @@
 "definitions" / "KeyedArrays" ->
 	TypeDef("definitions" / "KeyedArrays", Seq(
-		Field("definitions" / "KeyedArrays" / "additionalProperties", CatchAll(Arr(BInt)))))
+		Field("definitions" / "KeyedArrays" / "additionalProperties", CatchAll(ArrResult(BInt)))))

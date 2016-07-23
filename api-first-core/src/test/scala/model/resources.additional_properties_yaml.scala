@@ -15,7 +15,7 @@ object additional_properties_yaml extends WithModel {
 	Reference("⌿definitions⌿KeyedArrays") → 
 		TypeDef(Reference("⌿definitions⌿KeyedArrays"), 
 			Seq(
-					Field(Reference("⌿definitions⌿KeyedArrays⌿additionalProperties"), CatchAll(Arr(BInt(TypeMeta(None, List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List())))
+					Field(Reference("⌿definitions⌿KeyedArrays⌿additionalProperties"), CatchAll(ArrResult(BInt(TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List()))
 ) 
  

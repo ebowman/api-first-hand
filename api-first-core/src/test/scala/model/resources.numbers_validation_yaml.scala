@@ -50,7 +50,7 @@ object numbers_validation_yaml extends WithModel {
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
 def calls: Seq[ApiCall] = Seq(
-	ApiCall(GET, Path(Reference("⌿")), 
+	ApiCall(GET, Path(Reference("⌿")),
 		HandlerCall(
 			"numbers_validation.yaml",
 			"Numbers_validationYaml",
@@ -66,18 +66,18 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/⌿get⌿double_optional")),
 				ParameterRef(Reference("⌿paths⌿/⌿get⌿long_optional"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/yaml")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/yaml")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/⌿get⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]))
 
 def packageName: Option[String] = Some("numbers_validation.yaml")

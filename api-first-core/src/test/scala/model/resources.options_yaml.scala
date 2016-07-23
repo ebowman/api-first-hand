@@ -16,8 +16,8 @@ object options_yaml extends WithModel {
 		TypeDef(Reference("⌿definitions⌿Basic"), 
 			Seq(
 					Field(Reference("⌿definitions⌿Basic⌿id"), Lng(TypeMeta(Some("int64"), List()))),
-					Field(Reference("⌿definitions⌿Basic⌿required"), Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv")),
-					Field(Reference("⌿definitions⌿Basic⌿optional"), Opt(Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List())))
+					Field(Reference("⌿definitions⌿Basic⌿required"), ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Basic⌿optional"), Opt(ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 3"), List()))
 ) 
  

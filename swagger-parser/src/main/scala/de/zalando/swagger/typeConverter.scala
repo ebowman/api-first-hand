@@ -32,7 +32,7 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
 
   private def fromDefinitions(definitions: Definitions): NamedTypes =
     Option(definitions).toSeq.flatten flatMap { d =>
-      fromSchema(base / "definitions" / d._1, d._2, None)
+      fromSchema(base / "definitions" / d._1, d._2, None, isNonBodyParameter = false) // TODO this may be wrong
     }
 
   private def fromPaths(paths: Paths): NamedTypes =
@@ -69,7 +69,7 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
     (prefix, responses) <- forAllOperations(paths, responseCollector)
     (suffix, response) <- responses
     fullName = prefix / Reference.responses / suffix
-  } yield fromSchemaOrFileSchema(fullName, response.schema, Some(Nil))
+  } yield fromSchemaOrFileSchema(fullName, response.schema, Some(Nil), isNonBodyParameter = false)
 
   private def fromNamedParamListItem[T](pair: (Reference, ParametersListItem)): NamedTypes =
     fromParamListItem(pair._1, pair._2)
@@ -84,53 +84,59 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
 
   private def fromBodyParameter[T](name: Reference, param: BodyParameter[T]): NamedTypes =
     fromSchemaOrFileSchema(name / param.name, param.schema,
-      if (param.required) Some(Seq(param.name)) else Some(Nil))
+      if (param.required) Some(Seq(param.name)) else Some(Nil), isNonBodyParameter = false)
 
-  private def fromSchemaOrReference[T](name: Reference, param: SchemaOrReference[T], required: Option[Seq[String]]): NamedTypes =
+  private def fromSchemaOrReference[T](name: Reference, param: SchemaOrReference[T],
+    required: Option[Seq[String]], isNonBodyParameter: Boolean): NamedTypes =
     Option(param).toSeq flatMap {
-      case Left(s) => fromSchema(name, s, required)
+      case Left(s) => fromSchema(name, s, required, isNonBodyParameter)
       case Right(r: JsonReference) => Seq(fromReference(name, r, required))
     }
 
-  private def fromSchemaOrFileSchema[T](name: Reference, param: SchemaOrFileSchema[T], required: Option[Seq[String]]): NamedTypes =
+  private def fromSchemaOrFileSchema[T](name: Reference, param: SchemaOrFileSchema[T],
+    required: Option[Seq[String]], isNonBodyParameter: Boolean): NamedTypes =
     param match {
       case any if any == null => Seq(fromNull(name))
-      case Left(s: SchemaOrReference[_]) => fromSchemaOrReference(name, s, required)
+      case Left(s: SchemaOrReference[_]) => fromSchemaOrReference(name, s, required, isNonBodyParameter)
       case Right(fs: FileSchema[_]) => Seq(fromFileSchema(fs, required))
     }
 
-  private def fromSchemaOrSchemaArray[T](name: Reference, param: SchemaOrSchemaArray[T], required: Option[Seq[String]]): NamedTypes =
+  private def fromSchemaOrSchemaArray[T](name: Reference, param: SchemaOrSchemaArray[T],
+    required: Option[Seq[String]], isNonBodyParameter: Boolean): NamedTypes =
     param match {
-      case Right(sa) => fromSchemaArray(name, sa, required)
-      case Left(sr) => fromSchemaOrReference(name, sr, required)
+      case Right(sa) => fromSchemaArray(name, sa, required, isNonBodyParameter)
+      case Left(sr) => fromSchemaOrReference(name, sr, required, isNonBodyParameter)
     }
 
-  private def fromSchemaArray(name: Reference, sa: SchemaArray, required: Option[Seq[String]]): NamedTypes =
-    sa flatMap { s => fromSchemaOrFileSchema(name, s, required) }
+  private def fromSchemaArray(name: Reference, sa: SchemaArray,
+    required: Option[Seq[String]], isNonBodyParameter: Boolean): NamedTypes =
+    sa flatMap { s => fromSchemaOrFileSchema(name, s, required, isNonBodyParameter) }
 
-  private def fromSchema[T](name: Reference, param: Schema[_], required: Option[Seq[String]]): NamedTypes = {
+  private def fromSchema[T](name: Reference, param: Schema[_],
+    required: Option[Seq[String]], isNonBodyParameter: Boolean): NamedTypes = {
     val tpe = if (param.`type` != null) param.`type` else PrimitiveType.OBJECT
     tpe match {
       case t: ArrayJsonSchemaType => Seq(fromArrayJsonSchema(name, param, t))
-      case p: PrimitiveType.Val => fromPrimitiveType(name, param, p, required)
+      case p: PrimitiveType.Val => fromPrimitiveType(name, param, p, required, isNonBodyParameter)
     }
   }
 
-  private def fromPrimitiveType(name: Reference, param: Schema[_], p: PrimitiveType.Val, required: Option[Seq[String]]): NamedTypes = {
+  private def fromPrimitiveType(name: Reference, param: Schema[_], p: PrimitiveType.Val,
+    required: Option[Seq[String]], isNonBodyParameter: Boolean): NamedTypes = {
     p match {
       case PrimitiveType.ARRAY =>
         require(param.items.nonEmpty, s"Items should not be empty for $name")
-        val types = fromSchemaOrSchemaArray(name, param.items.get, None)
+        val types = fromSchemaOrSchemaArray(name, param.items.get, None, isNonBodyParameter)
         val meta = arrayTypeMeta(param.comment.getOrElse(param.format), param)
-        checkRequired(name, required, param.default)(wrapInArray(types, meta, None))
+        checkRequired(name, required, param.default)(wrapInArray(types, meta, None, isNonBodyParameter))
       case PrimitiveType.OBJECT =>
         val obj = param.allOf map { p =>
           val everythingIsRequired = None
-          Seq(extensionType(name, everythingIsRequired)(p))
+          Seq(extensionType(name, everythingIsRequired, isNonBodyParameter)(p))
         } getOrElse {
           val typeName = typeNameFromInlinedReference(param) getOrElse name
-          val catchAll = fromSchemaOrBoolean(name / "additionalProperties", param.additionalProperties, param)
-          val normal = fromSchemaProperties(name, param.properties, paramRequired(param.required, param.default))
+          val catchAll = fromSchemaOrBoolean(name / "additionalProperties", param.additionalProperties, param, isNonBodyParameter)
+          val normal = fromSchemaProperties(name, param.properties, paramRequired(param.required, param.default), isNonBodyParameter)
           val types = fromTypes(name, normal ++ catchAll.toSeq.flatten, typeName)
           Option(param.discriminator) foreach { d => memoizeDiscriminator(name, typeName / d) }
           checkRequired(name, required, param.default)(Seq(types))
@@ -148,16 +154,18 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
       Reference(base.toString, r)
     }
 
-  private def fromSchemaProperties[T](name: Reference, param: SchemaProperties, required: Option[Seq[String]]): NamedTypes =
+  private def fromSchemaProperties[T](name: Reference, param: SchemaProperties,
+    required: Option[Seq[String]], isNonBodyParameter: Boolean): NamedTypes =
     Option(param).toSeq.flatten flatMap { p =>
-      fromSchemaOrFileSchema(name / p._1, p._2, required)
+      fromSchemaOrFileSchema(name / p._1, p._2, required, isNonBodyParameter)
     }
 
   // FIXME the boolean value is basically ignored here
-  private def fromSchemaOrBoolean[T](name: Reference, param: SchemaOrBoolean[T], meta: TypeMeta): Option[NamedTypes] =
+  private def fromSchemaOrBoolean[T](name: Reference, param: SchemaOrBoolean[T],
+    meta: TypeMeta, isNonBodyParameter: Boolean): Option[NamedTypes] =
     Option(param) map {
       case Left(s) =>
-        val typeDefs = fromSchemaOrReference(name, s, None)
+        val typeDefs = fromSchemaOrReference(name, s, None, isNonBodyParameter)
         val topMeta = s match {
           case Left(schema) => schemaTypeMeta(schema)
           case _ => meta
@@ -170,8 +178,8 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
   // ------------------------------------ Single Types ------------------------------------
   private def fromNull(name: Reference): NamedType = name -> Null(TypeMeta(None))
 
-  private def extensionType[T](name: Reference, required: Option[Seq[String]])(schema: SchemaArray): NamedType = {
-    val allOf = fromSchemaArray(name, schema, required).map(_._2)
+  private def extensionType[T](name: Reference, required: Option[Seq[String]], isNonBodyParameter: Boolean)(schema: SchemaArray): NamedType = {
+    val allOf = fromSchemaArray(name, schema, required, isNonBodyParameter).map(_._2)
     val root = schema.collect {
       case Left(Left(s: Schema[_])) if s.discriminator != null => typeNameFromInlinedReference(s).map(_ / s.discriminator)
     }.flatten.headOption
@@ -198,7 +206,8 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
     val fullName = name / param.name
     if (param.isArray) {
       val meta = arrayTypeMeta(param.comment.getOrElse(param.format), param.items)
-      val result = wrapInArray(fromPrimitivesItems(fullName, param.items), meta, Option(param.collectionFormat).map(_.toString))
+      val result = wrapInArray(fromPrimitivesItems(fullName, param.items, isNonBodyParameter = true), meta,
+        Option(param.collectionFormat).map(_.toString), nonBodyParameter = true)
       if (!param.required && param.default == null && result.nonEmpty)
         wrapInOption(result.head) +: result.tail
       else
@@ -209,10 +218,10 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
     }
   }
 
-  private def fromPrimitivesItems[T](name: Reference, items: PrimitivesItems[T]): NamedTypes =
+  private def fromPrimitivesItems[T](name: Reference, items: PrimitivesItems[T], isNonBodyParameter: Boolean): NamedTypes =
     if (items.isArray) {
       val meta = arrayTypeMeta(items.comment.getOrElse(items.format), items)
-      wrapInArray(fromPrimitivesItems(name, items), meta, Option(items.collectionFormat).map(_.toString))
+      wrapInArray(fromPrimitivesItems(name, items, isNonBodyParameter), meta, Option(items.collectionFormat).map(_.toString), isNonBodyParameter)
     } else {
       val typeName = name
       val required = None
@@ -295,16 +304,16 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
     }
 
   // ------------------------------------ Wrappers ------------------------------------
-  private def wrapInArray(t: NamedTypes, m: TypeMeta, collectionFormat: Option[String]): NamedTypes =
+  private def wrapInArray(t: NamedTypes, m: TypeMeta, collectionFormat: Option[String], nonBodyParameter: Boolean): NamedTypes =
     t match {
       case e if e.isEmpty => t
-      case head :: tail => wrapSingleInArray(head, m, collectionFormat) :: tail
+      case head :: tail => wrapSingleInArray(head, m, collectionFormat, nonBodyParameter) :: tail
     }
 
-  private def wrapSingleInArray(t: NamedType, m: TypeMeta, collectionFormat: Option[String]): NamedType = {
+  private def wrapSingleInArray(t: NamedType, m: TypeMeta, collectionFormat: Option[String], nonBodyParameter: Boolean): NamedType = {
     val wrapper =
-      if (t._1.isResponsePath) Domain.ArrResult(t._2, m) // FIXME do this somehow better
-      else Domain.Arr(t._2, m, collectionFormat.map(_.toString).getOrElse(CollectionFormat.default.toString))
+      if (nonBodyParameter) Domain.Arr(t._2, m, collectionFormat.map(_.toString).getOrElse(CollectionFormat.default.toString))
+      else Domain.ArrResult(t._2, m)
     t._1 -> wrapper
   }
 

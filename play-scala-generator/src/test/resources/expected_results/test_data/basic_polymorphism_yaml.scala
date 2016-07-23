@@ -4,7 +4,6 @@ import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 import play.api.libs.json.scalacheck.JsValueGenerators
 import Arbitrary._
-import de.zalando.play.controllers.ArrayWrapper
 
 object Generators extends JsValueGenerators {
     
@@ -18,7 +17,7 @@ object Generators extends JsValueGenerators {
     
 
     
-    def ZooTiersOptGenerator = _genList(PetGenerator, "csv")
+    def ZooTiersOptGenerator = Gen.containerOf[List,Pet](PetGenerator)
     def ZooTiersGenerator = Gen.option(ZooTiersOptGenerator)
     def CatHuntingSkillGenerator = Gen.oneOf(Seq(Clueless, Lazy, Adventurous, Aggressive))
     def PutDummyGenerator = Gen.option(PetGenerator)
@@ -65,9 +64,6 @@ object Generators extends JsValueGenerators {
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
 
-    def _genList[T](gen: Gen[T], format: String): Gen[ArrayWrapper[T]] = for {
-        items <- Gen.containerOf[List,T](gen)
-    } yield ArrayWrapper(format)(items)
     
     
     

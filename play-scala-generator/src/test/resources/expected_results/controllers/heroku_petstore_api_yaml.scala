@@ -26,8 +26,9 @@ import scala.math.BigInt
 package heroku.petstore.api.yaml {
 
     class HerokuPetstoreApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends HerokuPetstoreApiYamlBase {
-    // ----- Start of unmanaged code area for constructor HerokuPetstoreApiYaml
-    // ----- End of unmanaged code area for constructor HerokuPetstoreApiYaml
+        // ----- Start of unmanaged code area for constructor HerokuPetstoreApiYaml
+
+        // ----- End of unmanaged code area for constructor HerokuPetstoreApiYaml
         val get = getAction { (limit: BigInt) =>  
             // ----- Start of unmanaged code area for action  HerokuPetstoreApiYaml.get
             NotImplementedYet

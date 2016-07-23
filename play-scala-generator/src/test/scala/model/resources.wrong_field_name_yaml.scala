@@ -16,7 +16,7 @@ object wrong_field_name_yaml extends WithModel {
 		TypeDef(Reference("⌿definitions⌿StatusAndCode"), 
 			Seq(
 					Field(Reference("⌿definitions⌿StatusAndCode⌿message"), Str(None, TypeMeta(None, List()))),
-					Field(Reference("⌿definitions⌿StatusAndCode⌿code"), TypeRef(Reference("⌿definitions⌿Status")))
+					Field(Reference("⌿definitions⌿StatusAndCode⌿Status"), TypeRef(Reference("⌿definitions⌿Status")))
 			), TypeMeta(Some("Named types: 2"), List())),
 	Reference("⌿definitions⌿Status") → 
 					EnumTrait(Str(None, TypeMeta(None, List("""enum("OK,WARNING,ERROR")"""))), TypeMeta(None, List("""enum("OK,WARNING,ERROR")""")), 

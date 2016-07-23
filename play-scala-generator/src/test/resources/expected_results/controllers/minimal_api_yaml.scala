@@ -24,8 +24,9 @@ import javax.inject._
 package admin {
 
     class Dashboard @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends DashboardBase {
-    // ----- Start of unmanaged code area for constructor Dashboard
-    // ----- End of unmanaged code area for constructor Dashboard
+        // ----- Start of unmanaged code area for constructor Dashboard
+
+        // ----- End of unmanaged code area for constructor Dashboard
         val index = indexAction {  _ =>  
             // ----- Start of unmanaged code area for action  Dashboard.index
             NotImplementedYet

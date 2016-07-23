@@ -1,7 +1,6 @@
 package nakadi
 
 
-    import de.zalando.play.controllers.ArrayWrapper
     import java.util.UUID
 
     import de.zalando.play.controllers.PlayPathBindables
@@ -14,11 +13,11 @@ package object yaml {
     type TopicsTopicEventsGetStream_timeout = Option[Int]
     type TopicsTopicEventsGetBatch_limit = Int
     type EventEvent_type = Option[String]
-    type SimpleStreamEventEventsOpt = ArrayWrapper[Event]
+    type SimpleStreamEventEventsOpt = Seq[Event]
     type EventMetaDataParent_id = Option[UUID]
     type EventMetadata = Option[EventMetaDataNameClash]
     type TopicsTopicEventsPostResponses201 = Null
-    type EventMetaDataScopesOpt = ArrayWrapper[String]
+    type EventMetaDataScopesOpt = Seq[String]
     type TopicsTopicPartitionsGetResponses200 = Seq[TopicPartition]
     type TopicsTopicEventsBatchPostEvent = Option[Event]
     type SimpleStreamEventEvents = Option[SimpleStreamEventEventsOpt]

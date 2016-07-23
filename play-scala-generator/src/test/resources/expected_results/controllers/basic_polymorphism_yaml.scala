@@ -25,9 +25,7 @@ package basic_polymorphism.yaml {
 
     class Basic_polymorphismYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends Basic_polymorphismYamlBase {
         // ----- Start of unmanaged code area for constructor Basic_polymorphismYaml
-        lifecycle.addStopHook {() =>
-            Future.successful(println("Shutting down"))
-        }
+
         // ----- End of unmanaged code area for constructor Basic_polymorphismYaml
         val put = putAction { (dummy: PutDummy) =>  
             // ----- Start of unmanaged code area for action  Basic_polymorphismYaml.put

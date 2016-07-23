@@ -52,10 +52,10 @@ object uber_api_yaml extends WithModel {
 					Field(Reference("⌿definitions⌿Activities⌿offset"), Opt(Intgr(TypeMeta(Some("Position in pagination."), List())), TypeMeta(None, List()))),
 					Field(Reference("⌿definitions⌿Activities⌿limit"), Opt(Intgr(TypeMeta(Some("Number of items to retrieve (100 max)."), List())), TypeMeta(None, List()))),
 					Field(Reference("⌿definitions⌿Activities⌿count"), Opt(Intgr(TypeMeta(Some("Total number of items available."), List())), TypeMeta(None, List()))),
-					Field(Reference("⌿definitions⌿Activities⌿history"), Opt(Arr(TypeDef(Reference("⌿definitions⌿Activity"), 
+					Field(Reference("⌿definitions⌿Activities⌿history"), Opt(ArrResult(TypeDef(Reference("⌿definitions⌿Activity"), 
 			Seq(
 						Field(Reference("⌿definitions⌿Activity⌿uuid"), Opt(Str(None, TypeMeta(Some("Unique identifier for the activity"), List())), TypeMeta(None, List())))
-			), TypeMeta(Some("Named types: 1"), List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 1"), List())), TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 4"), List())),
 	Reference("⌿definitions⌿Error") → 
 		TypeDef(Reference("⌿definitions⌿Error"), 

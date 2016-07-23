@@ -1,6 +1,6 @@
 "definitions" / "Zoo" ->
 	TypeDef("definitions" / "Zoo", Seq(
-		Field("definitions" / "Zoo" / "tiers", Opt(Arr(TypeDef("definitions" / "Pet", Seq(
+		Field("definitions" / "Zoo" / "tiers", Opt(ArrResult(TypeDef("definitions" / "Pet", Seq(
 			Field("definitions" / "Pet" / "name", Str), 
 			Field("definitions" / "Pet" / "petType", Str))))))))
 "definitions" / "Cat" ->

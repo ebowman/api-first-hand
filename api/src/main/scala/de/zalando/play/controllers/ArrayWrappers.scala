@@ -9,13 +9,17 @@ package de.zalando.play.controllers
  * @author slasch
  * @since 03.01.2016.
  */
-trait ArrayWrapper[+T] {
+trait ArrayWrapper[+T] extends Seq[T] {
   def items: Seq[T]
   def separator: Char
   def copy[B >: T](newItems: Seq[B]): ArrayWrapper[B]
   def map[B](f: T => B): Seq[B] = items map f
-  def find(f: T => Boolean): Option[T] = items find f
+  override def find(f: T => Boolean): Option[T] = items find f
   override def toString: String = items.mkString(separator.toString)
+  override def length: Int = items.length
+  override def iterator: Iterator[T] = items.iterator
+
+  override def apply(idx: Int): T = items(idx)
 }
 
 case class CsvArrayWrapper[+T](items: Seq[T]) extends ArrayWrapper[T] {

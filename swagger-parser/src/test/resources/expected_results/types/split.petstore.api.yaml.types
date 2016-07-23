@@ -7,10 +7,10 @@
 "paths" / "/pets" / "post" / "body" ->
 	Opt(TypeDef("definitions" / "Pet", Seq(
 		Field("definitions" / "Pet" / "name", Str), 
-		Field("definitions" / "Pet" / "tags", Opt(Arr(TypeDef("definitions" / "Tag", Seq(
+		Field("definitions" / "Pet" / "tags", Opt(ArrResult(TypeDef("definitions" / "Tag", Seq(
 			Field("definitions" / "Tag" / "id", Opt(Lng)), 
 			Field("definitions" / "Tag" / "name", Opt(Str))))))), 
-		Field("definitions" / "Pet" / "photoUrls", Arr(Str)), 
+		Field("definitions" / "Pet" / "photoUrls", ArrResult(Str)), 
 		Field("definitions" / "Pet" / "id", Opt(Lng)), 
 		Field("definitions" / "Pet" / "status", Opt(Str)), 
 		Field("definitions" / "Pet" / "category", Opt(TypeDef("definitions" / "Category", Seq(
@@ -47,7 +47,7 @@
 "paths" / "/users/{username}" / "put" / "username" ->
 	Str
 "paths" / "/users/createWithList" / "post" / "body" ->
-	Opt(Arr(TypeDef("definitions" / "User", Seq(
+	Opt(ArrResult(TypeDef("definitions" / "User", Seq(
 		Field("definitions" / "User" / "email", Opt(Str)), 
 		Field("definitions" / "User" / "username", Opt(Str)), 
 		Field("definitions" / "User" / "userStatus", Opt(Intgr)), 
@@ -61,10 +61,10 @@
 "paths" / "/pets" / "put" / "body" ->
 	Opt(TypeDef("definitions" / "Pet", Seq(
 		Field("definitions" / "Pet" / "name", Str), 
-		Field("definitions" / "Pet" / "tags", Opt(Arr(TypeDef("definitions" / "Tag", Seq(
+		Field("definitions" / "Pet" / "tags", Opt(ArrResult(TypeDef("definitions" / "Tag", Seq(
 			Field("definitions" / "Tag" / "id", Opt(Lng)), 
 			Field("definitions" / "Tag" / "name", Opt(Str))))))), 
-		Field("definitions" / "Pet" / "photoUrls", Arr(Str)), 
+		Field("definitions" / "Pet" / "photoUrls", ArrResult(Str)), 
 		Field("definitions" / "Pet" / "id", Opt(Lng)), 
 		Field("definitions" / "Pet" / "status", Opt(Str)), 
 		Field("definitions" / "Pet" / "category", Opt(TypeDef("definitions" / "Category", Seq(
@@ -91,7 +91,7 @@
 "paths" / "/users/{username}" / "delete" / "username" ->
 	Str
 "paths" / "/users/createWithArray" / "post" / "body" ->
-	Opt(Arr(TypeDef("definitions" / "User", Seq(
+	Opt(ArrResult(TypeDef("definitions" / "User", Seq(
 		Field("definitions" / "User" / "email", Opt(Str)), 
 		Field("definitions" / "User" / "username", Opt(Str)), 
 		Field("definitions" / "User" / "userStatus", Opt(Intgr)), 

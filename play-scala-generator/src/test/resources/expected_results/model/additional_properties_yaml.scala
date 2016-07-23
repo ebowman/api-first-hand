@@ -1,7 +1,6 @@
 
 
     import scala.collection.immutable.Map
-    import de.zalando.play.controllers.ArrayWrapper
     import scala.math.BigInt
 
 
@@ -9,7 +8,7 @@
 package object additional_properties_yaml {
 
     type KeyedArraysAdditionalProperties = Map[String, KeyedArraysAdditionalPropertiesCatchAll]
-    type KeyedArraysAdditionalPropertiesCatchAll = ArrayWrapper[BigInt]
+    type KeyedArraysAdditionalPropertiesCatchAll = Seq[BigInt]
 
 
 

@@ -7,7 +7,6 @@ import PlayValidations._
 
 import java.util.UUID
 import scala.math.BigDecimal
-import de.zalando.play.controllers.ArrayWrapper
 // ----- constraints and wrapper validations -----
 class EstimatesPriceGetEnd_latitudeConstraints(override val instance: Double) extends ValidationBase[Double] {
     override def constraints: Seq[Constraint[Double]] =

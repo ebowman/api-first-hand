@@ -28,8 +28,9 @@ import BinaryString._
 package string_formats.yaml {
 
     class String_formatsYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends String_formatsYamlBase {
-    // ----- Start of unmanaged code area for constructor String_formatsYaml
-    // ----- End of unmanaged code area for constructor String_formatsYaml
+        // ----- Start of unmanaged code area for constructor String_formatsYaml
+
+        // ----- End of unmanaged code area for constructor String_formatsYaml
         val get = getAction { input: (GetDate_time, GetDate, GetBase64, GetUuid, BinaryString) =>
             val (date_time, date, base64, uuid, petId) = input
             // ----- Start of unmanaged code area for action  String_formatsYaml.get

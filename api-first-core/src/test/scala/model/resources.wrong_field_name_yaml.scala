@@ -15,7 +15,7 @@ object wrong_field_name_yaml extends WithModel {
 	Reference("⌿definitions⌿StatusAndCode") → 
 		TypeDef(Reference("⌿definitions⌿StatusAndCode"), 
 			Seq(
-					Field(Reference("⌿definitions⌿StatusAndCode⌿code"), 				EnumTrait(Str(None, TypeMeta(None, List("""enum("OK,WARNING,ERROR")"""))), TypeMeta(None, List("""enum("OK,WARNING,ERROR")""")), 
+					Field(Reference("⌿definitions⌿StatusAndCode⌿Status"), 				EnumTrait(Str(None, TypeMeta(None, List("""enum("OK,WARNING,ERROR")"""))), TypeMeta(None, List("""enum("OK,WARNING,ERROR")""")), 
 					Set(
 						EnumObject(Str(None, TypeMeta(None, List("""enum("OK,WARNING,ERROR")"""))), "OK", TypeMeta(Some("OK"), List())),
 						EnumObject(Str(None, TypeMeta(None, List("""enum("OK,WARNING,ERROR")"""))), "WARNING", TypeMeta(Some("WARNING"), List())),
@@ -51,7 +51,7 @@ object wrong_field_name_yaml extends WithModel {
 	Reference("⌿paths⌿/⌿get⌿responses⌿200") → 
 		TypeDef(Reference("⌿definitions⌿StatusAndCode"), 
 			Seq(
-					Field(Reference("⌿definitions⌿StatusAndCode⌿code"), 				EnumTrait(Str(None, TypeMeta(None, List("""enum("OK,WARNING,ERROR")"""))), TypeMeta(None, List("""enum("OK,WARNING,ERROR")""")), 
+					Field(Reference("⌿definitions⌿StatusAndCode⌿Status"), 				EnumTrait(Str(None, TypeMeta(None, List("""enum("OK,WARNING,ERROR")"""))), TypeMeta(None, List("""enum("OK,WARNING,ERROR")""")), 
 					Set(
 						EnumObject(Str(None, TypeMeta(None, List("""enum("OK,WARNING,ERROR")"""))), "OK", TypeMeta(Some("OK"), List())),
 						EnumObject(Str(None, TypeMeta(None, List("""enum("OK,WARNING,ERROR")"""))), "WARNING", TypeMeta(Some("WARNING"), List())),

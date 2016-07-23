@@ -24,8 +24,9 @@ import javax.inject._
 package simple_petstore_api_yaml {
 
     class SimplePetstoreApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends SimplePetstoreApiYamlBase {
-    // ----- Start of unmanaged code area for constructor SimplePetstoreApiYaml
-    // ----- End of unmanaged code area for constructor SimplePetstoreApiYaml
+        // ----- Start of unmanaged code area for constructor SimplePetstoreApiYaml
+
+        // ----- End of unmanaged code area for constructor SimplePetstoreApiYaml
         val addPet = addPetAction { (pet: NewPet) =>  
             // ----- Start of unmanaged code area for action  SimplePetstoreApiYaml.addPet
             NotImplementedYet
@@ -37,8 +38,9 @@ package simple_petstore_api_yaml {
 package simple_petstore_api_yaml {
 
     class Dashboard @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends DashboardBase {
-    // ----- Start of unmanaged code area for constructor Dashboard
-    // ----- End of unmanaged code area for constructor Dashboard
+        // ----- Start of unmanaged code area for constructor Dashboard
+
+        // ----- End of unmanaged code area for constructor Dashboard
         val methodLevel = methodLevelAction { input: (PetsGetTags, PetsGetLimit) =>
             val (tags, limit) = input
             // ----- Start of unmanaged code area for action  Dashboard.methodLevel

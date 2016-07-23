@@ -6,7 +6,6 @@ import play.api.libs.json.scalacheck.JsValueGenerators
 import Arbitrary._
 import java.util.UUID
 import scala.math.BigDecimal
-import de.zalando.play.controllers.ArrayWrapper
 
 object Generators extends JsValueGenerators {
     
@@ -32,7 +31,7 @@ object Generators extends JsValueGenerators {
     def ProductsGetResponses200Generator = Gen.containerOf[List,Product](ProductGenerator)
     def PriceEstimateHigh_estimateGenerator = Gen.option(arbitrary[BigDecimal])
     def EstimatesPriceGetResponses200Generator = Gen.containerOf[List,PriceEstimate](PriceEstimateGenerator)
-    def ActivitiesHistoryOptGenerator = _genList(ActivityGenerator, "csv")
+    def ActivitiesHistoryOptGenerator = Gen.containerOf[List,Activity](ActivityGenerator)
     
 
     def createActivityGenerator = _generate(ActivityGenerator)
@@ -83,9 +82,6 @@ object Generators extends JsValueGenerators {
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
 
-    def _genList[T](gen: Gen[T], format: String): Gen[ArrayWrapper[T]] = for {
-        items <- Gen.containerOf[List,T](gen)
-    } yield ArrayWrapper(format)(items)
     
     
     

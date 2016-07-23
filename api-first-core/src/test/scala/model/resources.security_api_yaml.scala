@@ -56,7 +56,7 @@ object security_api_yaml extends WithModel {
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
 def calls: Seq[ApiCall] = Seq(
-	ApiCall(GET, Path(Reference("⌿pets⌿{id}")), 
+	ApiCall(GET, Path(Reference("⌿pets⌿{id}")),
 		HandlerCall(
 			"security.api.yaml",
 			"SecurityApiYaml",
@@ -65,18 +65,18 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/pets/{id}⌿get⌿id"))
 				)
-			), 
-		Set(MimeType("application/json")), 
-		Set(MimeType("application/json"), MimeType("text/html")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set(MimeType("application/json")),
+		Set(MimeType("application/json"), MimeType("text/html")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/pets/{id}⌿get⌿responses⌿200"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/pets/{id}⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/pets/{id}⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set(
 			OAuth2Constraint("githubAccessCode", OAuth2Definition(None, Some(new URL("https://github.com/login/oauth/access_token")), Map[String, String]( "admin:org" -> "Fully manage organization, teams, and memberships." ,  "user:email" -> "Grants read access to a user’s email addresses." ,  "read:org" -> "Read-only access to organization, teams, and membership." ,  "public_repo" -> "Grants read/write access to code, commit statuses, and deployment statuses for public repositories and organizations." ,  "write:public_key" -> "Create, list, and view details for public keys." ,  "repo_deployment" -> "Grants access to deployment statuses for public and private repositories. This scope is only necessary to grant other users or services access to deployment statuses, without granting access to the code." ,  "write:repo_hook" -> "Grants read, write, and ping access to hooks in public or private repositories." ,  "admin:public_key" -> "Fully manage public keys." ,  "repo:status" -> "Grants read/write access to public and private repository commit statuses. This scope is only necessary to grant other users or services access to private repository commit statuses without granting access to the code." ,  "gist" -> "Grants write access to gists." ,  "user:follow" -> "Grants access to follow or unfollow other users." ,  "repo" -> "Grants read/write access to code, commit statuses, and deployment statuses for public and private repositories and organizations." ,  "read:repo_hook" -> "Grants read and ping access to hooks in public or private repositories." ,  "notifications" -> "Grants read access to a user’s notifications. repo also provides this access." ,  "read:public_key" -> "List and view details for public keys." ,  "admin:repo_hook" -> "Grants read, write, ping, and delete access to hooks in public or private repositories." ,  "user" -> "Grants read/write access to profile info only. Note that this scope includes user:email and user:follow." ,  "write:org" -> "Publicize and unpublicize organization membership." ,  "delete_repo" -> "Grants access to delete adminable repositories." )), Set("user")),
 			ApiKeyConstraint("internalApiKey", ApiKey(None, "api_key", ParameterPlace.withName("header")))

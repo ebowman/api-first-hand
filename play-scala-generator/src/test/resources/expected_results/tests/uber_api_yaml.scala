@@ -29,7 +29,6 @@ import Generators._
 
 import java.util.UUID
 import scala.math.BigDecimal
-import de.zalando.play.controllers.ArrayWrapper
 
 //noinspection ScalaStyle
 class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {

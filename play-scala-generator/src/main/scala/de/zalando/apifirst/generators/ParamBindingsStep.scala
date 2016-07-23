@@ -53,6 +53,8 @@ trait ParamBindingsStep extends EnrichmentStep[Parameter] {
   def forType(tpe: String, k: Reference, typeName: Type, table: DenotationTable): Seq[Map[String, Any]] = typeName match {
     case i if providedBindings.contains(i.getClass) => Nil
     case d: EnumTrait => forEnum(tpe, table, k)
+    case a: ArrResult =>
+      throw new IllegalArgumentException("'type: Arr' should not appear in param-binding")
     case someTpe if someTpe.nestedTypes.nonEmpty => forNestedTypes(tpe, table, someTpe)
     case TypeRef(ref) => forType(tpe, ref, app.findType(ref), table)
     case d: Date => forDateType(tpe)

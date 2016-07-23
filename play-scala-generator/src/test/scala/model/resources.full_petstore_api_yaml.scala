@@ -81,13 +81,13 @@ object full_petstore_api_yaml extends WithModel {
 	Reference("⌿paths⌿/pets/findByStatus⌿get⌿status") → 
 		Opt(TypeRef(Reference("⌿paths⌿/pets/findByStatus⌿get⌿status⌿Opt")), TypeMeta(None, List())),
 	Reference("⌿definitions⌿Pet⌿tags⌿Opt") → 
-		Arr(TypeRef(Reference("⌿definitions⌿Tag")), TypeMeta(None, List()), "csv"),
+		ArrResult(TypeRef(Reference("⌿definitions⌿Tag")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/users/createWithList⌿post⌿responses⌿default") → 
 		Null(TypeMeta(None, List())),
 	Reference("⌿paths⌿/pets/findByStatus⌿get⌿status⌿Opt") → 
 		Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "multi"),
 	Reference("⌿paths⌿/users/createWithList⌿post⌿body⌿Opt") → 
-		Arr(TypeRef(Reference("⌿definitions⌿User")), TypeMeta(None, List()), "csv"),
+		ArrResult(TypeRef(Reference("⌿definitions⌿User")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/pets/findByStatus⌿get⌿responses⌿200") → 
 		ArrResult(TypeRef(Reference("⌿definitions⌿Pet")), TypeMeta(None, List()))
 ) 

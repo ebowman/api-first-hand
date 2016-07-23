@@ -5,7 +5,6 @@ import org.scalacheck.Arbitrary
 import play.api.libs.json.scalacheck.JsValueGenerators
 import Arbitrary._
 import scala.collection.immutable.Map
-import de.zalando.play.controllers.ArrayWrapper
 import scala.math.BigInt
 
 object Generators extends JsValueGenerators {
@@ -18,7 +17,7 @@ object Generators extends JsValueGenerators {
 
     
     def KeyedArraysAdditionalPropertiesGenerator = _genMap[String,KeyedArraysAdditionalPropertiesCatchAll](arbitrary[String], KeyedArraysAdditionalPropertiesCatchAllGenerator)
-    def KeyedArraysAdditionalPropertiesCatchAllGenerator = _genList(arbitrary[BigInt], "csv")
+    def KeyedArraysAdditionalPropertiesCatchAllGenerator = Gen.containerOf[List,BigInt](arbitrary[BigInt])
     
 
     def createKeyedArraysGenerator = _generate(KeyedArraysGenerator)
@@ -30,9 +29,6 @@ object Generators extends JsValueGenerators {
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
 
-    def _genList[T](gen: Gen[T], format: String): Gen[ArrayWrapper[T]] = for {
-        items <- Gen.containerOf[List,T](gen)
-    } yield ArrayWrapper(format)(items)
     
     def _genMap[K,V](keyGen: Gen[K], valGen: Gen[V]): Gen[Map[K,V]] = for {
         keys <- Gen.containerOf[List,K](keyGen)

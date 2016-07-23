@@ -95,9 +95,9 @@ object PlayValidations extends Constraints {
    * '''name'''[constraint.maxItems]
    * '''error'''[error.maxItems]
    */
-  def maxItems[T <: ArrayWrapper[_]](maxItems: Int): Constraint[T] = Constraint[T]("constraint.maxItems") { o =>
+  def maxItems[T <: Seq[_]](maxItems: Int): Constraint[T] = Constraint[T]("constraint.maxItems") { o =>
     if (o == null) Invalid(ValidationError("error.required"))
-    else if (o.items.size > maxItems) Invalid(ValidationError("error.maxItems")) else Valid
+    else if (o.size > maxItems) Invalid(ValidationError("error.maxItems")) else Valid
   }
 
   /**
@@ -107,9 +107,9 @@ object PlayValidations extends Constraints {
    * '''name'''[constraint.minItems]
    * '''error'''[error.minItems]
    */
-  def minItems[T <: ArrayWrapper[_]](minItems: Int): Constraint[T] = Constraint[T]("constraint.minItems") { o =>
+  def minItems[T <: Seq[_]](minItems: Int): Constraint[T] = Constraint[T]("constraint.minItems") { o =>
     if (o == null) Invalid(ValidationError("error.required"))
-    else if (o.items.size < minItems) Invalid(ValidationError("error.minItems")) else Valid
+    else if (o.size < minItems) Invalid(ValidationError("error.minItems")) else Valid
   }
 
   /**

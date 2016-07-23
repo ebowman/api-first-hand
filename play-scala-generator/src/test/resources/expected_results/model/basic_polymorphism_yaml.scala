@@ -1,30 +1,31 @@
 package basic_polymorphism
 
 
-    import de.zalando.play.controllers.ArrayWrapper
 
 
 //noinspection ScalaStyle
 package object yaml {
 
-    type ZooTiersOpt = ArrayWrapper[IPet]
+    type ZooTiersOpt = Seq[IPet]
     type ZooTiers = Option[ZooTiersOpt]
     type PutDummy = Option[IPet]
     type PutResponses200 = Null
 
-    
-    val Clueless = CatHuntingSkill("clueless")
-    val Lazy = CatHuntingSkill("lazy")
-    val Adventurous = CatHuntingSkill("adventurous")
-    val Aggressive = CatHuntingSkill("aggressive")
+    object CatHuntingSkill {
+        
+        val Clueless = new CatHuntingSkill("clueless")
+        val Lazy = new CatHuntingSkill("lazy")
+        val Adventurous = new CatHuntingSkill("adventurous")
+        val Aggressive = new CatHuntingSkill("aggressive")
 
-    implicit def stringToCatHuntingSkill: String => CatHuntingSkill = {
-        case "clueless" => Clueless
-        case "lazy" => Lazy
-        case "adventurous" => Adventurous
-        case "aggressive" => Aggressive
-        case other =>
-            throw new IllegalArgumentException("Couldn't parse parameter " + other)
+        implicit def stringToCatHuntingSkill: String => CatHuntingSkill = {
+            case "clueless" => Clueless
+            case "lazy" => Lazy
+            case "adventurous" => Adventurous
+            case "aggressive" => Aggressive
+            case other =>
+                throw new IllegalArgumentException("Couldn't parse parameter " + other)
+        }
     }
 
 

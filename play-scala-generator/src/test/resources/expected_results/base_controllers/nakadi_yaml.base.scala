@@ -9,7 +9,6 @@ import PlayBodyParsing._
 import scala.concurrent.Future
 
 import scala.util._
-import de.zalando.play.controllers.ArrayWrapper
 import java.util.UUID
 
 import de.zalando.play.controllers.PlayPathBindables

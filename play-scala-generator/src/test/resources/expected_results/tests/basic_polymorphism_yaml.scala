@@ -27,7 +27,6 @@ import org.scalatestplus.play.{OneAppPerTest, WsScalaTestClient}
 
 import Generators._
 
-import de.zalando.play.controllers.ArrayWrapper
 
 //noinspection ScalaStyle
 class Basic_polymorphism_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {

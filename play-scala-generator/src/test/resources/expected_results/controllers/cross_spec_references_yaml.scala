@@ -24,8 +24,9 @@ import javax.inject._
 package cross_spec_references.yaml {
 
     class Cross_spec_referencesYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends Cross_spec_referencesYamlBase {
-    // ----- Start of unmanaged code area for constructor Cross_spec_referencesYaml
-    // ----- End of unmanaged code area for constructor Cross_spec_referencesYaml
+        // ----- Start of unmanaged code area for constructor Cross_spec_referencesYaml
+
+        // ----- End of unmanaged code area for constructor Cross_spec_referencesYaml
         val post = postAction { (root: ModelSchemaRoot) =>  
             // ----- Start of unmanaged code area for action  Cross_spec_referencesYaml.post
             NotImplementedYet

@@ -39,7 +39,7 @@
 		Field("definitions" / "Media" / "created_time", Opt(BInt)), 
 		Field("definitions" / "Media" / "comments:", Opt(TypeDef("definitions" / "Media" / "comments:", Seq(
 			Field("definitions" / "Media" / "comments:" / "count", Opt(BInt)), 
-			Field("definitions" / "Media" / "comments:" / "data", Opt(Arr(TypeDef("definitions" / "Comment", Seq(
+			Field("definitions" / "Media" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
 				Field("definitions" / "Comment" / "id", Opt(Str)), 
 				Field("definitions" / "Comment" / "created_time", Opt(Str)), 
 				Field("definitions" / "Comment" / "text", Opt(Str)), 
@@ -48,10 +48,10 @@
 					Field("definitions" / "MiniProfile" / "full_name", Opt(Str)), 
 					Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 					Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))))))))))), 
-		Field("definitions" / "Media" / "tags", Opt(Arr(TypeDef("definitions" / "Tag", Seq(
+		Field("definitions" / "Media" / "tags", Opt(ArrResult(TypeDef("definitions" / "Tag", Seq(
 			Field("definitions" / "Tag" / "media_count", Opt(BInt)), 
 			Field("definitions" / "Tag" / "name", Opt(Str))))))), 
-		Field("definitions" / "Media" / "users_in_photo", Opt(Arr(TypeDef("definitions" / "MiniProfile", Seq(
+		Field("definitions" / "Media" / "users_in_photo", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
 			Field("definitions" / "MiniProfile" / "user_name", Opt(Str)), 
 			Field("definitions" / "MiniProfile" / "full_name", Opt(Str)), 
 			Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
@@ -59,7 +59,7 @@
 		Field("definitions" / "Media" / "filter", Opt(Str)), 
 		Field("definitions" / "Media" / "likes", Opt(TypeDef("definitions" / "Media" / "likes", Seq(
 			Field("definitions" / "Media" / "likes" / "count", Opt(BInt)), 
-			Field("definitions" / "Media" / "likes" / "data", Opt(Arr(TypeDef("definitions" / "MiniProfile", Seq(
+			Field("definitions" / "Media" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
 				Field("definitions" / "MiniProfile" / "user_name", Opt(Str)), 
 				Field("definitions" / "MiniProfile" / "full_name", Opt(Str)), 
 				Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
