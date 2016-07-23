@@ -4,7 +4,6 @@ import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 import play.api.libs.json.scalacheck.JsValueGenerators
 import Arbitrary._
-import de.zalando.play.controllers.ArrayWrapper
 
 object Generators extends JsValueGenerators {
     
@@ -15,7 +14,7 @@ object Generators extends JsValueGenerators {
     
 
     
-    def BasicRequiredGenerator = _genList(arbitrary[String], "csv")
+    def BasicRequiredGenerator = Gen.containerOf[List,String](arbitrary[String])
     def BasicOptionalGenerator = Gen.option(BasicRequiredGenerator)
     
 
@@ -30,9 +29,6 @@ object Generators extends JsValueGenerators {
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
 
-    def _genList[T](gen: Gen[T], format: String): Gen[ArrayWrapper[T]] = for {
-        items <- Gen.containerOf[List,T](gen)
-    } yield ArrayWrapper(format)(items)
     
     
     

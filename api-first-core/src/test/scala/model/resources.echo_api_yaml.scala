@@ -43,7 +43,7 @@ object echo_api_yaml extends WithModel {
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
 def calls: Seq[ApiCall] = Seq(
-	ApiCall(GET, Path(Reference("⌿")), 
+	ApiCall(GET, Path(Reference("⌿")),
 		HandlerCall(
 			"funnypackage",
 			"EchoHandler",
@@ -52,20 +52,20 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 
 				)
-			), 
-		Set.empty[MimeType], 
-		Set.empty[MimeType], 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set.empty[MimeType],
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/⌿get⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]), 
-	ApiCall(POST, Path(Reference("⌿")), 
+	ApiCall(POST, Path(Reference("⌿")),
 		HandlerCall(
 			"echo",
 			"EchoApiYaml",
@@ -75,20 +75,20 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/⌿post⌿name")),
 				ParameterRef(Reference("⌿paths⌿/⌿post⌿year"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set.empty[MimeType], 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set.empty[MimeType],
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/⌿post⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿test-path⌿{id}")), 
+	ApiCall(GET, Path(Reference("⌿test-path⌿{id}")),
 		HandlerCall(
 			"echo",
 			"EchoApiYaml",
@@ -97,18 +97,18 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/test-path/{id}⌿get⌿id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set.empty[MimeType], 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set.empty[MimeType],
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/test-path/{id}⌿get⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]))
 
 def packageName: Option[String] = Some("echo")

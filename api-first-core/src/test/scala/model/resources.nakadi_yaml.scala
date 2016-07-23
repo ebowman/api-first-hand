@@ -17,7 +17,7 @@ object nakadi_yaml extends WithModel {
 			Seq(
 					Field(Reference("⌿definitions⌿EventMetaData⌿root_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
 					Field(Reference("⌿definitions⌿EventMetaData⌿parent_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
-					Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), Opt(Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), Opt(ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List()))),
 					Field(Reference("⌿definitions⌿EventMetaData⌿id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
 					Field(Reference("⌿definitions⌿EventMetaData⌿created"), Opt(Str(Some("data-time"), TypeMeta(Some("data-time"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 5"), List())),
@@ -40,7 +40,7 @@ object nakadi_yaml extends WithModel {
 			Seq(
 						Field(Reference("⌿definitions⌿EventMetaData⌿root_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿EventMetaData⌿parent_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
-						Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), Opt(Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List()))),
+						Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), Opt(ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿EventMetaData⌿id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿EventMetaData⌿created"), Opt(Str(Some("data-time"), TypeMeta(Some("data-time"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 5"), List())), TypeMeta(None, List())))
@@ -71,7 +71,7 @@ object nakadi_yaml extends WithModel {
 						Field(Reference("⌿definitions⌿Cursor⌿partition"), Str(None, TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿Cursor⌿offset"), Str(None, TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List()))),
-					Field(Reference("⌿definitions⌿SimpleStreamEvent⌿events"), Opt(Arr(TypeDef(Reference("⌿definitions⌿Event"), 
+					Field(Reference("⌿definitions⌿SimpleStreamEvent⌿events"), Opt(ArrResult(TypeDef(Reference("⌿definitions⌿Event"), 
 			Seq(
 						Field(Reference("⌿definitions⌿Event⌿event_type"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿Event⌿partitioning_key"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
@@ -79,11 +79,11 @@ object nakadi_yaml extends WithModel {
 			Seq(
 							Field(Reference("⌿definitions⌿EventMetaData⌿root_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
 							Field(Reference("⌿definitions⌿EventMetaData⌿parent_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
-							Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), Opt(Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List()))),
+							Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), Opt(ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List()))),
 							Field(Reference("⌿definitions⌿EventMetaData⌿id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
 							Field(Reference("⌿definitions⌿EventMetaData⌿created"), Opt(Str(Some("data-time"), TypeMeta(Some("data-time"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 5"), List())), TypeMeta(None, List())))
-			), TypeMeta(Some("Named types: 3"), List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 3"), List())), TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
 	Reference("⌿paths⌿/topics/{topic}/events/batch⌿post⌿topic") → 
 		Str(None, TypeMeta(None, List())),
@@ -108,7 +108,7 @@ object nakadi_yaml extends WithModel {
 			Seq(
 						Field(Reference("⌿definitions⌿EventMetaData⌿root_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿EventMetaData⌿parent_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
-						Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), Opt(Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List()))),
+						Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), Opt(ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿EventMetaData⌿id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿EventMetaData⌿created"), Opt(Str(Some("data-time"), TypeMeta(Some("data-time"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 5"), List())), TypeMeta(None, List())))
@@ -134,7 +134,7 @@ object nakadi_yaml extends WithModel {
 			Seq(
 						Field(Reference("⌿definitions⌿EventMetaData⌿root_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿EventMetaData⌿parent_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
-						Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), Opt(Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List()))),
+						Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), Opt(ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿EventMetaData⌿id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿EventMetaData⌿created"), Opt(Str(Some("data-time"), TypeMeta(Some("data-time"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 5"), List())), TypeMeta(None, List())))
@@ -348,7 +348,7 @@ object nakadi_yaml extends WithModel {
 			Seq(
 			Field(Reference("⌿definitions⌿EventMetaData⌿root_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
 			Field(Reference("⌿definitions⌿EventMetaData⌿parent_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
-			Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), Opt(Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List()))),
+			Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), Opt(ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List()))),
 			Field(Reference("⌿definitions⌿EventMetaData⌿id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
 			Field(Reference("⌿definitions⌿EventMetaData⌿created"), Opt(Str(Some("data-time"), TypeMeta(Some("data-time"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 5"), List())), TypeMeta(None, List())))
@@ -362,7 +362,7 @@ object nakadi_yaml extends WithModel {
 			Seq(
 			Field(Reference("⌿definitions⌿EventMetaData⌿root_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
 			Field(Reference("⌿definitions⌿EventMetaData⌿parent_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
-			Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), Opt(Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List()))),
+			Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), Opt(ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List()))),
 			Field(Reference("⌿definitions⌿EventMetaData⌿id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
 			Field(Reference("⌿definitions⌿EventMetaData⌿created"), Opt(Str(Some("data-time"), TypeMeta(Some("data-time"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 5"), List())), TypeMeta(None, List())))

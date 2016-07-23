@@ -5,13 +5,13 @@
 			Field("definitions" / "ModelSchema" / "description", Opt(Str)), 
 			Field("definitions" / "ModelSchema" / "sizeRegister", Str), 
 			Field("definitions" / "ModelSchema" / "brand", Str), 
-			Field("definitions" / "ModelSchema" / "ageGroups", Arr(EnumTrait(Str))), 
+			Field("definitions" / "ModelSchema" / "ageGroups", ArrResult(EnumTrait(Str))), 
 			Field("definitions" / "ModelSchema" / "partnerArticleModelId", BInt), 
 			Field("definitions" / "ModelSchema" / "keywords", Opt(Str)), 
 			Field("definitions" / "ModelSchema" / "lengthRegister", Opt(Str)), 
 			Field("definitions" / "ModelSchema" / "silhouetteId", EnumTrait(Str)), 
-			Field("definitions" / "ModelSchema" / "specialDescriptions", Opt(Arr(Str))), 
-			Field("definitions" / "ModelSchema" / "articleModelAttributes", Opt(Arr(Str))))))), 
+			Field("definitions" / "ModelSchema" / "specialDescriptions", Opt(ArrResult(Str))), 
+			Field("definitions" / "ModelSchema" / "articleModelAttributes", Opt(ArrResult(Str))))))), 
 		Field("definitions" / "ModelSchemaRoot" / "meta", Opt(TypeDef("definitions" / "Meta", Seq(
 			Field("definitions" / "Meta" / "copyright", Opt(Str)))))), 
 		Field("definitions" / "ModelSchemaRoot" / "links", Opt(TypeDef("definitions" / "Links", Seq(

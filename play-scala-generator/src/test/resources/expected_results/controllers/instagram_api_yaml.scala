@@ -30,8 +30,9 @@ import scala.math.BigDecimal
 package instagram.api.yaml {
 
     class InstagramApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends InstagramApiYamlBase {
-    // ----- Start of unmanaged code area for constructor InstagramApiYaml
-    // ----- End of unmanaged code area for constructor InstagramApiYaml
+        // ----- Start of unmanaged code area for constructor InstagramApiYaml
+
+        // ----- End of unmanaged code area for constructor InstagramApiYaml
         val getmediaByMedia_idLikes = getmediaByMedia_idLikesAction { (media_id: BigInt) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.getmediaByMedia_idLikes
             NotImplementedYet

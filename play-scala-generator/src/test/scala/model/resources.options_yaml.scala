@@ -20,7 +20,7 @@ object options_yaml extends WithModel {
 					Field(Reference("⌿definitions⌿Basic⌿optional"), TypeRef(Reference("⌿definitions⌿Basic⌿optional")))
 			), TypeMeta(Some("Named types: 3"), List())),
 	Reference("⌿definitions⌿Basic⌿required") → 
-		Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv"),
+		ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List())),
 	Reference("⌿definitions⌿Basic⌿optional") → 
 		Opt(TypeRef(Reference("⌿definitions⌿Basic⌿required")), TypeMeta(None, List()))
 ) 

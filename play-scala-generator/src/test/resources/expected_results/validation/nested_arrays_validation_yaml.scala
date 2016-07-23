@@ -5,7 +5,6 @@ import de.zalando.play.controllers._
 import PlayBodyParsing._
 import PlayValidations._
 
-import de.zalando.play.controllers.ArrayWrapper
 // ----- constraints and wrapper validations -----
 class ActivityActionsOptConstraints(override val instance: String) extends ValidationBase[String] {
     override def constraints: Seq[Constraint[String]] =
@@ -14,12 +13,12 @@ class ActivityActionsOptConstraints(override val instance: String) extends Valid
 class ActivityActionsOptValidator(instance: String) extends RecursiveValidator {
     override val validators = Seq(new ActivityActionsOptConstraints(instance))
 }
-class ExampleNestedArraysOptArrArrArrArrConstraints(override val instance: String) extends ValidationBase[String] {
+class ExampleNestedArraysOptArrResultArrResultArrResultArrConstraints(override val instance: String) extends ValidationBase[String] {
     override def constraints: Seq[Constraint[String]] =
         Seq(maxLength(6), minLength(5))
 }
-class ExampleNestedArraysOptArrArrArrArrValidator(instance: String) extends RecursiveValidator {
-    override val validators = Seq(new ExampleNestedArraysOptArrArrArrArrConstraints(instance))
+class ExampleNestedArraysOptArrResultArrResultArrResultArrValidator(instance: String) extends RecursiveValidator {
+    override val validators = Seq(new ExampleNestedArraysOptArrResultArrResultArrResultArrConstraints(instance))
 }
 // ----- complex type validators -----
 class ExampleValidator(instance: Example) extends RecursiveValidator {
@@ -53,42 +52,42 @@ class ExampleMessagesOptConstraints(override val instance: ExampleMessagesOpt) e
         Seq(maxItems(6), minItems(5))
 }
 class ExampleMessagesOptValidator(instance: ExampleMessagesOpt) extends RecursiveValidator {
-    override val validators = new ExampleMessagesOptConstraints(instance) +: instance.map { new ExampleMessagesOptArrValidator(_)}
+    override val validators = new ExampleMessagesOptConstraints(instance) +: instance.map { new ExampleMessagesOptArrResultValidator(_)}
 }
-class ExampleMessagesOptArrConstraints(override val instance: ExampleMessagesOptArr) extends ValidationBase[ExampleMessagesOptArr] {
-    override def constraints: Seq[Constraint[ExampleMessagesOptArr]] =
+class ExampleMessagesOptArrResultConstraints(override val instance: ExampleMessagesOptArrResult) extends ValidationBase[ExampleMessagesOptArrResult] {
+    override def constraints: Seq[Constraint[ExampleMessagesOptArrResult]] =
         Seq(maxItems(6), minItems(5))
 }
-class ExampleMessagesOptArrValidator(instance: ExampleMessagesOptArr) extends RecursiveValidator {
-    override val validators = new ExampleMessagesOptArrConstraints(instance) +: instance.map { new ActivityValidator(_)}
+class ExampleMessagesOptArrResultValidator(instance: ExampleMessagesOptArrResult) extends RecursiveValidator {
+    override val validators = new ExampleMessagesOptArrResultConstraints(instance) +: instance.map { new ActivityValidator(_)}
 }
 class ExampleNestedArraysOptConstraints(override val instance: ExampleNestedArraysOpt) extends ValidationBase[ExampleNestedArraysOpt] {
     override def constraints: Seq[Constraint[ExampleNestedArraysOpt]] =
         Seq(maxItems(6), minItems(5))
 }
 class ExampleNestedArraysOptValidator(instance: ExampleNestedArraysOpt) extends RecursiveValidator {
-    override val validators = new ExampleNestedArraysOptConstraints(instance) +: instance.map { new ExampleNestedArraysOptArrValidator(_)}
+    override val validators = new ExampleNestedArraysOptConstraints(instance) +: instance.map { new ExampleNestedArraysOptArrResultValidator(_)}
 }
-class ExampleNestedArraysOptArrConstraints(override val instance: ExampleNestedArraysOptArr) extends ValidationBase[ExampleNestedArraysOptArr] {
-    override def constraints: Seq[Constraint[ExampleNestedArraysOptArr]] =
+class ExampleNestedArraysOptArrResultConstraints(override val instance: ExampleNestedArraysOptArrResult) extends ValidationBase[ExampleNestedArraysOptArrResult] {
+    override def constraints: Seq[Constraint[ExampleNestedArraysOptArrResult]] =
         Seq(maxItems(16), minItems(15))
 }
-class ExampleNestedArraysOptArrValidator(instance: ExampleNestedArraysOptArr) extends RecursiveValidator {
-    override val validators = new ExampleNestedArraysOptArrConstraints(instance) +: instance.map { new ExampleNestedArraysOptArrArrValidator(_)}
+class ExampleNestedArraysOptArrResultValidator(instance: ExampleNestedArraysOptArrResult) extends RecursiveValidator {
+    override val validators = new ExampleNestedArraysOptArrResultConstraints(instance) +: instance.map { new ExampleNestedArraysOptArrResultArrResultValidator(_)}
 }
-class ExampleNestedArraysOptArrArrConstraints(override val instance: ExampleNestedArraysOptArrArr) extends ValidationBase[ExampleNestedArraysOptArrArr] {
-    override def constraints: Seq[Constraint[ExampleNestedArraysOptArrArr]] =
+class ExampleNestedArraysOptArrResultArrResultConstraints(override val instance: ExampleNestedArraysOptArrResultArrResult) extends ValidationBase[ExampleNestedArraysOptArrResultArrResult] {
+    override def constraints: Seq[Constraint[ExampleNestedArraysOptArrResultArrResult]] =
         Seq(maxItems(26), minItems(25))
 }
-class ExampleNestedArraysOptArrArrValidator(instance: ExampleNestedArraysOptArrArr) extends RecursiveValidator {
-    override val validators = new ExampleNestedArraysOptArrArrConstraints(instance) +: instance.map { new ExampleNestedArraysOptArrArrArrValidator(_)}
+class ExampleNestedArraysOptArrResultArrResultValidator(instance: ExampleNestedArraysOptArrResultArrResult) extends RecursiveValidator {
+    override val validators = new ExampleNestedArraysOptArrResultArrResultConstraints(instance) +: instance.map { new ExampleNestedArraysOptArrResultArrResultArrResultValidator(_)}
 }
-class ExampleNestedArraysOptArrArrArrConstraints(override val instance: ExampleNestedArraysOptArrArrArr) extends ValidationBase[ExampleNestedArraysOptArrArrArr] {
-    override def constraints: Seq[Constraint[ExampleNestedArraysOptArrArrArr]] =
+class ExampleNestedArraysOptArrResultArrResultArrResultConstraints(override val instance: ExampleNestedArraysOptArrResultArrResultArrResult) extends ValidationBase[ExampleNestedArraysOptArrResultArrResultArrResult] {
+    override def constraints: Seq[Constraint[ExampleNestedArraysOptArrResultArrResultArrResult]] =
         Seq(maxItems(36), minItems(35))
 }
-class ExampleNestedArraysOptArrArrArrValidator(instance: ExampleNestedArraysOptArrArrArr) extends RecursiveValidator {
-    override val validators = new ExampleNestedArraysOptArrArrArrConstraints(instance) +: instance.map { new ExampleNestedArraysOptArrArrArrArrValidator(_)}
+class ExampleNestedArraysOptArrResultArrResultArrResultValidator(instance: ExampleNestedArraysOptArrResultArrResultArrResult) extends RecursiveValidator {
+    override val validators = new ExampleNestedArraysOptArrResultArrResultArrResultConstraints(instance) +: instance.map { new ExampleNestedArraysOptArrResultArrResultArrResultArrValidator(_)}
 }
 // ----- catch all simple validators -----
 // ----- call validations -----

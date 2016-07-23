@@ -1,22 +1,21 @@
 package nested_arrays_validation
 
 
-    import de.zalando.play.controllers.ArrayWrapper
 
 
 //noinspection ScalaStyle
 package object yaml {
 
-    type ExampleNestedArraysOptArr = ArrayWrapper[ExampleNestedArraysOptArrArr]
-    type ExampleNestedArraysOpt = ArrayWrapper[ExampleNestedArraysOptArr]
-    type ExampleMessagesOpt = ArrayWrapper[ExampleMessagesOptArr]
+    type ExampleNestedArraysOptArrResultArrResult = Seq[ExampleNestedArraysOptArrResultArrResultArrResult]
+    type ExampleNestedArraysOpt = Seq[ExampleNestedArraysOptArrResult]
+    type ExampleMessagesOpt = Seq[ExampleMessagesOptArrResult]
     type AnotherPostExample = Option[Example]
     type ExampleMessages = Option[ExampleMessagesOpt]
-    type ExampleMessagesOptArr = ArrayWrapper[Activity]
+    type ExampleNestedArraysOptArrResultArrResultArrResult = Seq[String]
     type AnotherPostResponses200 = Null
-    type ExampleNestedArraysOptArrArr = ArrayWrapper[ExampleNestedArraysOptArrArrArr]
+    type ExampleNestedArraysOptArrResult = Seq[ExampleNestedArraysOptArrResultArrResult]
     type ExampleNestedArrays = Option[ExampleNestedArraysOpt]
-    type ExampleNestedArraysOptArrArrArr = ArrayWrapper[String]
+    type ExampleMessagesOptArrResult = Seq[Activity]
     type ActivityActions = Option[String]
 
 

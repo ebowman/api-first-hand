@@ -5,7 +5,6 @@ import de.zalando.play.controllers._
 import PlayBodyParsing._
 import PlayValidations._
 
-import de.zalando.play.controllers.ArrayWrapper
 import scala.math.BigInt
 // ----- constraints and wrapper validations -----
 class ModelSchemaNameConstraints(override val instance: String) extends ValidationBase[String] {
@@ -43,12 +42,12 @@ class MetaCopyrightOptConstraints(override val instance: String) extends Validat
 class MetaCopyrightOptValidator(instance: String) extends RecursiveValidator {
     override val validators = Seq(new MetaCopyrightOptConstraints(instance))
 }
-class ModelSchemaAgeGroupsArrEnumConstraints(override val instance: String) extends ValidationBase[String] {
+class ModelSchemaAgeGroupsArrResultEnumConstraints(override val instance: String) extends ValidationBase[String] {
     override def constraints: Seq[Constraint[String]] =
         Seq(enum("baby,kid,teen,adult"))
 }
-class ModelSchemaAgeGroupsArrEnumValidator(instance: String) extends RecursiveValidator {
-    override val validators = Seq(new ModelSchemaAgeGroupsArrEnumConstraints(instance))
+class ModelSchemaAgeGroupsArrResultEnumValidator(instance: String) extends RecursiveValidator {
+    override val validators = Seq(new ModelSchemaAgeGroupsArrResultEnumConstraints(instance))
 }
 class ModelSchemaKeywordsOptConstraints(override val instance: String) extends ValidationBase[String] {
     override def constraints: Seq[Constraint[String]] =
@@ -78,13 +77,6 @@ class ModelSchemaSpecialDescriptionsOptArrConstraints(override val instance: Str
 class ModelSchemaSpecialDescriptionsOptArrValidator(instance: String) extends RecursiveValidator {
     override val validators = Seq(new ModelSchemaSpecialDescriptionsOptArrConstraints(instance))
 }
-class ModelSchemaArticleModelAttributesOptArrConstraints(override val instance: String) extends ValidationBase[String] {
-    override def constraints: Seq[Constraint[String]] =
-        Seq()
-}
-class ModelSchemaArticleModelAttributesOptArrValidator(instance: String) extends RecursiveValidator {
-    override val validators = Seq(new ModelSchemaArticleModelAttributesOptArrConstraints(instance))
-}
 // ----- complex type validators -----
 class ModelSchemaRootValidator(instance: ModelSchemaRoot) extends RecursiveValidator {
     override val validators = Seq(
@@ -105,7 +97,7 @@ class ModelSchemaValidator(instance: ModelSchema) extends RecursiveValidator {
         new ModelSchemaLengthRegisterValidator(instance.lengthRegister), 
         new ModelSchemaSilhouetteIdValidator(instance.silhouetteId), 
         new ModelSchemaSpecialDescriptionsValidator(instance.specialDescriptions), 
-        new ModelSchemaArticleModelAttributesValidator(instance.articleModelAttributes)
+        new ModelSchemaSpecialDescriptionsValidator(instance.articleModelAttributes)
     )
 }
 class MetaValidator(instance: Meta) extends RecursiveValidator {
@@ -121,8 +113,8 @@ class LinksValidator(instance: Links) extends RecursiveValidator {
 }
 
 // ----- enum delegating validators -----
-class ModelSchemaAgeGroupsArrValidator(instance: ModelSchemaAgeGroupsArr) extends RecursiveValidator {
-    override val validators = Seq(new ModelSchemaAgeGroupsArrEnumValidator(instance.value))
+class ModelSchemaAgeGroupsArrResultValidator(instance: ModelSchemaAgeGroupsArrResult) extends RecursiveValidator {
+    override val validators = Seq(new ModelSchemaAgeGroupsArrResultEnumValidator(instance.value))
 }
 class ModelSchemaSilhouetteIdValidator(instance: ModelSchemaSilhouetteId) extends RecursiveValidator {
     override val validators = Seq(new ModelSchemaSilhouetteIdEnumValidator(instance.value))
@@ -144,9 +136,6 @@ class ModelSchemaLengthRegisterValidator(instance: ModelSchemaLengthRegister) ex
 class ModelSchemaSpecialDescriptionsValidator(instance: ModelSchemaSpecialDescriptions) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new ModelSchemaSpecialDescriptionsOptValidator(_) }
 }
-class ModelSchemaArticleModelAttributesValidator(instance: ModelSchemaArticleModelAttributes) extends RecursiveValidator {
-    override val validators = instance.toSeq.map { new ModelSchemaArticleModelAttributesOptValidator(_) }
-}
 class ModelSchemaRootMetaValidator(instance: ModelSchemaRootMeta) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new MetaValidator(_) }
 }
@@ -159,7 +148,7 @@ class ModelSchemaAgeGroupsConstraints(override val instance: ModelSchemaAgeGroup
         Seq(maxItems(4))
 }
 class ModelSchemaAgeGroupsValidator(instance: ModelSchemaAgeGroups) extends RecursiveValidator {
-    override val validators = new ModelSchemaAgeGroupsConstraints(instance) +: instance.map { new ModelSchemaAgeGroupsArrValidator(_)}
+    override val validators = new ModelSchemaAgeGroupsConstraints(instance) +: instance.map { new ModelSchemaAgeGroupsArrResultValidator(_)}
 }
 class ModelSchemaSpecialDescriptionsOptConstraints(override val instance: ModelSchemaSpecialDescriptionsOpt) extends ValidationBase[ModelSchemaSpecialDescriptionsOpt] {
     override def constraints: Seq[Constraint[ModelSchemaSpecialDescriptionsOpt]] =
@@ -167,13 +156,6 @@ class ModelSchemaSpecialDescriptionsOptConstraints(override val instance: ModelS
 }
 class ModelSchemaSpecialDescriptionsOptValidator(instance: ModelSchemaSpecialDescriptionsOpt) extends RecursiveValidator {
     override val validators = new ModelSchemaSpecialDescriptionsOptConstraints(instance) +: instance.map { new ModelSchemaSpecialDescriptionsOptArrValidator(_)}
-}
-class ModelSchemaArticleModelAttributesOptConstraints(override val instance: ModelSchemaArticleModelAttributesOpt) extends ValidationBase[ModelSchemaArticleModelAttributesOpt] {
-    override def constraints: Seq[Constraint[ModelSchemaArticleModelAttributesOpt]] =
-        Seq(minItems(1))
-}
-class ModelSchemaArticleModelAttributesOptValidator(instance: ModelSchemaArticleModelAttributesOpt) extends RecursiveValidator {
-    override val validators = new ModelSchemaArticleModelAttributesOptConstraints(instance) +: instance.map { new ModelSchemaArticleModelAttributesOptArrValidator(_)}
 }
 // ----- catch all simple validators -----
 // ----- call validations -----

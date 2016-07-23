@@ -12,19 +12,18 @@ package object yaml {
 
     type TagsSearchGetResponses200Meta = Option[UsersSelfRequested_byGetResponses200MetaOpt]
     type LocationsLocation_idLocation_id = BigInt
-    type MediaMedia_idGetResponses200VideosStandard_resolution = Option[Image]
     type MediaFilter = Option[String]
     type MediaMedia_idCommentsDeleteResponses200Meta = Option[MediaMedia_idLikesGetResponses200MetaOpt]
     type UsersSelfFeedGetResponses200Data = Option[UsersSelfFeedGetResponses200DataOpt]
     type MediaTags = Option[MediaTagsOpt]
     type MediaMedia_idLikesGetResponses200Data = Option[MediaMedia_idLikesGetResponses200DataOpt]
     type MediaId = Option[BigInt]
+    type MediaVideosLow_resolution = Option[Image]
     type UsersUser_idRelationshipPostAction = Option[UsersUser_idRelationshipPostActionOpt]
     type MediaTagsOpt = Seq[Tag]
     type MediaImages = Option[MediaImagesOpt]
     type MediaLikes = Option[MediaLikesOpt]
     type MediaSearchGetDISTANCE = BigInt
-    type MediaMedia_idCommentsGetResponses200DataOpt = Seq[Comment]
     type MediaUsers_in_photoOpt = Seq[MiniProfile]
     type MediaMedia_idLikesGetResponses200DataOpt = Seq[Like]
     type LocationsSearchGetResponses200Data = Option[LocationsSearchGetResponses200DataOpt]
@@ -34,32 +33,35 @@ package object yaml {
     type LocationsSearchGetResponses200DataOpt = Seq[Location]
     type MediaSearchGetResponses200Data = Option[MediaSearchGetResponses200DataOpt]
     type UsersSelfFeedGetResponses200DataOpt = Seq[Media]
+    type MediaComments_DataOpt = Seq[Comment]
     type UsersUser_idGetResponses200Data = Option[User]
     type MediaVideos = Option[MediaVideosOpt]
     type MediaLocation = Option[Location]
     type GeographiesGeo_idMediaRecentGetResponses200 = Null
+    type MediaComments_Data = Option[MediaComments_DataOpt]
     type MediaUsers_in_photo = Option[MediaUsers_in_photoOpt]
     type LocationLatitude = Option[BigDecimal]
-    type MediaMedia_idCommentsGetResponses200Data = Option[MediaMedia_idCommentsGetResponses200DataOpt]
     type User_id_paramUser_id = BigDecimal
     type UserCounts = Option[UserCountsOpt]
     type Tag_nameTag_name = String
 
-    
-    val Unfollow = UsersUser_idRelationshipPostActionOpt("unfollow")
-    val Approve = UsersUser_idRelationshipPostActionOpt("approve")
-    val Block = UsersUser_idRelationshipPostActionOpt("block")
-    val Unblock = UsersUser_idRelationshipPostActionOpt("unblock")
-    val Follow = UsersUser_idRelationshipPostActionOpt("follow")
+    object UsersUser_idRelationshipPostActionOpt {
+        
+        val Unfollow = new UsersUser_idRelationshipPostActionOpt("unfollow")
+        val Approve = new UsersUser_idRelationshipPostActionOpt("approve")
+        val Block = new UsersUser_idRelationshipPostActionOpt("block")
+        val Unblock = new UsersUser_idRelationshipPostActionOpt("unblock")
+        val Follow = new UsersUser_idRelationshipPostActionOpt("follow")
 
-    implicit def stringToUsersUser_idRelationshipPostActionOpt: String => UsersUser_idRelationshipPostActionOpt = {
-        case "unfollow" => Unfollow
-        case "approve" => Approve
-        case "block" => Block
-        case "unblock" => Unblock
-        case "follow" => Follow
-        case other =>
-            throw new IllegalArgumentException("Couldn't parse parameter " + other)
+        implicit def stringToUsersUser_idRelationshipPostActionOpt: String => UsersUser_idRelationshipPostActionOpt = {
+            case "unfollow" => Unfollow
+            case "approve" => Approve
+            case "block" => Block
+            case "unblock" => Unblock
+            case "follow" => Follow
+            case other =>
+                throw new IllegalArgumentException("Couldn't parse parameter " + other)
+        }
     }
 
 import play.api.mvc.{QueryStringBindable, PathBindable}
@@ -96,15 +98,15 @@ package yaml {
     case class MediaSearchGetResponses200(data: MediaSearchGetResponses200Data) 
     case class TagsSearchGetResponses200(meta: TagsSearchGetResponses200Meta, data: MediaTags) 
     case class Like(first_name: MediaFilter, id: MediaFilter, last_name: MediaFilter, `type`: MediaFilter, user_name: MediaFilter) 
-    case class MediaComments_Opt(count: MediaId, data: MediaMedia_idCommentsGetResponses200Data) 
+    case class MediaComments_Opt(count: MediaId, data: MediaComments_Data) 
     case class UsersUser_idGetResponses200(data: UsersUser_idGetResponses200Data) 
-    case class MediaMedia_idCommentsGetResponses200(meta: MediaMedia_idCommentsDeleteResponses200Meta, data: MediaMedia_idCommentsGetResponses200Data) 
-    case class MediaVideosOpt(low_resolution: MediaMedia_idGetResponses200VideosStandard_resolution, standard_resolution: MediaMedia_idGetResponses200VideosStandard_resolution) 
+    case class MediaMedia_idCommentsGetResponses200(meta: MediaMedia_idCommentsDeleteResponses200Meta, data: MediaComments_Data) 
+    case class MediaVideosOpt(low_resolution: MediaVideosLow_resolution, standard_resolution: MediaVideosLow_resolution) 
     case class Location(id: MediaFilter, name: MediaFilter, latitude: LocationLatitude, longitude: LocationLatitude) 
     case class MiniProfile(user_name: MediaFilter, full_name: MediaFilter, id: MediaId, profile_picture: MediaFilter) 
     case class MediaLikesOpt(count: MediaId, data: MediaUsers_in_photo) 
     case class LocationsSearchGetResponses200(data: LocationsSearchGetResponses200Data) 
-    case class MediaImagesOpt(low_resolution: MediaMedia_idGetResponses200VideosStandard_resolution, thumbnail: MediaMedia_idGetResponses200VideosStandard_resolution, standard_resolution: MediaMedia_idGetResponses200VideosStandard_resolution) 
+    case class MediaImagesOpt(low_resolution: MediaVideosLow_resolution, thumbnail: MediaVideosLow_resolution, standard_resolution: MediaVideosLow_resolution) 
 
     case class UsersUser_idRelationshipPostActionOpt(value: String) extends AnyVal {
         override def toString = value.toString

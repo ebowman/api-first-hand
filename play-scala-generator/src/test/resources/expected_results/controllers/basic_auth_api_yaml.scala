@@ -24,8 +24,9 @@ import javax.inject._
 package basic.auth.api.yaml {
 
     class BasicAuthApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends BasicAuthApiYamlBase {
-    // ----- Start of unmanaged code area for constructor BasicAuthApiYaml
-    // ----- End of unmanaged code area for constructor BasicAuthApiYaml
+        // ----- Start of unmanaged code area for constructor BasicAuthApiYaml
+
+        // ----- End of unmanaged code area for constructor BasicAuthApiYaml
         val get = getAction {  _ =>  
             // ----- Start of unmanaged code area for action  BasicAuthApiYaml.get
             NotImplementedYet

@@ -1,19 +1,18 @@
 
 
-    import de.zalando.play.controllers.ArrayWrapper
 
 
 //noinspection ScalaStyle
 package object nested_arrays_yaml {
 
-    type ExampleNestedArraysOptArr = ArrayWrapper[ExampleNestedArraysOptArrArr]
-    type ExampleNestedArraysOpt = ArrayWrapper[ExampleNestedArraysOptArr]
-    type ExampleMessagesOpt = ArrayWrapper[ExampleMessagesOptArr]
+    type ExampleNestedArraysOptArrResultArrResult = Seq[ExampleNestedArraysOptArrResultArrResultArrResult]
+    type ExampleNestedArraysOpt = Seq[ExampleNestedArraysOptArrResult]
+    type ExampleMessagesOpt = Seq[ExampleMessagesOptArrResult]
     type ExampleMessages = Option[ExampleMessagesOpt]
-    type ExampleMessagesOptArr = ArrayWrapper[Activity]
-    type ExampleNestedArraysOptArrArr = ArrayWrapper[ExampleNestedArraysOptArrArrArr]
+    type ExampleNestedArraysOptArrResultArrResultArrResult = Seq[String]
+    type ExampleNestedArraysOptArrResult = Seq[ExampleNestedArraysOptArrResultArrResult]
     type ExampleNestedArrays = Option[ExampleNestedArraysOpt]
-    type ExampleNestedArraysOptArrArrArr = ArrayWrapper[String]
+    type ExampleMessagesOptArrResult = Seq[Activity]
     type ActivityActions = Option[String]
 
 

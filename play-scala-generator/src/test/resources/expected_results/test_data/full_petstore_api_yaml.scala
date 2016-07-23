@@ -38,7 +38,7 @@ object Generators extends JsValueGenerators {
     def NullGenerator = arbitrary[Null]
     def OrderStatusGenerator = Gen.option(arbitrary[String])
     def PetsFindByStatusGetStatusOptGenerator = _genList(arbitrary[String], "multi")
-    def UsersCreateWithListPostBodyOptGenerator = _genList(UserGenerator, "csv")
+    def UsersCreateWithListPostBodyOptGenerator = Gen.containerOf[List,User](UserGenerator)
     def OrderPetIdGenerator = Gen.option(arbitrary[Long])
     def PetsFindByStatusGetResponses200Generator = Gen.containerOf[List,Pet](PetGenerator)
     def PetsPostBodyGenerator = Gen.option(PetGenerator)
@@ -53,7 +53,7 @@ object Generators extends JsValueGenerators {
     def UsersCreateWithListPostBodyGenerator = Gen.option(UsersCreateWithListPostBodyOptGenerator)
     def PetsFindByStatusGetStatusGenerator = Gen.option(PetsFindByStatusGetStatusOptGenerator)
     def PetCategoryGenerator = Gen.option(TagGenerator)
-    def PetTagsOptGenerator = _genList(TagGenerator, "csv")
+    def PetTagsOptGenerator = Gen.containerOf[List,Tag](TagGenerator)
     
 
     def createUserGenerator = _generate(UserGenerator)

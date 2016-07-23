@@ -16,15 +16,17 @@ package object {{main_package_suffix}} {
 {{/for}}
 
 {{for enum in enums}}
-    {{for leaf in enum.leaves}}
-    val {{leaf.name}} = {{enum.name}}({{leaf.value}}){{/for}}
+    object {{enum.name}} {
+        {{for leaf in enum.leaves}}
+        val {{leaf.name}} = new {{enum.name}}({{leaf.value}}){{/for}}
 
-    implicit def stringTo{{enum.name}}: String => {{enum.name}} = {
-    {{for leaf in enum.leaves}}
-        case {{leaf.value}} => {{leaf.name}}
-    {{/for}}
-        case other =>
-            throw new IllegalArgumentException("Couldn't parse parameter " + other)
+        implicit def stringTo{{enum.name}}: String => {{enum.name}} = {
+        {{for leaf in enum.leaves}}
+            case {{leaf.value}} => {{leaf.name}}
+        {{/for}}
+            case other =>
+                throw new IllegalArgumentException("Couldn't parse parameter " + other)
+        }
     }
 {{/for}}
 {{if model_bindings}}

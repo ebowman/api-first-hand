@@ -15,11 +15,11 @@ object basic_polymorphism_yaml extends WithModel {
 	Reference("⌿definitions⌿Zoo") → 
 		TypeDef(Reference("⌿definitions⌿Zoo"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Zoo⌿tiers"), Opt(Arr(TypeDef(Reference("⌿definitions⌿Pet"), 
+					Field(Reference("⌿definitions⌿Zoo⌿tiers"), Opt(ArrResult(TypeDef(Reference("⌿definitions⌿Pet"), 
 			Seq(
 						Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List("maxLength(100)", "minLength(1)")))),
 						Field(Reference("⌿definitions⌿Pet⌿petType"), Str(None, TypeMeta(None, List())))
-			), TypeMeta(Some("Named types: 2"), List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 2"), List())), TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿definitions⌿Cat") → 
 					AllOf(Reference("⌿definitions⌿Cat⌿Cat"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
@@ -30,7 +30,7 @@ object basic_polymorphism_yaml extends WithModel {
 			), TypeMeta(Some("Named types: 2"), List())),
 			TypeDef(Reference("⌿definitions⌿Cat"), 
 			Seq(
-						Field(Reference("⌿definitions⌿Cat⌿huntingSkill"), 					EnumTrait(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), TypeMeta(Some("Enum type : 4"), List()), 
+						Field(Reference("⌿definitions⌿Cat⌿huntingSkill"), 					EnumTrait(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")""")), 
 						Set(
 							EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "clueless", TypeMeta(Some("clueless"), List())),
 							EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "lazy", TypeMeta(Some("lazy"), List())),
@@ -70,7 +70,7 @@ object basic_polymorphism_yaml extends WithModel {
 			), TypeMeta(Some("Named types: 2"), List())),
 				TypeDef(Reference("⌿definitions⌿CatNDog"), 
 			Seq(
-							Field(Reference("⌿definitions⌿CatNDog⌿huntingSkill"), 						EnumTrait(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), TypeMeta(Some("Enum type : 4"), List()), 
+							Field(Reference("⌿definitions⌿CatNDog⌿huntingSkill"), 						EnumTrait(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")""")), 
 							Set(
 								EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "clueless", TypeMeta(Some("clueless"), List())),
 								EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "lazy", TypeMeta(Some("lazy"), List())),

@@ -11,7 +11,6 @@ import scala.concurrent.Future
 import scala.util._
 import java.util.UUID
 import scala.math.BigDecimal
-import de.zalando.play.controllers.ArrayWrapper
 
 import de.zalando.play.controllers.PlayPathBindables
 

@@ -30,21 +30,21 @@ object nested_arrays_validation_yaml extends WithModel {
 	Reference("⌿definitions⌿Activity⌿actions") → 
 		Opt(Str(None, TypeMeta(Some("The text of the error message"), List("""pattern("""+"""""""""+"""the pattern to validate"""+"""""""""+""".r)"""))), TypeMeta(None, List())),
 	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt") → 
-		Arr(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr")), TypeMeta(None, List("maxItems(6)", "minItems(5)")), "csv"),
+		ArrResult(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult")), TypeMeta(None, List("maxItems(6)", "minItems(5)"))),
 	Reference("⌿definitions⌿Example⌿messages⌿Opt") → 
-		Arr(TypeRef(Reference("⌿definitions⌿Example⌿messages⌿Opt⌿Arr")), TypeMeta(Some("The text of the error message"), List("maxItems(6)", "minItems(5)")), "csv"),
+		ArrResult(TypeRef(Reference("⌿definitions⌿Example⌿messages⌿Opt⌿ArrResult")), TypeMeta(Some("The text of the error message"), List("maxItems(6)", "minItems(5)"))),
 	Reference("⌿paths⌿/another⌿post⌿example") → 
 		Opt(TypeRef(Reference("⌿definitions⌿Example")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr") → 
-		Arr(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr⌿Arr")), TypeMeta(None, List("maxItems(16)", "minItems(15)")), "csv"),
-	Reference("⌿definitions⌿Example⌿messages⌿Opt⌿Arr") → 
-		Arr(TypeRef(Reference("⌿definitions⌿Activity")), TypeMeta(None, List("maxItems(6)", "minItems(5)")), "csv"),
 	Reference("⌿paths⌿/another⌿post⌿responses⌿200") → 
 		Null(TypeMeta(None, List())),
-	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr⌿Arr") → 
-		Arr(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr⌿Arr⌿Arr")), TypeMeta(None, List("maxItems(26)", "minItems(25)")), "csv"),
-	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿Arr⌿Arr⌿Arr") → 
-		Arr(Str(Some("nested arrays"), TypeMeta(Some("nested arrays"), List("maxLength(6)", "minLength(5)"))), TypeMeta(None, List("maxItems(36)", "minItems(35)")), "csv")
+	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult") → 
+		ArrResult(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult⌿ArrResult")), TypeMeta(None, List("maxItems(16)", "minItems(15)"))),
+	Reference("⌿definitions⌿Example⌿messages⌿Opt⌿ArrResult") → 
+		ArrResult(TypeRef(Reference("⌿definitions⌿Activity")), TypeMeta(None, List("maxItems(6)", "minItems(5)"))),
+	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult⌿ArrResult") → 
+		ArrResult(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult⌿ArrResult⌿ArrResult")), TypeMeta(None, List("maxItems(26)", "minItems(25)"))),
+	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult⌿ArrResult⌿ArrResult") → 
+		ArrResult(Str(Some("nested arrays"), TypeMeta(Some("nested arrays"), List("maxLength(6)", "minLength(5)"))), TypeMeta(None, List("maxItems(36)", "minItems(35)")))
 ) 
  
  def parameters = Map[ParameterRef, Parameter](

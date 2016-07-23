@@ -1,0 +1,8 @@
+"definitions" / "Pets" ->
+	ArrResult(BInt)
+"paths" / "/" / "post" / "limits" ->
+	Opt(Arr(BInt))
+"paths" / "/" / "post" / "more_limits" ->
+	Opt(ArrResult(BInt))
+"paths" / "/" / "post" / "responses" / "200" ->
+	ArrResult(BInt)

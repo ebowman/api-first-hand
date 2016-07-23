@@ -2,7 +2,7 @@
 	TypeDef("definitions" / "EventMetaData", Seq(
 		Field("definitions" / "EventMetaData" / "root_id", Opt(UUID)), 
 		Field("definitions" / "EventMetaData" / "parent_id", Opt(UUID)), 
-		Field("definitions" / "EventMetaData" / "scopes", Opt(Arr(Str))), 
+		Field("definitions" / "EventMetaData" / "scopes", Opt(ArrResult(Str))), 
 		Field("definitions" / "EventMetaData" / "id", Opt(UUID)), 
 		Field("definitions" / "EventMetaData" / "created", Opt(Str))))
 "definitions" / "Topic" ->
@@ -18,7 +18,7 @@
 		Field("definitions" / "Event" / "metadata", Opt(TypeDef("definitions" / "EventMetaData", Seq(
 			Field("definitions" / "EventMetaData" / "root_id", Opt(UUID)), 
 			Field("definitions" / "EventMetaData" / "parent_id", Opt(UUID)), 
-			Field("definitions" / "EventMetaData" / "scopes", Opt(Arr(Str))), 
+			Field("definitions" / "EventMetaData" / "scopes", Opt(ArrResult(Str))), 
 			Field("definitions" / "EventMetaData" / "id", Opt(UUID)), 
 			Field("definitions" / "EventMetaData" / "created", Opt(Str))))))))
 "definitions" / "Cursor" ->
@@ -38,13 +38,13 @@
 		Field("definitions" / "SimpleStreamEvent" / "cursor", TypeDef("definitions" / "Cursor", Seq(
 			Field("definitions" / "Cursor" / "partition", Str), 
 			Field("definitions" / "Cursor" / "offset", Str)))), 
-		Field("definitions" / "SimpleStreamEvent" / "events", Opt(Arr(TypeDef("definitions" / "Event", Seq(
+		Field("definitions" / "SimpleStreamEvent" / "events", Opt(ArrResult(TypeDef("definitions" / "Event", Seq(
 			Field("definitions" / "Event" / "event_type", Opt(Str)), 
 			Field("definitions" / "Event" / "partitioning_key", Opt(Str)), 
 			Field("definitions" / "Event" / "metadata", Opt(TypeDef("definitions" / "EventMetaData", Seq(
 				Field("definitions" / "EventMetaData" / "root_id", Opt(UUID)), 
 				Field("definitions" / "EventMetaData" / "parent_id", Opt(UUID)), 
-				Field("definitions" / "EventMetaData" / "scopes", Opt(Arr(Str))), 
+				Field("definitions" / "EventMetaData" / "scopes", Opt(ArrResult(Str))), 
 				Field("definitions" / "EventMetaData" / "id", Opt(UUID)), 
 				Field("definitions" / "EventMetaData" / "created", Opt(Str)))))))))))))
 "paths" / "/topics/{topic}/events/batch" / "post" / "topic" ->
@@ -68,7 +68,7 @@
 		Field("definitions" / "Event" / "metadata", Opt(TypeDef("definitions" / "EventMetaData", Seq(
 			Field("definitions" / "EventMetaData" / "root_id", Opt(UUID)), 
 			Field("definitions" / "EventMetaData" / "parent_id", Opt(UUID)), 
-			Field("definitions" / "EventMetaData" / "scopes", Opt(Arr(Str))), 
+			Field("definitions" / "EventMetaData" / "scopes", Opt(ArrResult(Str))), 
 			Field("definitions" / "EventMetaData" / "id", Opt(UUID)), 
 			Field("definitions" / "EventMetaData" / "created", Opt(Str)))))))))
 "paths" / "/topics/{topic}/partitions/{partition}" / "get" / "topic" ->
@@ -90,7 +90,7 @@
 		Field("definitions" / "Event" / "metadata", Opt(TypeDef("definitions" / "EventMetaData", Seq(
 			Field("definitions" / "EventMetaData" / "root_id", Opt(UUID)), 
 			Field("definitions" / "EventMetaData" / "parent_id", Opt(UUID)), 
-			Field("definitions" / "EventMetaData" / "scopes", Opt(Arr(Str))), 
+			Field("definitions" / "EventMetaData" / "scopes", Opt(ArrResult(Str))), 
 			Field("definitions" / "EventMetaData" / "id", Opt(UUID)), 
 			Field("definitions" / "EventMetaData" / "created", Opt(Str)))))))))
 "paths" / "/topics/{topic}/events" / "get" / "stream_limit" ->

@@ -64,7 +64,7 @@ object string_formats_validation_yaml extends WithModel {
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
 def calls: Seq[ApiCall] = Seq(
-	ApiCall(POST, Path(Reference("⌿string")), 
+	ApiCall(POST, Path(Reference("⌿string")),
 		HandlerCall(
 			"string_formats_validation.yaml",
 			"String_formats_validationYaml",
@@ -83,20 +83,20 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/string⌿post⌿password_required")),
 				ParameterRef(Reference("⌿paths⌿/string⌿post⌿date_time_optional"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/yaml")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/yaml")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/string⌿post⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]), 
-	ApiCall(POST, Path(Reference("⌿string2")), 
+	ApiCall(POST, Path(Reference("⌿string2")),
 		HandlerCall(
 			"string_formats_validation.yaml",
 			"String_formats_validationYaml",
@@ -105,18 +105,18 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/string2⌿post⌿binary_required"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json"), MimeType("application/yaml")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json"), MimeType("application/yaml")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/string2⌿post⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set.empty[Security.Constraint]))
 
 def packageName: Option[String] = Some("string_formats_validation.yaml")

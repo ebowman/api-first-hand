@@ -14,7 +14,7 @@ package object yaml {
     type UsersCreateWithListPostResponsesDefault = Null
     type OrderStatus = Option[String]
     type PetsFindByStatusGetStatusOpt = ArrayWrapper[String]
-    type UsersCreateWithListPostBodyOpt = ArrayWrapper[User]
+    type UsersCreateWithListPostBodyOpt = Seq[User]
     type OrderPetId = Option[Long]
     type PetsFindByStatusGetResponses200 = Seq[Pet]
     type PetsPostBody = Option[Pet]

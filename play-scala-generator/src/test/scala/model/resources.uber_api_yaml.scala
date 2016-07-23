@@ -74,7 +74,7 @@ object uber_api_yaml extends WithModel {
 	Reference("⌿paths⌿/estimates/time⌿get⌿customer_uuid") → 
 		Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List())),
 	Reference("⌿definitions⌿Activities⌿history⌿Opt") → 
-		Arr(TypeRef(Reference("⌿definitions⌿Activity")), TypeMeta(None, List()), "csv"),
+		ArrResult(TypeRef(Reference("⌿definitions⌿Activity")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/products⌿get⌿responses⌿200") → 
 		ArrResult(TypeRef(Reference("⌿definitions⌿Product")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/estimates/price⌿get⌿responses⌿200") → 

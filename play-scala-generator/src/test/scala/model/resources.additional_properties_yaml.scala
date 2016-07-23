@@ -20,7 +20,7 @@ object additional_properties_yaml extends WithModel {
 	Reference("⌿definitions⌿KeyedArrays⌿additionalProperties") → 
 		CatchAll(TypeRef(Reference("⌿definitions⌿KeyedArrays⌿additionalProperties⌿CatchAll")), TypeMeta(None, List())),
 	Reference("⌿definitions⌿KeyedArrays⌿additionalProperties⌿CatchAll") → 
-		Arr(BInt(TypeMeta(None, List())), TypeMeta(None, List()), "csv")
+		ArrResult(BInt(TypeMeta(None, List())), TypeMeta(None, List()))
 ) 
  
  def parameters = Map[ParameterRef, Parameter](

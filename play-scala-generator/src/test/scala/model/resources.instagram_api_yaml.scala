@@ -115,6 +115,8 @@ object instagram_api_yaml extends WithModel {
 		Str(None, TypeMeta(None, List())),
 	Reference("⌿paths⌿/locations/{location-id}⌿⌿location-id") → 
 		BInt(TypeMeta(None, List())),
+	Reference("⌿definitions⌿Media⌿videos⌿low_resolution") → 
+		Opt(TypeRef(Reference("⌿definitions⌿Image")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action") → 
 		Opt(TypeRef(Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Opt")), TypeMeta(None, List())),
 	Reference("⌿definitions⌿Media⌿tags⌿Opt") → 
@@ -131,29 +133,31 @@ object instagram_api_yaml extends WithModel {
 	Reference("⌿definitions⌿Media⌿users_in_photo⌿Opt") → 
 		ArrResult(TypeRef(Reference("⌿definitions⌿MiniProfile")), TypeMeta(None, List())),
 	Reference("⌿definitions⌿Media⌿comments:⌿Opt") → 
-		TypeDef(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿comments:"), 
+		TypeDef(Reference("⌿definitions⌿Media⌿comments:"), 
 			Seq(
-					Field(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿comments:⌿count"), TypeRef(Reference("⌿definitions⌿Media⌿id"))),
-					Field(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿comments:⌿data"), TypeRef(Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200⌿data")))
+					Field(Reference("⌿definitions⌿Media⌿comments:⌿count"), TypeRef(Reference("⌿definitions⌿Media⌿id"))),
+					Field(Reference("⌿definitions⌿Media⌿comments:⌿data"), TypeRef(Reference("⌿definitions⌿Media⌿comments:⌿data")))
 			), TypeMeta(Some("Named types: 2"), List())),
 	Reference("⌿definitions⌿Media⌿videos⌿Opt") → 
-		TypeDef(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿videos"), 
+		TypeDef(Reference("⌿definitions⌿Media⌿videos"), 
 			Seq(
-					Field(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿videos⌿low_resolution"), TypeRef(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿videos⌿standard_resolution"))),
-					Field(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿videos⌿standard_resolution"), TypeRef(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿videos⌿standard_resolution")))
+					Field(Reference("⌿definitions⌿Media⌿videos⌿low_resolution"), TypeRef(Reference("⌿definitions⌿Media⌿videos⌿low_resolution"))),
+					Field(Reference("⌿definitions⌿Media⌿videos⌿standard_resolution"), TypeRef(Reference("⌿definitions⌿Media⌿videos⌿low_resolution")))
 			), TypeMeta(Some("Named types: 2"), List())),
+	Reference("⌿definitions⌿Media⌿comments:⌿data") → 
+		Opt(TypeRef(Reference("⌿definitions⌿Media⌿comments:⌿data⌿Opt")), TypeMeta(None, List())),
 	Reference("⌿definitions⌿Media⌿likes⌿Opt") → 
-		TypeDef(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿likes"), 
+		TypeDef(Reference("⌿definitions⌿Media⌿likes"), 
 			Seq(
-					Field(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿likes⌿count"), TypeRef(Reference("⌿definitions⌿Media⌿id"))),
-					Field(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿likes⌿data"), TypeRef(Reference("⌿definitions⌿Media⌿users_in_photo")))
+					Field(Reference("⌿definitions⌿Media⌿likes⌿count"), TypeRef(Reference("⌿definitions⌿Media⌿id"))),
+					Field(Reference("⌿definitions⌿Media⌿likes⌿data"), TypeRef(Reference("⌿definitions⌿Media⌿users_in_photo")))
 			), TypeMeta(Some("Named types: 2"), List())),
 	Reference("⌿definitions⌿Media⌿images⌿Opt") → 
-		TypeDef(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿images"), 
+		TypeDef(Reference("⌿definitions⌿Media⌿images"), 
 			Seq(
-					Field(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿images⌿low_resolution"), TypeRef(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿videos⌿standard_resolution"))),
-					Field(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿images⌿thumbnail"), TypeRef(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿videos⌿standard_resolution"))),
-					Field(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿images⌿standard_resolution"), TypeRef(Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿videos⌿standard_resolution")))
+					Field(Reference("⌿definitions⌿Media⌿images⌿low_resolution"), TypeRef(Reference("⌿definitions⌿Media⌿videos⌿low_resolution"))),
+					Field(Reference("⌿definitions⌿Media⌿images⌿thumbnail"), TypeRef(Reference("⌿definitions⌿Media⌿videos⌿low_resolution"))),
+					Field(Reference("⌿definitions⌿Media⌿images⌿standard_resolution"), TypeRef(Reference("⌿definitions⌿Media⌿videos⌿low_resolution")))
 			), TypeMeta(Some("Named types: 3"), List())),
 	Reference("⌿paths⌿/users/self/feed⌿get⌿responses⌿200") → 
 		TypeDef(Reference("⌿paths⌿/users/self/feed⌿get⌿responses⌿200"), 
@@ -205,7 +209,7 @@ object instagram_api_yaml extends WithModel {
 					Field(Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200⌿data"), TypeRef(Reference("⌿definitions⌿Media⌿tags")))
 			), TypeMeta(Some("Named types: 2"), List())),
 	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Opt") → 
-					EnumTrait(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), TypeMeta(Some("Enum type : 5"), List()), 
+					EnumTrait(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")""")), 
 				Set(
 					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "follow", TypeMeta(Some("follow"), List())),
 					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "unblock", TypeMeta(Some("unblock"), List())),
@@ -214,6 +218,8 @@ object instagram_api_yaml extends WithModel {
 					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "block", TypeMeta(Some("block"), List()))
 
 				)),
+	Reference("⌿definitions⌿Media⌿comments:⌿data⌿Opt") → 
+		ArrResult(TypeRef(Reference("⌿definitions⌿Comment")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/users/{user-id}⌿get⌿responses⌿200") → 
 		TypeDef(Reference("⌿paths⌿/users/{user-id}⌿get⌿responses⌿200"), 
 			Seq(
@@ -223,7 +229,7 @@ object instagram_api_yaml extends WithModel {
 		TypeDef(Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200"), 
 			Seq(
 					Field(Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200⌿meta"), TypeRef(Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200⌿meta"))),
-					Field(Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200⌿data"), TypeRef(Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200⌿data")))
+					Field(Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200⌿data"), TypeRef(Reference("⌿definitions⌿Media⌿comments:⌿data")))
 			), TypeMeta(Some("Named types: 2"), List())),
 	Reference("⌿paths⌿/geographies/{geo-id}/media/recent⌿get⌿responses⌿200") → 
 		Null(TypeMeta(None, List())),
@@ -252,21 +258,15 @@ object instagram_api_yaml extends WithModel {
 					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "unblock", TypeMeta(Some("unblock"), List())),
 	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Opt⌿approve") → 
 					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "approve", TypeMeta(Some("approve"), List())),
-	Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200⌿data") → 
-		Opt(TypeRef(Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200⌿data⌿Opt")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Opt⌿unfollow") → 
 					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "unfollow", TypeMeta(Some("unfollow"), List())),
 	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Opt⌿block") → 
 					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "block", TypeMeta(Some("block"), List())),
-	Reference("⌿paths⌿/media/{media-id}⌿get⌿responses⌿200⌿videos⌿standard_resolution") → 
-		Opt(TypeRef(Reference("⌿definitions⌿Image")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/users/self/requested-by⌿get⌿responses⌿200⌿meta⌿Opt") → 
 		TypeDef(Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200⌿meta"), 
 			Seq(
 					Field(Reference("⌿paths⌿/users/self/requested-by⌿get⌿responses⌿200⌿meta⌿code"), TypeRef(Reference("⌿definitions⌿Media⌿id")))
 			), TypeMeta(Some("Named types: 1"), List())),
-	Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200⌿data⌿Opt") → 
-		ArrResult(TypeRef(Reference("⌿definitions⌿Comment")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/media/{media-id}/likes⌿get⌿responses⌿200⌿data⌿Opt") → 
 		ArrResult(TypeRef(Reference("⌿definitions⌿Like")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data⌿Opt") → 

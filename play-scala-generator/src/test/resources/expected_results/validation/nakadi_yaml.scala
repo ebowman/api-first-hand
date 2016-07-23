@@ -5,7 +5,6 @@ import de.zalando.play.controllers._
 import PlayBodyParsing._
 import PlayValidations._
 
-import de.zalando.play.controllers.ArrayWrapper
 import java.util.UUID
 // ----- constraints and wrapper validations -----
 class TopicsTopicEventsBatchPostTopicConstraints(override val instance: String) extends ValidationBase[String] {

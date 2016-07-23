@@ -52,7 +52,7 @@ object basic_polymorphism_yaml extends WithModel {
 	Reference("⌿definitions⌿Zoo⌿tiers") → 
 		Opt(TypeRef(Reference("⌿definitions⌿Zoo⌿tiers⌿Opt")), TypeMeta(None, List())),
 	Reference("⌿definitions⌿Cat⌿huntingSkill") → 
-					EnumTrait(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), TypeMeta(Some("Enum type : 4"), List()), 
+					EnumTrait(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")""")), 
 				Set(
 					EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "clueless", TypeMeta(Some("clueless"), List())),
 					EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "lazy", TypeMeta(Some("lazy"), List())),
@@ -72,7 +72,7 @@ object basic_polymorphism_yaml extends WithModel {
 	Reference("⌿definitions⌿CatNDog⌿huntingSkill⌿aggressive") → 
 					EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "aggressive", TypeMeta(Some("aggressive"), List())),
 	Reference("⌿definitions⌿Zoo⌿tiers⌿Opt") → 
-		Arr(TypeRef(Reference("⌿definitions⌿Pet")), TypeMeta(None, List()), "csv"),
+		ArrResult(TypeRef(Reference("⌿definitions⌿Pet")), TypeMeta(None, List())),
 	Reference("⌿definitions⌿Cat⌿huntingSkill⌿adventurous") → 
 					EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "adventurous", TypeMeta(Some("adventurous"), List())),
 	Reference("⌿paths⌿/⌿put⌿dummy") → 

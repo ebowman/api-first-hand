@@ -24,8 +24,9 @@ import javax.inject._
 package security.api.yaml {
 
     class SecurityApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends SecurityApiYamlBase {
-    // ----- Start of unmanaged code area for constructor SecurityApiYaml
-    // ----- End of unmanaged code area for constructor SecurityApiYaml
+        // ----- Start of unmanaged code area for constructor SecurityApiYaml
+
+        // ----- End of unmanaged code area for constructor SecurityApiYaml
         val getPetsById = getPetsByIdAction { (id: PetsIdGetId) =>  
             // ----- Start of unmanaged code area for action  SecurityApiYaml.getPetsById
             NotImplementedYet

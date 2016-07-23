@@ -20,11 +20,11 @@ object nested_arrays_yaml extends WithModel {
 	Reference("⌿definitions⌿Example") → 
 		TypeDef(Reference("⌿definitions⌿Example"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Example⌿messages"), Opt(Arr(Arr(TypeDef(Reference("⌿definitions⌿Activity"), 
+					Field(Reference("⌿definitions⌿Example⌿messages"), Opt(ArrResult(ArrResult(TypeDef(Reference("⌿definitions⌿Activity"), 
 			Seq(
 						Field(Reference("⌿definitions⌿Activity⌿actions"), Opt(Str(None, TypeMeta(Some("The text of the error message"), List())), TypeMeta(None, List())))
-			), TypeMeta(Some("Named types: 1"), List())), TypeMeta(None, List()), "csv"), TypeMeta(Some("The text of the error message"), List()), "csv"), TypeMeta(None, List()))),
-					Field(Reference("⌿definitions⌿Example⌿nestedArrays"), Opt(Arr(Arr(Arr(Arr(Str(Some("nested arrays"), TypeMeta(Some("nested arrays"), List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List()), "csv"), TypeMeta(None, List()), "csv"), TypeMeta(None, List()), "csv"), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 1"), List())), TypeMeta(None, List())), TypeMeta(Some("The text of the error message"), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Example⌿nestedArrays"), Opt(ArrResult(ArrResult(ArrResult(ArrResult(Str(Some("nested arrays"), TypeMeta(Some("nested arrays"), List())), TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List()))
 ) 
  

@@ -779,7 +779,7 @@ object type_deduplication_yaml extends WithModel {
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
 def calls: Seq[ApiCall] = Seq(
-	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}⌿waterings⌿{watering_id}")), 
+	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}⌿waterings⌿{watering_id}")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -789,22 +789,22 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿get⌿plant_id")),
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿get⌿watering_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿get⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿get⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(PUT, Path(Reference("⌿plants⌿{plant_id}⌿waterings⌿{watering_id}")), 
+	ApiCall(PUT, Path(Reference("⌿plants⌿{plant_id}⌿waterings⌿{watering_id}")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -814,24 +814,24 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿put⌿plant_id")),
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿put⌿watering_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿put⌿responses⌿200")),
 			201 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿put⌿responses⌿201")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿put⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿put⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings/{watering_id}⌿put⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					201 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿users⌿me")), 
+	ApiCall(GET, Path(Reference("⌿users⌿me")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -840,20 +840,20 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/users/me⌿get⌿responses⌿200"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/users/me⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/users/me⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}⌿sunlight_needs")), 
+	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}⌿sunlight_needs")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -862,22 +862,22 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/sunlight_needs⌿get⌿plant_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/sunlight_needs⌿get⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/sunlight_needs⌿get⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/sunlight_needs⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/sunlight_needs⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(PUT, Path(Reference("⌿plants⌿{plant_id}⌿sunlight_needs")), 
+	ApiCall(PUT, Path(Reference("⌿plants⌿{plant_id}⌿sunlight_needs")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -887,22 +887,22 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/sunlight_needs⌿put⌿plant_id")),
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/sunlight_needs⌿put⌿sunlight_needs"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/sunlight_needs⌿put⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/sunlight_needs⌿put⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/sunlight_needs⌿put⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/sunlight_needs⌿put⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿users")), 
+	ApiCall(GET, Path(Reference("⌿users")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -912,20 +912,20 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/users⌿get⌿limit")),
 				ParameterRef(Reference("⌿paths⌿/users⌿get⌿offset"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/users⌿get⌿responses⌿200"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/users⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/users⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(POST, Path(Reference("⌿users")), 
+	ApiCall(POST, Path(Reference("⌿users")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -934,20 +934,20 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/users⌿post⌿signin_data"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/users⌿post⌿responses⌿200"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/users⌿post⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/users⌿post⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿areas⌿{area_id}")), 
+	ApiCall(GET, Path(Reference("⌿areas⌿{area_id}")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -956,20 +956,20 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/areas/{area_id}⌿get⌿area_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/areas/{area_id}⌿get⌿responses⌿200"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/areas/{area_id}⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/areas/{area_id}⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(PUT, Path(Reference("⌿areas⌿{area_id}")), 
+	ApiCall(PUT, Path(Reference("⌿areas⌿{area_id}")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -978,22 +978,22 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/areas/{area_id}⌿put⌿area_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/areas/{area_id}⌿put⌿responses⌿200")),
 			201 -> ParameterRef(Reference("⌿paths⌿/areas/{area_id}⌿put⌿responses⌿201"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/areas/{area_id}⌿put⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/areas/{area_id}⌿put⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					201 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(DELETE, Path(Reference("⌿areas⌿{area_id}")), 
+	ApiCall(DELETE, Path(Reference("⌿areas⌿{area_id}")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1002,20 +1002,20 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/areas/{area_id}⌿delete⌿area_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/areas/{area_id}⌿delete⌿responses⌿200"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/areas/{area_id}⌿delete⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/areas/{area_id}⌿delete⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿plants")), 
+	ApiCall(GET, Path(Reference("⌿plants")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1025,20 +1025,20 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/plants⌿get⌿limit")),
 				ParameterRef(Reference("⌿paths⌿/plants⌿get⌿offset"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants⌿get⌿responses⌿200"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿user⌿{user_id}⌿plants")), 
+	ApiCall(GET, Path(Reference("⌿user⌿{user_id}⌿plants")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1049,22 +1049,22 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/user/{user_id}/plants⌿get⌿limit")),
 				ParameterRef(Reference("⌿paths⌿/user/{user_id}/plants⌿get⌿offset"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/user/{user_id}/plants⌿get⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/user/{user_id}/plants⌿get⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/user/{user_id}/plants⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/user/{user_id}/plants⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿users⌿{user_id}")), 
+	ApiCall(GET, Path(Reference("⌿users⌿{user_id}")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1073,22 +1073,22 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿get⌿user_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿get⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿get⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(PUT, Path(Reference("⌿users⌿{user_id}")), 
+	ApiCall(PUT, Path(Reference("⌿users⌿{user_id}")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1098,22 +1098,22 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿put⌿user_id")),
 				ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿put⌿user"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿put⌿responses⌿200")),
 			201 -> ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿put⌿responses⌿201"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿put⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿put⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					201 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(DELETE, Path(Reference("⌿users⌿{user_id}")), 
+	ApiCall(DELETE, Path(Reference("⌿users⌿{user_id}")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1123,22 +1123,22 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿delete⌿user_id")),
 				ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿delete⌿user"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿delete⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿delete⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿delete⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/users/{user_id}⌿delete⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿areas")), 
+	ApiCall(GET, Path(Reference("⌿areas")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1148,20 +1148,20 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/areas⌿get⌿limit")),
 				ParameterRef(Reference("⌿paths⌿/areas⌿get⌿offset"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/areas⌿get⌿responses⌿200"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/areas⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/areas⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}⌿location")), 
+	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}⌿location")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1170,22 +1170,22 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿get⌿plant_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿get⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿get⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(PUT, Path(Reference("⌿plants⌿{plant_id}⌿location")), 
+	ApiCall(PUT, Path(Reference("⌿plants⌿{plant_id}⌿location")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1195,22 +1195,22 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿put⌿plant_id")),
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿put⌿location"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿put⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿put⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿put⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿put⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(DELETE, Path(Reference("⌿plants⌿{plant_id}⌿location")), 
+	ApiCall(DELETE, Path(Reference("⌿plants⌿{plant_id}⌿location")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1219,22 +1219,22 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿delete⌿plant_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿delete⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿delete⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿delete⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/location⌿delete⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿users⌿{user_id}⌿picture")), 
+	ApiCall(GET, Path(Reference("⌿users⌿{user_id}⌿picture")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1243,22 +1243,22 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿get⌿user_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿get⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿get⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(PUT, Path(Reference("⌿users⌿{user_id}⌿picture")), 
+	ApiCall(PUT, Path(Reference("⌿users⌿{user_id}⌿picture")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1267,24 +1267,24 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿put⌿user_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿put⌿responses⌿200")),
 			201 -> ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿put⌿responses⌿201")),
 			404 -> ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿put⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿put⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿put⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					201 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(DELETE, Path(Reference("⌿users⌿{user_id}⌿picture")), 
+	ApiCall(DELETE, Path(Reference("⌿users⌿{user_id}⌿picture")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1293,22 +1293,22 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿delete⌿user_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿delete⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿delete⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿delete⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/users/{user_id}/picture⌿delete⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}⌿pictures")), 
+	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}⌿pictures")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1319,22 +1319,22 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures⌿get⌿limit")),
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures⌿get⌿offset"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures⌿get⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures⌿get⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}")), 
+	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1343,22 +1343,22 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿get⌿plant_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿get⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿get⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(PUT, Path(Reference("⌿plants⌿{plant_id}")), 
+	ApiCall(PUT, Path(Reference("⌿plants⌿{plant_id}")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1368,24 +1368,24 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿put⌿plant_id")),
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿put⌿plant"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿put⌿responses⌿200")),
 			201 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿put⌿responses⌿201")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿put⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿put⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿put⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					201 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(DELETE, Path(Reference("⌿plants⌿{plant_id}")), 
+	ApiCall(DELETE, Path(Reference("⌿plants⌿{plant_id}")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1394,22 +1394,22 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿delete⌿plant_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿delete⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿delete⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿delete⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}⌿delete⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}⌿waterings")), 
+	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}⌿waterings")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1420,22 +1420,22 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings⌿get⌿limit")),
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings⌿get⌿offset"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings⌿get⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings⌿get⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/waterings⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}⌿pictures⌿{picture_id}")), 
+	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}⌿pictures⌿{picture_id}")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1445,22 +1445,22 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿get⌿plant_id")),
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿get⌿picture_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿get⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿get⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(PUT, Path(Reference("⌿plants⌿{plant_id}⌿pictures⌿{picture_id}")), 
+	ApiCall(PUT, Path(Reference("⌿plants⌿{plant_id}⌿pictures⌿{picture_id}")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1470,24 +1470,24 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿put⌿plant_id")),
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿put⌿picture_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿put⌿responses⌿200")),
 			201 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿put⌿responses⌿201")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿put⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿put⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿put⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					201 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(DELETE, Path(Reference("⌿plants⌿{plant_id}⌿pictures⌿{picture_id}")), 
+	ApiCall(DELETE, Path(Reference("⌿plants⌿{plant_id}⌿pictures⌿{picture_id}")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1497,22 +1497,22 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿delete⌿plant_id")),
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿delete⌿picture_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿delete⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿delete⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿delete⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/pictures/{picture_id}⌿delete⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}⌿water_needs")), 
+	ApiCall(GET, Path(Reference("⌿plants⌿{plant_id}⌿water_needs")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1521,20 +1521,20 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/water_needs⌿get⌿plant_id"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/water_needs⌿get⌿responses⌿200"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/water_needs⌿get⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/water_needs⌿get⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]), 
-	ApiCall(PUT, Path(Reference("⌿plants⌿{plant_id}⌿water_needs")), 
+	ApiCall(PUT, Path(Reference("⌿plants⌿{plant_id}⌿water_needs")),
 		HandlerCall(
 			"type_deduplication.yaml",
 			"Type_deduplicationYaml",
@@ -1544,20 +1544,20 @@ def calls: Seq[ApiCall] = Seq(
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/water_needs⌿put⌿plant_id")),
 				ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/water_needs⌿put⌿water_needs"))
 				)
-			), 
-		Set.empty[MimeType], 
-		Set(MimeType("application/json")), 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set(MimeType("application/json")),
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/water_needs⌿put⌿responses⌿200")),
 			404 -> ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/water_needs⌿put⌿responses⌿404"))
-		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/water_needs⌿put⌿responses⌿default")))), 
+		), Some(	ParameterRef(Reference("⌿paths⌿/plants/{plant_id}/water_needs⌿put⌿responses⌿default")))),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self,
 					404 -> Self
-			), Some(Self)), 
+			), Some(Self)),
 		Set.empty[Security.Constraint]))
 
 def packageName: Option[String] = Some("type_deduplication.yaml")

@@ -24,8 +24,9 @@ import javax.inject._
 package wrong_field_name.yaml {
 
     class Wrong_field_nameYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends Wrong_field_nameYamlBase {
-    // ----- Start of unmanaged code area for constructor Wrong_field_nameYaml
-    // ----- End of unmanaged code area for constructor Wrong_field_nameYaml
+        // ----- Start of unmanaged code area for constructor Wrong_field_nameYaml
+
+        // ----- End of unmanaged code area for constructor Wrong_field_nameYaml
         val get = getAction { input: (GetOptCodes, GetCodes) =>
             val (optCodes, codes) = input
             // ----- Start of unmanaged code area for action  Wrong_field_nameYaml.get

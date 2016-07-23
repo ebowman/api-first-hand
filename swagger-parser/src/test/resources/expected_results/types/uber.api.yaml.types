@@ -29,7 +29,7 @@
 		Field("definitions" / "Activities" / "offset", Opt(Intgr)), 
 		Field("definitions" / "Activities" / "limit", Opt(Intgr)), 
 		Field("definitions" / "Activities" / "count", Opt(Intgr)), 
-		Field("definitions" / "Activities" / "history", Opt(Arr(TypeDef("definitions" / "Activity", Seq(
+		Field("definitions" / "Activities" / "history", Opt(ArrResult(TypeDef("definitions" / "Activity", Seq(
 			Field("definitions" / "Activity" / "uuid", Opt(Str)))))))))
 "definitions" / "Error" ->
 	TypeDef("definitions" / "Error", Seq(

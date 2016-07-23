@@ -55,7 +55,7 @@ object split_petstore_api_yaml extends WithModel {
 	Reference("⌿paths⌿/pets/findByStatus⌿get⌿status⌿Opt") → 
 		Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "multi"),
 	Reference("⌿paths⌿/users/createWithList⌿post⌿body⌿Opt") → 
-		Arr(TypeRef(Reference("⌿paths⌿/users/{username}⌿put⌿body⌿Opt")), TypeMeta(None, List()), "csv"),
+		ArrResult(TypeRef(Reference("⌿paths⌿/users/{username}⌿put⌿body⌿Opt")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/pets/findByStatus⌿get⌿responses⌿200") → 
 		ArrResult(TypeRef(Reference("⌿paths⌿/pets⌿post⌿body⌿Opt")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/pets⌿post⌿body⌿Opt") → 

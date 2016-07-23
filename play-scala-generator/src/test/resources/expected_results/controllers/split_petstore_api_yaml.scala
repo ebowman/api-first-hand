@@ -24,8 +24,9 @@ import javax.inject._
 package split.petstore.api.yaml {
 
     class SplitPetstoreApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends SplitPetstoreApiYamlBase {
-    // ----- Start of unmanaged code area for constructor SplitPetstoreApiYaml
-    // ----- End of unmanaged code area for constructor SplitPetstoreApiYaml
+        // ----- Start of unmanaged code area for constructor SplitPetstoreApiYaml
+
+        // ----- End of unmanaged code area for constructor SplitPetstoreApiYaml
         val findPetsByTags = findPetsByTagsAction { (tags: PetsFindByStatusGetStatus) =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.findPetsByTags
             NotImplementedYet

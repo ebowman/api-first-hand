@@ -3,6 +3,6 @@
 		Field("definitions" / "Activity" / "actions", Opt(Str))))
 "definitions" / "Example" ->
 	TypeDef("definitions" / "Example", Seq(
-		Field("definitions" / "Example" / "messages", Opt(Arr(Arr(TypeDef("definitions" / "Activity", Seq(
+		Field("definitions" / "Example" / "messages", Opt(ArrResult(ArrResult(TypeDef("definitions" / "Activity", Seq(
 			Field("definitions" / "Activity" / "actions", Opt(Str)))))))), 
-		Field("definitions" / "Example" / "nestedArrays", Opt(Arr(Arr(Arr(Arr(Str))))))))
+		Field("definitions" / "Example" / "nestedArrays", Opt(ArrResult(ArrResult(ArrResult(ArrResult(Str))))))))

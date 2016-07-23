@@ -24,8 +24,9 @@ import javax.inject._
 package hackweek.yaml {
 
     class HackweekYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends HackweekYamlBase {
-    // ----- Start of unmanaged code area for constructor HackweekYaml
-    // ----- End of unmanaged code area for constructor HackweekYaml
+        // ----- Start of unmanaged code area for constructor HackweekYaml
+
+        // ----- End of unmanaged code area for constructor HackweekYaml
         val getschemaModel = getschemaModelAction { (root: ModelSchemaRoot) =>  
             // ----- Start of unmanaged code area for action  HackweekYaml.getschemaModel
             NotImplementedYet

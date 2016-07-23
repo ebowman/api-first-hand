@@ -26,8 +26,9 @@ import java.io.File
 package form_data.yaml {
 
     class Form_dataYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends Form_dataYamlBase {
-    // ----- Start of unmanaged code area for constructor Form_dataYaml
-    // ----- End of unmanaged code area for constructor Form_dataYaml
+        // ----- Start of unmanaged code area for constructor Form_dataYaml
+
+        // ----- End of unmanaged code area for constructor Form_dataYaml
         val postmultipart = postmultipartAction { input: (String, BothPostYear, MultipartPostAvatar) =>
             val (name, year, avatar) = input
             // ----- Start of unmanaged code area for action  Form_dataYaml.postmultipart

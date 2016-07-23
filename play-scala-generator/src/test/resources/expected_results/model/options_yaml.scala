@@ -1,12 +1,11 @@
 
 
-    import de.zalando.play.controllers.ArrayWrapper
 
 
 //noinspection ScalaStyle
 package object options_yaml {
 
-    type BasicRequired = ArrayWrapper[String]
+    type BasicRequired = Seq[String]
     type BasicOptional = Option[BasicRequired]
 
 

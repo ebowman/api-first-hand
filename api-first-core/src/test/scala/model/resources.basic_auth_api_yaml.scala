@@ -27,7 +27,7 @@ object basic_auth_api_yaml extends WithModel {
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
 def calls: Seq[ApiCall] = Seq(
-	ApiCall(GET, Path(Reference("⌿")), 
+	ApiCall(GET, Path(Reference("⌿")),
 		HandlerCall(
 			"basic.auth.api.yaml",
 			"BasicAuthApiYaml",
@@ -36,18 +36,18 @@ def calls: Seq[ApiCall] = Seq(
 			Seq(
 
 				)
-			), 
-		Set.empty[MimeType], 
-		Set.empty[MimeType], 
-		Map.empty[String, Seq[Class[Exception]]], 
+			),
+		Set.empty[MimeType],
+		Set.empty[MimeType],
+		Map.empty[String, Seq[Class[Exception]]],
 		TypesResponseInfo(
 			Map[Int, ParameterRef](
 			200 -> ParameterRef(Reference("⌿paths⌿/⌿get⌿responses⌿200"))
-		), None), 
+		), None),
 		StateResponseInfo(
 				Map[Int, State](
 					200 -> Self
-			), None), 
+			), None),
 		Set(
 			BasicConstraint("basicAuth", Basic(Some("HTTP Basic Authentication. Works over `HTTP` and `HTTPS`")))
 		)))

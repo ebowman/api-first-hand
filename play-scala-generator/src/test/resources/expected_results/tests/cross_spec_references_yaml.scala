@@ -27,7 +27,6 @@ import org.scalatestplus.play.{OneAppPerTest, WsScalaTestClient}
 
 import Generators._
 
-import de.zalando.play.controllers.ArrayWrapper
 import scala.math.BigInt
 
 //noinspection ScalaStyle

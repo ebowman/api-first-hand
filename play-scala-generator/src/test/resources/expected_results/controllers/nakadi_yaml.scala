@@ -24,8 +24,9 @@ import javax.inject._
 package nakadi.yaml {
 
     class NakadiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends NakadiYamlBase {
-    // ----- Start of unmanaged code area for constructor NakadiYaml
-    // ----- End of unmanaged code area for constructor NakadiYaml
+        // ----- Start of unmanaged code area for constructor NakadiYaml
+
+        // ----- End of unmanaged code area for constructor NakadiYaml
         val nakadiHackGet_metrics = nakadiHackGet_metricsAction {  _ =>  
             // ----- Start of unmanaged code area for action  NakadiYaml.nakadiHackGet_metrics
             NotImplementedYet

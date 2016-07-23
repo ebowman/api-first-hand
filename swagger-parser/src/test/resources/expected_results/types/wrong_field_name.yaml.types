@@ -1,6 +1,6 @@
 "definitions" / "StatusAndCode" ->
 	TypeDef("definitions" / "StatusAndCode", Seq(
-		Field("definitions" / "StatusAndCode" / "Status", EnumTrait(Str)),
+		Field("definitions" / "StatusAndCode" / "Status", EnumTrait(Str)), 
 		Field("definitions" / "StatusAndCode" / "message", Str)))
 "definitions" / "Status" ->
 	EnumTrait(Str)
@@ -10,5 +10,5 @@
 	Opt(EnumTrait(Str))
 "paths" / "/" / "get" / "responses" / "200" ->
 	TypeDef("definitions" / "StatusAndCode", Seq(
-		Field("definitions" / "StatusAndCode" / "Status", EnumTrait(Str)),
+		Field("definitions" / "StatusAndCode" / "Status", EnumTrait(Str)), 
 		Field("definitions" / "StatusAndCode" / "message", Str)))

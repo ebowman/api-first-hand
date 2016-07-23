@@ -3,7 +3,6 @@ package uber.api
 
     import java.util.UUID
     import scala.math.BigDecimal
-    import de.zalando.play.controllers.ArrayWrapper
 
     import de.zalando.play.controllers.PlayPathBindables
 
@@ -19,7 +18,7 @@ package object yaml {
     type ProductsGetResponses200 = Seq[Product]
     type PriceEstimateHigh_estimate = Option[BigDecimal]
     type EstimatesPriceGetResponses200 = Seq[PriceEstimate]
-    type ActivitiesHistoryOpt = ArrayWrapper[Activity]
+    type ActivitiesHistoryOpt = Seq[Activity]
 
 
 import play.api.mvc.{QueryStringBindable, PathBindable}

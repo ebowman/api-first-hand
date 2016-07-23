@@ -24,8 +24,9 @@ import javax.inject._
 package echo {
 
     class EchoHandler @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends EchoHandlerBase {
-    // ----- Start of unmanaged code area for constructor EchoHandler
-    // ----- End of unmanaged code area for constructor EchoHandler
+        // ----- Start of unmanaged code area for constructor EchoHandler
+
+        // ----- End of unmanaged code area for constructor EchoHandler
         val method = methodAction {  _ =>  
             // ----- Start of unmanaged code area for action  EchoHandler.method
             NotImplementedYet
@@ -37,8 +38,9 @@ package echo {
 package echo {
 
     class EchoApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends EchoApiYamlBase {
-    // ----- Start of unmanaged code area for constructor EchoApiYaml
-    // ----- End of unmanaged code area for constructor EchoApiYaml
+        // ----- Start of unmanaged code area for constructor EchoApiYaml
+
+        // ----- End of unmanaged code area for constructor EchoApiYaml
         val post = postAction { input: (PostName, PostName) =>
             val (name, year) = input
             // ----- Start of unmanaged code area for action  EchoApiYaml.post

@@ -27,8 +27,8 @@ object Generators extends JsValueGenerators {
 
     def StatusAndCodeGenerator = for {
         message <- arbitrary[String]
-        code <- StatusGenerator
-    } yield StatusAndCode(message, code)
+        Status <- StatusGenerator
+    } yield StatusAndCode(message, Status)
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
 

@@ -4,7 +4,6 @@ import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 import play.api.libs.json.scalacheck.JsValueGenerators
 import Arbitrary._
-import de.zalando.play.controllers.ArrayWrapper
 import java.util.UUID
 
 object Generators extends JsValueGenerators {
@@ -32,11 +31,11 @@ object Generators extends JsValueGenerators {
     def TopicsTopicEventsGetStream_timeoutGenerator = Gen.option(arbitrary[Int])
     def IntGenerator = arbitrary[Int]
     def EventEvent_typeGenerator = Gen.option(arbitrary[String])
-    def SimpleStreamEventEventsOptGenerator = _genList(EventGenerator, "csv")
+    def SimpleStreamEventEventsOptGenerator = Gen.containerOf[List,Event](EventGenerator)
     def EventMetaDataParent_idGenerator = Gen.option(arbitrary[UUID])
     def EventMetadataGenerator = Gen.option(EventMetaDataNameClashGenerator)
     def NullGenerator = arbitrary[Null]
-    def EventMetaDataScopesOptGenerator = _genList(arbitrary[String], "csv")
+    def EventMetaDataScopesOptGenerator = Gen.containerOf[List,String](arbitrary[String])
     def TopicsTopicPartitionsGetResponses200Generator = Gen.containerOf[List,TopicPartition](TopicPartitionGenerator)
     def TopicsTopicEventsBatchPostEventGenerator = Gen.option(EventGenerator)
     def SimpleStreamEventEventsGenerator = Gen.option(SimpleStreamEventEventsOptGenerator)
@@ -91,9 +90,6 @@ object Generators extends JsValueGenerators {
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
 
-    def _genList[T](gen: Gen[T], format: String): Gen[ArrayWrapper[T]] = for {
-        items <- Gen.containerOf[List,T](gen)
-    } yield ArrayWrapper(format)(items)
     
     
     
