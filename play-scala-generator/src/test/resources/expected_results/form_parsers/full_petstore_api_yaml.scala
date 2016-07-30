@@ -7,7 +7,7 @@ import play.api.mvc.{AnyContent, Request}
 import de.zalando.play.controllers.PlayBodyParsing
 
 import de.zalando.play.controllers.ArrayWrapper
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 
 import de.zalando.play.controllers.PlayPathBindables
 

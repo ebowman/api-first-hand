@@ -5,8 +5,8 @@ import de.zalando.play.controllers._
 import PlayBodyParsing._
 import PlayValidations._
 
-import org.joda.time.DateTime
-import org.joda.time.LocalDate
+import java.time.ZonedDateTime
+import java.time.LocalDate
 import de.zalando.play.controllers.BinaryString
 import BinaryString._
 import de.zalando.play.controllers.Base64String
@@ -19,11 +19,11 @@ class StringPostString_optionalOptConstraints(override val instance: String) ext
 class StringPostString_optionalOptValidator(instance: String) extends RecursiveValidator {
     override val validators = Seq(new StringPostString_optionalOptConstraints(instance))
 }
-class StringPostDate_time_requiredConstraints(override val instance: DateTime) extends ValidationBase[DateTime] {
-    override def constraints: Seq[Constraint[DateTime]] =
+class StringPostDate_time_requiredConstraints(override val instance: ZonedDateTime) extends ValidationBase[ZonedDateTime] {
+    override def constraints: Seq[Constraint[ZonedDateTime]] =
         Seq()
 }
-class StringPostDate_time_requiredValidator(instance: DateTime) extends RecursiveValidator {
+class StringPostDate_time_requiredValidator(instance: ZonedDateTime) extends RecursiveValidator {
     override val validators = Seq(new StringPostDate_time_requiredConstraints(instance))
 }
 class StringPostDate_requiredConstraints(override val instance: LocalDate) extends ValidationBase[LocalDate] {
@@ -82,11 +82,11 @@ class StringPostBase64requiredConstraints(override val instance: String) extends
 class StringPostBase64requiredValidator(instance: Base64String) extends RecursiveValidator {
     override val validators = Seq(new StringPostBase64requiredConstraints(instance))
 }
-class StringPostDate_time_optionalOptConstraints(override val instance: DateTime) extends ValidationBase[DateTime] {
-    override def constraints: Seq[Constraint[DateTime]] =
+class StringPostDate_time_optionalOptConstraints(override val instance: ZonedDateTime) extends ValidationBase[ZonedDateTime] {
+    override def constraints: Seq[Constraint[ZonedDateTime]] =
         Seq()
 }
-class StringPostDate_time_optionalOptValidator(instance: DateTime) extends RecursiveValidator {
+class StringPostDate_time_optionalOptValidator(instance: ZonedDateTime) extends RecursiveValidator {
     override val validators = Seq(new StringPostDate_time_optionalOptConstraints(instance))
 }
 class StringPostBase64optionalOptConstraints(override val instance: String) extends ValidationBase[String] {
@@ -120,7 +120,7 @@ class StringPostBase64optionalValidator(instance: StringPostBase64optional) exte
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
 // ----- call validations -----
-class StringPostValidator(string_required: String, password_optional: StringPostPassword_optional, date_required: LocalDate, binary_optional: StringPostBinary_optional, date_optional: StringPostDate_optional, base64required: Base64String, base64optional: StringPostBase64optional, string_optional: StringPostString_optional, date_time_required: DateTime, password_required: String, date_time_optional: StringPostDate_time_optional) extends RecursiveValidator {
+class StringPostValidator(string_required: String, password_optional: StringPostPassword_optional, date_required: LocalDate, binary_optional: StringPostBinary_optional, date_optional: StringPostDate_optional, base64required: Base64String, base64optional: StringPostBase64optional, string_optional: StringPostString_optional, date_time_required: ZonedDateTime, password_required: String, date_time_optional: StringPostDate_time_optional) extends RecursiveValidator {
     override val validators = Seq(
         new StringPostString_requiredValidator(string_required), 
     

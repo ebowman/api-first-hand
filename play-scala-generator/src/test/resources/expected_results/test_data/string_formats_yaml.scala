@@ -8,9 +8,9 @@ import de.zalando.play.controllers.Base64String
 import Base64String._
 import de.zalando.play.controllers.BinaryString
 import BinaryString._
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 import java.util.UUID
-import org.joda.time.LocalDate
+import java.time.LocalDate
 
 object Generators extends JsValueGenerators {
     
@@ -27,7 +27,7 @@ object Generators extends JsValueGenerators {
     
     def GetBase64Generator = Gen.option(arbitrary[Base64String])
     def BinaryStringGenerator = arbitrary[BinaryString]
-    def GetDate_timeGenerator = Gen.option(arbitrary[DateTime])
+    def GetDate_timeGenerator = Gen.option(arbitrary[ZonedDateTime])
     def GetUuidGenerator = Gen.option(arbitrary[UUID])
     def GetDateGenerator = Gen.option(arbitrary[LocalDate])
     def NullGenerator = arbitrary[Null]
@@ -38,12 +38,14 @@ object Generators extends JsValueGenerators {
 
     
     implicit lazy val arbLocalDate: Arbitrary[LocalDate] = Arbitrary(for {
-        l <- arbitrary[Long]
-    } yield new LocalDate(System.currentTimeMillis + l))
+        l <- arbitrary[Int]
+        epochSec = (System.currentTimeMillis + l) / 1000
+        epochDay = epochSec / 24 / 60 / 60
+    } yield LocalDate.ofEpochDay(epochDay))
     
-    implicit lazy val arbDateTime: Arbitrary[DateTime] = Arbitrary(for {
+    implicit lazy val arbDateTime: Arbitrary[ZonedDateTime] = Arbitrary(for {
         l <- arbitrary[Long]
-    } yield new DateTime(System.currentTimeMillis + l))
+    } yield ZonedDateTime.of(java.time.LocalDateTime.ofEpochSecond(l, 0, java.time.ZoneOffset.UTC), java.time.ZoneId.systemDefault()))
     
     implicit lazy val arbBinaryString: Arbitrary[BinaryString] = Arbitrary(for {
         s <- arbitrary[String]

@@ -5,7 +5,7 @@ import org.scalacheck.Arbitrary
 import play.api.libs.json.scalacheck.JsValueGenerators
 import Arbitrary._
 import de.zalando.play.controllers.ArrayWrapper
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 
 object Generators extends JsValueGenerators {
     
@@ -42,7 +42,7 @@ object Generators extends JsValueGenerators {
     def OrderPetIdGenerator = Gen.option(arbitrary[Long])
     def PetsFindByStatusGetResponses200Generator = Gen.containerOf[List,Pet](PetGenerator)
     def PetsPostBodyGenerator = Gen.option(PetGenerator)
-    def OrderShipDateGenerator = Gen.option(arbitrary[DateTime])
+    def OrderShipDateGenerator = Gen.option(arbitrary[ZonedDateTime])
     def UsersUsernamePutBodyGenerator = Gen.option(UserGenerator)
     def StoresOrderPostBodyGenerator = Gen.option(OrderGenerator)
     def OrderCompleteGenerator = Gen.option(arbitrary[Boolean])
@@ -100,9 +100,9 @@ object Generators extends JsValueGenerators {
     } yield ArrayWrapper(format)(items)
     
     
-    implicit lazy val arbDateTime: Arbitrary[DateTime] = Arbitrary(for {
+    implicit lazy val arbDateTime: Arbitrary[ZonedDateTime] = Arbitrary(for {
         l <- arbitrary[Long]
-    } yield new DateTime(System.currentTimeMillis + l))
+    } yield ZonedDateTime.of(java.time.LocalDateTime.ofEpochSecond(l, 0, java.time.ZoneOffset.UTC), java.time.ZoneId.systemDefault()))
     
     
     

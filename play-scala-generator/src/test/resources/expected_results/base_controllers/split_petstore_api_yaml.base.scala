@@ -10,7 +10,7 @@ import scala.concurrent.Future
 
 import scala.util._
 import de.zalando.play.controllers.ArrayWrapper
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 
 import de.zalando.play.controllers.PlayPathBindables
 

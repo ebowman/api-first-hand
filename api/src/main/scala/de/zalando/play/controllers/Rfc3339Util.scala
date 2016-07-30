@@ -1,7 +1,7 @@
 package de.zalando.play.controllers
 
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.{ DateTime, LocalDate }
+import java.time.format.{ DateTimeFormatter, DateTimeParseException }
+import java.time.{ LocalDate, ZonedDateTime }
 
 /**
  * An utility class for parsing date and date-time inputs as required by RFC3339
@@ -17,24 +17,24 @@ import org.joda.time.{ DateTime, LocalDate }
  */
 object Rfc3339Util {
 
-  private val fullDate = DateTimeFormat.forPattern("yyyy-MM-dd")
-  private val shortDateTime = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ")
-  private val shortDTWithTicks = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
-  private val fullDTWithTicks = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
-  private val dateTime = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ")
+  private val fullDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+  private val shortDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ")
+  private val shortDTWithTicks = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+  private val fullDTWithTicks = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'")
+  private val dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSZ")
 
-  def parseDateTime(datestring: String): DateTime =
+  def parseDateTime(datestring: String): ZonedDateTime =
     if (datestring.endsWith("Z") || datestring.endsWith("z")) parseFull(datestring)
     else parseParts(datestring)
 
   def parseDate(datestring: String): LocalDate =
-    fullDate.parseDateTime(datestring).toLocalDate
+    LocalDate.parse(datestring, fullDate)
 
-  def writeDate(date: LocalDate): String = fullDate.print(date)
+  def writeDate(date: LocalDate): String = fullDate.format(date)
 
-  def writeDateTime(date: DateTime): String = dateTime.print(date)
+  def writeDateTime(date: ZonedDateTime): String = dateTime.format(date)
 
-  private def parseParts(datestring: String): DateTime = {
+  private def parseParts(datestring: String): ZonedDateTime = {
     //step one, split off the timezone.
     val sepChar = if (datestring.indexOf('+') > 0) '+' else '-'
     val firstpart = datestring.substring(0, datestring.lastIndexOf(sepChar.toInt))
@@ -43,17 +43,18 @@ object Rfc3339Util {
     val thirdpart = secondpart.substring(0, secondpart.indexOf(':')) + secondpart.substring(secondpart.indexOf(':') + 1)
     val dstring = firstpart + thirdpart
     try {
-      shortDateTime.parseDateTime(dstring)
+      ZonedDateTime.parse(dstring, shortDateTime)
     } catch {
-      case pe: IllegalArgumentException => dateTime.parseDateTime(dstring)
+      case pe: DateTimeParseException =>
+        ZonedDateTime.parse(dstring, dateTime)
     }
   }
 
-  private def parseFull(datestring: String): DateTime = {
+  private def parseFull(datestring: String): ZonedDateTime = {
     try {
-      shortDTWithTicks.parseDateTime(datestring)
+      ZonedDateTime.parse(datestring, shortDTWithTicks)
     } catch {
-      case p: IllegalArgumentException => fullDTWithTicks.parseDateTime(datestring)
+      case p: DateTimeParseException => ZonedDateTime.parse(datestring, fullDTWithTicks)
     }
   }
 

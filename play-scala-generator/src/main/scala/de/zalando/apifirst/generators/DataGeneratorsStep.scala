@@ -41,7 +41,7 @@ trait DataGeneratorsStep extends EnrichmentStep[Type] {
 
   private def containerGenerator(k: Reference, v: Type)(table: DenotationTable): Map[String, Any] = {
     Map(
-      GENERATOR_NAME -> generatorNameForType(v, table),
+      GENERATOR_NAME -> generatorNameForType(v, table, k),
       "creator_method" -> prepend("create", generator(k, table)),
       "generator" -> generator(k, table)
     )
@@ -49,7 +49,7 @@ trait DataGeneratorsStep extends EnrichmentStep[Type] {
 
   private def enumGenerator(k: Reference, v: Type)(table: DenotationTable): Map[String, Any] = {
     Map(
-      GENERATOR_NAME -> generatorNameForType(v, table),
+      GENERATOR_NAME -> generatorNameForType(v, table, k),
       "creator_method" -> prepend("create", generator(k, table)),
       "generator" -> generator(k, table)
     )
@@ -62,31 +62,32 @@ trait DataGeneratorsStep extends EnrichmentStep[Type] {
         "fields" -> typeFields(table, k).map { f =>
           Map(
             "name" -> escape(f.name.simple),
-            "generator" -> generatorNameForType(f.tpe, table)
+            "generator" -> generatorNameForType(f.tpe, table, k)
           )
         }
       )
 
-  private val generatorNameForType: (Type, DenotationTable) => String = {
-    case (s: PrimitiveType, table) => primitiveType(s, table)
-    case (c: Container, table) => containerType(c, table)
-    case (TypeRef(r), table) => generator(r, table)
-    case (d: TypeDef, table) => generator(d.name, table)
-    case (c: Composite, table) => generator(c.name, table)
+  private val generatorNameForType: (Type, DenotationTable, Reference) => String = {
+    case (s: PrimitiveType, table, _) => primitiveType(s, table)
+    case (c: Container, table, k) => containerType(c, table, k)
+    case (TypeRef(r), table, _) => generator(r, table)
+    case (d: TypeDef, table, _) => generator(d.name, table)
+    case (c: Composite, table, _) => generator(c.name, table)
     case o =>
       throw new Exception("Unexpected request for generator name for: " + o.toString)
   }
 
-  private def containerType(c: Container, t: DenotationTable): String = {
-    val innerGenerator = generatorNameForType(c.tpe, t)
+  private def containerType(c: Container, t: DenotationTable, ref: Reference): String = {
+    val innerGenerator = generatorNameForType(c.tpe, t, ref)
     val className = typeNameDenotation(t, c.tpe.name)
     c match {
       case Opt(tpe, _) => s"Gen.option($innerGenerator)"
       case Arr(tpe, _, format) => s"""_genList($innerGenerator, "$format")"""
       case ArrResult(tpe, _) => s"Gen.containerOf[List,$className]($innerGenerator)"
-      case EnumTrait(tpe, _, leaves) =>
+      case e @ EnumTrait(tpe, _, leaves) =>
         val choice = leaves.map { l => memberNameDenotation(t, l.name) }.mkString(", ")
-        s"""Gen.oneOf(Seq($choice))"""
+        val outer = memberNameDenotation(t, ref)
+        s"""{ import $outer._ ; Gen.oneOf(Seq($choice)) }"""
       case c @ CatchAll(tpe, _) => s"_genMap[String,$className](arbitrary[String], $innerGenerator)"
     }
   }

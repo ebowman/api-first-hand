@@ -5,7 +5,7 @@ import scala.concurrent.Future
 import play.api.mvc._
 import de.zalando.play.controllers.SwaggerSecurityExtractors._
 import de.zalando.play.controllers.ArrayWrapper
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 
 object SecurityExtractorsExecutionContext {
     // this ExecutionContext might be overridden if default configuration is not suitable for some reason

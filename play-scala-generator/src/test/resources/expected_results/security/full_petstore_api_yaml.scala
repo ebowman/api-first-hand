@@ -4,7 +4,7 @@ import scala.concurrent.Future
 import play.api.mvc._
 import de.zalando.play.controllers.{FutureAuthenticatedBuilder,PlayBodyParsing}
 import de.zalando.play.controllers.ArrayWrapper
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 
 
 trait FullPetstoreApiYamlSecurity extends SecurityExtractors {

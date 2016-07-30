@@ -31,9 +31,9 @@ import de.zalando.play.controllers.Base64String
 import Base64String._
 import de.zalando.play.controllers.BinaryString
 import BinaryString._
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 import java.util.UUID
-import org.joda.time.LocalDate
+import java.time.LocalDate
 
 //noinspection ScalaStyle
 class String_formats_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
