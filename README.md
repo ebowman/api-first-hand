@@ -232,8 +232,8 @@ When generated as Scala, the following mapping applies:
 | string      | string       |                | scala.String                                |
 | byte        | string       | byte           | de.zalando.play.controllers.Base64String    |
 | binary      | string       | binary         | de.zalando.play.controllers.BinaryString    |
-| date        | string       | date           | org.joda.time.LocalDate                     |
-| datetime    | string       | date-time      | org.joda.time.DateTime                      |
+| date        | string       | date           | java.time.LocalDate                         |
+| datetime    | string       | date-time      | java.time.ZonedDateTime                     |
 | password    | string       | password       | scala.String                                |
 | uuid        | string       | uuid           | java.util.UUID                              |
 | file        | file         |                | java.io.File                                |

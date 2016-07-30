@@ -72,7 +72,7 @@ object Generators extends JsValueGenerators {
     def LocationsSearchGetResponses200DataOptGenerator = Gen.containerOf[List,Location](LocationGenerator)
     def MediaSearchGetResponses200DataGenerator = Gen.option(MediaSearchGetResponses200DataOptGenerator)
     def UsersSelfFeedGetResponses200DataOptGenerator = Gen.containerOf[List,Media](MediaGenerator)
-    def UsersUser_idRelationshipPostActionOptGenerator = Gen.oneOf(Seq(Follow, Approve, Unfollow, Block, Unblock))
+    def UsersUser_idRelationshipPostActionOptGenerator = { import UsersUser_idRelationshipPostActionOpt._ ; Gen.oneOf(Seq(Follow, Approve, Unfollow, Block, Unblock)) }
     def MediaComments_DataOptGenerator = Gen.containerOf[List,Comment](CommentGenerator)
     def UsersUser_idGetResponses200DataGenerator = Gen.option(UserGenerator)
     def MediaVideosGenerator = Gen.option(MediaVideosOptGenerator)

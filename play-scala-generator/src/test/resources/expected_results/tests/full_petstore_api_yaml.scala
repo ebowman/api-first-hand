@@ -28,7 +28,7 @@ import org.scalatestplus.play.{OneAppPerTest, WsScalaTestClient}
 import Generators._
 
 import de.zalando.play.controllers.ArrayWrapper
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 
 //noinspection ScalaStyle
 class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {

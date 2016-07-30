@@ -2,7 +2,7 @@ package split.petstore.api
 
 
     import de.zalando.play.controllers.ArrayWrapper
-    import org.joda.time.DateTime
+    import java.time.ZonedDateTime
 
     import de.zalando.play.controllers.PlayPathBindables
 
@@ -18,7 +18,7 @@ package object yaml {
     type OrderPetId = Option[Long]
     type PetsFindByStatusGetResponses200 = Seq[Pet]
     type PetsPostBody = Option[Pet]
-    type OrderShipDate = Option[DateTime]
+    type OrderShipDate = Option[ZonedDateTime]
     type UsersUsernamePutBody = Option[User]
     type StoresOrderPostBody = Option[Order]
     type OrderComplete = Option[Boolean]

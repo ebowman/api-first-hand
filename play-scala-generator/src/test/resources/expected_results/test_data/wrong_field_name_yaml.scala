@@ -16,10 +16,10 @@ object Generators extends JsValueGenerators {
     
 
     
-    def GetCodesGenerator = Gen.oneOf(Seq(Get, GET))
+    def GetCodesGenerator = { import GetCodes._ ; Gen.oneOf(Seq(Get, GET)) }
     def GetOptCodesGenerator = Gen.option(GetOptCodesOptGenerator)
-    def GetOptCodesOptGenerator = Gen.oneOf(Seq(Put, PUT))
-    def StatusGenerator = Gen.oneOf(Seq(OK, WARNING, ERROR))
+    def GetOptCodesOptGenerator = { import GetOptCodesOpt._ ; Gen.oneOf(Seq(Put, PUT)) }
+    def StatusGenerator = { import Status._ ; Gen.oneOf(Seq(OK, WARNING, ERROR)) }
     
 
     def createStatusAndCodeGenerator = _generate(StatusAndCodeGenerator)

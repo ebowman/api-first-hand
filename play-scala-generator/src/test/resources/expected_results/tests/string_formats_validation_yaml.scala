@@ -27,8 +27,8 @@ import org.scalatestplus.play.{OneAppPerTest, WsScalaTestClient}
 
 import Generators._
 
-import org.joda.time.DateTime
-import org.joda.time.LocalDate
+import java.time.ZonedDateTime
+import java.time.LocalDate
 import de.zalando.play.controllers.BinaryString
 import BinaryString._
 import de.zalando.play.controllers.Base64String
@@ -58,7 +58,7 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
 
 
     "POST /string" should {
-        def testInvalidInput(input: (String, StringPostPassword_optional, LocalDate, StringPostBinary_optional, StringPostDate_optional, Base64String, StringPostBase64optional, StringPostString_optional, DateTime, String, StringPostDate_time_optional)): Prop = {
+        def testInvalidInput(input: (String, StringPostPassword_optional, LocalDate, StringPostBinary_optional, StringPostDate_optional, Base64String, StringPostBase64optional, StringPostString_optional, ZonedDateTime, String, StringPostDate_time_optional)): Prop = {
 
             val (string_required, password_optional, date_required, binary_optional, date_optional, base64required, base64optional, string_optional, date_time_required, password_required, date_time_optional) = input
 
@@ -106,7 +106,7 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
             if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, StringPostPassword_optional, LocalDate, StringPostBinary_optional, StringPostDate_optional, Base64String, StringPostBase64optional, StringPostString_optional, DateTime, String, StringPostDate_time_optional)): Prop = {
+        def testValidInput(input: (String, StringPostPassword_optional, LocalDate, StringPostBinary_optional, StringPostDate_optional, Base64String, StringPostBase64optional, StringPostString_optional, ZonedDateTime, String, StringPostDate_time_optional)): Prop = {
             val (string_required, password_optional, date_required, binary_optional, date_optional, base64required, base64optional, string_optional, date_time_required, password_required, date_time_optional) = input
             
             val parsed_binary_optional = parserConstructor("application/json").writeValueAsString(binary_optional)
@@ -170,7 +170,7 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
                         base64required <- Base64StringGenerator
                         base64optional <- StringPostBase64optionalGenerator
                         string_optional <- StringPostString_optionalGenerator
-                        date_time_required <- DateTimeGenerator
+                        date_time_required <- ZonedDateTimeGenerator
                         password_required <- StringGenerator
                         date_time_optional <- StringPostDate_time_optionalGenerator
                     
@@ -191,7 +191,7 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
                     base64required <- Base64StringGenerator
                     base64optional <- StringPostBase64optionalGenerator
                     string_optional <- StringPostString_optionalGenerator
-                    date_time_required <- DateTimeGenerator
+                    date_time_required <- ZonedDateTimeGenerator
                     password_required <- StringGenerator
                     date_time_optional <- StringPostDate_time_optionalGenerator
                 

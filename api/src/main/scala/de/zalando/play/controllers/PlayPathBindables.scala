@@ -1,11 +1,11 @@
 package de.zalando.play.controllers
 
 import java.io.File
+import java.time.{ LocalDate, ZonedDateTime }
 import java.util.UUID
 
 import com.fasterxml.jackson.databind.{ MappingIterator, ObjectReader, ObjectWriter }
 import com.fasterxml.jackson.dataformat.csv.{ CsvMapper, CsvParser, CsvSchema }
-import org.joda.time.{ DateTime, LocalDate }
 import org.slf4j.LoggerFactory
 import play.api.mvc.{ PathBindable, QueryStringBindable }
 
@@ -52,7 +52,7 @@ object PlayPathBindables {
     (key: String, e: Exception) => "Cannot parse parameter %s as AnyVal: %s".format(key, e.getMessage)
   )
 
-  implicit object pathBindableDateTime extends PathBindable.Parsing[DateTime](
+  implicit object pathBindableDateTime extends PathBindable.Parsing[ZonedDateTime](
     Rfc3339Util.parseDateTime,
     Rfc3339Util.writeDateTime,
     (key: String, e: Exception) => "Cannot parse parameter %s as DateTime: %s".format(key, e.getMessage)
@@ -64,7 +64,7 @@ object PlayPathBindables {
     (key: String, e: Exception) => "Cannot parse parameter %s as LocalDate: %s".format(key, e.getMessage)
   )
 
-  implicit object queryBindableDateTime extends QueryStringBindable.Parsing[DateTime](
+  implicit object queryBindableDateTime extends QueryStringBindable.Parsing[ZonedDateTime](
     Rfc3339Util.parseDateTime,
     Rfc3339Util.writeDateTime,
     (key: String, e: Exception) => "Cannot parse parameter %s as DateTime: %s".format(key, e.getMessage)

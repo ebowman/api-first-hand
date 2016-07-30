@@ -9,9 +9,9 @@ import de.zalando.play.controllers.Base64String
 import Base64String._
 import de.zalando.play.controllers.BinaryString
 import BinaryString._
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 import java.util.UUID
-import org.joda.time.LocalDate
+import java.time.LocalDate
 // ----- constraints and wrapper validations -----
 class GetBase64OptConstraints(override val instance: String) extends ValidationBase[String] {
     override def constraints: Seq[Constraint[String]] =
@@ -27,11 +27,11 @@ class GetPetIdConstraints(override val instance: String) extends ValidationBase[
 class GetPetIdValidator(instance: BinaryString) extends RecursiveValidator {
     override val validators = Seq(new GetPetIdConstraints(instance))
 }
-class GetDate_timeOptConstraints(override val instance: DateTime) extends ValidationBase[DateTime] {
-    override def constraints: Seq[Constraint[DateTime]] =
+class GetDate_timeOptConstraints(override val instance: ZonedDateTime) extends ValidationBase[ZonedDateTime] {
+    override def constraints: Seq[Constraint[ZonedDateTime]] =
         Seq()
 }
-class GetDate_timeOptValidator(instance: DateTime) extends RecursiveValidator {
+class GetDate_timeOptValidator(instance: ZonedDateTime) extends RecursiveValidator {
     override val validators = Seq(new GetDate_timeOptConstraints(instance))
 }
 class GetUuidOptConstraints(override val instance: UUID) extends ValidationBase[UUID] {

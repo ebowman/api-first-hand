@@ -18,7 +18,6 @@ class Dependencies(playVersion: String, projectVersion: String, scalaVersion: St
   val jacksons = jacksonScala +: jacksonsJava
 
   val jsonRef     = "me.andrz.jackson"  % "jackson-json-reference-core" % "0.2.1"
-  val jodaTime    = "joda-time"         % "joda-time"         % "2.9.1"
   val commonsIO   = "commons-io"        % "commons-io"        % "2.5"
 
   val beard       =  "de.zalando"       %% "beard"            % "0.0.6"
@@ -45,7 +44,7 @@ class Dependencies(playVersion: String, projectVersion: String, scalaVersion: St
 
   val test = testLibs
 
-  val api = Seq(jodaTime, play, playClient) ++ jacksons
+  val api = Seq(play, playClient) ++ jacksons
 
   val playScalaGenerator = Seq(commonsIO, beard)
 
