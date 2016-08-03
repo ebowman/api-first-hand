@@ -1,0 +1,10 @@
+"definitions" / "pet" ->
+	TypeDef("definitions" / "pet", Seq(
+		Field("definitions" / "pet" / "id", Lng), 
+		Field("definitions" / "pet" / "name", Str), 
+		Field("definitions" / "pet" / "tag", Opt(Str)), 
+		Field("definitions" / "pet" / "children", Opt(ArrResult(TypeDef("definitions" / "pet", Seq(
+			Field("definitions" / "pet" / "id", Lng), 
+			Field("definitions" / "pet" / "name", Str), 
+			Field("definitions" / "pet" / "tag", Opt(Str)), 
+			Field("definitions" / "pet" / "children", Opt(ArrResult(TypeRef("definitions" / "pet")))))))))))

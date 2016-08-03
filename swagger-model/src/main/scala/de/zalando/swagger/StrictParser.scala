@@ -95,7 +95,7 @@ private[swagger] abstract class StrictSwaggerParser extends StrictParser {
     val arbitraryMaxDepth = 200
     p.setMapperFactory(mapperFactory)
     p.setMaxDepth(arbitraryMaxDepth)
-    p.setStopOnCircular(false)
+    p.setStopOnCircular(true)
     p.setPreserveRefs(true)
     p
   }
