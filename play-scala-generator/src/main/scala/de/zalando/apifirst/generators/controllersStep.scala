@@ -119,7 +119,9 @@ trait CallControllersStep extends EnrichmentStep[ApiCall]
 
   private def parsers(f: Set[String] => Set[String]) = {
     val relevantMimeTypes = f(NewPlayBodyParsing.defaultParsers.keySet)
-    NewPlayBodyParsing.defaultParsers.withFilter { case (k, v) => relevantMimeTypes.contains(k) }.map { case (k, v) => Map("name" -> k, "parser" -> v) }
+    relevantMimeTypes.map { k =>
+      k -> NewPlayBodyParsing.defaultParsers.getOrElse(k, "")
+    }.toMap.map { case (k, v) => Map("name" -> k, "parser" -> v) }
   }
 
   private def securityData(call: ApiCall)(implicit table: DenotationTable): Map[String, Any] = {
@@ -304,8 +306,8 @@ object NewPlayBodyParsing {
   val defaultParsers: Map[String, String] = Map(
     "text/xml" -> xml,
     "application/xml" -> xml,
-    "text/json" -> xml,
-    "application/json" -> xml
+    "text/json" -> json,
+    "application/json" -> json
   // "\"\"\"application/.*\\+xml.*\"\"\".r" -> xml,
   // "\"\"\"application/.*\\+json.*\"\"\".r" -> xml
   )

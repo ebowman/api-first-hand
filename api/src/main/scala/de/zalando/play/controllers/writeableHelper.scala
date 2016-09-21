@@ -68,9 +68,17 @@ trait ResultWrapper[ResultT] {
   val emptyByteString = akka.util.CompactByteString.empty
   def statusCode: Int
   def result: ResultT
-  def toResult(implicit writer: Writeable[ResultT]): play.api.mvc.Result =
+  def toResultWithWriter(implicit writer: Writeable[ResultT]): play.api.mvc.Result =
     if (statusCode / 100 == 3)
       Redirect(result.toString, statusCode)
     else
       Status(statusCode)(result)
+
+  def writer: String => Option[Writeable[ResultT]]
+  def toResult(mimeType: String): Option[play.api.mvc.Result] =
+    if (statusCode / 100 == 3)
+      Option(Redirect(result.toString, statusCode))
+    else
+      writer(mimeType).map(Status(statusCode)(result)(_))
+
 }
