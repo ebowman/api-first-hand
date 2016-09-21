@@ -83,6 +83,9 @@ trait CallControllersStep extends EnrichmentStep[ApiCall]
 
     val (nonEmptyActionResults, nullActionResults) = allActionResults.partition(_("type") != "Null")
 
+    val standardMimeTypes = parsers(call.mimeIn.map(_.name).intersect)
+    val customMimeTypes = parsers(call.mimeIn.map(_.name).diff)
+
     Map(
       "full_result_types" -> nonEmptyActionResults,
       "empty_result_types" -> nullActionResults,
@@ -102,6 +105,9 @@ trait CallControllersStep extends EnrichmentStep[ApiCall]
       "produces" -> mimeTypes2StringList(call.mimeOut),
       "consumes" -> mimeTypes2StringList(call.mimeIn),
 
+      "default_content_types" -> standardMimeTypes,
+      "custom_content_types" -> customMimeTypes,
+
       "needs_custom_writers" -> customWriters,
       "needs_custom_readers" -> customReaders,
       "has_no_validations" -> allValidations.isEmpty,
@@ -109,6 +115,11 @@ trait CallControllersStep extends EnrichmentStep[ApiCall]
       "form_parameters" -> formParams,
       "result_class_prefix" -> escape(capitalize("$", call.handler.method))
     ) ++ nameMappings ++ nameParamPair ++ securityData(call)
+  }
+
+  private def parsers(f: Set[String] => Set[String]) = {
+    val relevantMimeTypes = f(NewPlayBodyParsing.defaultParsers.keySet)
+    NewPlayBodyParsing.defaultParsers.withFilter { case (k, v) => relevantMimeTypes.contains(k) }.map { case (k, v) => Map("name" -> k, "parser" -> v) }
   }
 
   private def securityData(call: ApiCall)(implicit table: DenotationTable): Map[String, Any] = {
@@ -285,4 +296,17 @@ object ControllersCommons {
   val ceof = "// ----- End of unmanaged code area for constructor "
   val csof = "// ----- Start of unmanaged code area for constructor "
 
+}
+
+object NewPlayBodyParsing {
+  private val json = "play.api.mvc.BodyParsers.parse.tolerantJson"
+  private val xml = "play.api.mvc.BodyParsers.parse.tolerantXml"
+  val defaultParsers: Map[String, String] = Map(
+    "text/xml" -> xml,
+    "application/xml" -> xml,
+    "text/json" -> xml,
+    "application/json" -> xml
+  // "\"\"\"application/.*\\+xml.*\"\"\".r" -> xml,
+  // "\"\"\"application/.*\\+json.*\"\"\".r" -> xml
+  )
 }
