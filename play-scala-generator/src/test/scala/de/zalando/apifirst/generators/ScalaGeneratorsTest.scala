@@ -104,7 +104,7 @@ class ScalaGeneratorsTest extends FunSpec with MustMatchers {
           |import scala.collection.immutable.Map
           |object Generators extends JsValueGenerators {
           |   def createAllGenerator = _generate(AllGenerator)
-          |   def AllGenerator = _genMap[String,Boolean](arbitrary[String], arbitrary[Boolean])
+          |   def AllGenerator: Gen[Map[String, Boolean]] = _genMap[String,Boolean](arbitrary[String], arbitrary[Boolean])
           |   def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
           |   def _genMap[K,V](keyGen: Gen[K], valGen: Gen[V]): Gen[Map[K,V]] = for {
           |     keys <- Gen.containerOf[List,K](keyGen)

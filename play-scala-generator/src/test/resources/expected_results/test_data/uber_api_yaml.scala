@@ -28,10 +28,10 @@ object Generators extends JsValueGenerators {
     def ProfilePictureGenerator = Gen.option(arbitrary[String])
     def ErrorCodeGenerator = Gen.option(arbitrary[Int])
     def EstimatesTimeGetCustomer_uuidGenerator = Gen.option(arbitrary[UUID])
-    def ProductsGetResponses200Generator = Gen.containerOf[List,Product](ProductGenerator)
+    def ProductsGetResponses200Generator: Gen[List[Product]] = Gen.containerOf[List,Product](ProductGenerator)
     def PriceEstimateHigh_estimateGenerator = Gen.option(arbitrary[BigDecimal])
-    def EstimatesPriceGetResponses200Generator = Gen.containerOf[List,PriceEstimate](PriceEstimateGenerator)
-    def ActivitiesHistoryOptGenerator = Gen.containerOf[List,Activity](ActivityGenerator)
+    def EstimatesPriceGetResponses200Generator: Gen[List[PriceEstimate]] = Gen.containerOf[List,PriceEstimate](PriceEstimateGenerator)
+    def ActivitiesHistoryOptGenerator: Gen[List[Activity]] = Gen.containerOf[List,Activity](ActivityGenerator)
     
 
     def createActivityGenerator = _generate(ActivityGenerator)

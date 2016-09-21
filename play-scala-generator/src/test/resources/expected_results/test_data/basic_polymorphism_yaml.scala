@@ -17,7 +17,7 @@ object Generators extends JsValueGenerators {
     
 
     
-    def ZooTiersOptGenerator = Gen.containerOf[List,Pet](PetGenerator)
+    def ZooTiersOptGenerator: Gen[List[Pet]] = Gen.containerOf[List,Pet](PetGenerator)
     def ZooTiersGenerator = Gen.option(ZooTiersOptGenerator)
     def CatHuntingSkillGenerator = { import CatHuntingSkill._ ; Gen.oneOf(Seq(Clueless, Lazy, Adventurous, Aggressive)) }
     def PutDummyGenerator = Gen.option(PetGenerator)

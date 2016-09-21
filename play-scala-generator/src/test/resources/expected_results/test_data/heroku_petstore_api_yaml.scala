@@ -26,7 +26,7 @@ object Generators extends JsValueGenerators {
     def NullGenerator = arbitrary[Null]
     def BigIntGenerator = arbitrary[BigInt]
     def PutPetGenerator = Gen.option(PetGenerator)
-    def GetResponses200Generator = Gen.containerOf[List,Pet](PetGenerator)
+    def GetResponses200Generator: Gen[List[Pet]] = Gen.containerOf[List,Pet](PetGenerator)
     
 
     def createPetGenerator = _generate(PetGenerator)

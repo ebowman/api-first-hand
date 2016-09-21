@@ -16,7 +16,7 @@ object Generators extends JsValueGenerators {
     {{if test_data_aliases}}
 
     {{for alias in test_data_aliases}}
-    def {{alias.generator}} = {{alias.generator_name}}{{/for}}{{/if}}
+    def {{alias.generator}}{{if alias.generator_type}}{{alias.generator_type}}{{/if}} = {{alias.generator_name}}{{/for}}{{/if}}
     {{if test_data_classes}}
 
     {{for class in test_data_classes}}

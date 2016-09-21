@@ -16,8 +16,8 @@ object Generators extends JsValueGenerators {
     
 
     
-    def KeyedArraysAdditionalPropertiesGenerator = _genMap[String,KeyedArraysAdditionalPropertiesCatchAll](arbitrary[String], KeyedArraysAdditionalPropertiesCatchAllGenerator)
-    def KeyedArraysAdditionalPropertiesCatchAllGenerator = Gen.containerOf[List,BigInt](arbitrary[BigInt])
+    def KeyedArraysAdditionalPropertiesGenerator: Gen[Map[String, KeyedArraysAdditionalPropertiesCatchAll]] = _genMap[String,KeyedArraysAdditionalPropertiesCatchAll](arbitrary[String], KeyedArraysAdditionalPropertiesCatchAllGenerator)
+    def KeyedArraysAdditionalPropertiesCatchAllGenerator: Gen[List[BigInt]] = Gen.containerOf[List,BigInt](arbitrary[BigInt])
     
 
     def createKeyedArraysGenerator = _generate(KeyedArraysGenerator)

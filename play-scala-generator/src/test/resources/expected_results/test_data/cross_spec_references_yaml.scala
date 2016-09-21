@@ -36,12 +36,12 @@ object Generators extends JsValueGenerators {
     def ModelSchemaRootLinksGenerator = Gen.option(ModelSchemaRootLinksOptGenerator)
     def PetTagsGenerator = Gen.option(PetTagsOptGenerator)
     def ModelSchemaSilhouetteIdGenerator = { import ModelSchemaSilhouetteId._ ; Gen.oneOf(Seq(Kitchen, Bikini_top, Toys, Nightwear_combination, Bra, One_piece_underwear, Ball, Cleansing, Skincare, Jewellery, Headgear, Bustier, Beach_trouser, Bedroom, Lounge, Nail, Undershirt, Combination_clothing, Gloves, Fragrance, Other_equipment, Fitness, Bathroom, One_piece_nightwear, Sleeping_bag, Coat, Case, Sandals, Ankle_boots, Stocking, Shirt, Backpack, Face_cosmetic, Travel_equipment, Hair, Sneaker, Beauty_equipment, Bikini_combination, Backless_slipper, Beach_accessoires, Scarf, First_shoe, Voucher, Wallet, Peeling, Glasses, Boards, Sun, Shave, Low_shoe, Underwear_combination, Nightdress, Suit_accessoires, Watch, Headphones, Skates, Boots, Jacket, Etui, Night_shirt, Other_accessoires, Vest, Bag, System, Racket, Trouser, Lip_cosmetic, Keychain, Belt, Ballerina_shoe, One_piece_suit, Night_trouser, Skirt, Tights, Beach_shirt, Dress, Bicycle, Protector, Eye_cosmetic, Bathrobe, Bicycle_equipment, Pullover, One_piece_beachwear, Underpant, Living, Cardigan, Corsage, Shoe_accessoires, Umbrella, Pumps, Tent, T_shirt_top, Ski)) }
-    def PetPhotoUrlsGenerator = Gen.containerOf[List,String](arbitrary[String])
+    def PetPhotoUrlsGenerator: Gen[List[String]] = Gen.containerOf[List,String](arbitrary[String])
     def ModelSchemaLengthRegisterGenerator = Gen.option(arbitrary[String])
-    def ModelSchemaAgeGroupsGenerator = Gen.containerOf[List,ModelSchemaAgeGroupsArrResult](ModelSchemaAgeGroupsArrResultGenerator)
+    def ModelSchemaAgeGroupsGenerator: Gen[List[ModelSchemaAgeGroupsArrResult]] = Gen.containerOf[List,ModelSchemaAgeGroupsArrResult](ModelSchemaAgeGroupsArrResultGenerator)
     def PetCategoryGenerator = Gen.option(PetCategoryOptGenerator)
     def ModelSchemaAgeGroupsArrResultGenerator = { import ModelSchemaAgeGroupsArrResult._ ; Gen.oneOf(Seq(Baby, Kid, Teen, Adult)) }
-    def PetTagsOptGenerator = Gen.containerOf[List,PetCategoryOpt](PetCategoryOptGenerator)
+    def PetTagsOptGenerator: Gen[List[PetCategoryOpt]] = Gen.containerOf[List,PetCategoryOpt](PetCategoryOptGenerator)
     def ModelSchemaRootMetaGenerator = Gen.option(ModelSchemaRootMetaOptGenerator)
     
 
