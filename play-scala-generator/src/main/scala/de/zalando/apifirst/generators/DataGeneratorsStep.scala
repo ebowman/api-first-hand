@@ -42,7 +42,6 @@ trait DataGeneratorsStep extends EnrichmentStep[Type] {
   private def containerGenerator(k: Reference, v: Type)(table: DenotationTable): Map[String, Any] = {
     Map(
       GENERATOR_NAME -> generatorNameForType(v, table, k),
-      "generator_type" -> generatorTypeNameForType(v, table, k),
       "creator_method" -> prepend("create", generator(k, table)),
       "generator" -> generator(k, table)
     )
@@ -68,11 +67,6 @@ trait DataGeneratorsStep extends EnrichmentStep[Type] {
         }
       )
 
-  private val generatorTypeNameForType: (Type, DenotationTable, Reference) => String = {
-    case (c: Container, table, k) => containerTypeName(c, table, k)
-    case _ => ""
-  }
-
   private val generatorNameForType: (Type, DenotationTable, Reference) => String = {
     case (s: PrimitiveType, table, _) => primitiveType(s, table)
     case (c: Container, table, k) => containerType(c, table, k)
@@ -95,15 +89,6 @@ trait DataGeneratorsStep extends EnrichmentStep[Type] {
         val outer = memberNameDenotation(t, ref)
         s"""{ import $outer._ ; Gen.oneOf(Seq($choice)) }"""
       case c @ CatchAll(tpe, _) => s"_genMap[String,$className](arbitrary[String], $innerGenerator)"
-    }
-  }
-
-  private def containerTypeName(c: Container, t: DenotationTable, ref: Reference): String = {
-    val className = typeNameDenotation(t, c.tpe.name)
-    c match {
-      case ArrResult(tpe, _) => s": Gen[List[$className]]"
-      case c @ CatchAll(tpe, _) => s": Gen[Map[String, $className]]"
-      case _ => ""
     }
   }
 
