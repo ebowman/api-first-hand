@@ -30,13 +30,13 @@ object Generators extends JsValueGenerators {
     def NullGenerator = arbitrary[Null]
     def PlantPlant_idGenerator = Gen.option(arbitrary[String])
     def PlantsGetLimitGenerator = Gen.option(arbitrary[BigInt])
-    def UsersGetResponses200Generator = Gen.containerOf[List,User](UserGenerator)
+    def UsersGetResponses200Generator: Gen[List[User]] = Gen.containerOf[List,User](UserGenerator)
     def ErrorCodeGenerator = Gen.option(arbitrary[Int])
-    def PlantsGetResponses200Generator = Gen.containerOf[List,Plant](PlantGenerator)
-    def AreasGetResponses200Generator = Gen.containerOf[List,Area](AreaGenerator)
+    def PlantsGetResponses200Generator: Gen[List[Plant]] = Gen.containerOf[List,Plant](PlantGenerator)
+    def AreasGetResponses200Generator: Gen[List[Area]] = Gen.containerOf[List,Area](AreaGenerator)
     def PlantsGetOffsetGenerator = Gen.option(arbitrary[BigInt])
-    def PlantsPlant_idPicturesGetResponses200Generator = Gen.containerOf[List,String](arbitrary[String])
-    def PlantsPlant_idWateringsGetResponses200Generator = Gen.containerOf[List,Watering](WateringGenerator)
+    def PlantsPlant_idPicturesGetResponses200Generator: Gen[List[String]] = Gen.containerOf[List,String](arbitrary[String])
+    def PlantsPlant_idWateringsGetResponses200Generator: Gen[List[Watering]] = Gen.containerOf[List,Watering](WateringGenerator)
     
 
     def createSunlightNeedsGenerator = _generate(SunlightNeedsGenerator)

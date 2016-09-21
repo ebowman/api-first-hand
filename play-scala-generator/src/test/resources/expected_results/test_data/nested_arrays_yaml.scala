@@ -21,14 +21,14 @@ object Generators extends JsValueGenerators {
     
 
     
-    def ExampleNestedArraysOptArrResultArrResultGenerator = Gen.containerOf[List,ExampleNestedArraysOptArrResultArrResultArrResult](ExampleNestedArraysOptArrResultArrResultArrResultGenerator)
-    def ExampleNestedArraysOptGenerator = Gen.containerOf[List,ExampleNestedArraysOptArrResult](ExampleNestedArraysOptArrResultGenerator)
-    def ExampleMessagesOptGenerator = Gen.containerOf[List,ExampleMessagesOptArrResult](ExampleMessagesOptArrResultGenerator)
+    def ExampleNestedArraysOptArrResultArrResultGenerator: Gen[List[ExampleNestedArraysOptArrResultArrResultArrResult]] = Gen.containerOf[List,ExampleNestedArraysOptArrResultArrResultArrResult](ExampleNestedArraysOptArrResultArrResultArrResultGenerator)
+    def ExampleNestedArraysOptGenerator: Gen[List[ExampleNestedArraysOptArrResult]] = Gen.containerOf[List,ExampleNestedArraysOptArrResult](ExampleNestedArraysOptArrResultGenerator)
+    def ExampleMessagesOptGenerator: Gen[List[ExampleMessagesOptArrResult]] = Gen.containerOf[List,ExampleMessagesOptArrResult](ExampleMessagesOptArrResultGenerator)
     def ExampleMessagesGenerator = Gen.option(ExampleMessagesOptGenerator)
-    def ExampleNestedArraysOptArrResultArrResultArrResultGenerator = Gen.containerOf[List,String](arbitrary[String])
-    def ExampleNestedArraysOptArrResultGenerator = Gen.containerOf[List,ExampleNestedArraysOptArrResultArrResult](ExampleNestedArraysOptArrResultArrResultGenerator)
+    def ExampleNestedArraysOptArrResultArrResultArrResultGenerator: Gen[List[String]] = Gen.containerOf[List,String](arbitrary[String])
+    def ExampleNestedArraysOptArrResultGenerator: Gen[List[ExampleNestedArraysOptArrResultArrResult]] = Gen.containerOf[List,ExampleNestedArraysOptArrResultArrResult](ExampleNestedArraysOptArrResultArrResultGenerator)
     def ExampleNestedArraysGenerator = Gen.option(ExampleNestedArraysOptGenerator)
-    def ExampleMessagesOptArrResultGenerator = Gen.containerOf[List,Activity](ActivityGenerator)
+    def ExampleMessagesOptArrResultGenerator: Gen[List[Activity]] = Gen.containerOf[List,Activity](ActivityGenerator)
     def ActivityActionsGenerator = Gen.option(arbitrary[String])
     
 

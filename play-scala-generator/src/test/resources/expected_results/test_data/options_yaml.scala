@@ -14,7 +14,7 @@ object Generators extends JsValueGenerators {
     
 
     
-    def BasicRequiredGenerator = Gen.containerOf[List,String](arbitrary[String])
+    def BasicRequiredGenerator: Gen[List[String]] = Gen.containerOf[List,String](arbitrary[String])
     def BasicOptionalGenerator = Gen.option(BasicRequiredGenerator)
     
 

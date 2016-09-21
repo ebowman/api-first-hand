@@ -38,9 +38,9 @@ object Generators extends JsValueGenerators {
     def NullGenerator = arbitrary[Null]
     def OrderStatusGenerator = Gen.option(arbitrary[String])
     def PetsFindByStatusGetStatusOptGenerator = _genList(arbitrary[String], "multi")
-    def UsersCreateWithListPostBodyOptGenerator = Gen.containerOf[List,User](UserGenerator)
+    def UsersCreateWithListPostBodyOptGenerator: Gen[List[User]] = Gen.containerOf[List,User](UserGenerator)
     def OrderPetIdGenerator = Gen.option(arbitrary[Long])
-    def PetsFindByStatusGetResponses200Generator = Gen.containerOf[List,Pet](PetGenerator)
+    def PetsFindByStatusGetResponses200Generator: Gen[List[Pet]] = Gen.containerOf[List,Pet](PetGenerator)
     def PetsPostBodyGenerator = Gen.option(PetGenerator)
     def OrderShipDateGenerator = Gen.option(arbitrary[ZonedDateTime])
     def UsersUsernamePutBodyGenerator = Gen.option(UserGenerator)
@@ -49,11 +49,11 @@ object Generators extends JsValueGenerators {
     def PetTagsGenerator = Gen.option(PetTagsOptGenerator)
     def LongGenerator = arbitrary[Long]
     def OrderQuantityGenerator = Gen.option(arbitrary[Int])
-    def PetPhotoUrlsGenerator = Gen.containerOf[List,String](arbitrary[String])
+    def PetPhotoUrlsGenerator: Gen[List[String]] = Gen.containerOf[List,String](arbitrary[String])
     def UsersCreateWithListPostBodyGenerator = Gen.option(UsersCreateWithListPostBodyOptGenerator)
     def PetsFindByStatusGetStatusGenerator = Gen.option(PetsFindByStatusGetStatusOptGenerator)
     def PetCategoryGenerator = Gen.option(TagGenerator)
-    def PetTagsOptGenerator = Gen.containerOf[List,Tag](TagGenerator)
+    def PetTagsOptGenerator: Gen[List[Tag]] = Gen.containerOf[List,Tag](TagGenerator)
     
 
     def createUserGenerator = _generate(UserGenerator)

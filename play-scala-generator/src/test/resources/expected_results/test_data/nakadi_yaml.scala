@@ -31,16 +31,16 @@ object Generators extends JsValueGenerators {
     def TopicsTopicEventsGetStream_timeoutGenerator = Gen.option(arbitrary[Int])
     def IntGenerator = arbitrary[Int]
     def EventEvent_typeGenerator = Gen.option(arbitrary[String])
-    def SimpleStreamEventEventsOptGenerator = Gen.containerOf[List,Event](EventGenerator)
+    def SimpleStreamEventEventsOptGenerator: Gen[List[Event]] = Gen.containerOf[List,Event](EventGenerator)
     def EventMetaDataParent_idGenerator = Gen.option(arbitrary[UUID])
     def EventMetadataGenerator = Gen.option(EventMetaDataNameClashGenerator)
     def NullGenerator = arbitrary[Null]
-    def EventMetaDataScopesOptGenerator = Gen.containerOf[List,String](arbitrary[String])
-    def TopicsTopicPartitionsGetResponses200Generator = Gen.containerOf[List,TopicPartition](TopicPartitionGenerator)
+    def EventMetaDataScopesOptGenerator: Gen[List[String]] = Gen.containerOf[List,String](arbitrary[String])
+    def TopicsTopicPartitionsGetResponses200Generator: Gen[List[TopicPartition]] = Gen.containerOf[List,TopicPartition](TopicPartitionGenerator)
     def TopicsTopicEventsBatchPostEventGenerator = Gen.option(EventGenerator)
     def SimpleStreamEventEventsGenerator = Gen.option(SimpleStreamEventEventsOptGenerator)
     def EventMetaDataScopesGenerator = Gen.option(EventMetaDataScopesOptGenerator)
-    def TopicsGetResponses200Generator = Gen.containerOf[List,Topic](TopicGenerator)
+    def TopicsGetResponses200Generator: Gen[List[Topic]] = Gen.containerOf[List,Topic](TopicGenerator)
     
 
     def createEventMetaDataNameClashGenerator = _generate(EventMetaDataNameClashGenerator)

@@ -99,10 +99,10 @@ trait DataGeneratorsStep extends EnrichmentStep[Type] {
   }
 
   private def containerTypeName(c: Container, t: DenotationTable, ref: Reference): String = {
-    val className = typeNameDenotation(t, c.tpe.name)
+    lazy val className = typeNameDenotation(t, c.tpe.name)
     c match {
-      case ArrResult(tpe, _) => s": Gen[List[$className]]"
-      case c @ CatchAll(tpe, _) => s": Gen[Map[String, $className]]"
+      case ArrResult(_, _) => s": Gen[List[$className]]"
+      case CatchAll(_, _) => s": Gen[Map[String, $className]]"
       case _ => ""
     }
   }

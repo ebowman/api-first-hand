@@ -17,7 +17,7 @@ object Generators extends JsValueGenerators {
 
     
     def PetsIdGetIdGenerator = _genList(arbitrary[String], "csv")
-    def PetsIdGetResponses200Generator = Gen.containerOf[List,Pet](PetGenerator)
+    def PetsIdGetResponses200Generator: Gen[List[Pet]] = Gen.containerOf[List,Pet](PetGenerator)
     def PetTagGenerator = Gen.option(arbitrary[String])
     
 
