@@ -39,7 +39,6 @@ object PlayBodyParsing extends PlayBodyParsing {
   }
 
   import play.api.libs.iteratee.Execution.Implicits.trampoline
-
   /**
    * Parser factory for optional bodies
    *

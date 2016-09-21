@@ -16,5 +16,4 @@ object WriterFactories {
     "application/json" -> jsonFactory,
     "text/x-yaml" -> new YAMLFactory() // TODO implement workaround for bug in yaml parser
   ).withDefaultValue(jsonFactory)
-
 }

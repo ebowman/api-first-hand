@@ -47,18 +47,6 @@ trait {{controller.base}} extends Controller with PlayBodyParsing {{if controlle
     private type {{m.action_type}}[T]            = {{m.action_request_type}} => Future[{{m.result_class_prefix}}Type[T] forSome { type T }]
 
     {{for body in m.body_param}}
-        val definedContentTypes = parse.using { request =>
-            request.contentType.map(_.toLowerCase(Locale.ENGLISH)) match {
-                {{for content_type in m.default_content_types}}
-                case Some("{{content_type.name}}") => {{content_type.parser}}.map(_.as[{{body.parser_type}}])
-                {{/for}}
-                {{for content_type in m.custom_content_types}}
-                case Some("{{content_type.name}}") => anyParser[{{body.parser_type}}](_ => {{content_type.name}}, Nil, "")(request)
-                {{/for}}
-                case other => play.api.mvc.BodyParsers.parse.error(Future.successful(UnsupportedMediaType(s"Invalid content type specified $other")))
-            }
-        }
-
         private def {{m.parser_name}}(acceptedTypes: Seq[String], maxLength: Int = parse.DefaultMaxTextLength) = {
             def bodyMimeType: Option[MediaType] => String = mediaType => {
                 val requestType = mediaType.toSeq.map {
