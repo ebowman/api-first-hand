@@ -143,6 +143,9 @@ class ScalaGenerator(
     val unmarshallers = ReShaper.filterByType("unmarshallers", denotationTable)
     val grouppedunMarshallers = ReShaper.groupByType(unmarshallers.toSeq).toMap
 
+    val jsonWritables = ReShaper.filterByType("json_writables", denotationTable)
+    val grouppedWritables = ReShaper.groupByType(jsonWritables.toSeq).toMap
+
     val securityExtractors = ReShaper.filterByType("security_extractors", denotationTable)
     val extractors = ReShaper.groupByType(securityExtractors.toSeq).toMap
 
@@ -199,6 +202,7 @@ class ScalaGenerator(
       "tests" -> ReShaper.filterByType("tests", denotationTable),
       "marshallers" -> grouppedMarshallers,
       "unmarshallers" -> grouppedunMarshallers,
+      "json_writables" -> grouppedWritables,
       "security_extractors" -> extractors,
       "bindings" -> bindingsByType,
       "forms" -> forms,

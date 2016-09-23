@@ -57,5 +57,15 @@ package {{main_package_suffix}} {
         override def toString = value.toString
     }
 {{/for}}
-
+{{if json_writables.data}}
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    object BodyReads extends DefaultReads {
+        {{for class in json_writables.data}}
+        implicit val {{class.name}}Reads: Reads[{{class.name}}] = (
+            {{for field in class.fields}}(JsPath \ "{{field.name}}").read{{if field.nullable_type_name}}Nullable[{{field.nullable_type_name}}]{{else}}[{{field.type_name}}]{{/if}}{{if field.isNotLast}} and {{/if}}{{/for}}
+        )({{class.name}}.apply _)
+        {{/for}}
+    }
+{{/if}}
 }

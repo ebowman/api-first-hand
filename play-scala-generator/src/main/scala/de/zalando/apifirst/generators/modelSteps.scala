@@ -37,8 +37,15 @@ trait ClassesStep extends EnrichmentStep[Type] {
     Map(
       "name" -> typeNameDenotation(table, k),
       "fields" -> typeFields(table, k).map { f =>
+        val nullableType = f.tpe match {
+          case TypeRef(r) =>
+            val underlying = app.findType(r)
+            if (underlying.isInstanceOf[Opt]) Option(typeNameDenotation(table, underlying.asInstanceOf[Opt].nestedTypes.head.name)) else None
+          case _ => None
+        }
         Map(
           "name" -> escape(f.name.simple),
+          "nullable_type_name" -> nullableType,
           TYPE_NAME -> typeNameDenotation(table, f.tpe.name)
         )
       },

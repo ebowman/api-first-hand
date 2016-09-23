@@ -10,10 +10,6 @@ import de.zalando.apifirst.naming.Reference
  * @author slasch
  * @since 06.01.2016.
  */
-/**
- * @author slasch
- * @since 30.12.2015.
- */
 trait ParamBindingsStep extends EnrichmentStep[Parameter] {
 
   override def steps: Seq[SingleStep] = bindings +: super.steps

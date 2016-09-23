@@ -8,7 +8,7 @@ import scala.annotation.tailrec
 import scala.language.reflectiveCalls
 
 object TypeNormaliser {
-  val flatten = ParameterDereferencer.apply _ andThen TypeDeduplicator.apply andThen TypeFlattener.apply andThen TypeDeduplicator.apply
+  val flatten: (StrictModel) => StrictModel = ParameterDereferencer.apply _ andThen TypeDeduplicator.apply andThen TypeFlattener.apply andThen TypeDeduplicator.apply
 }
 
 object TypeDeduplicator extends TypeAnalyzer {

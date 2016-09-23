@@ -2,7 +2,6 @@ package de.zalando.apifirst
 
 import java.net.URL
 
-import de.zalando.apifirst.Domain.Type
 import de.zalando.apifirst.Http.MimeType
 import de.zalando.apifirst.Hypermedia.{ State, StateTransitionsTable }
 import de.zalando.apifirst.ParameterPlace.ParameterPlace
@@ -116,8 +115,8 @@ object Domain {
     private def escape(s: String) =
       (if (s.contains('"')) "\"\"\"" + s.replaceAllLiterally("\"\"\"", replacement) + "\"\"\""
       else "\"" + s + "\"").replace('\n', ' ')
-    lazy val constrStr = constraints.map(escape)
-    val escapedComment = comment.map(escape)
+    lazy val constrStr: Seq[String] = constraints.map(escape)
+    val escapedComment: Option[String] = comment.map(escape)
   }
 
   object TypeMeta {
@@ -401,7 +400,7 @@ object Application {
   ) {
     def findParameter(ref: ParameterRef): Parameter = params(ref)
     def findParameter(name: Reference): Option[Parameter] = params.find(_._1.name == name).map(_._2)
-    def findType(ref: Reference): Type = typeDefs(ref)
+    def findType(ref: Reference): Domain.Type = typeDefs(ref)
   }
 
 }

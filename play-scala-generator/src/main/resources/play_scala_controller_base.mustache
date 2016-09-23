@@ -47,6 +47,8 @@ trait {{controller.base}} extends Controller with PlayBodyParsing {{if controlle
     private type {{m.action_type}}[T]            = {{m.action_request_type}} => Future[{{m.result_class_prefix}}Type[T] forSome { type T }]
 
     {{for body in m.body_param}}
+        import BodyReads._
+
         val {{m.parser_name}}ContentTypes = parse.using { request =>
             request.contentType.map(_.toLowerCase(java.util.Locale.ENGLISH)) match {
                 {{for content_type in m.default_content_types}}

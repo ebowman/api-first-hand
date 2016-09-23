@@ -79,7 +79,7 @@ trait CommonData {
 
   def app: StrictModel
 
-  protected def typeName(t: Type, r: Reference, suffix: String = "") = t match {
+  protected def typeName(t: Type, r: Reference, suffix: String = ""): String = t match {
     case TypeRef(ref) =>
       app.findType(ref) match {
         case p: PrimitiveType => useType(p.name, suffix, "")

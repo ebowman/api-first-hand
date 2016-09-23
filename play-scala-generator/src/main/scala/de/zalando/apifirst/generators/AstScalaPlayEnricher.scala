@@ -209,6 +209,8 @@ object KeyCollector {
       tt.values flatMap {
         case ttt: Map[String @unchecked, _] =>
           collect(key)(ttt)
+        case l: List[_] if l.isEmpty || !l.head.isInstanceOf[Map[_, _]] =>
+          Nil
         case ttt: List[Map[String @unchecked, _] @unchecked] =>
           ttt flatMap collect(key)
         case _ => Nil
