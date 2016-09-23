@@ -24,7 +24,6 @@ import de.zalando.play.controllers.ResponseWriters
 {{/if}}
 {{/if}}
 
-
 {{for controller in controllers}}
 //noinspection ScalaStyle
 trait {{controller.base}} extends Controller with PlayBodyParsing {{if controller.security_trait}} with {{controller.security_trait}} {{/if}}{
@@ -62,20 +61,16 @@ trait {{controller.base}} extends Controller with PlayBodyParsing {{if controlle
         }
     {{/for}}
 
-
-
     val {{m.action_constructor}}  = {{if m.needs_security}}{{if m.security_instance}}new {{/if}}{{m.secure_action}}{{for check in m.security_checks}}{{if check.params}}({{for param in check.params}}{{param.name}}{{if param.isNotLast}}, {{/if}}{{/for}}){{/if}}{{/for}}{{else}}Action{{/if}}
-
-    // TODO val AcceptsJsonTodos = Accepting("application/json+todos")
 
     def {{m.action}}[T] = (f: {{m.action_type}}[T]) =>{{if m.non_body_params}} ({{/if}}{{for p in m.non_body_params}}{{p.field_name}}: {{p.type_name}}{{if p.isNotLast}}, {{/if}}{{/for}}{{if m.non_body_params}}) =>{{/if}} {{m.action_constructor}}.async{{if m.body_param}}({{m.parser_name}}){{/if}} { implicit request =>
 
-        def {{m.process_valid_request}}({{for v in m.validations}}{{for f in v.fields}}{{f.field_name}}: {{f.type_name}}{{if f.isNotLast}}, {{/if}}{{/for}}{{/for}}) = {
-          lazy val result = {{for v in m.validations}}Right(f(({{for f in v.fields}}{{f.field_name}}{{if f.isNotLast}}, {{/if}}{{/for}}))){{/for}}
+        def {{m.process_valid_request}}({{for v in m.validations}}{{for f in v.fields}}{{f.field_name}}: {{f.type_name}}{{if f.isNotLast}}, {{/if}}{{/for}}{{/for}}): Either[Result, Future[{{m.result_class_prefix}}Type[_]]] = {
+          lazy val result = {{for v in m.validations}}f(({{for f in v.fields}}{{f.field_name}}{{if f.isNotLast}}, {{/if}}{{/for}})){{/for}}
           {{if m.has_no_validations}}result{{else}}
             {{for v in m.validations}}new {{v.validation_name}}({{for f in v.fields}}{{f.field_name}}{{if f.isNotLast}}, {{/if}}{{/for}}).errors match {
                 case e if e.isEmpty =>
-                    result
+                    Right(result)
                 case l =>
                     import ResponseWriters.jsonParsingErrorsWrites
                     Left(BadRequest(Json.toJson(l)))
@@ -84,19 +79,7 @@ trait {{controller.base}} extends Controller with PlayBodyParsing {{if controlle
           {{/if}}
         }
 
-
-
-
-
-        // val providedTypes = {{m.produces}}
-
-
-
-
-
-
-        // negotiateContent(request.acceptedTypes, providedTypes).map { {{m.response_mime_type_name}} =>
-            {{for body in m.body_param}}
+        {{for body in m.body_param}}
             val {{body.field_name}}: {{body.type_name}} = request.body
             {{/for}}
             {{for header in m.header_params}}
@@ -119,13 +102,13 @@ trait {{controller.base}} extends Controller with PlayBodyParsing {{if controlle
 
             {{m.process_valid_request}}({{for v in m.validations}}{{for f in v.fields}}{{f.field_name}}{{if f.isNotLast}}, {{/if}}{{/for}}{{/for}}) match {
                 case Left(l) => success(l)
-                case Right(r: Future[{{m.result_class_prefix}}Type[_] @unchecked]) => render.async {
-                    case Accepts.Html() => r.map(_.toResult("Mediatype").get)
-                    case Accepts.Json() =>
+                case Right(r: Future[{{m.result_class_prefix}}Type[_] @unchecked]) =>
+                    val providedTypes = {{m.produces}}
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { {{m.response_mime_type_name}} =>
                         import ResponseWrites._
-                        Future.successful(Ok(Json.toJson(Nil))) // Need writable for example implicit def writeableOf_JsValue(implicit codec: Codec): Writeable[JsValue] = { // r.map(_.toResult("Mediatype"))
-                    // case AcceptsJsonTodos() => r.map(_.toResult("Mediatype").get)
-                }
+                        r.map(_.toResult({{m.response_mime_type_name}}).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
             }
             {{if m.header_params}}
                 case ({{for h in m.header_params}}_{{if h.isNotLast}}, {{/if}}{{/for}}) =>
@@ -136,13 +119,9 @@ trait {{controller.base}} extends Controller with PlayBodyParsing {{if controlle
             {{/if}}
             {{if m.form_parameters}}
             }
-            {{/if}}
-        // }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
+        {{/if}}
     }
 
-//    private def {{m.process_valid_request}}[T](f: {{m.action_type}}[T])(request: {{m.action_request_type}})(mimeType: String) = {
-//        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-//    }
     {{/for}}
     abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result] {{for m in controller.methods}} with {{m.result_class_prefix}}Type[Result]{{/for}} { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(result) }
     case object NotImplementedYetSync extends ResultWrapper[Results.EmptyContent] {{for m in controller.methods}} with {{m.result_class_prefix}}Type[Results.EmptyContent]{{/for}} { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }

@@ -10,7 +10,7 @@ import play.api.Logger
 import play.api.http.Status._
 import play.api.http._
 import play.api.libs.Files.TemporaryFile
-import play.api.mvc.{ BodyParser, BodyParsers, QueryStringBindable, RequestHeader }
+import play.api.mvc._
 import play.api.mvc.MultipartFormData.FilePart
 import play.api.mvc.Results.Status
 
@@ -140,7 +140,7 @@ object PlayBodyParsing extends PlayBodyParsing {
 
 trait PlayBodyParsing extends BodyParsers {
 
-  def success[T](t: => T) = Future.successful(t)
+  def success[T](t: => T): Future[T] = Future.successful(t)
 
   val logger = Logger.logger
 
@@ -167,6 +167,8 @@ trait PlayBodyParsing extends BodyParsers {
     case _: IndexOutOfBoundsException => Status(NOT_FOUND)
     case _ => Status(INTERNAL_SERVER_ERROR)
   }
+
+  val notAcceptable: Future[Result] = success(Results.NotAcceptable)
 
   /**
    * Helper method to parse parameters sent as Headers

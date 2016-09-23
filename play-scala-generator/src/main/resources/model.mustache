@@ -57,7 +57,7 @@ package {{main_package_suffix}} {
         override def toString = value.toString
     }
 {{/for}}
-{{if json_writables.data}}
+{{if json_readables.data}}
     import play.api.libs.json._
     import play.api.libs.functional.syntax._
     object BodyReads extends DefaultReads {
@@ -68,7 +68,7 @@ package {{main_package_suffix}} {
         {{/for}}
     }
 {{/if}}
-
+{{if json_writables.data}}
     import play.api.libs.json._
     import play.api.libs.functional.syntax._
     object ResponseWrites extends DefaultWrites {
@@ -83,4 +83,5 @@ package {{main_package_suffix}} {
         }
     {{/for}}
     }
+{{/if}}
 }
