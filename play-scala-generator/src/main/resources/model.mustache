@@ -64,8 +64,23 @@ package {{main_package_suffix}} {
         {{for class in json_writables.data}}
         implicit val {{class.name}}Reads: Reads[{{class.name}}] = (
             {{for field in class.fields}}(JsPath \ "{{field.name}}").read{{if field.nullable_type_name}}Nullable[{{field.nullable_type_name}}]{{else}}[{{field.type_name}}]{{/if}}{{if field.isNotLast}} and {{/if}}{{/for}}
-        )({{class.name}}.apply _)
+        )({{class.name}}.apply _){{if class.optional}} map Option{{/if}}
         {{/for}}
     }
 {{/if}}
+
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    object ResponseWrites extends DefaultWrites {
+    {{for class in json_writables.data}}
+    implicit val {{class.name}}Writes = new Writes[{{class.name}}] {
+        def writes(ss: {{class.name}}) =
+          Json.obj(
+            {{for field in class.fields}}
+            "{{field.name}}" -> ss.{{field.name}}{{if field.isNotLast}}, {{/if}}
+            {{/for}}
+          )
+        }
+    {{/for}}
+    }
 }

@@ -36,6 +36,7 @@ trait ClassesStep extends EnrichmentStep[Type] {
   protected def typeDefProps(k: Reference, t: Type)(table: DenotationTable): Map[String, Any] = {
     Map(
       "name" -> typeNameDenotation(table, k),
+      "optional" -> t.isInstanceOf[Opt],
       "fields" -> typeFields(table, k).map { f =>
         val nullableType = f.tpe match {
           case TypeRef(r) =>

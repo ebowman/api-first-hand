@@ -17,6 +17,7 @@ import play.api.mvc.Results.Status
 import scala.language.implicitConversions
 import scala.reflect.ClassTag
 import scala.util._
+import scala.concurrent.Future
 
 /**
  * @since 02.09.2015
@@ -138,6 +139,9 @@ object PlayBodyParsing extends PlayBodyParsing {
 }
 
 trait PlayBodyParsing extends BodyParsers {
+
+  def success[T](t: => T) = Future.successful(t)
+
   val logger = Logger.logger
 
   type ContentMap = Map[Int, PartialFunction[String, Writeable[Any]]]
