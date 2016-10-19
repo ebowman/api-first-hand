@@ -32,7 +32,7 @@ trait StrictParser {
  * @param contents
  * @param factory
  */
-class TransientJsonContext(file: File, contents: String, factory: ObjectMapperFactory) extends JsonContext(file, 0) {
+class TransientJsonContext(file: File, contents: String, factory: ObjectMapperFactory) extends JsonContext(file) {
   setUrl(file.toURI.toURL)
   private val rootNode = factory.create(getUrl).readTree(contents)
   setNode(rootNode)
