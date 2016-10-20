@@ -9,9 +9,7 @@ package nakadi
 //noinspection ScalaStyle
 package object yaml {
 
-    type TopicsTopicEventsBatchPostTopic = String
     type TopicsTopicEventsGetStream_timeout = Option[Int]
-    type TopicsTopicEventsGetBatch_limit = Int
     type EventEvent_type = Option[String]
     type SimpleStreamEventEventsOpt = Seq[Event]
     type EventMetaDataParent_id = Option[UUID]
@@ -44,4 +42,79 @@ package yaml {
     case class SimpleStreamEvent(cursor: Cursor, events: SimpleStreamEventEvents) 
 
 
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    import de.zalando.play.controllers.MissingDefaultReads
+    object BodyReads extends MissingDefaultReads {
+        implicit val EventMetaDataNameClashReads: Reads[EventMetaDataNameClash] = (
+            (JsPath \ "root_id").readNullable[UUID] and (JsPath \ "parent_id").readNullable[UUID] and (JsPath \ "scopes").readNullable[EventMetaDataScopesOpt] and (JsPath \ "id").readNullable[UUID] and (JsPath \ "created").readNullable[String]
+        )(EventMetaDataNameClash.apply _)
+        implicit val EventReads: Reads[Event] = (
+            (JsPath \ "event_type").readNullable[String] and (JsPath \ "partitioning_key").readNullable[String] and (JsPath \ "metadata").readNullable[EventMetaDataNameClash]
+        )(Event.apply _)
+    }
+
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    import de.zalando.play.controllers.MissingDefaultWrites
+    object ResponseWrites extends MissingDefaultWrites {
+    implicit val TopicWrites: Writes[Topic] = new Writes[Topic] {
+        def writes(ss: Topic) =
+          Json.obj(
+            "name" -> ss.name
+          )
+        }
+    implicit val TopicPartitionWrites: Writes[TopicPartition] = new Writes[TopicPartition] {
+        def writes(ss: TopicPartition) =
+          Json.obj(
+            "partition" -> ss.partition, 
+            "oldest_available_offset" -> ss.oldest_available_offset, 
+            "newest_available_offset" -> ss.newest_available_offset
+          )
+        }
+    implicit val EventMetaDataNameClashWrites: Writes[EventMetaDataNameClash] = new Writes[EventMetaDataNameClash] {
+        def writes(ss: EventMetaDataNameClash) =
+          Json.obj(
+            "root_id" -> ss.root_id, 
+            "parent_id" -> ss.parent_id, 
+            "scopes" -> ss.scopes, 
+            "id" -> ss.id, 
+            "created" -> ss.created
+          )
+        }
+    implicit val EventWrites: Writes[Event] = new Writes[Event] {
+        def writes(ss: Event) =
+          Json.obj(
+            "event_type" -> ss.event_type, 
+            "partitioning_key" -> ss.partitioning_key, 
+            "metadata" -> ss.metadata
+          )
+        }
+    implicit val CursorWrites: Writes[Cursor] = new Writes[Cursor] {
+        def writes(ss: Cursor) =
+          Json.obj(
+            "partition" -> ss.partition, 
+            "offset" -> ss.offset
+          )
+        }
+    implicit val SimpleStreamEventWrites: Writes[SimpleStreamEvent] = new Writes[SimpleStreamEvent] {
+        def writes(ss: SimpleStreamEvent) =
+          Json.obj(
+            "cursor" -> ss.cursor, 
+            "events" -> ss.events
+          )
+        }
+    implicit val MetricsWrites: Writes[Metrics] = new Writes[Metrics] {
+        def writes(ss: Metrics) =
+          Json.obj(
+            "name" -> ss.name
+          )
+        }
+    implicit val ProblemWrites: Writes[Problem] = new Writes[Problem] {
+        def writes(ss: Problem) =
+          Json.obj(
+            "detail" -> ss.detail
+          )
+        }
+    }
 }

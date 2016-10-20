@@ -76,4 +76,16 @@ package yaml {
         override def toString = value.toString
     }
 
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    import de.zalando.play.controllers.MissingDefaultWrites
+    object ResponseWrites extends MissingDefaultWrites {
+    implicit val StatusAndCodeWrites: Writes[StatusAndCode] = new Writes[StatusAndCode] {
+        def writes(ss: StatusAndCode) =
+          Json.obj(
+            "message" -> ss.message, 
+            "Status" -> ss.Status
+          )
+        }
+    }
 }

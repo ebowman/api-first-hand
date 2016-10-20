@@ -1,16 +1,18 @@
 package de.zalando.apifirst.generators
 
-import de.zalando.apifirst.Application.StrictModel
-import de.zalando.apifirst.Domain.{ TypeDef, TypeRef }
+import de.zalando.apifirst.Application.{ ApiCall, StrictModel }
+import de.zalando.apifirst.Domain.TypeDef
+import de.zalando.apifirst.Http.ApplicationJson
 import de.zalando.apifirst.generators.DenotationNames._
-import de.zalando.apifirst.{ Domain, ParameterPlace, ScalaName }
+import de.zalando.apifirst.{ Http, ParameterPlace, ScalaName }
+import org.slf4j.{ Logger, LoggerFactory }
 
 /**
  * @author  slasch
  * @since   30.12.2015.
  */
 trait MarshallersStep extends EnrichmentStep[StrictModel] {
-
+  private val logger: Logger = LoggerFactory.getLogger(getClass)
   override def steps: Seq[SingleStep] = readersAndWriteables +: super.steps
 
   private val jsonPattern = """application/(.*\+)?json.*""".r.pattern
@@ -64,53 +66,47 @@ trait MarshallersStep extends EnrichmentStep[StrictModel] {
     }
   }
 
-  private def specJsonReadables(spec: StrictModel)(table: DenotationTable): Map[String, Any] = {
-    val bodyParams = bodyParameters(spec).filter { case (mimeType, _) => jsonPattern.matcher(mimeType).matches() }
-    val bodyTypes = parameterDependencies(bodyParams.map(_._2.typeName)).distinct.collect { case d: TypeDef => d }.reverse.map(_.name)
+  private def specJsonReadables(spec: StrictModel)(table: DenotationTable): Seq[Map[String, Any]] = {
+    val bodyParams = bodyParameters(spec).filter { case (mimeType, _) => jsonPattern.matcher(mimeType).matches() }.distinct
+    val bodyTypes =
+      bodyParams.flatMap(_._2.typeName.allNestedTypes).distinct.map(_.realType).collect { case TypeDef(name, _, _) => name }.reverse
     val denotations = bodyTypes.flatMap(table.apply)
     val typeDefs = denotations.collect { case (k, v) if k == "classes" => v.toSeq }
-    typeDefs.flatten.toMap
+    typeDefs.map(_.toMap)
   }
 
-  private def specJsonWritables(spec: StrictModel)(table: DenotationTable): Map[String, Any] = {
-    val results = callResults(spec).filter { case (mimeType, _) => jsonPattern.matcher(mimeType).matches() }
-    val types = parameterDependencies(results.map(_._2)).distinct.collect { case d: TypeDef => d }.reverse.map(_.name)
+  private def specJsonWritables(spec: StrictModel)(table: DenotationTable): Seq[Map[String, Any]] = {
+    val results = callResults(spec).filter { case (mimeType, _) => jsonPattern.matcher(mimeType.name).matches() }.distinct
+    val types = results.flatMap(_._2.allNestedTypes).distinct.map(_.realType).collect { case TypeDef(name, _, _) => name }.reverse
     val denotations = types.flatMap(table.apply)
     val typeDefs = denotations.collect { case (k, v) if k == "classes" => v.toSeq }
-    typeDefs.flatten.toMap
-  }
-
-  private def parameterDependencies(parameters: Seq[Domain.Type]): Seq[Domain.Type] =
-    parameters.flatMap { p =>
-      val nested = nestedTypes(realType(p).nestedTypes)
-      realType(p) +: nested
-    }
-
-  private def nestedTypes(ts: Seq[Domain.Type]): Seq[Domain.Type] = {
-    (ts map realType) ++ (ts.map(_.nestedTypes map realType) flatMap nestedTypes)
-  }
-
-  private def realType(p: Domain.Type) = p match {
-    case r: TypeRef => app.findType(r.name)
-    case _ => p
+    typeDefs.map(_.toMap)
   }
 
   private def bodyParameters(spec: StrictModel) = {
     for {
       call <- spec.calls
-      mime <- call.mimeIn.map(_.name).diff(providedWriterFactories)
       param <- call.handler.parameters
       bodyParam = app.findParameter(param) if bodyParam.place == ParameterPlace.BODY
-    } yield (mime, bodyParam)
+      mime <- nonEmptyOrDefault(call.mimeIn, call)
+    } yield (mime.name, bodyParam)
   }
 
   private def callResults(spec: StrictModel) = {
     for {
       call <- spec.calls
-      mime <- call.mimeOut.map(_.name).diff(providedWriterFactories)
+      mime <- nonEmptyOrDefault(call.mimeOut, call)
       resultRef <- call.resultTypes.results.values
       resultType = app.findType(resultRef.name)
     } yield (mime, resultType)
   }
+
+  private def nonEmptyOrDefault(mime: Set[Http.MimeType], call: ApiCall): Set[Http.MimeType] =
+    if (mime.isEmpty) {
+      logger.warn(s"No mime-types is defined for call ${call.verb} ${call.path}, defaulting to $ApplicationJson")
+      Set(ApplicationJson)
+    } else {
+      mime
+    }
 
 }

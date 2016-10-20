@@ -9,7 +9,6 @@ package object echo {
 
     type Test_pathIdGetResponses200 = Null
     type PostName = Option[String]
-    type Test_pathIdGetId = String
 
 
 import play.api.mvc.{QueryStringBindable, PathBindable}
@@ -24,4 +23,16 @@ package echo {
     case class PostResponses200(name: PostName, year: PostName) 
 
 
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    import de.zalando.play.controllers.MissingDefaultWrites
+    object ResponseWrites extends MissingDefaultWrites {
+    implicit val PostResponses200Writes: Writes[PostResponses200] = new Writes[PostResponses200] {
+        def writes(ss: PostResponses200) =
+          Json.obj(
+            "name" -> ss.name, 
+            "year" -> ss.year
+          )
+        }
+    }
 }

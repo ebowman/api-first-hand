@@ -49,4 +49,13 @@ package yaml {
         override def toString = value.toString
     }
 
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    import de.zalando.play.controllers.MissingDefaultReads
+    object BodyReads extends MissingDefaultReads {
+        implicit val PetReads: Reads[Pet] = (
+            (JsPath \ "name").read[String] and (JsPath \ "petType").read[String]
+        )(Pet.apply _)
+    }
+
 }

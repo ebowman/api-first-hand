@@ -66,13 +66,13 @@ trait ParamBindingsStep extends EnrichmentStep[Parameter] {
   }
 
   def forNestedTypes(tpe: String, table: DenotationTable, someTpe: Type): Seq[Map[String, Any]] = {
-    val alias = someTpe.name.simple
+    val alias = someTpe.realType.name.simple
     val underlyingType = someTpe.nestedTypes.map { t => typeNameDenotation(table, t.name) }.mkString(", ")
     val binding = if (tpe == "Path") tpe else "QueryString"
     val bindable =
       s"""implicit val bindable_$alias$underlyingType$tpe: ${binding}Bindable[$alias[$underlyingType]] = """ +
         s"""PlayPathBindables.create$alias${tpe}Bindable[$underlyingType]"""
-    val format = someTpe match {
+    val format = someTpe.realType match {
       case arr: Arr => "(\"" + arr.format + "\")"
       case _ => ""
     }

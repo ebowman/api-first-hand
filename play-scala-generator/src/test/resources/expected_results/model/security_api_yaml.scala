@@ -27,4 +27,16 @@ package yaml {
     case class Pet(name: String, tag: PetTag) 
 
 
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    import de.zalando.play.controllers.MissingDefaultWrites
+    object ResponseWrites extends MissingDefaultWrites {
+    implicit val PetWrites: Writes[Pet] = new Writes[Pet] {
+        def writes(ss: Pet) =
+          Json.obj(
+            "name" -> ss.name, 
+            "tag" -> ss.tag
+          )
+        }
+    }
 }

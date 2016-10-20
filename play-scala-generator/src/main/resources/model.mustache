@@ -60,8 +60,9 @@ package {{main_package_suffix}} {
 {{if json_readables.data}}
     import play.api.libs.json._
     import play.api.libs.functional.syntax._
-    object BodyReads extends DefaultReads {
-        {{for class in json_writables.data}}
+    import de.zalando.play.controllers.MissingDefaultReads
+    object BodyReads extends MissingDefaultReads {
+        {{for class in json_readables.data}}
         implicit val {{class.name}}Reads: Reads[{{class.name}}] = (
             {{for field in class.fields}}(JsPath \ "{{field.name}}").read{{if field.nullable_type_name}}Nullable[{{field.nullable_type_name}}]{{else}}[{{field.type_name}}]{{/if}}{{if field.isNotLast}} and {{/if}}{{/for}}
         )({{class.name}}.apply _){{if class.optional}} map Option{{/if}}
@@ -71,9 +72,10 @@ package {{main_package_suffix}} {
 {{if json_writables.data}}
     import play.api.libs.json._
     import play.api.libs.functional.syntax._
-    object ResponseWrites extends DefaultWrites {
+    import de.zalando.play.controllers.MissingDefaultWrites
+    object ResponseWrites extends MissingDefaultWrites {
     {{for class in json_writables.data}}
-    implicit val {{class.name}}Writes = new Writes[{{class.name}}] {
+    implicit val {{class.name}}Writes: Writes[{{class.name}}] = new Writes[{{class.name}}] {
         def writes(ss: {{class.name}}) =
           Json.obj(
             {{for field in class.fields}}

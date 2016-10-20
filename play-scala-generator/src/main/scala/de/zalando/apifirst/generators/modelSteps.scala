@@ -124,8 +124,10 @@ trait AliasesStep extends EnrichmentStep[Type] {
     case (ref, t: EnumType) => empty
     case (ref, t: Container) =>
       Map("aliases" -> aliasProps(ref, t)(table))
-    case (k, v: PrimitiveType) =>
+
+    case (k, v: Null) =>
       Map("aliases" -> mapForAlias(k, v)(table))
+
     case (k, v: TypeRef) =>
       Map("aliases" -> mapForAlias(v.name, v)(table))
     case _ => empty

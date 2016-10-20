@@ -1,15 +1,15 @@
 package de.zalando.apifirst.generators
 
 import de.zalando.ExpectedResults
-import de.zalando.model.{ WithModel, wrong_field_name_yaml }
-import org.scalatest.{ FunSpec, MustMatchers }
+import de.zalando.model._
+import org.scalatest.{FunSpec, MustMatchers}
 
 class ScalaBaseControllerGeneratorIntegrationTest extends FunSpec with MustMatchers with ExpectedResults {
 
   override val expectationsFolder = super.expectationsFolder + "base_controllers/"
 
   describe("ScalaSecurityGenerator should generate controller bases") {
-    (model ++ examples).foreach { ast =>
+    Seq(form_data_yaml, echo_api_yaml).foreach { ast => // model ++ examples
       testScalaBaseControllerGenerator(ast)
     }
   }

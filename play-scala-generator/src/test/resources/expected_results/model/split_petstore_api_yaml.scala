@@ -10,7 +10,6 @@ package split.petstore.api
 //noinspection ScalaStyle
 package object yaml {
 
-    type UsersUsernameGetUsername = String
     type UsersCreateWithListPostResponsesDefault = Null
     type OrderStatus = Option[String]
     type PetsFindByStatusGetStatusOpt = ArrayWrapper[String]
@@ -23,7 +22,6 @@ package object yaml {
     type StoresOrderPostBody = Option[Order]
     type OrderComplete = Option[Boolean]
     type PetTags = Option[PetTagsOpt]
-    type PetsPetIdDeletePetId = Long
     type OrderQuantity = Option[Int]
     type PetPhotoUrls = Seq[String]
     type UsersCreateWithListPostBody = Option[UsersCreateWithListPostBodyOpt]

@@ -1,0 +1,53 @@
+package de.zalando.play.controllers
+
+import java.math.BigInteger
+
+import play.api.data.validation.ValidationError
+import play.api.libs.json.{ JsError, _ }
+
+object MissingDefaultWrites extends MissingDefaultWrites
+
+trait MissingDefaultWrites extends DefaultWrites {
+
+  /**
+   * Serializer for BigInt types.
+   */
+  implicit object BigIntWrites extends Writes[BigInt] {
+    def writes(o: BigInt): JsNumber = JsNumber(BigDecimal(o))
+  }
+  /**
+   * Serializer for BigInteger types.
+   */
+  implicit object BigIntegerWrites extends Writes[BigInteger] {
+    def writes(o: BigInteger): JsNumber = JsNumber(BigDecimal(o))
+  }
+}
+
+object MissingDefaultReads extends MissingDefaultReads
+
+trait MissingDefaultReads extends DefaultReads {
+
+  /**
+   * Deserializer for BigInt
+   */
+  implicit val bigIntReads: Reads[BigInt] = Reads[BigInt] {
+    case JsString(s) =>
+      scala.util.control.Exception.catching(classOf[NumberFormatException])
+        .opt(JsSuccess(BigInt(s)))
+        .getOrElse(JsError(ValidationError("error.expected.numberformatexception")))
+    case JsNumber(d) => JsSuccess(d.toBigInt())
+    case _ => JsError(ValidationError("error.expected.jsnumberorjsstring"))
+  }
+
+  /**
+   * Deserializer for BigInteger
+   */
+  implicit val javaBigIntegerReads: Reads[BigInteger] = Reads[java.math.BigInteger] {
+    case JsString(s) =>
+      scala.util.control.Exception.catching(classOf[NumberFormatException])
+        .opt(JsSuccess(new java.math.BigInteger(s)))
+        .getOrElse(JsError(ValidationError("error.expected.numberformatexception")))
+    case JsNumber(d) => JsSuccess(d.toBigInt().bigInteger)
+    case _ => JsError(ValidationError("error.expected.jsnumberorjsstring"))
+  }
+}

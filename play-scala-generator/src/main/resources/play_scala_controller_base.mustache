@@ -46,8 +46,11 @@ trait {{controller.base}} extends Controller with PlayBodyParsing {{if controlle
     private type {{m.action_type}}[T]            = {{m.action_request_type}} => Future[{{m.result_class_prefix}}Type[T] forSome { type T }]
 
     {{for body in m.body_param}}
+        {{if m.json_readables}}
         import BodyReads._
-
+        {{else}}
+        import MissingDefaultReads._
+        {{/if}}
         val {{m.parser_name}} = parse.using { request =>
             request.contentType.map(_.toLowerCase(java.util.Locale.ENGLISH)) match {
                 {{for content_type in m.default_content_types}}
@@ -63,7 +66,7 @@ trait {{controller.base}} extends Controller with PlayBodyParsing {{if controlle
 
     val {{m.action_constructor}}  = {{if m.needs_security}}{{if m.security_instance}}new {{/if}}{{m.secure_action}}{{for check in m.security_checks}}{{if check.params}}({{for param in check.params}}{{param.name}}{{if param.isNotLast}}, {{/if}}{{/for}}){{/if}}{{/for}}{{else}}Action{{/if}}
 
-    def {{m.action}}[T] = (f: {{m.action_type}}[T]) =>{{if m.non_body_params}} ({{/if}}{{for p in m.non_body_params}}{{p.field_name}}: {{p.type_name}}{{if p.isNotLast}}, {{/if}}{{/for}}{{if m.non_body_params}}) =>{{/if}} {{m.action_constructor}}.async{{if m.body_param}}({{m.parser_name}}){{/if}} { implicit request =>
+def {{m.action}}[T] = (f: {{m.action_type}}[T]) =>{{if m.non_body_params}} ({{/if}}{{for p in m.non_body_params}}{{p.field_name}}: {{p.type_name}}{{if p.isNotLast}}, {{/if}}{{/for}}{{if m.non_body_params}}) =>{{/if}} {{m.action_constructor}}.async{{if m.body_param}}({{m.parser_name}}){{/if}} { implicit request: Request[{{if m.body_param}}{{for p in m.body_param}}{{p.type_name}}{{/for}}{{else}}AnyContent{{/if}}] =>
 
         def {{m.process_valid_request}}({{for v in m.validations}}{{for f in v.fields}}{{f.field_name}}: {{f.type_name}}{{if f.isNotLast}}, {{/if}}{{/for}}{{/for}}): Either[Result, Future[{{m.result_class_prefix}}Type[_]]] = {
           lazy val apiFirstTempResultHolder = {{if m.has_no_validations}}Right(f()){{else}}{{for v in m.validations}}Right(f(({{for f in v.fields}}{{f.field_name}}{{if f.isNotLast}}, {{/if}}{{/for}}))){{/for}}{{/if}}
@@ -89,9 +92,13 @@ trait {{controller.base}} extends Controller with PlayBodyParsing {{if controlle
             val eitherFormParameters = FormDataParser.{{m.form_parser_name}}(request)
             eitherFormParameters match {
                 case Left(problem: Seq[String]) =>
-                    val msg = problem.mkString("\n")
-                    implicit val marshaller: Writeable[String] = anyToWritable({{m.response_mime_type_name}})
-                    success(BadRequest(msg))
+                    val providedTypes = Seq[String]()
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { {{m.response_mime_type_name}} =>
+                        val msg = problem.mkString("\n")
+                        implicit val marshaller: Writeable[String] = anyToWritable({{m.response_mime_type_name}})
+                        success(BadRequest(msg))
+                    }
+                    result.getOrElse(success(Results.NotAcceptable))
 
                 case Right(({{for param in m.form_parameters}}{{param.field_name}}{{if param.isNotLast}}, {{/if}}{{/for}})) =>
             {{/if}}
@@ -105,7 +112,11 @@ trait {{controller.base}} extends Controller with PlayBodyParsing {{if controlle
                 case Right(r: Future[{{m.result_class_prefix}}Type[_] @unchecked]) =>
                     val providedTypes = {{m.produces}}
                     val result = negotiateContent(request.acceptedTypes, providedTypes) map { {{m.response_mime_type_name}} =>
+                        {{if m.json_writables}}
                         import ResponseWrites._
+                        {{else}}
+                        import MissingDefaultWrites._
+                        {{/if}}
                         r.map(_.toResult({{m.response_mime_type_name}}).getOrElse(Results.NotAcceptable))
                     }
                     result getOrElse notAcceptable

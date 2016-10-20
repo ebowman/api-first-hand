@@ -3,8 +3,6 @@ package string_formats
 
     import de.zalando.play.controllers.Base64String
     import Base64String._
-    import de.zalando.play.controllers.BinaryString
-    import BinaryString._
     import java.time.ZonedDateTime
     import java.util.UUID
     import java.time.LocalDate
@@ -16,7 +14,6 @@ package string_formats
 package object yaml {
 
     type GetBase64 = Option[Base64String]
-    type GetPetId = BinaryString
     type GetDate_time = Option[ZonedDateTime]
     type GetUuid = Option[UUID]
     type GetDate = Option[LocalDate]

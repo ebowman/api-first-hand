@@ -104,7 +104,7 @@ trait EnrichmentStep[InputType] {
 
   type SingleStep = ((Reference, InputType)) => DenotationTable => Denotation
 
-  def app: StrictModel
+  implicit def app: StrictModel
 
   def steps: Seq[SingleStep] = Seq.empty
 

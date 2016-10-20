@@ -12,8 +12,6 @@ package object yaml {
 
     type MultipartPostAvatar = Option[File]
     type BothPostResponses200Name = Option[String]
-    type MultipartPostName = String
-    type BothPostRingtone = File
     type BothPostYear = Option[BigInt]
 
 
@@ -33,4 +31,27 @@ package yaml {
     case class BothPostResponses200(name: BothPostResponses200Name, year: BothPostYear, avatarSize: BothPostYear, ringtoneSize: BothPostYear) 
 
 
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    import de.zalando.play.controllers.MissingDefaultWrites
+    object ResponseWrites extends MissingDefaultWrites {
+    implicit val BothPostResponses200Writes: Writes[BothPostResponses200] = new Writes[BothPostResponses200] {
+        def writes(ss: BothPostResponses200) =
+          Json.obj(
+            "name" -> ss.name, 
+            "year" -> ss.year, 
+            "avatarSize" -> ss.avatarSize, 
+            "ringtoneSize" -> ss.ringtoneSize
+          )
+        }
+    implicit val MultipartPostResponses200Writes: Writes[MultipartPostResponses200] = new Writes[MultipartPostResponses200] {
+        def writes(ss: MultipartPostResponses200) =
+          Json.obj(
+            "name" -> ss.name, 
+            "year" -> ss.year, 
+            "fileSize" -> ss.fileSize, 
+            "fileName" -> ss.fileName
+          )
+        }
+    }
 }

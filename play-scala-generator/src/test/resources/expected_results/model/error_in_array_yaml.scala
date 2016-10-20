@@ -252,4 +252,64 @@ package yaml {
         override def toString = value.toString
     }
 
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    import de.zalando.play.controllers.MissingDefaultReads
+    object BodyReads extends MissingDefaultReads {
+        implicit val LinksReads: Reads[Links] = (
+            (JsPath \ "self").readNullable[String] and (JsPath \ "related").readNullable[String]
+        )(Links.apply _)
+        implicit val MetaReads: Reads[Meta] = (
+            (JsPath \ "copyright").readNullable[String]
+        )(Meta.apply _)
+        implicit val ModelSchemaReads: Reads[ModelSchema] = (
+            (JsPath \ "name").read[String] and (JsPath \ "sizeRegister").read[String] and (JsPath \ "brand").read[String] and (JsPath \ "partnerArticleModelId").read[BigInt] and (JsPath \ "description").readNullable[String] and (JsPath \ "ageGroups").read[ModelSchemaAgeGroups] and (JsPath \ "keywords").readNullable[String] and (JsPath \ "lengthRegister").readNullable[String] and (JsPath \ "silhouetteId").read[ModelSchemaSilhouetteId] and (JsPath \ "specialDescriptions").readNullable[ModelSchemaSpecialDescriptionsOpt] and (JsPath \ "articleModelAttributes").readNullable[ModelSchemaSpecialDescriptionsOpt]
+        )(ModelSchema.apply _)
+        implicit val ModelSchemaRootReads: Reads[ModelSchemaRoot] = (
+            (JsPath \ "data").readNullable[ModelSchema] and (JsPath \ "meta").readNullable[Meta] and (JsPath \ "links").readNullable[Links]
+        )(ModelSchemaRoot.apply _)
+    }
+
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    import de.zalando.play.controllers.MissingDefaultWrites
+    object ResponseWrites extends MissingDefaultWrites {
+    implicit val LinksWrites: Writes[Links] = new Writes[Links] {
+        def writes(ss: Links) =
+          Json.obj(
+            "self" -> ss.self, 
+            "related" -> ss.related
+          )
+        }
+    implicit val MetaWrites: Writes[Meta] = new Writes[Meta] {
+        def writes(ss: Meta) =
+          Json.obj(
+            "copyright" -> ss.copyright
+          )
+        }
+    implicit val ModelSchemaWrites: Writes[ModelSchema] = new Writes[ModelSchema] {
+        def writes(ss: ModelSchema) =
+          Json.obj(
+            "name" -> ss.name, 
+            "sizeRegister" -> ss.sizeRegister, 
+            "brand" -> ss.brand, 
+            "partnerArticleModelId" -> ss.partnerArticleModelId, 
+            "description" -> ss.description, 
+            "ageGroups" -> ss.ageGroups, 
+            "keywords" -> ss.keywords, 
+            "lengthRegister" -> ss.lengthRegister, 
+            "silhouetteId" -> ss.silhouetteId, 
+            "specialDescriptions" -> ss.specialDescriptions, 
+            "articleModelAttributes" -> ss.articleModelAttributes
+          )
+        }
+    implicit val ModelSchemaRootWrites: Writes[ModelSchemaRoot] = new Writes[ModelSchemaRoot] {
+        def writes(ss: ModelSchemaRoot) =
+          Json.obj(
+            "data" -> ss.data, 
+            "meta" -> ss.meta, 
+            "links" -> ss.links
+          )
+        }
+    }
 }

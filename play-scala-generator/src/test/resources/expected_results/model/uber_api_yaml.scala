@@ -10,7 +10,6 @@ package uber.api
 //noinspection ScalaStyle
 package object yaml {
 
-    type EstimatesPriceGetEnd_latitude = Double
     type ActivitiesHistory = Option[ActivitiesHistoryOpt]
     type ProfilePicture = Option[String]
     type ErrorCode = Option[Int]
@@ -41,4 +40,56 @@ package yaml {
     case class Error(code: ErrorCode, message: ProfilePicture, fields: ProfilePicture) 
 
 
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    import de.zalando.play.controllers.MissingDefaultWrites
+    object ResponseWrites extends MissingDefaultWrites {
+    implicit val ActivityWrites: Writes[Activity] = new Writes[Activity] {
+        def writes(ss: Activity) =
+          Json.obj(
+            "uuid" -> ss.uuid
+          )
+        }
+    implicit val ActivitiesWrites: Writes[Activities] = new Writes[Activities] {
+        def writes(ss: Activities) =
+          Json.obj(
+            "offset" -> ss.offset, 
+            "limit" -> ss.limit, 
+            "count" -> ss.count, 
+            "history" -> ss.history
+          )
+        }
+    implicit val PriceEstimateWrites: Writes[PriceEstimate] = new Writes[PriceEstimate] {
+        def writes(ss: PriceEstimate) =
+          Json.obj(
+            "low_estimate" -> ss.low_estimate, 
+            "display_name" -> ss.display_name, 
+            "estimate" -> ss.estimate, 
+            "high_estimate" -> ss.high_estimate, 
+            "product_id" -> ss.product_id, 
+            "currency_code" -> ss.currency_code, 
+            "surge_multiplier" -> ss.surge_multiplier
+          )
+        }
+    implicit val ProductWrites: Writes[Product] = new Writes[Product] {
+        def writes(ss: Product) =
+          Json.obj(
+            "image" -> ss.image, 
+            "description" -> ss.description, 
+            "display_name" -> ss.display_name, 
+            "product_id" -> ss.product_id, 
+            "capacity" -> ss.capacity
+          )
+        }
+    implicit val ProfileWrites: Writes[Profile] = new Writes[Profile] {
+        def writes(ss: Profile) =
+          Json.obj(
+            "first_name" -> ss.first_name, 
+            "email" -> ss.email, 
+            "promo_code" -> ss.promo_code, 
+            "last_name" -> ss.last_name, 
+            "picture" -> ss.picture
+          )
+        }
+    }
 }

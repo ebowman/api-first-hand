@@ -29,4 +29,16 @@ package yaml {
     case class Example(messages: ExampleMessages, nestedArrays: ExampleNestedArrays) 
 
 
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    import de.zalando.play.controllers.MissingDefaultReads
+    object BodyReads extends MissingDefaultReads {
+        implicit val ExampleReads: Reads[Example] = (
+            (JsPath \ "messages").readNullable[ExampleMessagesOpt] and (JsPath \ "nestedArrays").readNullable[ExampleNestedArraysOpt]
+        )(Example.apply _)
+        implicit val ActivityReads: Reads[Activity] = (
+            (JsPath \ "actions").readNullable[String]
+        )(Activity.apply _)
+    }
+
 }

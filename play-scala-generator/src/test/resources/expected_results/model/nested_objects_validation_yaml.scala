@@ -26,4 +26,16 @@ package yaml {
     case class NestedObjectsNestedNested2(nested3: NestedObjectsNestedNested2Nested3) 
 
 
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    import de.zalando.play.controllers.MissingDefaultReads
+    object BodyReads extends MissingDefaultReads {
+        implicit val NestedObjectsNestedNested2Reads: Reads[NestedObjectsNestedNested2] = (
+            (JsPath \ "nested3").readNullable[NestedObjectsNestedNested2Nested3Opt]
+        )(NestedObjectsNestedNested2.apply _)
+        implicit val NestedObjectsReads: Reads[NestedObjects] = (
+            (JsPath \ "plain").readNullable[NestedObjectsPlainOpt] and (JsPath \ "nested").readNullable[NestedObjectsNestedOpt]
+        )(NestedObjects.apply _)
+    }
+
 }
