@@ -33,3 +33,5 @@ object BinaryString {
   implicit def byteArray2binaryString(s: Array[Byte]): BinaryString = BinaryString(s)
   implicit def binaryString2byteArray(s: BinaryString): Array[Byte] = s.value
 }
+
+trait StringAnyVal extends Any { def value: String }

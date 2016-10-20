@@ -46,7 +46,7 @@ trait {{controller.base}} extends Controller with PlayBodyParsing {{if controlle
     private type {{m.action_type}}[T]            = {{m.action_request_type}} => Future[{{m.result_class_prefix}}Type[T] forSome { type T }]
 
     {{for body in m.body_param}}
-        {{if m.json_readables}}
+        {{if json_readables.data}}
         import BodyReads._
         {{else}}
         import MissingDefaultReads._
@@ -112,7 +112,7 @@ def {{m.action}}[T] = (f: {{m.action_type}}[T]) =>{{if m.non_body_params}} ({{/i
                 case Right(r: Future[{{m.result_class_prefix}}Type[_] @unchecked]) =>
                     val providedTypes = {{m.produces}}
                     val result = negotiateContent(request.acceptedTypes, providedTypes) map { {{m.response_mime_type_name}} =>
-                        {{if m.json_writables}}
+                        {{if json_writables.data}}
                         import ResponseWrites._
                         {{else}}
                         import MissingDefaultWrites._

@@ -37,6 +37,7 @@ trait ClassesStep extends EnrichmentStep[Type] {
     Map(
       "name" -> typeNameDenotation(table, k),
       "optional" -> t.isInstanceOf[Opt],
+      "single_field" -> (typeFields(table, k).size == 1),
       "fields" -> typeFields(table, k).map { f =>
         val nullableType = f.tpe match {
           case TypeRef(r) =>

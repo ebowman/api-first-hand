@@ -21,6 +21,19 @@ trait MissingDefaultWrites extends DefaultWrites {
   implicit object BigIntegerWrites extends Writes[BigInteger] {
     def writes(o: BigInteger): JsNumber = JsNumber(BigDecimal(o))
   }
+  /**
+   * Serializer for AnyVal types.
+   */
+  implicit object StringAnyValWrites extends Writes[StringAnyVal] {
+    def writes(o: StringAnyVal): JsString = JsString(o.value)
+  }
+
+  /**
+   * Serializer for ArrResult types.
+   */
+  implicit def arrayWrapperWrites[T](implicit fmt: Writes[T]): Writes[ArrayWrapper[T]] = new Writes[ArrayWrapper[T]] {
+    def writes(o: ArrayWrapper[T]) = JsArray(o.items.map(fmt.writes))
+  }
 }
 
 object MissingDefaultReads extends MissingDefaultReads

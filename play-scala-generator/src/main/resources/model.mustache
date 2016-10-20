@@ -53,9 +53,7 @@ package {{main_package_suffix}} {
 {{/for}}
 
 {{for enum in enums}}
-    case class {{enum.name}}(value: {{enum.type_name}}) extends AnyVal {
-        override def toString = value.toString
-    }
+    case class {{enum.name}}(override val value: {{enum.type_name}}) extends AnyVal with de.zalando.play.controllers.StringAnyVal
 {{/for}}
 {{if json_readables.data}}
     import play.api.libs.json._
@@ -65,7 +63,7 @@ package {{main_package_suffix}} {
         {{for class in json_readables.data}}
         implicit val {{class.name}}Reads: Reads[{{class.name}}] = (
             {{for field in class.fields}}(JsPath \ "{{field.name}}").read{{if field.nullable_type_name}}Nullable[{{field.nullable_type_name}}]{{else}}[{{field.type_name}}]{{/if}}{{if field.isNotLast}} and {{/if}}{{/for}}
-        )({{class.name}}.apply _){{if class.optional}} map Option{{/if}}
+        ){{if class.single_field}}.map{{/if}}({{class.name}}.apply{{if class.single_field}} {{else}} _{{/if}}){{if class.optional}} map Option{{/if}}
         {{/for}}
     }
 {{/if}}
