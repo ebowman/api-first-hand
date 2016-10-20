@@ -245,12 +245,8 @@ package yaml {
     case class Error(source: ErrorSource, code: MetaCopyright, status: MetaCopyright, detail: MetaCopyright, title: MetaCopyright) 
     case class Links(self: MetaCopyright, related: MetaCopyright) 
 
-    case class ModelSchemaSilhouetteId(value: String) extends AnyVal {
-        override def toString = value.toString
-    }
-    case class ModelSchemaAgeGroupsArrResult(value: String) extends AnyVal {
-        override def toString = value.toString
-    }
+    case class ModelSchemaSilhouetteId(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
+    case class ModelSchemaAgeGroupsArrResult(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
 
     import play.api.libs.json._
     import play.api.libs.functional.syntax._
@@ -261,7 +257,7 @@ package yaml {
         )(Links.apply _)
         implicit val MetaReads: Reads[Meta] = (
             (JsPath \ "copyright").readNullable[String]
-        )(Meta.apply _)
+        ).map(Meta.apply )
         implicit val ModelSchemaReads: Reads[ModelSchema] = (
             (JsPath \ "name").read[String] and (JsPath \ "sizeRegister").read[String] and (JsPath \ "brand").read[String] and (JsPath \ "partnerArticleModelId").read[BigInt] and (JsPath \ "description").readNullable[String] and (JsPath \ "ageGroups").read[ModelSchemaAgeGroups] and (JsPath \ "keywords").readNullable[String] and (JsPath \ "lengthRegister").readNullable[String] and (JsPath \ "silhouetteId").read[ModelSchemaSilhouetteId] and (JsPath \ "specialDescriptions").readNullable[ModelSchemaSpecialDescriptionsOpt] and (JsPath \ "articleModelAttributes").readNullable[ModelSchemaSpecialDescriptionsOpt]
         )(ModelSchema.apply _)

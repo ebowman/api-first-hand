@@ -47,9 +47,8 @@ $ absent target/routes/test/generators/echo.api.yaml.scala
 # -> compile
 > playScalaMarshallers
 > playScalaSecurity
-$ pause
+# $ pause
 > compile
-$ pause
 
 # no test data exists yet
 

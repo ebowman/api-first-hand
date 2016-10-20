@@ -5,6 +5,8 @@ import java.math.BigInteger
 import play.api.data.validation.ValidationError
 import play.api.libs.json.{ JsError, _ }
 
+import scala.reflect.ClassTag
+
 object MissingDefaultWrites extends MissingDefaultWrites
 
 trait MissingDefaultWrites extends DefaultWrites {
@@ -63,4 +65,16 @@ trait MissingDefaultReads extends DefaultReads {
     case JsNumber(d) => JsSuccess(d.toBigInt().bigInteger)
     case _ => JsError(ValidationError("error.expected.jsnumberorjsstring"))
   }
+
+  /**
+   * Deserializer for StringAnyVal
+   */
+  implicit def stringAnyValReads[T <: StringAnyVal: ClassTag]: Reads[T] = Reads[T] {
+    case JsString(s) =>
+      val instance = implicitly[ClassTag[T]].runtimeClass.getConstructor(classOf[String]).newInstance(s)
+      JsSuccess(instance.asInstanceOf[T])
+    case _ =>
+      JsError(ValidationError("error.expected.jsstring"))
+  }
+
 }
