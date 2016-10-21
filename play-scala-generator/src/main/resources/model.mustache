@@ -9,35 +9,6 @@
 {{/for}}
 
 //noinspection ScalaStyle
-package object {{main_package_suffix}} {
-
-{{for alias in aliases}}
-    type {{alias.name}} = {{alias.alias}}{{alias.underlying_type}}
-{{/for}}
-
-{{for enum in enums}}
-    object {{enum.name}} {
-        {{for leaf in enum.leaves}}
-        val {{leaf.name}} = new {{enum.name}}({{leaf.value}}){{/for}}
-
-        implicit def stringTo{{enum.name}}: String => {{enum.name}} = {
-        {{for leaf in enum.leaves}}
-            case {{leaf.value}} => {{leaf.name}}
-        {{/for}}
-            case other =>
-                throw new IllegalArgumentException("Couldn't parse parameter " + other)
-        }
-    }
-{{/for}}
-{{if model_bindings}}
-import play.api.mvc.{QueryStringBindable, PathBindable}
-{{/if}}
-{{for binding in model_bindings}}
-    {{binding.full_name}}
-{{/for}}
-
-}
-//noinspection ScalaStyle
 package {{main_package_suffix}} {
 
 {{for trait in traits}}
@@ -84,4 +55,36 @@ package {{main_package_suffix}} {
     {{/for}}
     }
 {{/if}}
+}
+
+// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
+
+//noinspection ScalaStyle
+package object {{main_package_suffix}} {
+
+{{for alias in aliases}}
+    type {{alias.name}} = {{alias.alias}}{{alias.underlying_type}}
+{{/for}}
+
+{{for enum in enums}}
+    object {{enum.name}} {
+        {{for leaf in enum.leaves}}
+        val {{leaf.name}} = new {{enum.name}}({{leaf.value}}){{/for}}
+
+        implicit def stringTo{{enum.name}}: String => {{enum.name}} = {
+        {{for leaf in enum.leaves}}
+            case {{leaf.value}} => {{leaf.name}}
+        {{/for}}
+            case other =>
+                throw new IllegalArgumentException("Couldn't parse parameter " + other)
+        }
+    }
+{{/for}}
+{{if model_bindings}}
+import play.api.mvc.{QueryStringBindable, PathBindable}
+{{/if}}
+{{for binding in model_bindings}}
+    {{binding.full_name}}
+{{/for}}
+
 }
