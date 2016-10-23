@@ -157,8 +157,8 @@ class ScalaGenerator(
     val constructors = collectImplementations(controllerLines, csof, ceof)
     val injections = collectImplementations(controllerLines, isof, ieof)
 
-    val constructorCode = cleanFromComments(constructors)
-    val injectedCode = cleanFromComments(injections)
+    val constructorCode = cleanFromComments(constructors, csof, ceof)
+    val injectedCode = cleanFromComments(injections, isof, ieof)
 
     val unmanagedParts = analyzeController(modelCalls, codeParts)
 
@@ -218,10 +218,10 @@ class ScalaGenerator(
     renderTemplate(packages, templateName, allPackages)
   }
 
-  private def cleanFromComments(constructors: Map[String, Seq[String]]) = {
+  private def cleanFromComments(constructors: Map[String, Seq[String]], start: String, end: String) = {
     constructors map {
       case (k, v) =>
-        k -> v.filterNot(l => l.trim.startsWith(csof) || l.trim.startsWith(ceof)).mkString("\n")
+        k -> v.filterNot(l => l.trim.startsWith(start) || l.trim.startsWith(end)).mkString("\n")
     } withDefaultValue ""
   }
 
