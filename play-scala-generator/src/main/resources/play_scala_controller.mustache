@@ -15,13 +15,13 @@ package {{controller.effective_package}} {
 
     class {{controller.controller}} @Inject() (
         {{controller.inject_start_comment}}
-        {{controller.inject_code}}
+{{controller.inject_code}}
         {{controller.inject_end_comment}}
         lifecycle: ApplicationLifecycle,
         config: ConfigurationProvider
     ) extends {{controller.base}} {
         {{controller.start_comment}}
-        {{controller.constructor_code}}
+{{controller.constructor_code}}
         {{controller.end_comment}}
     {{for method in controller.methods}}
         val {{method.method}} = {{method.action}} { {{for sp in method.single_parameter}}({{sp.field_name}}: {{sp.type_name}}) =>{{/for}}{{if method.multiple_parameters}}input: ({{for p in method.multiple_parameters}}{{p.type_name}}{{if p.isNotLast}}, {{/if}}{{/for}}) =>
