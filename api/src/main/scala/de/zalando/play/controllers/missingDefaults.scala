@@ -77,4 +77,13 @@ trait MissingDefaultReads extends DefaultReads {
       JsError(ValidationError("error.expected.jsstring"))
   }
 
+  import play.api.libs.json.JsReadable
+  import scala.language.implicitConversions
+  import scala.xml.NodeSeq
+
+  implicit def nodeSeq2JsReadable(n: NodeSeq): JsReadable = {
+    sys.error("Generic NodeSeq -> JsReadable converter is not implemented yet")
+  }
+
 }
+

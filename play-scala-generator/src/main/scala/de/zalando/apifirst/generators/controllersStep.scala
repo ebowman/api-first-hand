@@ -298,6 +298,9 @@ object ControllersCommons {
   val ceof = "// ----- End of unmanaged code area for constructor "
   val csof = "// ----- Start of unmanaged code area for constructor "
 
+  val ieof = "// ----- End of unmanaged code area for injections "
+  val isof = "// ----- Start of unmanaged code area for injections "
+
 }
 
 object NewPlayBodyParsing {

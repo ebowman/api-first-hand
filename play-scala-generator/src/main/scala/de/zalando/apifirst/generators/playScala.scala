@@ -155,11 +155,10 @@ class ScalaGenerator(
     val controllerLines = currentController.split("\n")
     val codeParts = collectImplementations(controllerLines, sof, eof)
     val constructors = collectImplementations(controllerLines, csof, ceof)
+    val injections = collectImplementations(controllerLines, isof, ieof)
 
-    val constructorCode = constructors map {
-      case (k, v) =>
-        k -> v.filterNot(l => l.trim.startsWith(csof) || l.trim.startsWith(ceof)).mkString("\n")
-    } withDefaultValue ""
+    val constructorCode = cleanFromComments(constructors)
+    val injectedCode = cleanFromComments(injections)
 
     val unmanagedParts = analyzeController(modelCalls, codeParts)
 
@@ -185,7 +184,7 @@ class ScalaGenerator(
     )
 
     val controllersList = PlayScalaControllersGenerator.
-      controllers(modelCalls, unmanagedParts, pckg, deadCode, constructorCode)(denotationTable)
+      controllers(modelCalls, unmanagedParts, pckg, deadCode, constructorCode, injectedCode)(denotationTable)
 
     val stdImports = standardImports(modelTypes).map(i => Map("name" -> i))
 
@@ -217,6 +216,13 @@ class ScalaGenerator(
     val allPackages = enrichWithStructuralInfo(rawAllPackages)
 
     renderTemplate(packages, templateName, allPackages)
+  }
+
+  private def cleanFromComments(constructors: Map[String, Seq[String]]) = {
+    constructors map {
+      case (k, v) =>
+        k -> v.filterNot(l => l.trim.startsWith(csof) || l.trim.startsWith(ceof)).mkString("\n")
+    } withDefaultValue ""
   }
 
   def renderTemplate(map: Map[String, Any], templateName: String,
@@ -280,7 +286,7 @@ object PlayScalaControllersGenerator {
   val securityTraitSuffix = "Security"
 
   def controllers(allCalls: Seq[ApiCall], unmanagedParts: Map[ApiCall, UnmanagedPart], packageName: String,
-    deadCode: Map[String, String], constructorCode: Map[String, String])(table: DenotationTable): Iterable[Map[String, Object]] = {
+    deadCode: Map[String, String], constructorCode: Map[String, String], injectedCode: Map[String, String])(table: DenotationTable): Iterable[Map[String, Object]] = {
     allCalls groupBy { c =>
       (c.handler.packageName, c.handler.controller)
     } map {
@@ -308,7 +314,10 @@ object PlayScalaControllersGenerator {
           "dead_code" -> deadCodeParts,
           "start_comment" -> (csof + controllerName),
           "end_comment" -> (ceof + controllerName),
-          "constructor_code" -> constructorCode(controller._2)
+          "constructor_code" -> constructorCode(controller._2),
+          "inject_start_comment" -> (isof + controllerName),
+          "inject_end_comment" -> (ieof + controllerName),
+          "inject_code" -> injectedCode(controller._2)
         )
     }
   }
