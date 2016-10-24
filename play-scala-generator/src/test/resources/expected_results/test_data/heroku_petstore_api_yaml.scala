@@ -4,7 +4,6 @@ import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 import play.api.libs.json.scalacheck.JsValueGenerators
 import Arbitrary._
-import scala.math.BigInt
 
 object Generators extends JsValueGenerators {
     

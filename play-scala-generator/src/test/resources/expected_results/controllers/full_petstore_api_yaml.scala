@@ -23,7 +23,13 @@ import javax.inject._
 
 package full.petstore.api.yaml {
 
-    class FullPetstoreApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends FullPetstoreApiYamlBase {
+    class FullPetstoreApiYaml @Inject() (
+        // ----- Start of unmanaged code area for injections FullPetstoreApiYaml
+
+        // ----- End of unmanaged code area for injections FullPetstoreApiYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends FullPetstoreApiYamlBase {
         // ----- Start of unmanaged code area for constructor FullPetstoreApiYaml
 
         // ----- End of unmanaged code area for constructor FullPetstoreApiYaml

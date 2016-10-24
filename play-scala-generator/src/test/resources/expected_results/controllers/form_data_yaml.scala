@@ -25,7 +25,13 @@ import java.io.File
 
 package form_data.yaml {
 
-    class Form_dataYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends Form_dataYamlBase {
+    class Form_dataYaml @Inject() (
+        // ----- Start of unmanaged code area for injections Form_dataYaml
+
+        // ----- End of unmanaged code area for injections Form_dataYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends Form_dataYamlBase {
         // ----- Start of unmanaged code area for constructor Form_dataYaml
 
         // ----- End of unmanaged code area for constructor Form_dataYaml

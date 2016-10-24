@@ -32,14 +32,14 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
       result mustBeAs
         """package `test-file`
           |//noinspection ScalaStyle
-          |package object scala {
-          |type Opti = Option[Long]
-          |type Stri = Option[String]
-          |}
-          |//noinspection ScalaStyle
           |package scala {
           |}
-          | """
+          |// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
+          |//noinspection ScalaStyle
+          |package object scala {
+          |    type Opti = Option[Long]
+          |    type Stri = Option[String]
+          |}"""
     }
 
     it("should deal with overriden type definitions") {
@@ -47,17 +47,18 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
         "definitions" / "Option" -> Opt(Lng(None), None),
         "definitions" / "String" -> Opt(Str(None, None), None)
       )
-      new ScalaGenerator(model).generateModel("overloaded.txt", "overloaded.txt") mustBeAs
+      val result = new ScalaGenerator(model).generateModel("overloaded.txt", "overloaded.txt")
+      result mustBeAs
         """package overloaded
-          |//noinspection ScalaStyle
-          |package object txt {
-          |type Option = Option[Long]
-          |type String = Option[String]
-          |}
           |//noinspection ScalaStyle
           |package txt {
           |}
-          | """
+          |// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
+          |//noinspection ScalaStyle
+          |package object txt {
+          |    type Option = Option[Long]
+          |    type String = Option[String]
+          |}"""
     }
 
     it("should generate single type alias for an array") {
@@ -66,36 +67,38 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
         "definitions" / "Dbl" -> Arr(Dbl(None), None, "tsv"),
         "definitions" / "Flt" -> Arr(Flt(None), None, "ssv")
       )
-      new ScalaGenerator(model).generateModel("test.scala", "test.scala") mustBeAs
+      val result = new ScalaGenerator(model).generateModel("test.scala", "test.scala")
+      result mustBeAs
         """package test
-          |import de.zalando.play.controllers.ArrayWrapper
-          |//noinspection ScalaStyle
-          |package object scala {
-          |type Int = ArrayWrapper[Int]
-          |type Dbl = ArrayWrapper[Double]
-          |type Flt = ArrayWrapper[Float]
-          |}
+          |    import de.zalando.play.controllers.ArrayWrapper
           |//noinspection ScalaStyle
           |package scala {
           |}
-          | """
+          |// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
+          |//noinspection ScalaStyle
+          |package object scala {
+          |    type Int = ArrayWrapper[Int]
+          |    type Dbl = ArrayWrapper[Double]
+          |    type Flt = ArrayWrapper[Float]
+          |}"""
     }
 
     it("should generate single type alias for catchAll") {
       val model = Map(
         "parameters" / "all" -> CatchAll(Bool(None), None)
       )
-      new ScalaGenerator(model).generateModel("test.scala", "test.scala") mustBeAs
+      val result = new ScalaGenerator(model).generateModel("test.scala", "test.scala")
+      result mustBeAs
         """package test
-          |import scala.collection.immutable.Map
-          |//noinspection ScalaStyle
-          |package object scala {
-          |type All = Map[String, Boolean]
-          |}
+          |    import scala.collection.immutable.Map
           |//noinspection ScalaStyle
           |package scala {
           |}
-          | """
+          |// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
+          |//noinspection ScalaStyle
+          |package object scala {
+          |    type All = Map[String, Boolean]
+          |}"""
     }
 
     it("should generate single type alias for top-level primitive type") {
@@ -114,16 +117,17 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
       val model = Map(
         "definitions" / "User" -> TypeDef("definitions" / "User", fields, None)
       )
-      new ScalaGenerator(model).generateModel("test.scala", "test.scala") mustBeAs
+      val result = new ScalaGenerator(model).generateModel("test.scala", "test.scala")
+      result mustBeAs
         """package test
           |//noinspection ScalaStyle
-          |package object scala {
-          |}
-          |//noinspection ScalaStyle
           |package scala {
-          |case class User(name: String, id: Long)
+          |    case class User(name: String, id: Long)
           |}
-          | """
+          |// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
+          |//noinspection ScalaStyle
+          |package object scala {
+          |}"""
     }
 
     it("should generate a type alias for the TypeReference") {
@@ -131,18 +135,19 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
         "definitions" / "OptionalData" -> Opt(TypeRef("definitions" / "Passwords"), None),
         "definitions" / "Passwords" -> Arr(Password(None), None, "csv")
       )
-      new ScalaGenerator(model).generateModel("test.scala", "test.scala") mustBeAs
+      val result = new ScalaGenerator(model).generateModel("test.scala", "test.scala")
+      result mustBeAs
         """package test
-          |import de.zalando.play.controllers.ArrayWrapper
-          |//noinspection ScalaStyle
-          |package object scala {
-          |type OptionalData = Option[Passwords]
-          |type Passwords = ArrayWrapper[String]
-          |}
+          |    import de.zalando.play.controllers.ArrayWrapper
           |//noinspection ScalaStyle
           |package scala {
           |}
-          | """
+          |// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
+          |//noinspection ScalaStyle
+          |package object scala {
+          |    type OptionalData = Option[Passwords]
+          |    type Passwords = ArrayWrapper[String]
+          |}"""
     }
 
     it("should generate a complex polymorphic hierarchy") {
@@ -200,21 +205,22 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
       result mustBeAs
         """package overriden.package
           |//noinspection ScalaStyle
-          |package object scala {
-          |}
-          |//noinspection ScalaStyle
           |package scala {
-          |trait IPet {
-          |    def name: String
-          |    def petType: String
+          |    trait IPet {
+          |        def name: String
+          |        def petType: String
+          |    }
+          |    case class Cat(name: String, petType: String, huntingSkill: String) extends IPet
+          |    case class Dog(name: String, petType: String, packSize: Int) extends IPet
+          |    case class CatNDog(name: String, petType: String, packSize: Int, huntingSkill: String) extends IPet
+          |    case class Pet(name: String, petType: String) extends IPet
+          |    case class Labrador(name: String, petType: String, packSize: Int, cuteness: Int) extends IPet
           |}
-          |case class Cat(name: String, petType: String, huntingSkill: String) extends IPet
-          |case class Dog(name: String, petType: String, packSize: Int) extends IPet
-          |case class CatNDog(name: String, petType: String, packSize: Int, huntingSkill: String) extends IPet
-          |case class Pet(name: String, petType: String) extends IPet
-          |case class Labrador(name: String, petType: String, packSize: Int, cuteness: Int) extends IPet
-          |}
-          | """
+          |// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
+          |
+          |//noinspection ScalaStyle
+          |package object scala {
+          |}"""
     }
 
     it("should generate a simple composition") {
@@ -234,17 +240,18 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
             Field("definitions" / "ExtendedErrorModel" / "rootCause", Str(None, None))
           ), None)
       )
-      new ScalaGenerator(model).generateModel("test.scala", "test.scala") mustBeAs
+      val result = new ScalaGenerator(model).generateModel("test.scala", "test.scala")
+      result mustBeAs
         """package test
           |//noinspection ScalaStyle
-          |package object scala {
-          |}
-          |//noinspection ScalaStyle
           |package scala {
-          |case class ErrorModel(message: String, code: Int)
-          |case class ExtendedErrorModel(message: String, code: Int, rootCause: String)
+          |    case class ErrorModel(message: String, code: Int)
+          |    case class ExtendedErrorModel(message: String, code: Int, rootCause: String)
           |}
-          | """
+          |// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
+          |//noinspection ScalaStyle
+          |package object scala {
+          |}"""
     }
 
   }

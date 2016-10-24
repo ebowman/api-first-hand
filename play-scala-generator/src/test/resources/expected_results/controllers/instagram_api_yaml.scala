@@ -29,7 +29,13 @@ import scala.math.BigDecimal
 
 package instagram.api.yaml {
 
-    class InstagramApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends InstagramApiYamlBase {
+    class InstagramApiYaml @Inject() (
+        // ----- Start of unmanaged code area for injections InstagramApiYaml
+
+        // ----- End of unmanaged code area for injections InstagramApiYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends InstagramApiYamlBase {
         // ----- Start of unmanaged code area for constructor InstagramApiYaml
 
         // ----- End of unmanaged code area for constructor InstagramApiYaml

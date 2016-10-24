@@ -23,7 +23,13 @@ import javax.inject._
 
 package basic.auth.api.yaml {
 
-    class BasicAuthApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends BasicAuthApiYamlBase {
+    class BasicAuthApiYaml @Inject() (
+        // ----- Start of unmanaged code area for injections BasicAuthApiYaml
+
+        // ----- End of unmanaged code area for injections BasicAuthApiYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends BasicAuthApiYamlBase {
         // ----- Start of unmanaged code area for constructor BasicAuthApiYaml
 
         // ----- End of unmanaged code area for constructor BasicAuthApiYaml

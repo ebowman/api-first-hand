@@ -23,7 +23,13 @@ import javax.inject._
 
 package security.api.yaml {
 
-    class SecurityApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends SecurityApiYamlBase {
+    class SecurityApiYaml @Inject() (
+        // ----- Start of unmanaged code area for injections SecurityApiYaml
+
+        // ----- End of unmanaged code area for injections SecurityApiYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends SecurityApiYamlBase {
         // ----- Start of unmanaged code area for constructor SecurityApiYaml
 
         // ----- End of unmanaged code area for constructor SecurityApiYaml

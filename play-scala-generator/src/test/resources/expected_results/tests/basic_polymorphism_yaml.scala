@@ -34,21 +34,22 @@ class Basic_polymorphism_yamlSpec extends WordSpec with OptionValues with WsScal
     def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
     def toHeader[T](value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
 
-  def checkResult(props: Prop) =
+  def checkResult(props: Prop): org.specs2.execute.Result =
     Test.check(Test.Parameters.default, props).status match {
       case Failed(args, labels) =>
         val failureMsg = labels.mkString("\n") + " given args: " + args.map(_.arg).mkString("'", "', '","'")
-        Failure(failureMsg)
-      case Proved(_) | Exhausted | Passed => Success()
+        org.specs2.execute.Failure(failureMsg)
+      case Proved(_) | Exhausted | Passed => org.specs2.execute.Success()
+      case PropException(_, e: IllegalStateException, _) => org.specs2.execute.Error(e.getMessage)
       case PropException(_, e, labels) =>
-        val error = if (labels.isEmpty) e.getLocalizedMessage() else labels.mkString("\n")
-        Failure(error)
+        val error = if (labels.isEmpty) e.getLocalizedMessage else labels.mkString("\n")
+        org.specs2.execute.Failure(error)
     }
 
   private def parserConstructor(mimeType: String) = PlayBodyParsing.jacksonMapper(mimeType)
 
   def parseResponseContent[T](mapper: ObjectMapper, content: String, mimeType: Option[String], expectedType: Class[T]) =
-    mapper.readValue(content, expectedType)
+    if (expectedType.getCanonicalName == "scala.runtime.Null$") null else mapper.readValue(content, expectedType)
 
 
     "PUT /" should {
@@ -59,6 +60,8 @@ class Basic_polymorphism_yamlSpec extends WordSpec with OptionValues with WsScal
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq()
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -85,14 +88,13 @@ class Basic_polymorphism_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_dummy + "]") |: all(
+                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_dummy + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
                     s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(dummy: PutDummy): Prop = {
@@ -103,6 +105,8 @@ class Basic_polymorphism_yamlSpec extends WordSpec with OptionValues with WsScal
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq()
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -134,14 +138,13 @@ class Basic_polymorphism_yamlSpec extends WordSpec with OptionValues with WsScal
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_dummy + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_dummy + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {

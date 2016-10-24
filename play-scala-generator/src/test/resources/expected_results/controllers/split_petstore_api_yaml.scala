@@ -23,7 +23,13 @@ import javax.inject._
 
 package split.petstore.api.yaml {
 
-    class SplitPetstoreApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends SplitPetstoreApiYamlBase {
+    class SplitPetstoreApiYaml @Inject() (
+        // ----- Start of unmanaged code area for injections SplitPetstoreApiYaml
+
+        // ----- End of unmanaged code area for injections SplitPetstoreApiYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends SplitPetstoreApiYamlBase {
         // ----- Start of unmanaged code area for constructor SplitPetstoreApiYaml
 
         // ----- End of unmanaged code area for constructor SplitPetstoreApiYaml

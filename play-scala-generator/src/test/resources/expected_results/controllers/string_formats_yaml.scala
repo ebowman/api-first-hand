@@ -27,7 +27,13 @@ import BinaryString._
 
 package string_formats.yaml {
 
-    class String_formatsYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends String_formatsYamlBase {
+    class String_formatsYaml @Inject() (
+        // ----- Start of unmanaged code area for injections String_formatsYaml
+
+        // ----- End of unmanaged code area for injections String_formatsYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends String_formatsYamlBase {
         // ----- Start of unmanaged code area for constructor String_formatsYaml
 
         // ----- End of unmanaged code area for constructor String_formatsYaml

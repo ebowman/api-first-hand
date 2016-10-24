@@ -7,8 +7,6 @@ import PlayValidations._
 
 import de.zalando.play.controllers.Base64String
 import Base64String._
-import de.zalando.play.controllers.BinaryString
-import BinaryString._
 import java.time.ZonedDateTime
 import java.util.UUID
 import java.time.LocalDate

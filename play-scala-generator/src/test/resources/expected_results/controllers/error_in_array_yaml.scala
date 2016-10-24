@@ -23,7 +23,13 @@ import javax.inject._
 
 package error_in_array.yaml {
 
-    class Error_in_arrayYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends Error_in_arrayYamlBase {
+    class Error_in_arrayYaml @Inject() (
+        // ----- Start of unmanaged code area for injections Error_in_arrayYaml
+
+        // ----- End of unmanaged code area for injections Error_in_arrayYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends Error_in_arrayYamlBase {
         // ----- Start of unmanaged code area for constructor Error_in_arrayYaml
 
         // ----- End of unmanaged code area for constructor Error_in_arrayYaml

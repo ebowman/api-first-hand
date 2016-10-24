@@ -39,6 +39,7 @@ script:
 #  - sbt -jvm-opts travis/jvmopts clean compile
   - sbt -jvm-opts travis/jvmopts test
   - sbt -jvm-opts travis/jvmopts_scripted scripted
+  - cd swagger-tester && sbt -jvm-opts travis/jvmopts test & cd ..
 #  - sbt -jvm-opts travis/jvmopts < travis_coverage_script.txt
 
 

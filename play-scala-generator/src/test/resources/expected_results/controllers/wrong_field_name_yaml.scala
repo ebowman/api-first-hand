@@ -23,7 +23,13 @@ import javax.inject._
 
 package wrong_field_name.yaml {
 
-    class Wrong_field_nameYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends Wrong_field_nameYamlBase {
+    class Wrong_field_nameYaml @Inject() (
+        // ----- Start of unmanaged code area for injections Wrong_field_nameYaml
+
+        // ----- End of unmanaged code area for injections Wrong_field_nameYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends Wrong_field_nameYamlBase {
         // ----- Start of unmanaged code area for constructor Wrong_field_nameYaml
 
         // ----- End of unmanaged code area for constructor Wrong_field_nameYaml

@@ -6,8 +6,6 @@ import play.api.libs.json.scalacheck.JsValueGenerators
 import Arbitrary._
 import de.zalando.play.controllers.Base64String
 import Base64String._
-import de.zalando.play.controllers.BinaryString
-import BinaryString._
 import java.time.ZonedDateTime
 import java.util.UUID
 import java.time.LocalDate
@@ -47,9 +45,6 @@ object Generators extends JsValueGenerators {
         l <- arbitrary[Long]
     } yield ZonedDateTime.of(java.time.LocalDateTime.ofEpochSecond(l, 0, java.time.ZoneOffset.UTC), java.time.ZoneId.systemDefault()))
     
-    implicit lazy val arbBinaryString: Arbitrary[BinaryString] = Arbitrary(for {
-        s <- arbitrary[String]
-    } yield BinaryString.fromString(s))
     
     implicit lazy val arbBase64String: Arbitrary[Base64String] = Arbitrary(for {
         s <- arbitrary[String]

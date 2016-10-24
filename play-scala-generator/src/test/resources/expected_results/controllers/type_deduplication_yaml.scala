@@ -23,7 +23,13 @@ import javax.inject._
 
 package type_deduplication.yaml {
 
-    class Type_deduplicationYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends Type_deduplicationYamlBase {
+    class Type_deduplicationYaml @Inject() (
+        // ----- Start of unmanaged code area for injections Type_deduplicationYaml
+
+        // ----- End of unmanaged code area for injections Type_deduplicationYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends Type_deduplicationYamlBase {
         // ----- Start of unmanaged code area for constructor Type_deduplicationYaml
 
         // ----- End of unmanaged code area for constructor Type_deduplicationYaml

@@ -35,20 +35,21 @@ class Security_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestC
     def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
     def toHeader[T](value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
 
-  def checkResult(props: Prop) =
+  def checkResult(props: Prop): org.specs2.execute.Result =
     Test.check(Test.Parameters.default, props).status match {
       case Failed(args, labels) =>
         val failureMsg = labels.mkString("\n") + " given args: " + args.map(_.arg).mkString("'", "', '","'")
-        Failure(failureMsg)
-      case Proved(_) | Exhausted | Passed => Success()
+        org.specs2.execute.Failure(failureMsg)
+      case Proved(_) | Exhausted | Passed => org.specs2.execute.Success()
+      case PropException(_, e: IllegalStateException, _) => org.specs2.execute.Error(e.getMessage)
       case PropException(_, e, labels) =>
-        val error = if (labels.isEmpty) e.getLocalizedMessage() else labels.mkString("\n")
-        Failure(error)
+        val error = if (labels.isEmpty) e.getLocalizedMessage else labels.mkString("\n")
+        org.specs2.execute.Failure(error)
     }
 
   private def parserConstructor(mimeType: String) = PlayBodyParsing.jacksonMapper(mimeType)
 
   def parseResponseContent[T](mapper: ObjectMapper, content: String, mimeType: Option[String], expectedType: Class[T]) =
-    mapper.readValue(content, expectedType)
+    if (expectedType.getCanonicalName == "scala.runtime.Null$") null else mapper.readValue(content, expectedType)
 
 }

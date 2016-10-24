@@ -2,7 +2,7 @@ package de.zalando.apifirst.generators
 
 import de.zalando.ExpectedResults
 import de.zalando.model._
-import org.scalatest.{FunSpec, MustMatchers}
+import org.scalatest.{ FunSpec, MustMatchers }
 
 class ScalaBaseControllerGeneratorIntegrationTest extends FunSpec with MustMatchers with ExpectedResults {
 
