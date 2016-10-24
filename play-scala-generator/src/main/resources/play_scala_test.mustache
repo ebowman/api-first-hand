@@ -52,7 +52,7 @@ class {{spec_name}} extends WordSpec with OptionValues with WsScalaTestClient wi
   private def parserConstructor(mimeType: String) = PlayBodyParsing.jacksonMapper(mimeType)
 
   def parseResponseContent[T](mapper: ObjectMapper, content: String, mimeType: Option[String], expectedType: Class[T]) =
-    mapper.readValue(content, expectedType)
+    if (expectedType.getCanonicalName == "scala.runtime.Null$") null else mapper.readValue(content, expectedType)
 
 {{for test in tests}}
 
@@ -173,7 +173,7 @@ class {{spec_name}} extends WordSpec with OptionValues with WsScalaTestClient wi
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" {{for b in test.body_param}}+ " and body [" + parsed_{{b.body_parameter_name}} + "]"{{/for}}) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
