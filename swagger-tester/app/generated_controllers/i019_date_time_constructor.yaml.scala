@@ -15,6 +15,8 @@ import scala.util._
 
 import javax.inject._
 
+import java.time.ZonedDateTime
+
 
 /**
  * This controller is re-generated after each change in the specification.
@@ -37,6 +39,12 @@ package i019_date_time_constructor.yaml {
             // ----- Start of unmanaged code area for action  I019_date_time_constructorYaml.post
             Post200(body.getOrElse(throw new IllegalStateException("Body is expected")))
             // ----- End of unmanaged code area for action  I019_date_time_constructorYaml.post
+        }
+        val getbyTask = getbyTaskAction { input: (ZonedDateTime, ZonedDateTime) =>
+            val (header, task) = input
+            // ----- Start of unmanaged code area for action  I019_date_time_constructorYaml.getbyTask
+            GetbyTask200(Task(Option(header), Option(task)))
+            // ----- End of unmanaged code area for action  I019_date_time_constructorYaml.getbyTask
         }
     
     }

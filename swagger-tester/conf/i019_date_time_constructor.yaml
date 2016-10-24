@@ -25,6 +25,26 @@ paths:
           description: 200 response
           schema:
             $ref: '#/definitions/Task'
+  /{task}:
+    get:
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: header
+          required: true
+          type: string
+          format: date-time
+        - in: path
+          name: task
+          required: true
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: 200 response
+          schema:
+            $ref: '#/definitions/Task'
 definitions:
   Task:
     type: object
