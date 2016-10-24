@@ -51,7 +51,7 @@ trait ClassesStep extends EnrichmentStep[Type] {
           TYPE_NAME -> typeNameDenotation(table, f.tpe.name)
         )
       },
-      "imports" -> t.imports
+      "imports" -> t.realImports
     ) ++ abstractTypeNameDenotation(table, k).map("abstract_name" -> _).toSeq
   }
 

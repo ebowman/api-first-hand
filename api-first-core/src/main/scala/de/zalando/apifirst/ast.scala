@@ -136,12 +136,13 @@ object Domain {
       nestedTypes ++ nestedTypes.flatMap(_.allNestedTypes)
     def imports: Set[String] = Set.empty
     def realType(implicit app: StrictModel): Type = this
+    def realImports(implicit app: StrictModel): Set[String] = imports
   }
 
   case class TypeRef(override val name: Reference) extends Type(name, TypeMeta(None)) {
-    // override def nestedTypes(implicit app: StrictModel): Seq[Type] = realType.nestedTypes
     override def allNestedTypes(implicit app: StrictModel): Seq[Type] = realType.allNestedTypes
     override def realType(implicit app: StrictModel): Type = app.findType(name)
+    override def realImports(implicit app: StrictModel): Set[String] = realType.imports
   }
 
   abstract class ProvidedType(name: String, override val meta: TypeMeta)
@@ -216,6 +217,7 @@ object Domain {
     override def nestedTypes(implicit app: StrictModel): Seq[Type] = descendants flatMap (_.nestedTypes)
     override def allNestedTypes(implicit app: StrictModel): Seq[Type] = descendants flatMap (_.realType.allNestedTypes)
     override def imports: Set[String] = descendants.flatMap(_.imports).toSet
+    override def realImports(implicit app: StrictModel): Set[String] = descendants.flatMap(_.realImports).toSet
     def withTypes(t: Seq[Type]): Composite
   }
 
@@ -247,6 +249,7 @@ object Domain {
     override def nestedTypes(implicit app: StrictModel): Seq[Type] = Seq(tpe)
     override def allNestedTypes(implicit app: StrictModel): Seq[Type] = tpe.realType +: tpe.realType.allNestedTypes
     def withType(t: Type): Container
+    override def realImports(implicit app: StrictModel): Set[String] = imports ++ tpe.realImports
   }
 
   case class Arr(override val tpe: Type, override val meta: TypeMeta, format: String)
@@ -275,6 +278,7 @@ object Domain {
       case c: Container => c.allImports
       case o => o.imports
     }
+    def realImports(implicit app: StrictModel): Set[String] = tpe.realImports
     def nestedTypes(implicit app: StrictModel): Seq[Type] = tpe.nestedTypes :+ tpe
     def allNestedTypes(implicit app: StrictModel): Seq[Type] = tpe.realType +: tpe.realType.allNestedTypes
   }
@@ -288,6 +292,8 @@ object Domain {
     override def nestedTypes(implicit app: StrictModel): Seq[Type] = allNestedTypes filter { _.name.parent == name } distinct
     override def allNestedTypes(implicit app: StrictModel): Seq[Type] = this +: (fields flatMap (_.allNestedTypes))
     override def imports: Set[String] = (fields flatMap { _.imports }).toSet
+    override def realImports(implicit app: StrictModel): Set[String] = (fields flatMap { _.realImports }).toSet
+
   }
 
   abstract class EnumType(override val name: Reference, override val tpe: Type, override val meta: TypeMeta)

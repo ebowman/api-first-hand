@@ -1,0 +1,48 @@
+swagger: '2.0'
+info:
+  version:     0.0.1
+  title:       Loop
+  description: Absent imports for date-time types
+schemes:
+  - http
+host: localhost:8888
+basePath: /020
+paths:
+  /:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: false
+          schema:
+            $ref: "#/definitions/DatetimeValue"
+      responses:
+        '200':
+          description: 200 response
+          schema:
+            $ref: '#/definitions/DatetimeValue'
+        '400':
+          description: Wrong request structure
+definitions:
+  Value:
+    type: object
+    discriminator: type
+    required:
+      - type
+    properties:
+      type:
+        type: string
+  DatetimeValue:
+    allOf:
+      - $ref: '#/definitions/Value'
+      - type: object
+        required:
+          - value
+        properties:
+          value:
+            type: string
+            format: date-time

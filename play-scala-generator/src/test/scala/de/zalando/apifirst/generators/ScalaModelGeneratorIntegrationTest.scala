@@ -1,15 +1,15 @@
 package de.zalando.apifirst.generators
 
 import de.zalando.ExpectedResults
-import de.zalando.model.{ WithModel, hackweek_yaml, nakadi_yaml }
-import org.scalatest.{ FunSpec, MustMatchers }
+import de.zalando.model.{WithModel, all_of_imports_yaml, hackweek_yaml, nakadi_yaml}
+import org.scalatest.{FunSpec, MustMatchers}
 
 class ScalaModelGeneratorIntegrationTest extends FunSpec with MustMatchers with ExpectedResults {
 
   override val expectationsFolder: String = super.expectationsFolder + "model/"
 
   describe("ScalaGenerator should generate scala model") {
-    Seq(hackweek_yaml).foreach { ast => //model ++ examples ++ validations
+    Seq(all_of_imports_yaml).foreach { ast => //model ++ examples ++ validations
       testScalaModelGenerator(ast)
     }
   }

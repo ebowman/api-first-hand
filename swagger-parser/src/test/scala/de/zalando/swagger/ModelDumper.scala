@@ -18,7 +18,7 @@ object ModelDumper extends App with ExpectedResults {
 
   override def expectationsFolder: String = if (flatten) flatExpectations else origExpectations
 
-  val modelFixtures = new File(resourcesPath + "model").listFiles
+  val modelFixtures = new File(resourcesPath + "model").listFiles.filter(_.getName.startsWith("all"))
 
   val exampleFixtures = new File(resourcesPath + "examples").listFiles
 
@@ -27,7 +27,7 @@ object ModelDumper extends App with ExpectedResults {
   def toTest: File => Boolean = f => f.getName.endsWith(".yaml")
 
   def run: Unit = {
-    (modelFixtures ++ exampleFixtures ++ validationFixtures).filter(toTest).foreach { file =>
+    (modelFixtures).filter(toTest).foreach { file =>
       dumpFile(file, flatten)
     }
   }

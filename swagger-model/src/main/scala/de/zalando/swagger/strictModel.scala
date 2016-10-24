@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.`type`.TypeReference
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import com.fasterxml.jackson.module.scala.JsonScalaEnumeration
 import de.zalando.swagger.strictModel.EnumValidation.Enum
+import org.slf4j.LoggerFactory
 
 import scala.collection.mutable
 import scala.language.implicitConversions
@@ -815,6 +816,7 @@ object strictModel {
   }
 
   trait VendorExtensions { self =>
+    private val log = LoggerFactory.getLogger(getClass)
     private[this] val extensions = new mutable.HashMap[String, String]
     private[this] val errorMappings = new mutable.HashMap[String, Seq[Class[Exception]]]
     private[this] val transitionDefinitions = new mutable.HashMap[String, Map[String, Map[String, Any]]]
@@ -841,7 +843,7 @@ object strictModel {
             errorMappings ++= errors
           }
         case other =>
-          throw new UnrecognizedPropertyException(s"Unknown property: $key", NULL, self.getClass, key, NULL)
+          log.debug(s"Found unknown vendor extension: $key")
       }
     }
     lazy val vendorExtensions = extensions.toMap

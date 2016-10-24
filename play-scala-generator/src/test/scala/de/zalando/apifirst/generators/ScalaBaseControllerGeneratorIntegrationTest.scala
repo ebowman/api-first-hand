@@ -9,7 +9,7 @@ class ScalaBaseControllerGeneratorIntegrationTest extends FunSpec with MustMatch
   override val expectationsFolder = super.expectationsFolder + "base_controllers/"
 
   describe("ScalaSecurityGenerator should generate controller bases") {
-    Seq(heroku_petstore_api_yaml).foreach { ast => // model ++ examples
+    (model ++ examples).foreach { ast =>
       testScalaBaseControllerGenerator(ast)
     }
   }
