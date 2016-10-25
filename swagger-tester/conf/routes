@@ -1,3 +1,5 @@
 ->  /019        i019_date_time_constructor.yaml.Routes
 
 ->  /020        i020_number_parsing.yaml.Routes
+
+->  /023        i023_allOf_imports.yaml.Routes

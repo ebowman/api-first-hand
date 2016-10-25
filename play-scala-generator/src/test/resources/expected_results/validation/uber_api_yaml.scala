@@ -99,6 +99,7 @@ class ProfilePictureValidator(instance: ProfilePicture) extends RecursiveValidat
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class HistoryGetValidator(offset: ErrorCode, limit: ErrorCode) extends RecursiveValidator {
     override val validators = Seq(

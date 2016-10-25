@@ -87,6 +87,7 @@ class PetsGetTagsOptValidator(instance: PetsGetTagsOpt) extends RecursiveValidat
     override val validators = new PetsGetTagsOptConstraints(instance) +: instance.map { new PetsGetTagsOptArrValidator(_)}
 }
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class PetsPostValidator(pet: NewPet) extends RecursiveValidator {
     override val validators = Seq(

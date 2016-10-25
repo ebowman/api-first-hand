@@ -90,6 +90,7 @@ class ExampleNestedArraysOptArrResultArrResultArrResultValidator(instance: Examp
     override val validators = new ExampleNestedArraysOptArrResultArrResultArrResultConstraints(instance) +: instance.map { new ExampleNestedArraysOptArrResultArrResultArrResultArrValidator(_)}
 }
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class GetValidator(activity: Activity) extends RecursiveValidator {
     override val validators = Seq(

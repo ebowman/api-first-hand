@@ -4,7 +4,7 @@ import play.api.test.{FakeHeaders, _}
 import play.api.test.Helpers._
 import play.api.libs.json._
 
-class I019_datetime_constructorSpec extends PlaySpec with OneAppPerSuite {
+class I019_datetime_constructor_Spec extends PlaySpec with OneAppPerSuite {
 
   val exptectedContentType = "application/json"
 

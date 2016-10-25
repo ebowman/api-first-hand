@@ -27,24 +27,9 @@ class NestedObjectsValidator(instance: NestedObjects) extends RecursiveValidator
         new NestedObjectsNestedValidator(instance.nested)
     )
 }
-class NestedObjectsPlainOptValidator(instance: NestedObjectsPlainOpt) extends RecursiveValidator {
-    override val validators = Seq(
-        new NestedObjectsPlainSimpleValidator(instance.simple)
-    )
-}
-class NestedObjectsNestedOptValidator(instance: NestedObjectsNestedOpt) extends RecursiveValidator {
-    override val validators = Seq(
-        new NestedObjectsNestedNested2Validator(instance.nested2)
-    )
-}
 class NestedObjectsNestedNested2Validator(instance: NestedObjectsNestedNested2) extends RecursiveValidator {
     override val validators = Seq(
         new NestedObjectsNestedNested2Nested3Validator(instance.nested3)
-    )
-}
-class NestedObjectsNestedNested2Nested3OptValidator(instance: NestedObjectsNestedNested2Nested3Opt) extends RecursiveValidator {
-    override val validators = Seq(
-        new NestedObjectsNestedNested2Nested3BottomValidator(instance.bottom)
     )
 }
 
@@ -63,6 +48,7 @@ class NestedObjectsNestedNested2Nested3BottomValidator(instance: NestedObjectsNe
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class GetValidator(nestedObject: NestedObjects) extends RecursiveValidator {
     override val validators = Seq(

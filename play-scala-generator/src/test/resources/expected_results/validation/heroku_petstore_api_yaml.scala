@@ -54,6 +54,7 @@ class PutPetValidator(instance: PutPet) extends RecursiveValidator {
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class PutValidator(pet: PutPet) extends RecursiveValidator {
     override val validators = Seq(

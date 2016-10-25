@@ -63,6 +63,7 @@ class GetDateValidator(instance: GetDate) extends RecursiveValidator {
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class GetValidator(date_time: GetDate_time, date: GetDate, base64: GetBase64, uuid: GetUuid, petId: BinaryString) extends RecursiveValidator {
     override val validators = Seq(

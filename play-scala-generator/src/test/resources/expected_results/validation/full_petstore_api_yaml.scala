@@ -248,6 +248,7 @@ class PetsFindByStatusGetStatusOptValidator(instance: PetsFindByStatusGetStatusO
     override val validators = new PetsFindByStatusGetStatusOptConstraints(instance) +: instance.map { new PetsFindByStatusGetStatusOptArrValidator(_)}
 }
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class UsersPostValidator(body: UsersUsernamePutBody) extends RecursiveValidator {
     override val validators = Seq(

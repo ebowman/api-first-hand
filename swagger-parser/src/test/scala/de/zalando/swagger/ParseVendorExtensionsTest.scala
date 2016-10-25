@@ -27,11 +27,6 @@ class ParseVendorExtensionsTest extends FunSpec with MustMatchers with ExpectedR
       swagger.tags.head.vendorExtensions contains "x-tag-extension" mustBe true
       swagger.securityDefinitions("internalApiKey").vendorExtensions contains "x-security-extension" mustBe true
     }
-    it("should reject invalid vendor extensions") {
-      intercept[JsonParseException] {
-        StrictYamlParser.parse(nok)
-      }.getClass mustBe classOf[JsonParseException]
-    }
     it("should read hypermedia definitions") {
       implicit val (uri, swagger) = StrictYamlParser.parse(hypermediaOk)
       val expected = Map(

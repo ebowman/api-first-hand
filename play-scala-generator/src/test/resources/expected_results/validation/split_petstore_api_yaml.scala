@@ -142,44 +142,6 @@ class UsersUsernameDeleteUsernameValidator(instance: String) extends RecursiveVa
     override val validators = Seq(new UsersUsernameDeleteUsernameConstraints(instance))
 }
 // ----- complex type validators -----
-class PetsPostBodyOptValidator(instance: Pet) extends RecursiveValidator {
-    override val validators = Seq(
-        new PetNameValidator(instance.name), 
-        new PetTagsValidator(instance.tags), 
-        new PetPhotoUrlsValidator(instance.photoUrls), 
-        new OrderPetIdValidator(instance.id), 
-        new OrderStatusValidator(instance.status), 
-        new PetCategoryValidator(instance.category)
-    )
-}
-class PetCategoryOptValidator(instance: PetCategoryOpt) extends RecursiveValidator {
-    override val validators = Seq(
-        new OrderPetIdValidator(instance.id), 
-        new OrderStatusValidator(instance.name)
-    )
-}
-class UsersUsernamePutBodyOptValidator(instance: User) extends RecursiveValidator {
-    override val validators = Seq(
-        new OrderStatusValidator(instance.email), 
-        new OrderStatusValidator(instance.username), 
-        new OrderQuantityValidator(instance.userStatus), 
-        new OrderStatusValidator(instance.lastName), 
-        new OrderStatusValidator(instance.firstName), 
-        new OrderPetIdValidator(instance.id), 
-        new OrderStatusValidator(instance.phone), 
-        new OrderStatusValidator(instance.password)
-    )
-}
-class StoresOrderPostBodyOptValidator(instance: Order) extends RecursiveValidator {
-    override val validators = Seq(
-        new OrderShipDateValidator(instance.shipDate), 
-        new OrderQuantityValidator(instance.quantity), 
-        new OrderPetIdValidator(instance.petId), 
-        new OrderPetIdValidator(instance.id), 
-        new OrderCompleteValidator(instance.complete), 
-        new OrderStatusValidator(instance.status)
-    )
-}
 
 // ----- option delegating validators -----
 class OrderStatusValidator(instance: OrderStatus) extends RecursiveValidator {
@@ -248,6 +210,7 @@ class PetsFindByStatusGetStatusOptValidator(instance: PetsFindByStatusGetStatusO
     override val validators = new PetsFindByStatusGetStatusOptConstraints(instance) +: instance.map { new PetsFindByStatusGetStatusOptArrValidator(_)}
 }
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class UsersPostValidator(body: UsersUsernamePutBody) extends RecursiveValidator {
     override val validators = Seq(

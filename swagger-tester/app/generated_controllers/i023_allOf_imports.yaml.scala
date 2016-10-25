@@ -35,7 +35,7 @@ package i023_allOf_imports.yaml {
         // ----- End of unmanaged code area for constructor I023_allOf_importsYaml
         val post = postAction { (body: DatetimeValue) =>  
             // ----- Start of unmanaged code area for action  I023_allOf_importsYaml.post
-            NotImplementedYet
+            Post200(body)
             // ----- End of unmanaged code area for action  I023_allOf_importsYaml.post
         }
     

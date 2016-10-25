@@ -6,7 +6,7 @@ info:
 schemes:
   - http
 host: localhost:8888
-basePath: /020
+basePath: /023
 paths:
   /:
     post:

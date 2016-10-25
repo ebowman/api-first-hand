@@ -823,14 +823,14 @@ object strictModel {
     @JsonAnySetter
     def handleUnknown(key: String, value: Any): Unit = {
       val _ = value match {
-        case str: String if key.startsWith("x-") =>
+        case str: String if key.startsWith("x-api-first-") =>
           extensions += key -> str
         case trans: Map[String @unchecked, Map[String, Map[String, Any]] @unchecked]
           if key.equalsIgnoreCase("x-api-first-transitions") =>
           transitionDefinitions ++= trans
         case trans if key.equalsIgnoreCase("x-api-first-transitions") =>
           throw new IllegalArgumentException("Malformed transition definitions")
-        case mapping: Map[_, _] if key.startsWith("x-") =>
+        case mapping: Map[_, _] if key.startsWith("x-api-first-") =>
           import scala.util.control.Exception._
           handling(classOf[ClassNotFoundException]) by { e =>
             throw new IllegalArgumentException(s"Could not find exception class $e for error code")
@@ -842,6 +842,8 @@ object strictModel {
             }
             errorMappings ++= errors
           }
+        case other if key.startsWith("x-api-first-") =>
+          throw new UnrecognizedPropertyException(s"Unknown property: $key", NULL, self.getClass, key, NULL)
         case other =>
           log.debug(s"Found unknown vendor extension: $key")
       }

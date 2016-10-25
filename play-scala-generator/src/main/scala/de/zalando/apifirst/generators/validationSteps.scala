@@ -58,6 +58,8 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
 
   override def steps: Seq[SingleStep] = callValidators +: super.steps
 
+  implicit def app: StrictModel
+
   /**
    * Puts validation related information into the denotation table
    *
@@ -105,22 +107,27 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
         tpeConstraints(r, t, "Enum", "enum")
       case (r, t: TypeDef) =>
         typeDefConstraints(r, t)
+      case (r: Reference, t: AllOf) =>
+        compositeConstraints(r, t, "AllOf", "allof")
+      case (r: Reference, t: OneOf) =>
+        compositeConstraints(r, t, "OneOf", "oneof")
       case (r, TypeRef(ref)) if !app.findType(ref).isInstanceOf[TypeRef] =>
         constraints0(ref -> app.findType(ref))
       case (r, TypeRef(ref)) =>
         Nil
-      case (r, t: Composite) =>
-        Nil // TODO
     }
 
   private def typeDefConstraints(r: Reference, t: TypeDef)(implicit table: DenotationTable): Seq[(String, Map[String, Any])] = {
     val fields = t.fields.flatMap { f => constraints0(f.name -> f.tpe) }
-    val mainType = "typedef_validations" -> typeDefValidations(r, t)
-    mainType +: fields
+    if (r == t.name) {
+      val mainType = "typedef_validations" -> typeDefValidations(r, t)
+      mainType +: fields
+    } else
+      fields
   }
 
   private def tpeConstraints(r: Reference, t: Container, suffix: String, key: String)(implicit table: DenotationTable): Validations = {
-    val delegate = delegateName(r, t, suffix)
+    val delegate = delegateName(r, t.tpe, suffix)
     val constraints = constraints0(delegate -> t.tpe)
     if (constraints.nonEmpty)
       ((key + "_validations") -> optValidations(r, t, delegate)) +: constraints
@@ -128,11 +135,20 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
       constraints
   }
 
-  private def delegateName(r: Reference, t: Container, suffix: String): Reference = {
-    t.tpe match {
+  private def compositeConstraints(r: Reference, t: Composite, suffix: String, key: String)(implicit table: DenotationTable): Seq[(String, Map[String, Any])] = {
+    val descendants = t.descendants.flatMap { f =>
+      val delegate = delegateName(r, f, suffix)
+      constraints0(delegate -> f)
+    }
+    val mainType = "composite_validations" -> compositeValidations(r, t)
+    mainType +: descendants
+  }
+
+  private def delegateName(r: Reference, t: Type, suffix: String): Reference = {
+    t match {
       case p: PrimitiveType => r / suffix
       case t: CatchAll => r / suffix
-      case _ => t.tpe.name
+      case _ => t.name
     }
   }
 
@@ -148,6 +164,20 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
           )
       }
     )
+
+  // TODO add validations for allOf or oneOf (maxProperties, minProperties, what else?)
+  // current code is probably only valid for allOf but not for oneOf
+  private def compositeValidations(r: Reference, t: Composite)(implicit table: DenotationTable) = {
+    val descendants = t.descendants.collect {
+      case d if d.realType.isInstanceOf[TypeDef] =>
+        typeDefValidations(d.name, d.realType.asInstanceOf[TypeDef])(table)
+    }
+    Map(
+      "validation_name" -> validator(r, table),
+      "type_name" -> typeNameDenotation(table, r), // need a concrete type here, abstract does not have all the properties
+      "descendants" -> descendants
+    )
+  }
 
   private def optValidations(r: Reference, t: Container, delegateName: Reference)(implicit table: DenotationTable) = {
     val typeName = typeNameDenotation(table, r)
