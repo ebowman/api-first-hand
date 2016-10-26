@@ -13,10 +13,13 @@ package yaml {
 
     case class Zoo(tiers: ZooTiers) 
     case class Cat(name: String, petType: String, huntingSkill: CatHuntingSkill) extends IPet
+    case class LabradorAllOf0(name: String, petType: String, packSize: Int) extends IPet
     case class Dog(name: String, petType: String, packSize: Int) extends IPet
+    case class CatNDogAllOf1(name: String, petType: String, huntingSkill: CatHuntingSkill) extends IPet
     case class CatNDog(name: String, petType: String, packSize: Int, huntingSkill: CatHuntingSkill) extends IPet
     case class Pet(name: String, petType: String) extends IPet
     case class Labrador(name: String, petType: String, packSize: Int, cuteness: Int) extends IPet
+    case class CatNDogAllOf0(name: String, petType: String, packSize: Int) extends IPet
 
     case class CatHuntingSkill(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
 

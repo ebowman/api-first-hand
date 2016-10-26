@@ -18,7 +18,7 @@ trait CommonParamDataStep extends EnrichmentStep[Parameter] with CommonData {
   override def steps: Seq[SingleStep] = types +: super.steps
 
   /**
-   * Puts type information into the denotation table
+   * Puts parameter information into the denotation table
    *
    * @return
    */
@@ -68,10 +68,8 @@ trait CommonDataStep extends EnrichmentStep[Type] with CommonData {
     case (ref, t) =>
       val name = avoidClashes(table, typeName(t, ref))()
       val abstractType = app.discriminators.get(ref).flatMap {
-        case tpe if tpe.parent == ref =>
-          Some(ABSTRACT_TYPE_NAME -> escape("I" + name))
         case tpe =>
-          abstractTypeNameDenotation(table, tpe.parent).map(ABSTRACT_TYPE_NAME -> _)
+          Some(ABSTRACT_TYPE_NAME -> escape("I" + name))
       }.toSeq
       Map(COMMON -> (Seq(TYPE_NAME -> name, FIELDS -> fieldsForType(t), MEMBER_NAME -> memberName(t, ref)) ++ abstractType).toMap)
   }
@@ -106,6 +104,7 @@ trait CommonData {
   protected def dereferenceFields(t: Composite): Seq[Field] =
     t.descendants flatMap {
       case td: TypeDef => td.fields
+      case c: Composite => dereferenceFields(c)
       case r: TypeRef => app.findType(r.name) match {
         case td: TypeDef => td.fields
         case c: Composite => dereferenceFields(c)

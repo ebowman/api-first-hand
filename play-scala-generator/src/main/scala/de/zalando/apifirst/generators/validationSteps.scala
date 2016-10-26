@@ -119,7 +119,7 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
 
   private def typeDefConstraints(r: Reference, t: TypeDef)(implicit table: DenotationTable): Seq[(String, Map[String, Any])] = {
     val fields = t.fields.flatMap { f => constraints0(f.name -> f.tpe) }
-    if (r == t.name) {
+    if (r == t.name || table.get(r).nonEmpty) {
       val mainType = "typedef_validations" -> typeDefValidations(r, t)
       mainType +: fields
     } else

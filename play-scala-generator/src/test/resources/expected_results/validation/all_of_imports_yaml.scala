@@ -22,11 +22,6 @@ class DatetimeValueValueValidator(instance: ZonedDateTime) extends RecursiveVali
     override val validators = Seq(new DatetimeValueValueConstraints(instance))
 }
 // ----- complex type validators -----
-class ValueValidator(instance: IValue) extends RecursiveValidator {
-    override val validators = Seq(
-        new ValueTypeValidator(instance.`type`)
-    )
-}
 
 // ----- option delegating validators -----
 // ----- array delegating validators -----

@@ -19,12 +19,17 @@ object all_of_imports_yaml extends WithModel {
 			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿definitions⌿DatetimeValue") → 
 					AllOf(Reference("⌿definitions⌿DatetimeValue⌿DatetimeValue"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
-			TypeRef(Reference("⌿definitions⌿Value")),
+			TypeRef(Reference("⌿definitions⌿DatetimeValue⌿AllOf0")),
 			TypeRef(Reference("⌿definitions⌿DatetimeValue⌿AllOf1"))) , Some(Reference("⌿definitions⌿Value⌿type"))),
 	Reference("⌿definitions⌿DatetimeValue⌿AllOf1") → 
 		TypeDef(Reference("⌿definitions⌿DatetimeValue"), 
 			Seq(
 					Field(Reference("⌿definitions⌿DatetimeValue⌿value"), DateTime(TypeMeta(Some("date-time"), List())))
+			), TypeMeta(Some("Named types: 1"), List())),
+	Reference("⌿definitions⌿DatetimeValue⌿AllOf0") → 
+		TypeDef(Reference("⌿definitions⌿Value"), 
+			Seq(
+					Field(Reference("⌿definitions⌿Value⌿type"), Str(None, TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿paths⌿/⌿post⌿responses⌿400") → 
 		Null(TypeMeta(None, List()))

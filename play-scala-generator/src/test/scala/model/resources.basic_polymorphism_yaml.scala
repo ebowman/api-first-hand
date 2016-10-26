@@ -27,8 +27,8 @@ object basic_polymorphism_yaml extends WithModel {
 			TypeRef(Reference("⌿definitions⌿Dog⌿AllOf1"))) , Some(Reference("⌿definitions⌿Pet⌿petType"))),
 	Reference("⌿definitions⌿CatNDog") → 
 					AllOf(Reference("⌿definitions⌿CatNDog⌿CatNDog"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
-			TypeRef(Reference("⌿definitions⌿Dog")),
-			TypeRef(Reference("⌿definitions⌿Cat"))) , Some(Reference("⌿definitions⌿Pet⌿petType"))),
+			TypeRef(Reference("⌿definitions⌿CatNDog⌿AllOf0")),
+			TypeRef(Reference("⌿definitions⌿CatNDog⌿AllOf1"))) , Some(Reference("⌿definitions⌿Pet⌿petType"))),
 	Reference("⌿definitions⌿Pet") → 
 		TypeDef(Reference("⌿definitions⌿Pet"), 
 			Seq(
@@ -37,7 +37,7 @@ object basic_polymorphism_yaml extends WithModel {
 			), TypeMeta(Some("Named types: 2"), List())),
 	Reference("⌿definitions⌿Labrador") → 
 					AllOf(Reference("⌿definitions⌿Labrador⌿Labrador"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
-			TypeRef(Reference("⌿definitions⌿Dog")),
+			TypeRef(Reference("⌿definitions⌿Labrador⌿AllOf0")),
 			TypeRef(Reference("⌿definitions⌿Labrador⌿AllOf1"))) , Some(Reference("⌿definitions⌿Pet⌿petType"))),
 	Reference("⌿definitions⌿Cat⌿AllOf1") → 
 		TypeDef(Reference("⌿definitions⌿Cat"), 
@@ -51,6 +51,14 @@ object basic_polymorphism_yaml extends WithModel {
 			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿definitions⌿Zoo⌿tiers") → 
 		Opt(TypeRef(Reference("⌿definitions⌿Zoo⌿tiers⌿Opt")), TypeMeta(None, List())),
+	Reference("⌿definitions⌿Labrador⌿AllOf0") → 
+					AllOf(Reference("⌿definitions⌿Labrador⌿Labrador"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
+			TypeRef(Reference("⌿definitions⌿Pet")),
+			TypeRef(Reference("⌿definitions⌿Labrador⌿AllOf0⌿AllOf1"))) , Some(Reference("⌿definitions⌿Pet⌿petType"))),
+	Reference("⌿definitions⌿CatNDog⌿AllOf1") → 
+					AllOf(Reference("⌿definitions⌿CatNDog⌿CatNDog"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
+			TypeRef(Reference("⌿definitions⌿Pet")),
+			TypeRef(Reference("⌿definitions⌿CatNDog⌿AllOf1⌿AllOf1"))) , Some(Reference("⌿definitions⌿Pet⌿petType"))),
 	Reference("⌿definitions⌿Cat⌿huntingSkill") → 
 					EnumTrait(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")""")), 
 				Set(
@@ -60,10 +68,19 @@ object basic_polymorphism_yaml extends WithModel {
 					EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "aggressive", TypeMeta(Some("aggressive"), List()))
 
 				)),
+	Reference("⌿definitions⌿CatNDog⌿AllOf0") → 
+					AllOf(Reference("⌿definitions⌿CatNDog⌿CatNDog"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
+			TypeRef(Reference("⌿definitions⌿Pet")),
+			TypeRef(Reference("⌿definitions⌿CatNDog⌿AllOf0⌿AllOf1"))) , Some(Reference("⌿definitions⌿Pet⌿petType"))),
 	Reference("⌿definitions⌿Labrador⌿AllOf1") → 
 		TypeDef(Reference("⌿definitions⌿Labrador"), 
 			Seq(
 					Field(Reference("⌿definitions⌿Labrador⌿cuteness"), Intgr(TypeMeta(Some("the cuteness of the animal in percent"), List("min(0.toInt, false)"))))
+			), TypeMeta(Some("Named types: 1"), List())),
+	Reference("⌿definitions⌿CatNDog⌿AllOf0⌿AllOf1") → 
+		TypeDef(Reference("⌿definitions⌿CatNDog"), 
+			Seq(
+					Field(Reference("⌿definitions⌿CatNDog⌿packSize"), Intgr(TypeMeta(Some("the size of the pack the dog is from"), List("min(0.toInt, false)"))))
 			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿definitions⌿Cat⌿huntingSkill⌿lazy") → 
 					EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "lazy", TypeMeta(Some("lazy"), List())),
@@ -71,10 +88,20 @@ object basic_polymorphism_yaml extends WithModel {
 					EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "clueless", TypeMeta(Some("clueless"), List())),
 	Reference("⌿definitions⌿CatNDog⌿huntingSkill⌿aggressive") → 
 					EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "aggressive", TypeMeta(Some("aggressive"), List())),
+	Reference("⌿definitions⌿Labrador⌿AllOf0⌿AllOf1") → 
+		TypeDef(Reference("⌿definitions⌿Labrador"), 
+			Seq(
+					Field(Reference("⌿definitions⌿Labrador⌿packSize"), Intgr(TypeMeta(Some("the size of the pack the dog is from"), List("min(0.toInt, false)"))))
+			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿definitions⌿Zoo⌿tiers⌿Opt") → 
 		ArrResult(TypeRef(Reference("⌿definitions⌿Pet")), TypeMeta(None, List())),
 	Reference("⌿definitions⌿Cat⌿huntingSkill⌿adventurous") → 
 					EnumObject(Str(None, TypeMeta(Some("The measured skill for hunting"), List("""enum("clueless,lazy,adventurous,aggressive")"""))), "adventurous", TypeMeta(Some("adventurous"), List())),
+	Reference("⌿definitions⌿CatNDog⌿AllOf1⌿AllOf1") → 
+		TypeDef(Reference("⌿definitions⌿CatNDog"), 
+			Seq(
+					Field(Reference("⌿definitions⌿CatNDog⌿huntingSkill"), TypeRef(Reference("⌿definitions⌿Cat⌿huntingSkill")))
+			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿paths⌿/⌿put⌿dummy") → 
 		Opt(TypeRef(Reference("⌿definitions⌿Pet")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/⌿put⌿responses⌿200") → 

@@ -43,7 +43,7 @@ trait SecurityStep extends EnrichmentStep[StrictModel] with SecurityCommons {
     case b: Basic => Nil
     case ApiKey(_, name, _) => Seq(Map("name" -> ("\"" + name + "\"")))
     case OAuth2Definition(_, None, _) =>
-      throw new IllegalStateException("Validation URL is required for play security code generator")
+      throw new IllegalStateException(s"Validation URL is required for play security code generator in ${app.packageName}")
     case OAuth2Definition(_, Some(validationURL), scopes) => Seq(Map("name" -> ("\"" + validationURL + "\"")))
   }
 

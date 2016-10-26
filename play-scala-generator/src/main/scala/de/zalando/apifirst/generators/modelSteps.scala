@@ -106,7 +106,8 @@ trait TraitsStep extends EnrichmentStep[Type] {
   protected def traits: SingleStep = typeDef => table => typeDef match {
     case (ref, t: TypeDef) if app.discriminators.contains(ref) =>
       Map("traits" -> typeDefProps(ref, t)(table))
-    case _ => empty
+    case other =>
+      empty
   }
 
   protected def typeDefProps(k: Reference, t: Type)(table: DenotationTable): Map[String, Any] // FIXME should be defined only once

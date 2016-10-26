@@ -1,7 +1,7 @@
 package de.zalando.apifirst.generators
 
 import de.zalando.ExpectedResults
-import de.zalando.model.WithModel
+import de.zalando.model.{ WithModel, basic_polymorphism_yaml }
 import org.scalatest.{ FunSpec, MustMatchers }
 
 class ScalaValidatorsGeneratorIntegrationTest extends FunSpec with MustMatchers with ExpectedResults {
@@ -9,7 +9,7 @@ class ScalaValidatorsGeneratorIntegrationTest extends FunSpec with MustMatchers 
   override val expectationsFolder = super.expectationsFolder + "validation/"
 
   describe("ScalaGenerator should generate play validators") {
-    (model ++ examples ++ validations).foreach { ast =>
+    Seq(basic_polymorphism_yaml).foreach { ast => //model ++ examples ++ validations
       testScalaModelGenerator(ast)
     }
   }

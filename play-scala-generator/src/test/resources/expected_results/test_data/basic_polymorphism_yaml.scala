@@ -26,10 +26,13 @@ object Generators extends JsValueGenerators {
 
     def createZooGenerator = _generate(ZooGenerator)
     def createCatGenerator = _generate(CatGenerator)
+    def createLabradorAllOf0Generator = _generate(LabradorAllOf0Generator)
     def createDogGenerator = _generate(DogGenerator)
+    def createCatNDogAllOf1Generator = _generate(CatNDogAllOf1Generator)
     def createCatNDogGenerator = _generate(CatNDogGenerator)
     def createPetGenerator = _generate(PetGenerator)
     def createLabradorGenerator = _generate(LabradorGenerator)
+    def createCatNDogAllOf0Generator = _generate(CatNDogAllOf0Generator)
 
 
     def ZooGenerator = for {
@@ -40,11 +43,21 @@ object Generators extends JsValueGenerators {
         petType <- arbitrary[String]
         huntingSkill <- CatHuntingSkillGenerator
     } yield Cat(name, petType, huntingSkill)
+    def LabradorAllOf0Generator = for {
+        name <- arbitrary[String]
+        petType <- arbitrary[String]
+        packSize <- arbitrary[Int]
+    } yield LabradorAllOf0(name, petType, packSize)
     def DogGenerator = for {
         name <- arbitrary[String]
         petType <- arbitrary[String]
         packSize <- arbitrary[Int]
     } yield Dog(name, petType, packSize)
+    def CatNDogAllOf1Generator = for {
+        name <- arbitrary[String]
+        petType <- arbitrary[String]
+        huntingSkill <- CatHuntingSkillGenerator
+    } yield CatNDogAllOf1(name, petType, huntingSkill)
     def CatNDogGenerator = for {
         name <- arbitrary[String]
         petType <- arbitrary[String]
@@ -61,6 +74,11 @@ object Generators extends JsValueGenerators {
         packSize <- arbitrary[Int]
         cuteness <- arbitrary[Int]
     } yield Labrador(name, petType, packSize, cuteness)
+    def CatNDogAllOf0Generator = for {
+        name <- arbitrary[String]
+        petType <- arbitrary[String]
+        packSize <- arbitrary[Int]
+    } yield CatNDogAllOf0(name, petType, packSize)
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
 

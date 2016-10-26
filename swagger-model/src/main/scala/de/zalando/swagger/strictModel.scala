@@ -823,7 +823,7 @@ object strictModel {
     @JsonAnySetter
     def handleUnknown(key: String, value: Any): Unit = {
       val _ = value match {
-        case str: String if key.startsWith("x-api-first-") =>
+        case str: String if key.startsWith("x-") =>
           extensions += key -> str
         case trans: Map[String @unchecked, Map[String, Map[String, Any]] @unchecked]
           if key.equalsIgnoreCase("x-api-first-transitions") =>
