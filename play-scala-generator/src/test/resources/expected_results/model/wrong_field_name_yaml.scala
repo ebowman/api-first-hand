@@ -81,8 +81,8 @@ package object yaml {
 
 import play.api.mvc.{QueryStringBindable, PathBindable}
 
-    implicit val bindable_QueryGetOptCodesOpt: QueryStringBindable[GetOptCodesOpt] = new PlayPathBindables.createEnumQueryBindable(stringToGetOptCodesOpt)
+    implicit val bindable_QueryGetOptCodesOpt: QueryStringBindable[GetOptCodesOpt] = new PlayPathBindables.createEnumQueryBindable(GetOptCodesOpt.stringToGetOptCodesOpt)
     implicit val bindable_OptionGetOptCodesOptQuery: QueryStringBindable[Option[GetOptCodesOpt]] = PlayPathBindables.createOptionQueryBindable[GetOptCodesOpt]
-    implicit val bindable_QueryGetCodes: QueryStringBindable[GetCodes] = new PlayPathBindables.createEnumQueryBindable(stringToGetCodes)
+    implicit val bindable_QueryGetCodes: QueryStringBindable[GetCodes] = new PlayPathBindables.createEnumQueryBindable(GetCodes.stringToGetCodes)
 
 }

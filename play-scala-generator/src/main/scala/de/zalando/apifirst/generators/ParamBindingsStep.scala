@@ -97,7 +97,7 @@ trait ParamBindingsStep extends EnrichmentStep[Parameter] {
     val binding = if (name == "Path") name else "QueryString"
     Seq(Map(
       "name" -> "",
-      "format" -> s"""implicit val bindable_$name$tpe: ${binding}Bindable[$tpe] = new PlayPathBindables.createEnum${name}Bindable(stringTo$tpe)""",
+      "format" -> s"""implicit val bindable_$name$tpe: ${binding}Bindable[$tpe] = new PlayPathBindables.createEnum${name}Bindable($tpe.stringTo$tpe)""",
       "binding_imports" -> Set("de.zalando.play.controllers.PlayPathBindables")
     ))
   }
