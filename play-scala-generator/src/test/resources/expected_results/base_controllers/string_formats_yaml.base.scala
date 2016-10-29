@@ -15,6 +15,8 @@ import Base64String._
 import java.time.ZonedDateTime
 import java.util.UUID
 import java.time.LocalDate
+import de.zalando.play.controllers.BinaryString
+import BinaryString._
 
 import de.zalando.play.controllers.PlayPathBindables
 

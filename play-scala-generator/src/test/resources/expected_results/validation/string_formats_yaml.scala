@@ -10,6 +10,8 @@ import Base64String._
 import java.time.ZonedDateTime
 import java.util.UUID
 import java.time.LocalDate
+import de.zalando.play.controllers.BinaryString
+import BinaryString._
 // ----- constraints and wrapper validations -----
 class GetBase64OptConstraints(override val instance: String) extends ValidationBase[String] {
     override def constraints: Seq[Constraint[String]] =

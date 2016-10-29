@@ -1,6 +1,7 @@
 package heroku.petstore.api
 
 
+    import scala.math.BigInt
 
     import de.zalando.play.controllers.PlayPathBindables
 

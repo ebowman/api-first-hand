@@ -10,6 +10,7 @@ import PlayBodyParsing._
 import scala.concurrent.Future
 
 import scala.util._
+import scala.math.BigInt
 
 import de.zalando.play.controllers.PlayPathBindables
 

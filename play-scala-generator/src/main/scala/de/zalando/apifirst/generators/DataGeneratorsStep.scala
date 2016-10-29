@@ -44,7 +44,8 @@ trait DataGeneratorsStep extends EnrichmentStep[Type] {
       GENERATOR_NAME -> generatorNameForType(v, table, k),
       "generator_type" -> generatorTypeNameForType(v, table, k),
       "creator_method" -> prepend("create", generator(k, table)),
-      "generator" -> generator(k, table)
+      "generator" -> generator(k, table),
+      "imports" -> v.realImports
     )
   }
 
@@ -52,7 +53,8 @@ trait DataGeneratorsStep extends EnrichmentStep[Type] {
     Map(
       GENERATOR_NAME -> generatorNameForType(v, table, k),
       "creator_method" -> prepend("create", generator(k, table)),
-      "generator" -> generator(k, table)
+      "generator" -> generator(k, table),
+      "imports" -> v.realImports
     )
   }
 
@@ -65,7 +67,8 @@ trait DataGeneratorsStep extends EnrichmentStep[Type] {
             "name" -> escape(f.name.simple),
             "generator" -> generatorNameForType(f.tpe, table, k)
           )
-        }
+        },
+        "imports" -> v.realImports
       )
 
   private val generatorTypeNameForType: (Type, DenotationTable, Reference) => String = {

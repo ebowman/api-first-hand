@@ -27,6 +27,7 @@ import org.scalatestplus.play.{OneAppPerTest, WsScalaTestClient}
 
 import Generators._
 
+import scala.math.BigInt
 
 //noinspection ScalaStyle
 class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {

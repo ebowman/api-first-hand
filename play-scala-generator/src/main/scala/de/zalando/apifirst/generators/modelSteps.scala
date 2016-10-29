@@ -76,7 +76,7 @@ trait EnumsStep extends EnrichmentStep[Type] {
     Map(
       "name" -> memberNameDenotation(table, k),
       "type_name" -> typeNameDenotation(table, v.tpe.name),
-      "imports" -> v.imports,
+      "imports" -> v.realImports,
       "leaves" -> (v.leaves map mapForEnumObject(table, k))
     )
 
@@ -142,7 +142,7 @@ trait AliasesStep extends EnrichmentStep[Type] {
       "underlying_type" -> v.nestedTypes.map { t =>
         abstractTypeNameDenotation(table, t.name).getOrElse(typeNameDenotation(table, t.name))
       }.mkString("[", ", ", "]"),
-      "imports" -> v.allImports
+      "imports" -> v.realImports
     )
   }
 
@@ -150,7 +150,7 @@ trait AliasesStep extends EnrichmentStep[Type] {
     Map(
       "name" -> memberNameDenotation(table, k),
       "alias" -> typeNameDenotation(table, v.name),
-      "imports" -> v.imports,
+      "imports" -> v.realImports,
       "underlying_type" -> ""
     )
   }
