@@ -1,8 +1,8 @@
 package de.zalando.apifirst.generators
 
 import de.zalando.ExpectedResults
-import de.zalando.model.{WithModel, all_of_imports_yaml}
-import org.scalatest.{FunSpec, MustMatchers}
+import de.zalando.model.{ WithModel, all_of_imports_yaml }
+import org.scalatest.{ FunSpec, MustMatchers }
 
 class ScalaValidatorsGeneratorIntegrationTest extends FunSpec with MustMatchers with ExpectedResults {
 
