@@ -143,17 +143,22 @@ class ScalaGenerator(
     val unmarshallers = ReShaper.filterByType("unmarshallers", denotationTable)
     val grouppedunMarshallers = ReShaper.groupByType(unmarshallers.toSeq).toMap
 
+    val jsonWritables = ReShaper.filterByType("json_writables", denotationTable)
+    val grouppedWritables = ReShaper.groupByType(jsonWritables.toSeq).toMap
+
+    val jsonReadables = ReShaper.filterByType("json_readables", denotationTable)
+    val grouppedReadables = ReShaper.groupByType(jsonReadables.toSeq).toMap
+
     val securityExtractors = ReShaper.filterByType("security_extractors", denotationTable)
     val extractors = ReShaper.groupByType(securityExtractors.toSeq).toMap
 
     val controllerLines = currentController.split("\n")
     val codeParts = collectImplementations(controllerLines, sof, eof)
     val constructors = collectImplementations(controllerLines, csof, ceof)
+    val injections = collectImplementations(controllerLines, isof, ieof)
 
-    val constructorCode = constructors map {
-      case (k, v) =>
-        k -> v.filterNot(l => l.trim.startsWith(csof) || l.trim.startsWith(ceof)).mkString("\n")
-    } withDefaultValue ""
+    val constructorCode = cleanFromComments(constructors, csof, ceof)
+    val injectedCode = cleanFromComments(injections, isof, ieof)
 
     val unmanagedParts = analyzeController(modelCalls, codeParts)
 
@@ -179,7 +184,7 @@ class ScalaGenerator(
     )
 
     val controllersList = PlayScalaControllersGenerator.
-      controllers(modelCalls, unmanagedParts, pckg, deadCode, constructorCode)(denotationTable)
+      controllers(modelCalls, unmanagedParts, pckg, deadCode, constructorCode, injectedCode)(denotationTable)
 
     val stdImports = standardImports(modelTypes).map(i => Map("name" -> i))
 
@@ -199,6 +204,8 @@ class ScalaGenerator(
       "tests" -> ReShaper.filterByType("tests", denotationTable),
       "marshallers" -> grouppedMarshallers,
       "unmarshallers" -> grouppedunMarshallers,
+      "json_writables" -> grouppedWritables,
+      "json_readables" -> grouppedReadables,
       "security_extractors" -> extractors,
       "bindings" -> bindingsByType,
       "forms" -> forms,
@@ -209,6 +216,13 @@ class ScalaGenerator(
     val allPackages = enrichWithStructuralInfo(rawAllPackages)
 
     renderTemplate(packages, templateName, allPackages)
+  }
+
+  private def cleanFromComments(constructors: Map[String, Seq[String]], start: String, end: String) = {
+    constructors map {
+      case (k, v) =>
+        k -> v.filterNot(l => l.trim.startsWith(start) || l.trim.startsWith(end)).mkString("\n")
+    } withDefaultValue ""
   }
 
   def renderTemplate(map: Map[String, Any], templateName: String,
@@ -272,7 +286,7 @@ object PlayScalaControllersGenerator {
   val securityTraitSuffix = "Security"
 
   def controllers(allCalls: Seq[ApiCall], unmanagedParts: Map[ApiCall, UnmanagedPart], packageName: String,
-    deadCode: Map[String, String], constructorCode: Map[String, String])(table: DenotationTable): Iterable[Map[String, Object]] = {
+    deadCode: Map[String, String], constructorCode: Map[String, String], injectedCode: Map[String, String])(table: DenotationTable): Iterable[Map[String, Object]] = {
     allCalls groupBy { c =>
       (c.handler.packageName, c.handler.controller)
     } map {
@@ -300,7 +314,10 @@ object PlayScalaControllersGenerator {
           "dead_code" -> deadCodeParts,
           "start_comment" -> (csof + controllerName),
           "end_comment" -> (ceof + controllerName),
-          "constructor_code" -> constructorCode(controller._2)
+          "constructor_code" -> constructorCode(controller._2),
+          "inject_start_comment" -> (isof + controllerName),
+          "inject_end_comment" -> (ieof + controllerName),
+          "inject_code" -> injectedCode(controller._2)
         )
     }
   }

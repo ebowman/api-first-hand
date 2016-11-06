@@ -65,6 +65,16 @@ class {{v.validation_name}}(instance: {{v.type_name}}) extends RecursiveValidato
     override val validators = Seq(new {{v.constraint_name}}(instance))
 }
 {{/for}}
+// ----- composite validators -----
+{{for v in composite_validations}}
+class {{v.validation_name}}(instance: {{v.type_name}}) extends RecursiveValidator {
+    override val validators = Seq(
+    {{for d in v.descendants}}
+        {{for f in d.fields}}new {{f.validation_name}}(instance.{{f.field_name}}){{if f.isNotLast}}, {{/if}}{{/for}}{{if d.isNotLast}}, {{/if}}
+    {{/for}}
+    )
+}
+{{/for}}
 // ----- call validations -----
 {{for v in call_validations}}
 class {{v.validation_name}}({{for f in v.fields}}{{f.field_name}}: {{f.type_name}}{{if f.isNotLast}}, {{/if}}{{/for}}) extends RecursiveValidator {

@@ -158,6 +158,7 @@ class PetPhotoUrlsValidator(instance: PetPhotoUrls) extends RecursiveValidator {
     override val validators = new PetPhotoUrlsConstraints(instance) +: instance.map { new PetPhotoUrlsArrValidator(_)}
 }
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class PostValidator(root: ModelSchemaRoot) extends RecursiveValidator {
     override val validators = Seq(

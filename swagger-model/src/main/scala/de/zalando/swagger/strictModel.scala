@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.`type`.TypeReference
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import com.fasterxml.jackson.module.scala.JsonScalaEnumeration
 import de.zalando.swagger.strictModel.EnumValidation.Enum
+import org.slf4j.LoggerFactory
 
 import scala.collection.mutable
 import scala.language.implicitConversions
@@ -679,7 +680,7 @@ object strictModel {
   ) extends VendorExtensions with AllValidations[T] with ObjectValidation {
     require(allOf.forall(_.nonEmpty))
     // TODO this could be handled with a Map[String, Any]
-    require(`type`!=PrimitiveType.OBJECT || properties != NULL || additionalProperties != NULL,
+    require(`type`!=PrimitiveType.OBJECT || properties != NULL || additionalProperties != NULL || allOf != NULL,
       "Support for object definitions without properties is not implemented yet")
     validateSchemaArray(items)
     validateSchemaArray(allOf)
@@ -815,6 +816,7 @@ object strictModel {
   }
 
   trait VendorExtensions { self =>
+    private val log = LoggerFactory.getLogger(getClass)
     private[this] val extensions = new mutable.HashMap[String, String]
     private[this] val errorMappings = new mutable.HashMap[String, Seq[Class[Exception]]]
     private[this] val transitionDefinitions = new mutable.HashMap[String, Map[String, Map[String, Any]]]
@@ -828,7 +830,7 @@ object strictModel {
           transitionDefinitions ++= trans
         case trans if key.equalsIgnoreCase("x-api-first-transitions") =>
           throw new IllegalArgumentException("Malformed transition definitions")
-        case mapping: Map[_, _] if key.startsWith("x-") =>
+        case mapping: Map[_, _] if key.startsWith("x-api-first-") =>
           import scala.util.control.Exception._
           handling(classOf[ClassNotFoundException]) by { e =>
             throw new IllegalArgumentException(s"Could not find exception class $e for error code")
@@ -840,8 +842,10 @@ object strictModel {
             }
             errorMappings ++= errors
           }
-        case other =>
+        case other if key.startsWith("x-api-first-") =>
           throw new UnrecognizedPropertyException(s"Unknown property: $key", NULL, self.getClass, key, NULL)
+        case other =>
+          log.debug(s"Found unknown vendor extension: $key")
       }
     }
     lazy val vendorExtensions = extensions.toMap

@@ -13,7 +13,13 @@ import {{import.name}}
 {{for controller in controllers}}
 package {{controller.effective_package}} {
 
-    class {{controller.controller}} @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends {{controller.base}} {
+    class {{controller.controller}} @Inject() (
+        {{controller.inject_start_comment}}
+{{controller.inject_code}}
+        {{controller.inject_end_comment}}
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends {{controller.base}} {
         {{controller.start_comment}}
 {{controller.constructor_code}}
         {{controller.end_comment}}

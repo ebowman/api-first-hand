@@ -18,7 +18,7 @@ trait CommonParamDataStep extends EnrichmentStep[Parameter] with CommonData {
   override def steps: Seq[SingleStep] = types +: super.steps
 
   /**
-   * Puts type information into the denotation table
+   * Puts parameter information into the denotation table
    *
    * @return
    */
@@ -67,8 +67,9 @@ trait CommonDataStep extends EnrichmentStep[Type] with CommonData {
   protected def types: SingleStep = typeDef => table => typeDef match {
     case (ref, t) =>
       val name = avoidClashes(table, typeName(t, ref))()
-      val abstractType = app.discriminators.get(ref).map { tpe =>
-        ABSTRACT_TYPE_NAME -> escape("I" + name)
+      val abstractType = app.discriminators.get(ref).flatMap {
+        case tpe =>
+          Some(ABSTRACT_TYPE_NAME -> escape("I" + name))
       }.toSeq
       Map(COMMON -> (Seq(TYPE_NAME -> name, FIELDS -> fieldsForType(t), MEMBER_NAME -> memberName(t, ref)) ++ abstractType).toMap)
   }
@@ -79,14 +80,14 @@ trait CommonData {
 
   def app: StrictModel
 
-  protected def typeName(t: Type, r: Reference, suffix: String = "") = t match {
+  protected def typeName(t: Type, r: Reference, suffix: String = ""): String = t match {
     case TypeRef(ref) =>
       app.findType(ref) match {
         case p: PrimitiveType => useType(p.name, suffix, "")
         case d: TypeDef => useType(d.name, suffix, "")
         case _ => useType(ref, suffix, "")
       }
-    case p: PrimitiveType => useType(t.name, suffix, "")
+    case p: PrimitiveType => useType(p.name, suffix, "")
     case TypeDef(name, _, _) if name.isDefinition && !r.isDefinition =>
       useType(name, suffix, "")
     case _ => useType(r, suffix, "")
@@ -103,6 +104,7 @@ trait CommonData {
   protected def dereferenceFields(t: Composite): Seq[Field] =
     t.descendants flatMap {
       case td: TypeDef => td.fields
+      case c: Composite => dereferenceFields(c)
       case r: TypeRef => app.findType(r.name) match {
         case td: TypeDef => td.fields
         case c: Composite => dereferenceFields(c)

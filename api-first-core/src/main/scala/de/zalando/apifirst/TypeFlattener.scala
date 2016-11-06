@@ -8,10 +8,15 @@ import scala.annotation.tailrec
 import scala.language.reflectiveCalls
 
 object TypeNormaliser {
-  val flatten = ParameterDereferencer.apply _ andThen TypeDeduplicator.apply andThen TypeFlattener.apply andThen TypeDeduplicator.apply
+  val flatten: (StrictModel) => StrictModel =
+    ParameterDereferencer.apply _ andThen TypeDeduplicator.apply andThen TypeFlattener.apply andThen TypeDeduplicator.apply
 }
 
 object TypeDeduplicator extends TypeAnalyzer {
+
+  private def equal(app: StrictModel) = (t1: Type, t2: Type) =>
+    t1 == t2 ||
+      ((notHierarhyRoot(t1, app) || notHierarhyRoot(t2, app)) && isSameTypeDef(t1)(t2) && isSameConstraints(t1)(t2))
 
   /**
    * Removes redundant type definitions changing pointing references
@@ -21,13 +26,14 @@ object TypeDeduplicator extends TypeAnalyzer {
    */
   private[apifirst] def apply(app: StrictModel): StrictModel = {
     val types = app.typeDefs.values
-    val equal = (t1: Type, t2: Type) => isSameTypeDef(t1)(t2) && isSameConstraints(t1)(t2)
-    val duplicate = types find { t => types.count(equal(t, _)) > 1 }
+    val duplicate = types.find { t => types.count(equal(app)(t, _)) > 1 }
     duplicate map replaceSingle(app) map apply getOrElse app
   }
 
+  private def notHierarhyRoot(t: Type, app: StrictModel) = !app.discriminators.contains(t.name)
+
   private def replaceSingle(model: StrictModel): Type => StrictModel = tpe => {
-    val duplicates = model.typeDefs.filter { d => isSameTypeDef(tpe)(d._2) && isSameConstraints(tpe)(d._2) }
+    val duplicates = model.typeDefs.filter { d => equal(model)(tpe, d._2) }
     val duplicateNames = sortByDiscriminatorOrPathLength(model.discriminators, duplicates)
     val bestMatch :: refsToRemove = duplicateNames
     val typesToRewrite = model.typeDefs filterNot { t => refsToRemove.contains(t._1) }
@@ -215,17 +221,17 @@ trait TypeAnalyzer {
 
   def isSameTypeDef(one: Type)(two: Type): Boolean = (one, two) match {
     case (c1: EnumObject, c2: EnumObject) if c1.tpe == c2.tpe =>
-      c1.fieldValue == c2.fieldValue
+      c1 == c2 || c1.fieldValue == c2.fieldValue
     case (c1: EnumTrait, c2: EnumTrait) if c1.tpe == c2.tpe =>
-      c1.leaves.map(_.fieldValue) == c2.leaves.map(_.fieldValue)
+      c1 == c2 || c1.leaves.map(_.fieldValue) == c2.leaves.map(_.fieldValue)
     case (c1: Container, c2: Container) if c1.getClass == c2.getClass =>
-      isSameTypeDef(c1.tpe)(c2.tpe)
+      c1 == c2 || isSameTypeDef(c1.tpe)(c2.tpe)
     case (c1: Composite, c2: Composite) if c1.getClass == c2.getClass && c1.descendants.size == c2.descendants.size =>
-      sameDescendants(c1, c2)
+      c1 == c2 || sameDescendants(c1, c2)
     case (t1: TypeDef, t2: TypeDef) if t1.fields.size == t2.fields.size =>
-      sameFields(t1, t2)
+      t1 == t2 || sameFields(t1, t2)
     case (t1: ProvidedType, t2: ProvidedType) if t1.getClass == t2.getClass =>
-      sameNames(t1, t2)
+      t1 == t2 || sameNames(t1, t2)
     case (r1: TypeRef, r2: TypeRef) =>
       r1.name == r2.name
     case _ => false
@@ -240,6 +246,7 @@ trait TypeAnalyzer {
     p.name.simple == e.name.simple
 
   def sameDescendants(c1: Composite, c2: Composite): Boolean =
-    c1.descendants.forall(p => c2.descendants.exists(isSameTypeDef(p)))
+    c1.root == c2.root &&
+      c1.descendants.forall(p => c2.descendants.exists(isSameTypeDef(p)))
 
 }

@@ -1,7 +1,7 @@
 package de.zalando.play.controllers
 
 import java.time.format.{ DateTimeFormatter, DateTimeParseException }
-import java.time.{ LocalDate, ZonedDateTime }
+import java.time.{ LocalDate, ZoneId, ZonedDateTime }
 
 /**
  * An utility class for parsing date and date-time inputs as required by RFC3339
@@ -51,10 +51,11 @@ object Rfc3339Util {
   }
 
   private def parseFull(datestring: String): ZonedDateTime = {
+    val z = ZoneId.systemDefault()
     try {
-      ZonedDateTime.parse(datestring, shortDTWithTicks)
+      ZonedDateTime.parse(datestring, shortDTWithTicks.withZone(z))
     } catch {
-      case p: DateTimeParseException => ZonedDateTime.parse(datestring, fullDTWithTicks)
+      case p: DateTimeParseException => ZonedDateTime.parse(datestring, fullDTWithTicks.withZone(z))
     }
   }
 

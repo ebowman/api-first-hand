@@ -96,6 +96,12 @@ object WrappedBodyParsers extends WrappedBodyParsersBase {
     * in order for play-swagger to be able to provide safety net for
     * different response types
     */
+    val reader_application_json_StoresOrderPostBody_esc: Parser[StoresOrderPostBody] =
+        (content: ByteString) => ???
+    val reader_application_json_UsersUsernamePutBody_esc: Parser[UsersUsernamePutBody] =
+        (content: ByteString) => ???
+    val reader_application_json_UsersCreateWithListPostBody_esc: Parser[UsersCreateWithListPostBody] =
+        (content: ByteString) => ???
     val reader_application_json_PetsPostBody_esc: Parser[PetsPostBody] =
         (content: ByteString) => ???
     val reader_application_xml_PetsPostBody_esc: Parser[PetsPostBody] =
@@ -105,6 +111,9 @@ object WrappedBodyParsers extends WrappedBodyParsersBase {
     * as a marshaller for different mime types and types of response
     */
     override val custom: Seq[(String, ParserWrapper[_])] = Seq(
+            "application/json" -> reader_application_json_StoresOrderPostBody_esc, 
+            "application/json" -> reader_application_json_UsersUsernamePutBody_esc, 
+            "application/json" -> reader_application_json_UsersCreateWithListPostBody_esc, 
             "application/json" -> reader_application_json_PetsPostBody_esc, 
             "application/xml" -> reader_application_xml_PetsPostBody_esc
     )

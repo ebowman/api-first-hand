@@ -23,7 +23,13 @@ import javax.inject._
 
 package nakadi.yaml {
 
-    class NakadiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends NakadiYamlBase {
+    class NakadiYaml @Inject() (
+        // ----- Start of unmanaged code area for injections NakadiYaml
+
+        // ----- End of unmanaged code area for injections NakadiYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends NakadiYamlBase {
         // ----- Start of unmanaged code area for constructor NakadiYaml
 
         // ----- End of unmanaged code area for constructor NakadiYaml

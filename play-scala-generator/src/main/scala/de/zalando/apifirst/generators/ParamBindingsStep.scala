@@ -10,10 +10,6 @@ import de.zalando.apifirst.naming.Reference
  * @author slasch
  * @since 06.01.2016.
  */
-/**
- * @author slasch
- * @since 30.12.2015.
- */
 trait ParamBindingsStep extends EnrichmentStep[Parameter] {
 
   override def steps: Seq[SingleStep] = bindings +: super.steps
@@ -70,13 +66,13 @@ trait ParamBindingsStep extends EnrichmentStep[Parameter] {
   }
 
   def forNestedTypes(tpe: String, table: DenotationTable, someTpe: Type): Seq[Map[String, Any]] = {
-    val alias = someTpe.name.simple
+    val alias = someTpe.realType.name.simple
     val underlyingType = someTpe.nestedTypes.map { t => typeNameDenotation(table, t.name) }.mkString(", ")
     val binding = if (tpe == "Path") tpe else "QueryString"
     val bindable =
       s"""implicit val bindable_$alias$underlyingType$tpe: ${binding}Bindable[$alias[$underlyingType]] = """ +
         s"""PlayPathBindables.create$alias${tpe}Bindable[$underlyingType]"""
-    val format = someTpe match {
+    val format = someTpe.realType match {
       case arr: Arr => "(\"" + arr.format + "\")"
       case _ => ""
     }
@@ -101,7 +97,7 @@ trait ParamBindingsStep extends EnrichmentStep[Parameter] {
     val binding = if (name == "Path") name else "QueryString"
     Seq(Map(
       "name" -> "",
-      "format" -> s"""implicit val bindable_$name$tpe: ${binding}Bindable[$tpe] = new PlayPathBindables.createEnum${name}Bindable(stringTo$tpe)""",
+      "format" -> s"""implicit val bindable_$name$tpe: ${binding}Bindable[$tpe] = new PlayPathBindables.createEnum${name}Bindable($tpe.stringTo$tpe)""",
       "binding_imports" -> Set("de.zalando.play.controllers.PlayPathBindables")
     ))
   }

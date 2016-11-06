@@ -4,7 +4,7 @@ import sbt._
 val PlayVersion = "2.5.4"
 val Scala10 = "2.10.5"
 val Scala11 = "2.11.8"
-val ProjectVersion = "0.1.18"
+val ProjectVersion = "0.2.0"
 
 val deps = new Dependencies(PlayVersion, ProjectVersion)
 
@@ -160,4 +160,3 @@ coverageHighlighting := {
   if (scalaBinaryVersion.value == "2.10") false
   else false
 }
-

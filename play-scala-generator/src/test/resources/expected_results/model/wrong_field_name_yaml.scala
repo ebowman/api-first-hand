@@ -6,6 +6,32 @@ package wrong_field_name
 
 
 //noinspection ScalaStyle
+package yaml {
+
+
+    case class StatusAndCode(message: String, Status: Status) 
+
+    case class GetCodes(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
+    case class GetOptCodesOpt(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
+    case class Status(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
+
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    import de.zalando.play.controllers.MissingDefaultWrites
+    object ResponseWrites extends MissingDefaultWrites {
+    implicit val StatusAndCodeWrites: Writes[StatusAndCode] = new Writes[StatusAndCode] {
+        def writes(ss: StatusAndCode) =
+          Json.obj(
+            "message" -> ss.message, 
+            "Status" -> ss.Status
+          )
+        }
+    }
+}
+
+// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
+
+//noinspection ScalaStyle
 package object yaml {
 
     type GetOptCodes = Option[GetOptCodesOpt]
@@ -55,25 +81,8 @@ package object yaml {
 
 import play.api.mvc.{QueryStringBindable, PathBindable}
 
-    implicit val bindable_QueryGetOptCodesOpt: QueryStringBindable[GetOptCodesOpt] = new PlayPathBindables.createEnumQueryBindable(stringToGetOptCodesOpt)
+    implicit val bindable_QueryGetOptCodesOpt: QueryStringBindable[GetOptCodesOpt] = new PlayPathBindables.createEnumQueryBindable(GetOptCodesOpt.stringToGetOptCodesOpt)
     implicit val bindable_OptionGetOptCodesOptQuery: QueryStringBindable[Option[GetOptCodesOpt]] = PlayPathBindables.createOptionQueryBindable[GetOptCodesOpt]
-    implicit val bindable_QueryGetCodes: QueryStringBindable[GetCodes] = new PlayPathBindables.createEnumQueryBindable(stringToGetCodes)
-
-}
-//noinspection ScalaStyle
-package yaml {
-
-
-    case class StatusAndCode(message: String, Status: Status) 
-
-    case class GetCodes(value: String) extends AnyVal {
-        override def toString = value.toString
-    }
-    case class GetOptCodesOpt(value: String) extends AnyVal {
-        override def toString = value.toString
-    }
-    case class Status(value: String) extends AnyVal {
-        override def toString = value.toString
-    }
+    implicit val bindable_QueryGetCodes: QueryStringBindable[GetCodes] = new PlayPathBindables.createEnumQueryBindable(GetCodes.stringToGetCodes)
 
 }

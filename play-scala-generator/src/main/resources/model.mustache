@@ -9,6 +9,57 @@
 {{/for}}
 
 //noinspection ScalaStyle
+package {{main_package_suffix}} {
+
+{{for trait in traits}}
+    trait {{trait.abstract_name}} {
+    {{for field in trait.fields}}
+        def {{field.name}}: {{field.type_name}}
+    {{/for}}
+    }
+{{/for}}
+
+{{for class in classes}}
+    case class {{class.name}}({{for field in class.fields}}{{field.name}}: {{field.type_name}}{{if field.isNotLast}}, {{/if}}{{/for}}) {{for trait in class.trait}}extends {{trait.name}}{{/for}}
+{{/for}}
+
+{{for enum in enums}}
+    case class {{enum.name}}(override val value: {{enum.type_name}}) extends AnyVal with de.zalando.play.controllers.StringAnyVal
+{{/for}}
+{{if json_readables.data}}
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    import de.zalando.play.controllers.MissingDefaultReads
+    object BodyReads extends MissingDefaultReads {
+        {{for class in json_readables.data}}
+        implicit val {{class.name}}Reads: Reads[{{class.name}}] = (
+            {{for field in class.fields}}(JsPath \ "{{field.name}}").read{{if field.nullable_type_name}}Nullable[{{field.nullable_type_name}}]{{else}}[{{field.type_name}}]{{/if}}{{if field.isNotLast}} and {{/if}}{{/for}}
+        ){{if class.single_field}}.map{{/if}}({{class.name}}.apply{{if class.single_field}} {{else}} _{{/if}}){{if class.optional}} map Option{{/if}}
+        {{/for}}
+    }
+{{/if}}
+{{if json_writables.data}}
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+    import de.zalando.play.controllers.MissingDefaultWrites
+    object ResponseWrites extends MissingDefaultWrites {
+    {{for class in json_writables.data}}
+    implicit val {{class.name}}Writes: Writes[{{class.name}}] = new Writes[{{class.name}}] {
+        def writes(ss: {{class.name}}) =
+          Json.obj(
+            {{for field in class.fields}}
+            "{{field.name}}" -> ss.{{field.name}}{{if field.isNotLast}}, {{/if}}
+            {{/for}}
+          )
+        }
+    {{/for}}
+    }
+{{/if}}
+}
+
+// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
+
+//noinspection ScalaStyle
 package object {{main_package_suffix}} {
 
 {{for alias in aliases}}
@@ -34,28 +85,6 @@ import play.api.mvc.{QueryStringBindable, PathBindable}
 {{/if}}
 {{for binding in model_bindings}}
     {{binding.full_name}}
-{{/for}}
-
-}
-//noinspection ScalaStyle
-package {{main_package_suffix}} {
-
-{{for trait in traits}}
-    trait {{trait.abstract_name}} {
-    {{for field in trait.fields}}
-        def {{field.name}}: {{field.type_name}}
-    {{/for}}
-    }
-{{/for}}
-
-{{for class in classes}}
-    case class {{class.name}}({{for field in class.fields}}{{field.name}}: {{field.type_name}}{{if field.isNotLast}}, {{/if}}{{/for}}) {{for trait in class.trait}}extends {{trait.name}}{{/for}}
-{{/for}}
-
-{{for enum in enums}}
-    case class {{enum.name}}(value: {{enum.type_name}}) extends AnyVal {
-        override def toString = value.toString
-    }
 {{/for}}
 
 }

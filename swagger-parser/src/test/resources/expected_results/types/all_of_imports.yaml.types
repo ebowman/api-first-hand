@@ -1,0 +1,23 @@
+"definitions" / "Value" ->
+	TypeDef("definitions" / "Value", Seq(
+		Field("definitions" / "Value" / "type", Str)))
+"definitions" / "DatetimeValue" ->
+	AllOf(
+		TypeDef("definitions" / "Value", Seq(
+			Field("definitions" / "Value" / "type", Str)))
+		TypeDef("definitions" / "DatetimeValue", Seq(
+			Field("definitions" / "DatetimeValue" / "value", DateTime))))
+"paths" / "/" / "post" / "body" ->
+	AllOf(
+		TypeDef("definitions" / "Value", Seq(
+			Field("definitions" / "Value" / "type", Str)))
+		TypeDef("paths" / "/" / "post" / "body", Seq(
+			Field("paths" / "/" / "post" / "body" / "value", DateTime))))
+"paths" / "/" / "post" / "responses" / "200" ->
+	AllOf(
+		TypeDef("definitions" / "Value", Seq(
+			Field("definitions" / "Value" / "type", Str)))
+		TypeDef("paths" / "/" / "post" / "responses" / "200", Seq(
+			Field("paths" / "/" / "post" / "responses" / "200" / "value", DateTime))))
+"paths" / "/" / "post" / "responses" / "400" ->
+	Null

@@ -36,13 +36,22 @@ trait ClassesStep extends EnrichmentStep[Type] {
   protected def typeDefProps(k: Reference, t: Type)(table: DenotationTable): Map[String, Any] = {
     Map(
       "name" -> typeNameDenotation(table, k),
+      "optional" -> t.isInstanceOf[Opt],
+      "single_field" -> (typeFields(table, k).size == 1),
       "fields" -> typeFields(table, k).map { f =>
+        val nullableType = f.tpe match {
+          case TypeRef(r) =>
+            val underlying = app.findType(r)
+            if (underlying.isInstanceOf[Opt]) Option(typeNameDenotation(table, underlying.asInstanceOf[Opt].nestedTypes.head.name)) else None
+          case _ => None
+        }
         Map(
           "name" -> escape(f.name.simple),
+          "nullable_type_name" -> nullableType,
           TYPE_NAME -> typeNameDenotation(table, f.tpe.name)
         )
       },
-      "imports" -> t.imports
+      "imports" -> t.realImports
     ) ++ abstractTypeNameDenotation(table, k).map("abstract_name" -> _).toSeq
   }
 
@@ -67,7 +76,7 @@ trait EnumsStep extends EnrichmentStep[Type] {
     Map(
       "name" -> memberNameDenotation(table, k),
       "type_name" -> typeNameDenotation(table, v.tpe.name),
-      "imports" -> v.imports,
+      "imports" -> v.realImports,
       "leaves" -> (v.leaves map mapForEnumObject(table, k))
     )
 
@@ -97,7 +106,8 @@ trait TraitsStep extends EnrichmentStep[Type] {
   protected def traits: SingleStep = typeDef => table => typeDef match {
     case (ref, t: TypeDef) if app.discriminators.contains(ref) =>
       Map("traits" -> typeDefProps(ref, t)(table))
-    case _ => empty
+    case other =>
+      empty
   }
 
   protected def typeDefProps(k: Reference, t: Type)(table: DenotationTable): Map[String, Any] // FIXME should be defined only once
@@ -116,8 +126,10 @@ trait AliasesStep extends EnrichmentStep[Type] {
     case (ref, t: EnumType) => empty
     case (ref, t: Container) =>
       Map("aliases" -> aliasProps(ref, t)(table))
-    case (k, v: PrimitiveType) =>
+
+    case (k, v: Null) =>
       Map("aliases" -> mapForAlias(k, v)(table))
+
     case (k, v: TypeRef) =>
       Map("aliases" -> mapForAlias(v.name, v)(table))
     case _ => empty
@@ -130,7 +142,7 @@ trait AliasesStep extends EnrichmentStep[Type] {
       "underlying_type" -> v.nestedTypes.map { t =>
         abstractTypeNameDenotation(table, t.name).getOrElse(typeNameDenotation(table, t.name))
       }.mkString("[", ", ", "]"),
-      "imports" -> v.allImports
+      "imports" -> v.realImports
     )
   }
 
@@ -138,7 +150,7 @@ trait AliasesStep extends EnrichmentStep[Type] {
     Map(
       "name" -> memberNameDenotation(table, k),
       "alias" -> typeNameDenotation(table, v.name),
-      "imports" -> v.imports,
+      "imports" -> v.realImports,
       "underlying_type" -> ""
     )
   }

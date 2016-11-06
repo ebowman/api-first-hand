@@ -2,7 +2,7 @@ package de.zalando.apifirst
 
 import java.net.URL
 
-import de.zalando.apifirst.Domain.Type
+import de.zalando.apifirst.Application.StrictModel
 import de.zalando.apifirst.Http.MimeType
 import de.zalando.apifirst.Hypermedia.{ State, StateTransitionsTable }
 import de.zalando.apifirst.ParameterPlace.ParameterPlace
@@ -116,8 +116,8 @@ object Domain {
     private def escape(s: String) =
       (if (s.contains('"')) "\"\"\"" + s.replaceAllLiterally("\"\"\"", replacement) + "\"\"\""
       else "\"" + s + "\"").replace('\n', ' ')
-    lazy val constrStr = constraints.map(escape)
-    val escapedComment = comment.map(escape)
+    lazy val constrStr: Seq[String] = constraints.map(escape)
+    val escapedComment: Option[String] = comment.map(escape)
   }
 
   object TypeMeta {
@@ -131,11 +131,19 @@ object Domain {
   }
 
   abstract class Type(val name: TypeName, val meta: TypeMeta) extends Expr {
-    def nestedTypes: Seq[Type] = Nil
+    def nestedTypes(implicit app: StrictModel): Seq[Type] = Nil
+    def allNestedTypes(implicit app: StrictModel): Seq[Type] =
+      nestedTypes ++ nestedTypes.flatMap(_.allNestedTypes)
     def imports: Set[String] = Set.empty
+    def realType(implicit app: StrictModel): Type = this
+    def realImports(implicit app: StrictModel): Set[String] = imports
   }
 
-  case class TypeRef(override val name: Reference) extends Type(name, TypeMeta(None))
+  case class TypeRef(override val name: Reference) extends Type(name, TypeMeta(None)) {
+    override def allNestedTypes(implicit app: StrictModel): Seq[Type] = realType.allNestedTypes
+    override def realType(implicit app: StrictModel): Type = app.findType(name)
+    override def realImports(implicit app: StrictModel): Set[String] = realType.imports
+  }
 
   abstract class ProvidedType(name: String, override val meta: TypeMeta)
     extends Type(Reference(name), meta)
@@ -206,8 +214,10 @@ object Domain {
     val root: Option[Reference]
   )
       extends Type(name, meta) {
-    override def nestedTypes: Seq[Type] = descendants flatMap (_.nestedTypes)
+    override def nestedTypes(implicit app: StrictModel): Seq[Type] = descendants flatMap (_.nestedTypes)
+    override def allNestedTypes(implicit app: StrictModel): Seq[Type] = descendants flatMap (_.realType.allNestedTypes)
     override def imports: Set[String] = descendants.flatMap(_.imports).toSet
+    override def realImports(implicit app: StrictModel): Set[String] = descendants.flatMap(_.realImports).toSet
     def withTypes(t: Seq[Type]): Composite
   }
 
@@ -236,8 +246,10 @@ object Domain {
   abstract class Container(name: TypeName, val tpe: Type, override val meta: TypeMeta, override val imports: Set[String])
       extends Type(name, meta) {
     def allImports: Set[String] = imports ++ tpe.imports
-    override def nestedTypes: Seq[Type] = Seq(tpe)
+    override def nestedTypes(implicit app: StrictModel): Seq[Type] = Seq(tpe)
+    override def allNestedTypes(implicit app: StrictModel): Seq[Type] = tpe.realType +: tpe.realType.allNestedTypes
     def withType(t: Type): Container
+    override def realImports(implicit app: StrictModel): Set[String] = imports ++ tpe.realImports
   }
 
   case class Arr(override val tpe: Type, override val meta: TypeMeta, format: String)
@@ -258,7 +270,7 @@ object Domain {
   case class CatchAll(override val tpe: Type, override val meta: TypeMeta)
       extends Container(tpe.name / "Map", tpe, meta, Set("scala.collection.immutable.Map")) {
     def withType(t: Type): CatchAll = this.copy(tpe = t)
-    override def nestedTypes: Seq[Type] = Str(None, None) +: super.nestedTypes
+    override def nestedTypes(implicit app: StrictModel): Seq[Type] = Str(None, None) +: super.nestedTypes
   }
 
   case class Field(name: TypeName, tpe: Type) {
@@ -266,7 +278,9 @@ object Domain {
       case c: Container => c.allImports
       case o => o.imports
     }
-    def nestedTypes: Seq[Type] = tpe.nestedTypes :+ tpe
+    def realImports(implicit app: StrictModel): Set[String] = tpe.realImports
+    def nestedTypes(implicit app: StrictModel): Seq[Type] = tpe.nestedTypes :+ tpe
+    def allNestedTypes(implicit app: StrictModel): Seq[Type] = tpe.realType +: tpe.realType.allNestedTypes
   }
 
   case class TypeDef(
@@ -275,8 +289,11 @@ object Domain {
       override val meta: TypeMeta
   ) extends Type(name, meta) {
     override def toString: String = s"""\n\tTypeDef($name, \n\t\tSeq(${fields.mkString("\n\t\t", ",\n\t\t", "")}\n\t\t), $meta)\n"""
-    override def nestedTypes: Seq[Type] = fields flatMap (_.nestedTypes) filter { _.name.parent == name } distinct
+    override def nestedTypes(implicit app: StrictModel): Seq[Type] = allNestedTypes filter { _.name.parent == name } distinct
+    override def allNestedTypes(implicit app: StrictModel): Seq[Type] = this +: (fields flatMap (_.allNestedTypes))
     override def imports: Set[String] = (fields flatMap { _.imports }).toSet
+    override def realImports(implicit app: StrictModel): Set[String] = (fields flatMap { _.realImports }).toSet
+
   }
 
   abstract class EnumType(override val name: Reference, override val tpe: Type, override val meta: TypeMeta)
@@ -284,7 +301,8 @@ object Domain {
 
   case class EnumTrait(override val tpe: Type, override val meta: TypeMeta, leaves: Set[EnumObject])
       extends EnumType(tpe.name / "Enum", tpe, meta) {
-    override def nestedTypes: Seq[Type] = tpe +: leaves.toSeq
+    override def allNestedTypes(implicit app: StrictModel): Seq[Type] =
+      tpe.realType +: leaves.toSeq.flatMap(_.realType.allNestedTypes)
     override def withType(t: Type): EnumTrait = this.copy(tpe = t)
   }
 
@@ -401,7 +419,7 @@ object Application {
   ) {
     def findParameter(ref: ParameterRef): Parameter = params(ref)
     def findParameter(name: Reference): Option[Parameter] = params.find(_._1.name == name).map(_._2)
-    def findType(ref: Reference): Type = typeDefs(ref)
+    def findType(ref: Reference): Domain.Type = typeDefs(ref)
   }
 
 }

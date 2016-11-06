@@ -34,6 +34,7 @@ class PutDummyValidator(instance: PutDummy) extends RecursiveValidator {
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class PutValidator(dummy: PutDummy) extends RecursiveValidator {
     override val validators = Seq(

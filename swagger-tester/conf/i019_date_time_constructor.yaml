@@ -1,0 +1,57 @@
+swagger: '2.0'
+info:
+  version:     0.0.1
+  title:       Loop
+  description: Absent constructor for date-time types
+schemes:
+  - http
+host: localhost:8888
+basePath: /019
+paths:
+  /:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: false
+          schema:
+            $ref: "#/definitions/Task"
+      responses:
+        '200':
+          description: 200 response
+          schema:
+            $ref: '#/definitions/Task'
+  /{task}:
+    get:
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: header
+          required: true
+          type: string
+          format: date-time
+        - in: path
+          name: task
+          required: true
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: 200 response
+          schema:
+            $ref: '#/definitions/Task'
+definitions:
+  Task:
+    type: object
+    properties:
+      complete_before:
+        type: string
+        format: date-time
+      complete_after:
+        type: string
+        format: date-time

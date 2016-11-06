@@ -2,6 +2,7 @@ package de.zalando.play.controllers
 
 import akka.util.ByteString
 import play.api.http.Writeable
+import play.api.libs.json.{ JsArray, JsObject, Json, Writes }
 import play.api.mvc.Results.{ Redirect, Status }
 import play.api.mvc.{ AnyContentAsMultipartFormData, RequestHeader, Results }
 
@@ -39,6 +40,14 @@ trait ResponseWritersBase {
       } map (_.w)
   }
 
+  implicit val jsonParsingErrorWrites = new Writes[ParsingError] {
+    def writes(pe: ParsingError): JsObject =
+      Json.obj("messages" -> pe.messages, "args" -> pe.args.map(_.toString))
+  }
+
+  implicit val jsonParsingErrorsWrites = new Writes[Seq[ParsingError]] {
+    def writes(pe: Seq[ParsingError]): JsArray = Json.arr(pe)
+  }
 }
 
 object WrappedBodyParsers extends WrappedBodyParsersBase
@@ -59,10 +68,17 @@ trait ResultWrapper[ResultT] {
   val emptyByteString = akka.util.CompactByteString.empty
   def statusCode: Int
   def result: ResultT
+  def toResultWithWriter(implicit writer: Writeable[ResultT]): play.api.mvc.Result =
+    if (statusCode / 100 == 3)
+      Redirect(result.toString, statusCode)
+    else
+      Status(statusCode)(result)
+
   def writer: String => Option[Writeable[ResultT]]
   def toResult(mimeType: String): Option[play.api.mvc.Result] =
     if (statusCode / 100 == 3)
       Option(Redirect(result.toString, statusCode))
     else
       writer(mimeType).map(Status(statusCode)(result)(_))
+
 }

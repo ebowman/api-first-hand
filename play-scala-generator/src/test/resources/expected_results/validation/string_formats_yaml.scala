@@ -7,11 +7,11 @@ import PlayValidations._
 
 import de.zalando.play.controllers.Base64String
 import Base64String._
-import de.zalando.play.controllers.BinaryString
-import BinaryString._
 import java.time.ZonedDateTime
 import java.util.UUID
 import java.time.LocalDate
+import de.zalando.play.controllers.BinaryString
+import BinaryString._
 // ----- constraints and wrapper validations -----
 class GetBase64OptConstraints(override val instance: String) extends ValidationBase[String] {
     override def constraints: Seq[Constraint[String]] =
@@ -65,6 +65,7 @@ class GetDateValidator(instance: GetDate) extends RecursiveValidator {
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class GetValidator(date_time: GetDate_time, date: GetDate, base64: GetBase64, uuid: GetUuid, petId: BinaryString) extends RecursiveValidator {
     override val validators = Seq(

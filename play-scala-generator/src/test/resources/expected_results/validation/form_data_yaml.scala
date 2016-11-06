@@ -68,6 +68,7 @@ class BothPostYearValidator(instance: BothPostYear) extends RecursiveValidator {
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class MultipartPostValidator(name: String, year: BothPostYear, avatar: MultipartPostAvatar) extends RecursiveValidator {
     override val validators = Seq(

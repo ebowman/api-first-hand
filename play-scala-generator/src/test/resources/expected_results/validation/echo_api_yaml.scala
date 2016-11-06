@@ -28,6 +28,7 @@ class PostNameValidator(instance: PostName) extends RecursiveValidator {
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class Test_pathIdGetValidator(id: String) extends RecursiveValidator {
     override val validators = Seq(

@@ -198,6 +198,7 @@ class UsersUser_idRelationshipPostActionValidator(instance: UsersUser_idRelation
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class UsersUser_idGetValidator(user_id: BigDecimal) extends RecursiveValidator {
     override val validators = Seq(

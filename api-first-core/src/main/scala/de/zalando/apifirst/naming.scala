@@ -137,7 +137,9 @@ object StringUtil {
 
   def capitalize(separator: String, str: String): String = {
     assert(str != null)
-    str.split(separator).map { p => if (p.nonEmpty) p.head.toUpper +: p.tail else p }.mkString("")
+    str.replaceAll("\\s", "_").split(separator).map { p =>
+      if (p.nonEmpty) p.head.toUpper +: p.tail else p
+    }.mkString("")
   }
 
   def camelize(separator: String, str: String): String = capitalize(separator, str) match {

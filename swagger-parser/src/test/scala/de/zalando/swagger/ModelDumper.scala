@@ -24,7 +24,7 @@ object ModelDumper extends App with ExpectedResults {
 
   val validationFixtures = new File(resourcesPath + "validations").listFiles
 
-  def toTest: File => Boolean = f => f.getName.endsWith(".yaml")
+  def toTest: File => Boolean = f => f.getName.endsWith(".yaml") && f.getName.startsWith("i038")
 
   def run: Unit = {
     (modelFixtures ++ exampleFixtures ++ validationFixtures).filter(toTest).foreach { file =>
@@ -41,7 +41,7 @@ object ModelDumper extends App with ExpectedResults {
     dump(ScalaPrinter.asScala(file.getName, flatAst), root, file.getName.replace('.', '_') + ".scala")
   }
 
-  run
+  //  run
   flatten = true
   run
 

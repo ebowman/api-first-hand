@@ -5,6 +5,24 @@ package cross_spec_references
 
 
 //noinspection ScalaStyle
+package yaml {
+
+
+    case class PetCategoryOpt(id: PetId, name: MetaCopyright) 
+    case class ModelSchemaRootDataOpt(name: String, sizeRegister: String, brand: String, partnerArticleModelId: BigInt, description: MetaCopyright, ageGroups: ModelSchemaAgeGroups, keywords: ModelSchemaKeywords, lengthRegister: ModelSchemaLengthRegister, silhouetteId: ModelSchemaSilhouetteId, specialDescriptions: ModelSchemaSpecialDescriptions, articleModelAttributes: ModelSchemaSpecialDescriptions) 
+    case class ModelSchemaRootMetaOpt(copyright: MetaCopyright) 
+    case class ModelSchemaRoot(data: ModelSchemaRootData, meta: ModelSchemaRootMeta, links: ModelSchemaRootLinks) 
+    case class Pet(name: String, tags: PetTags, photoUrls: PetPhotoUrls, id: PetId, status: MetaCopyright, category: PetCategory) 
+    case class ModelSchemaRootLinksOpt(self: MetaCopyright, related: MetaCopyright) 
+
+    case class ModelSchemaSilhouetteId(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
+    case class ModelSchemaAgeGroupsArrResult(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
+
+}
+
+// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
+
+//noinspection ScalaStyle
 package object yaml {
 
     type MetaCopyright = Option[String]
@@ -232,24 +250,5 @@ package object yaml {
         }
     }
 
-
-}
-//noinspection ScalaStyle
-package yaml {
-
-
-    case class PetCategoryOpt(id: PetId, name: MetaCopyright) 
-    case class ModelSchemaRootDataOpt(name: String, sizeRegister: String, brand: String, partnerArticleModelId: BigInt, description: MetaCopyright, ageGroups: ModelSchemaAgeGroups, keywords: ModelSchemaKeywords, lengthRegister: ModelSchemaLengthRegister, silhouetteId: ModelSchemaSilhouetteId, specialDescriptions: ModelSchemaSpecialDescriptions, articleModelAttributes: ModelSchemaSpecialDescriptions) 
-    case class ModelSchemaRootMetaOpt(copyright: MetaCopyright) 
-    case class ModelSchemaRoot(data: ModelSchemaRootData, meta: ModelSchemaRootMeta, links: ModelSchemaRootLinks) 
-    case class Pet(name: String, tags: PetTags, photoUrls: PetPhotoUrls, id: PetId, status: MetaCopyright, category: PetCategory) 
-    case class ModelSchemaRootLinksOpt(self: MetaCopyright, related: MetaCopyright) 
-
-    case class ModelSchemaSilhouetteId(value: String) extends AnyVal {
-        override def toString = value.toString
-    }
-    case class ModelSchemaAgeGroupsArrResult(value: String) extends AnyVal {
-        override def toString = value.toString
-    }
 
 }

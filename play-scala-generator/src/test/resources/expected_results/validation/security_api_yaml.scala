@@ -26,6 +26,7 @@ class PetsIdGetIdValidator(instance: PetsIdGetId) extends RecursiveValidator {
     override val validators = new PetsIdGetIdConstraints(instance) +: instance.map { new PetsIdGetIdArrValidator(_)}
 }
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class PetsIdGetValidator(id: PetsIdGetId) extends RecursiveValidator {
     override val validators = Seq(

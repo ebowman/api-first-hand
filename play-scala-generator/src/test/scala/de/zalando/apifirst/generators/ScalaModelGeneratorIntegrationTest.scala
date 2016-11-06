@@ -6,7 +6,7 @@ import org.scalatest.{ FunSpec, MustMatchers }
 
 class ScalaModelGeneratorIntegrationTest extends FunSpec with MustMatchers with ExpectedResults {
 
-  override val expectationsFolder = super.expectationsFolder + "model/"
+  override val expectationsFolder: String = super.expectationsFolder + "model/"
 
   describe("ScalaGenerator should generate scala model") {
     (model ++ examples ++ validations).foreach { ast =>

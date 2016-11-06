@@ -23,7 +23,13 @@ import javax.inject._
 
 package echo {
 
-    class EchoHandler @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends EchoHandlerBase {
+    class EchoHandler @Inject() (
+        // ----- Start of unmanaged code area for injections EchoHandler
+
+        // ----- End of unmanaged code area for injections EchoHandler
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends EchoHandlerBase {
         // ----- Start of unmanaged code area for constructor EchoHandler
 
         // ----- End of unmanaged code area for constructor EchoHandler
@@ -37,7 +43,13 @@ package echo {
 }
 package echo {
 
-    class EchoApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends EchoApiYamlBase {
+    class EchoApiYaml @Inject() (
+        // ----- Start of unmanaged code area for injections EchoApiYaml
+
+        // ----- End of unmanaged code area for injections EchoApiYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends EchoApiYamlBase {
         // ----- Start of unmanaged code area for constructor EchoApiYaml
 
         // ----- End of unmanaged code area for constructor EchoApiYaml

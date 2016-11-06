@@ -165,6 +165,7 @@ class EventMetaDataScopesOptValidator(instance: EventMetaDataScopesOpt) extends 
     override val validators = new EventMetaDataScopesOptConstraints(instance) +: instance.map { new EventMetaDataScopesOptArrValidator(_)}
 }
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class TopicsTopicPartitionsPartitionGetValidator(topic: String, partition: String) extends RecursiveValidator {
     override val validators = Seq(

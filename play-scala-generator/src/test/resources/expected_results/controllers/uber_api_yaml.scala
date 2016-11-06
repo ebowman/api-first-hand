@@ -23,7 +23,13 @@ import javax.inject._
 
 package uber.api.yaml {
 
-    class UberApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends UberApiYamlBase {
+    class UberApiYaml @Inject() (
+        // ----- Start of unmanaged code area for injections UberApiYaml
+
+        // ----- End of unmanaged code area for injections UberApiYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends UberApiYamlBase {
         // ----- Start of unmanaged code area for constructor UberApiYaml
 
         // ----- End of unmanaged code area for constructor UberApiYaml

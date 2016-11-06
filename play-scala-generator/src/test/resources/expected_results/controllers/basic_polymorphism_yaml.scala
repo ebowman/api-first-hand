@@ -23,7 +23,13 @@ import javax.inject._
 
 package basic_polymorphism.yaml {
 
-    class Basic_polymorphismYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends Basic_polymorphismYamlBase {
+    class Basic_polymorphismYaml @Inject() (
+        // ----- Start of unmanaged code area for injections Basic_polymorphismYaml
+
+        // ----- End of unmanaged code area for injections Basic_polymorphismYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends Basic_polymorphismYamlBase {
         // ----- Start of unmanaged code area for constructor Basic_polymorphismYaml
 
         // ----- End of unmanaged code area for constructor Basic_polymorphismYaml

@@ -23,7 +23,13 @@ import javax.inject._
 
 package simple_petstore_api_yaml {
 
-    class SimplePetstoreApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends SimplePetstoreApiYamlBase {
+    class SimplePetstoreApiYaml @Inject() (
+        // ----- Start of unmanaged code area for injections SimplePetstoreApiYaml
+
+        // ----- End of unmanaged code area for injections SimplePetstoreApiYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends SimplePetstoreApiYamlBase {
         // ----- Start of unmanaged code area for constructor SimplePetstoreApiYaml
 
         // ----- End of unmanaged code area for constructor SimplePetstoreApiYaml
@@ -37,7 +43,13 @@ package simple_petstore_api_yaml {
 }
 package simple_petstore_api_yaml {
 
-    class Dashboard @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends DashboardBase {
+    class Dashboard @Inject() (
+        // ----- Start of unmanaged code area for injections Dashboard
+
+        // ----- End of unmanaged code area for injections Dashboard
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends DashboardBase {
         // ----- Start of unmanaged code area for constructor Dashboard
 
         // ----- End of unmanaged code area for constructor Dashboard

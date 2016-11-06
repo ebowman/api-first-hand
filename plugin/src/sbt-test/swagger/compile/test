@@ -44,12 +44,11 @@ $ absent target/routes/test/generators/echo.api.yaml.scala
 # Successfully compiles after controllers have being generated
 > clean
 > playScalaApiFirstApp
--> compile
+# -> compile
 > playScalaMarshallers
 > playScalaSecurity
 # $ pause
 > compile
-
 
 # no test data exists yet
 

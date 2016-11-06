@@ -1,0 +1,39 @@
+swagger: '2.0'
+info:
+  version:     0.0.1
+  title:       Loop
+  description: Absent constructor for date-time types
+schemes:
+  - http
+host: localhost:8888
+basePath: /020
+paths:
+  /:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: false
+          schema:
+            $ref: "#/definitions/Geometry"
+      responses:
+        '200':
+          description: 200 response
+          schema:
+            $ref: '#/definitions/Geometry'
+        '400':
+          description: Wrong request structure
+definitions:
+  Geometry:
+        type: object
+        properties:
+          coordinates:
+            type: array
+            items:
+              type: number
+              format: double
+              example: [4.49965, 52.06891]

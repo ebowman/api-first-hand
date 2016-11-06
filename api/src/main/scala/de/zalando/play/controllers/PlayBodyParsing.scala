@@ -10,13 +10,14 @@ import play.api.Logger
 import play.api.http.Status._
 import play.api.http._
 import play.api.libs.Files.TemporaryFile
-import play.api.mvc.{ BodyParser, BodyParsers, QueryStringBindable, RequestHeader }
+import play.api.mvc._
 import play.api.mvc.MultipartFormData.FilePart
 import play.api.mvc.Results.Status
 
 import scala.language.implicitConversions
 import scala.reflect.ClassTag
 import scala.util._
+import scala.concurrent.Future
 
 /**
  * @since 02.09.2015
@@ -39,6 +40,7 @@ object PlayBodyParsing extends PlayBodyParsing {
   }
 
   import play.api.libs.iteratee.Execution.Implicits.trampoline
+
   /**
    * Parser factory for optional bodies
    *
@@ -137,6 +139,9 @@ object PlayBodyParsing extends PlayBodyParsing {
 }
 
 trait PlayBodyParsing extends BodyParsers {
+
+  def success[T](t: => T): Future[T] = Future.successful(t)
+
   val logger = Logger.logger
 
   type ContentMap = Map[Int, PartialFunction[String, Writeable[Any]]]
@@ -162,6 +167,8 @@ trait PlayBodyParsing extends BodyParsers {
     case _: IndexOutOfBoundsException => Status(NOT_FOUND)
     case _ => Status(INTERNAL_SERVER_ERROR)
   }
+
+  val notAcceptable: Future[Result] = success(Results.NotAcceptable)
 
   /**
    * Helper method to parse parameters sent as Headers

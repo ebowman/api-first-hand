@@ -36,6 +36,7 @@ class GetOptCodesValidator(instance: GetOptCodes) extends RecursiveValidator {
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class GetValidator(optCodes: GetOptCodes, codes: GetCodes) extends RecursiveValidator {
     override val validators = Seq(

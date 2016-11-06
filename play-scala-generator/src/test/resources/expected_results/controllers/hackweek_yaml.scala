@@ -23,7 +23,13 @@ import javax.inject._
 
 package hackweek.yaml {
 
-    class HackweekYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends HackweekYamlBase {
+    class HackweekYaml @Inject() (
+        // ----- Start of unmanaged code area for injections HackweekYaml
+
+        // ----- End of unmanaged code area for injections HackweekYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends HackweekYamlBase {
         // ----- Start of unmanaged code area for constructor HackweekYaml
 
         // ----- End of unmanaged code area for constructor HackweekYaml

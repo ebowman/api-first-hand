@@ -23,7 +23,13 @@ import javax.inject._
 
 package admin {
 
-    class Dashboard @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends DashboardBase {
+    class Dashboard @Inject() (
+        // ----- Start of unmanaged code area for injections Dashboard
+
+        // ----- End of unmanaged code area for injections Dashboard
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends DashboardBase {
         // ----- Start of unmanaged code area for constructor Dashboard
 
         // ----- End of unmanaged code area for constructor Dashboard

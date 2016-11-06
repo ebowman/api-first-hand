@@ -31,7 +31,7 @@ class TypeDeduplicatorTest extends FunSpec with MustMatchers {
     it("should deduplicate TypeDefs") {
       testTypeDef(TypeDef.apply)
     }
-    it("should choose types with discriminators if possible") {
+    it("should not remove types with discriminators") {
       testDiscriminator(TypeDef.apply)
     }
   }
@@ -90,11 +90,7 @@ class TypeDeduplicatorTest extends FunSpec with MustMatchers {
     val discriminators = Map(
       longName -> longName / "a"
     )
-    val duplicates = Map[Reference, Type](
-      longName -> constructor(longName, fields, TypeMeta(None)),
-      reference1 -> constructor("definitions" / "nothing-special", fields, TypeMeta(Some("Limit for search queries")))
-    )
-    checkExpectations(duplicates, discriminators)
+    checkExpectations(Map.empty[Reference, Type], discriminators)
   }
 
   def checkExpectations[T](types: Map[Reference, Type], discriminators: Application.DiscriminatorLookupTable = Map.empty): Unit = {

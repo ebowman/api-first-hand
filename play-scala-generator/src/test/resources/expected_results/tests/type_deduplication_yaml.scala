@@ -35,21 +35,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
     def toQuery[T](key: String, value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind(key, value)).getOrElse("")
     def toHeader[T](value: T)(implicit binder: QueryStringBindable[T]): String = Option(binder.unbind("", value)).getOrElse("")
 
-  def checkResult(props: Prop) =
+  def checkResult(props: Prop): org.specs2.execute.Result =
     Test.check(Test.Parameters.default, props).status match {
       case Failed(args, labels) =>
         val failureMsg = labels.mkString("\n") + " given args: " + args.map(_.arg).mkString("'", "', '","'")
-        Failure(failureMsg)
-      case Proved(_) | Exhausted | Passed => Success()
+        org.specs2.execute.Failure(failureMsg)
+      case Proved(_) | Exhausted | Passed => org.specs2.execute.Success()
+      case PropException(_, e: IllegalStateException, _) => org.specs2.execute.Error(e.getMessage)
       case PropException(_, e, labels) =>
-        val error = if (labels.isEmpty) e.getLocalizedMessage() else labels.mkString("\n")
-        Failure(error)
+        val error = if (labels.isEmpty) e.getLocalizedMessage else labels.mkString("\n")
+        org.specs2.execute.Failure(error)
     }
 
   private def parserConstructor(mimeType: String) = PlayBodyParsing.jacksonMapper(mimeType)
 
   def parseResponseContent[T](mapper: ObjectMapper, content: String, mimeType: Option[String], expectedType: Class[T]) =
-    mapper.readValue(content, expectedType)
+    if (expectedType.getCanonicalName == "scala.runtime.Null$") null else mapper.readValue(content, expectedType)
 
 
     "DELETE /api/users/{user_id}" should {
@@ -63,6 +64,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -89,14 +92,13 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_user + "]") |: all(
+                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_user + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
                     s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (String, User)): Prop = {
@@ -110,6 +112,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -142,14 +146,13 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_user + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_user + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -189,6 +192,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -215,14 +220,13 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_signin_data + "]") |: all(
+                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_signin_data + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
                     s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(signin_data: SigninData): Prop = {
@@ -235,6 +239,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -266,14 +272,13 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_signin_data + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_signin_data + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -309,6 +314,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -341,7 +348,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(plant_id: String): Prop = {
@@ -352,6 +358,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -386,11 +394,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -427,6 +434,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -453,14 +462,13 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_sunlight_needs + "]") |: all(
+                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_sunlight_needs + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
                     s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (String, SunlightNeeds)): Prop = {
@@ -474,6 +482,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -506,14 +516,13 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_sunlight_needs + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_sunlight_needs + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -553,6 +562,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -585,7 +596,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(plant_id: String): Prop = {
@@ -596,6 +606,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -631,11 +643,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -672,6 +683,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -704,7 +717,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (String, String)): Prop = {
@@ -716,6 +728,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -751,11 +765,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -796,6 +809,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -822,14 +837,13 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_water_needs + "]") |: all(
+                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_water_needs + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
                     s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (String, WaterNeeds)): Prop = {
@@ -843,6 +857,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -875,14 +891,13 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_water_needs + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_water_needs + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -922,6 +937,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -954,7 +971,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(plant_id: String): Prop = {
@@ -965,6 +981,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1000,11 +1018,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -1041,6 +1058,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1073,7 +1092,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (String, UsersGetLimit, UsersGetLimit)): Prop = {
@@ -1085,6 +1103,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1120,11 +1140,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -1166,6 +1185,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1198,7 +1219,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(user_id: String): Prop = {
@@ -1209,6 +1229,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1244,11 +1266,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -1285,6 +1306,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1311,14 +1334,13 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_location + "]") |: all(
+                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_location + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
                     s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (String, Location)): Prop = {
@@ -1332,6 +1354,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1364,14 +1388,13 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_location + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_location + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -1412,6 +1435,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1444,7 +1469,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (String, UsersGetLimit, UsersGetLimit)): Prop = {
@@ -1456,6 +1480,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1491,11 +1517,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -1538,6 +1563,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1570,7 +1597,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (String, String)): Prop = {
@@ -1582,6 +1608,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1618,11 +1646,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -1663,6 +1690,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1695,7 +1724,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (UsersGetLimit, UsersGetLimit)): Prop = {
@@ -1707,6 +1735,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1741,11 +1771,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -1785,6 +1814,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1817,7 +1848,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(user_id: String): Prop = {
@@ -1828,6 +1858,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1863,11 +1895,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -1904,6 +1935,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1930,14 +1963,13 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_user + "]") |: all(
+                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_user + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
                     s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (String, User)): Prop = {
@@ -1951,6 +1983,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -1983,14 +2017,13 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_user + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_user + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -2031,6 +2064,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2063,7 +2098,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (String, String)): Prop = {
@@ -2075,6 +2109,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2110,11 +2146,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -2154,6 +2189,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2186,7 +2223,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(area_id: String): Prop = {
@@ -2197,6 +2233,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2232,11 +2270,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -2273,6 +2310,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2305,7 +2344,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (PlantsGetLimit, PlantsGetOffset)): Prop = {
@@ -2317,6 +2355,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2351,11 +2391,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -2395,6 +2434,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2427,7 +2468,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(user_id: String): Prop = {
@@ -2438,6 +2478,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2474,11 +2516,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -2514,6 +2555,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2546,7 +2589,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(plant_id: String): Prop = {
@@ -2557,6 +2599,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2592,11 +2636,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -2632,6 +2675,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2664,7 +2709,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(plant_id: String): Prop = {
@@ -2675,6 +2719,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2710,11 +2756,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -2751,6 +2796,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2777,14 +2824,13 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_plant + "]") |: all(
+                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_plant + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
                     s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (String, Plant)): Prop = {
@@ -2798,6 +2844,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2831,14 +2879,13 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + "and body [" + parsed_plant + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_plant + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -2879,6 +2926,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2911,7 +2960,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (UsersGetLimit, UsersGetLimit)): Prop = {
@@ -2923,6 +2971,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -2957,11 +3007,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -3002,6 +3051,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -3034,7 +3085,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (String, String)): Prop = {
@@ -3046,6 +3096,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -3082,11 +3134,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -3126,6 +3177,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -3158,7 +3211,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(plant_id: String): Prop = {
@@ -3169,6 +3221,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -3204,11 +3258,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -3244,6 +3297,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -3276,7 +3331,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(area_id: String): Prop = {
@@ -3287,6 +3341,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -3321,11 +3377,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -3361,6 +3416,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -3393,7 +3450,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(user_id: String): Prop = {
@@ -3404,6 +3460,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -3439,11 +3497,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -3480,6 +3537,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -3512,7 +3571,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (String, String)): Prop = {
@@ -3524,6 +3582,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -3559,11 +3619,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -3603,6 +3662,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -3635,7 +3696,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(area_id: String): Prop = {
@@ -3646,6 +3706,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -3680,11 +3742,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {
@@ -3721,6 +3782,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                     Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -3753,7 +3816,6 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         def testValidInput(input: (String, UsersGetLimit, UsersGetLimit)): Prop = {
@@ -3765,6 +3827,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 "application/json"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
+
             val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
                 val headers =
                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
@@ -3800,11 +3864,10 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                 (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
-            if (propertyList.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
             propertyList.reduce(_ && _)
         }
         "discard invalid data" in {

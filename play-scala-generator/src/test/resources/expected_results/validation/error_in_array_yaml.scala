@@ -158,6 +158,7 @@ class ModelSchemaSpecialDescriptionsOptValidator(instance: ModelSchemaSpecialDes
     override val validators = new ModelSchemaSpecialDescriptionsOptConstraints(instance) +: instance.map { new ModelSchemaSpecialDescriptionsOptArrValidator(_)}
 }
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class SchemaModelGetValidator(root: ModelSchemaRoot) extends RecursiveValidator {
     override val validators = Seq(

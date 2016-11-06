@@ -3,6 +3,7 @@ package instagram.api.yaml
 import scala.language.existentials
 import play.api.mvc._
 import play.api.http._
+import play.api.libs.json._
 import de.zalando.play.controllers._
 import Results.Status
 import PlayBodyParsing._
@@ -17,11 +18,9 @@ import de.zalando.play.controllers.PlayPathBindables
 
 
 
-
 //noinspection ScalaStyle
 trait InstagramApiYamlBase extends Controller with PlayBodyParsing  with InstagramApiYamlSecurity {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
-    def success[T](t: => T) = Future.successful(t)
     sealed trait GetmediaByMedia_idLikesType[T] extends ResultWrapper[T]
     def GetmediaByMedia_idLikes200(resultP: MediaMedia_idLikesGetResponses200)(implicit writerP: String => Option[Writeable[MediaMedia_idLikesGetResponses200]]) = success(new GetmediaByMedia_idLikesType[MediaMedia_idLikesGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetmediaByMedia_idLikes200(resultF: Future[MediaMedia_idLikesGetResponses200])(implicit writerP: String => Option[Writeable[MediaMedia_idLikesGetResponses200]]) = resultF map { resultP => (new GetmediaByMedia_idLikesType[MediaMedia_idLikesGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -33,28 +32,38 @@ trait InstagramApiYamlBase extends Controller with PlayBodyParsing  with Instagr
 
     val getmediaByMedia_idLikesActionConstructor  = new getmediaByMedia_idLikesSecureAction("basic", "comments", "relationships", "likes")
 
-def getmediaByMedia_idLikesAction[T] = (f: getmediaByMedia_idLikesActionType[T]) => (media_id: BigInt) => getmediaByMedia_idLikesActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getmediaByMedia_idLikesAction[T] = (f: getmediaByMedia_idLikesActionType[T]) => (media_id: BigInt) => getmediaByMedia_idLikesActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getmediaByMedia_idLikesResponseMimeType =>
+        def processValidgetmediaByMedia_idLikesRequest(media_id: BigInt): Either[Result, Future[GetmediaByMedia_idLikesType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((media_id)))
+            
+            new MediaMedia_idLikesGetValidator(media_id).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new MediaMedia_idLikesGetValidator(media_id).errors match {
-                            case e if e.isEmpty => processValidgetmediaByMedia_idLikesRequest(f)((media_id))(getmediaByMedia_idLikesResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getmediaByMedia_idLikesResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetmediaByMedia_idLikesRequest(media_id) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetmediaByMedia_idLikesType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getmediaByMedia_idLikesResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getmediaByMedia_idLikesResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetmediaByMedia_idLikesRequest[T](f: getmediaByMedia_idLikesActionType[T])(request: getmediaByMedia_idLikesActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait PostmediaByMedia_idLikesType[T] extends ResultWrapper[T]
     def PostmediaByMedia_idLikes200(resultP: MediaMedia_idCommentsDeleteResponses200)(implicit writerP: String => Option[Writeable[MediaMedia_idCommentsDeleteResponses200]]) = success(new PostmediaByMedia_idLikesType[MediaMedia_idCommentsDeleteResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def PostmediaByMedia_idLikes200(resultF: Future[MediaMedia_idCommentsDeleteResponses200])(implicit writerP: String => Option[Writeable[MediaMedia_idCommentsDeleteResponses200]]) = resultF map { resultP => (new PostmediaByMedia_idLikesType[MediaMedia_idCommentsDeleteResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -66,28 +75,38 @@ def getmediaByMedia_idLikesAction[T] = (f: getmediaByMedia_idLikesActionType[T])
 
     val postmediaByMedia_idLikesActionConstructor  = new postmediaByMedia_idLikesSecureAction("comments")
 
-def postmediaByMedia_idLikesAction[T] = (f: postmediaByMedia_idLikesActionType[T]) => (media_id: BigInt) => postmediaByMedia_idLikesActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def postmediaByMedia_idLikesAction[T] = (f: postmediaByMedia_idLikesActionType[T]) => (media_id: BigInt) => postmediaByMedia_idLikesActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { postmediaByMedia_idLikesResponseMimeType =>
+        def processValidpostmediaByMedia_idLikesRequest(media_id: BigInt): Either[Result, Future[PostmediaByMedia_idLikesType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((media_id)))
+            
+            new MediaMedia_idLikesPostValidator(media_id).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new MediaMedia_idLikesPostValidator(media_id).errors match {
-                            case e if e.isEmpty => processValidpostmediaByMedia_idLikesRequest(f)((media_id))(postmediaByMedia_idLikesResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(postmediaByMedia_idLikesResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidpostmediaByMedia_idLikesRequest(media_id) match {
+                case Left(l) => success(l)
+                case Right(r: Future[PostmediaByMedia_idLikesType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { postmediaByMedia_idLikesResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(postmediaByMedia_idLikesResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidpostmediaByMedia_idLikesRequest[T](f: postmediaByMedia_idLikesActionType[T])(request: postmediaByMedia_idLikesActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait DeletemediaByMedia_idLikesType[T] extends ResultWrapper[T]
     def DeletemediaByMedia_idLikes200(resultP: MediaMedia_idCommentsDeleteResponses200)(implicit writerP: String => Option[Writeable[MediaMedia_idCommentsDeleteResponses200]]) = success(new DeletemediaByMedia_idLikesType[MediaMedia_idCommentsDeleteResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def DeletemediaByMedia_idLikes200(resultF: Future[MediaMedia_idCommentsDeleteResponses200])(implicit writerP: String => Option[Writeable[MediaMedia_idCommentsDeleteResponses200]]) = resultF map { resultP => (new DeletemediaByMedia_idLikesType[MediaMedia_idCommentsDeleteResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -99,28 +118,38 @@ def postmediaByMedia_idLikesAction[T] = (f: postmediaByMedia_idLikesActionType[T
 
     val deletemediaByMedia_idLikesActionConstructor  = new deletemediaByMedia_idLikesSecureAction("basic", "comments", "relationships", "likes")
 
-def deletemediaByMedia_idLikesAction[T] = (f: deletemediaByMedia_idLikesActionType[T]) => (media_id: BigInt) => deletemediaByMedia_idLikesActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def deletemediaByMedia_idLikesAction[T] = (f: deletemediaByMedia_idLikesActionType[T]) => (media_id: BigInt) => deletemediaByMedia_idLikesActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { deletemediaByMedia_idLikesResponseMimeType =>
+        def processValiddeletemediaByMedia_idLikesRequest(media_id: BigInt): Either[Result, Future[DeletemediaByMedia_idLikesType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((media_id)))
+            
+            new MediaMedia_idLikesDeleteValidator(media_id).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new MediaMedia_idLikesDeleteValidator(media_id).errors match {
-                            case e if e.isEmpty => processValiddeletemediaByMedia_idLikesRequest(f)((media_id))(deletemediaByMedia_idLikesResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(deletemediaByMedia_idLikesResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValiddeletemediaByMedia_idLikesRequest(media_id) match {
+                case Left(l) => success(l)
+                case Right(r: Future[DeletemediaByMedia_idLikesType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { deletemediaByMedia_idLikesResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(deletemediaByMedia_idLikesResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValiddeletemediaByMedia_idLikesRequest[T](f: deletemediaByMedia_idLikesActionType[T])(request: deletemediaByMedia_idLikesActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetusersByUser_idFollowsType[T] extends ResultWrapper[T]
     def GetusersByUser_idFollows200(resultP: UsersUser_idFollowsGetResponses200)(implicit writerP: String => Option[Writeable[UsersUser_idFollowsGetResponses200]]) = success(new GetusersByUser_idFollowsType[UsersUser_idFollowsGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetusersByUser_idFollows200(resultF: Future[UsersUser_idFollowsGetResponses200])(implicit writerP: String => Option[Writeable[UsersUser_idFollowsGetResponses200]]) = resultF map { resultP => (new GetusersByUser_idFollowsType[UsersUser_idFollowsGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -132,28 +161,38 @@ def deletemediaByMedia_idLikesAction[T] = (f: deletemediaByMedia_idLikesActionTy
 
     val getusersByUser_idFollowsActionConstructor  = new getusersByUser_idFollowsSecureAction("basic", "comments", "relationships", "likes")
 
-def getusersByUser_idFollowsAction[T] = (f: getusersByUser_idFollowsActionType[T]) => (user_id: BigDecimal) => getusersByUser_idFollowsActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getusersByUser_idFollowsAction[T] = (f: getusersByUser_idFollowsActionType[T]) => (user_id: BigDecimal) => getusersByUser_idFollowsActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getusersByUser_idFollowsResponseMimeType =>
+        def processValidgetusersByUser_idFollowsRequest(user_id: BigDecimal): Either[Result, Future[GetusersByUser_idFollowsType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((user_id)))
+            
+            new UsersUser_idFollowsGetValidator(user_id).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new UsersUser_idFollowsGetValidator(user_id).errors match {
-                            case e if e.isEmpty => processValidgetusersByUser_idFollowsRequest(f)((user_id))(getusersByUser_idFollowsResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getusersByUser_idFollowsResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetusersByUser_idFollowsRequest(user_id) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetusersByUser_idFollowsType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getusersByUser_idFollowsResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getusersByUser_idFollowsResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetusersByUser_idFollowsRequest[T](f: getusersByUser_idFollowsActionType[T])(request: getusersByUser_idFollowsActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetlocationsByLocation_idType[T] extends ResultWrapper[T]
     def GetlocationsByLocation_id200(resultP: LocationsLocation_idGetResponses200)(implicit writerP: String => Option[Writeable[LocationsLocation_idGetResponses200]]) = success(new GetlocationsByLocation_idType[LocationsLocation_idGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetlocationsByLocation_id200(resultF: Future[LocationsLocation_idGetResponses200])(implicit writerP: String => Option[Writeable[LocationsLocation_idGetResponses200]]) = resultF map { resultP => (new GetlocationsByLocation_idType[LocationsLocation_idGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -165,28 +204,38 @@ def getusersByUser_idFollowsAction[T] = (f: getusersByUser_idFollowsActionType[T
 
     val getlocationsByLocation_idActionConstructor  = new getlocationsByLocation_idSecureAction("basic", "comments", "relationships", "likes")
 
-def getlocationsByLocation_idAction[T] = (f: getlocationsByLocation_idActionType[T]) => (location_id: BigInt) => getlocationsByLocation_idActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getlocationsByLocation_idAction[T] = (f: getlocationsByLocation_idActionType[T]) => (location_id: BigInt) => getlocationsByLocation_idActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getlocationsByLocation_idResponseMimeType =>
+        def processValidgetlocationsByLocation_idRequest(location_id: BigInt): Either[Result, Future[GetlocationsByLocation_idType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((location_id)))
+            
+            new LocationsLocation_idGetValidator(location_id).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new LocationsLocation_idGetValidator(location_id).errors match {
-                            case e if e.isEmpty => processValidgetlocationsByLocation_idRequest(f)((location_id))(getlocationsByLocation_idResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getlocationsByLocation_idResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetlocationsByLocation_idRequest(location_id) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetlocationsByLocation_idType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getlocationsByLocation_idResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getlocationsByLocation_idResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetlocationsByLocation_idRequest[T](f: getlocationsByLocation_idActionType[T])(request: getlocationsByLocation_idActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetusersSearchType[T] extends ResultWrapper[T]
     def GetusersSearch200(resultP: UsersUser_idFollowsGetResponses200)(implicit writerP: String => Option[Writeable[UsersUser_idFollowsGetResponses200]]) = success(new GetusersSearchType[UsersUser_idFollowsGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetusersSearch200(resultF: Future[UsersUser_idFollowsGetResponses200])(implicit writerP: String => Option[Writeable[UsersUser_idFollowsGetResponses200]]) = resultF map { resultP => (new GetusersSearchType[UsersUser_idFollowsGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -198,28 +247,38 @@ def getlocationsByLocation_idAction[T] = (f: getlocationsByLocation_idActionType
 
     val getusersSearchActionConstructor  = new getusersSearchSecureAction("basic", "comments", "relationships", "likes")
 
-def getusersSearchAction[T] = (f: getusersSearchActionType[T]) => (q: String, count: MediaFilter) => getusersSearchActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getusersSearchAction[T] = (f: getusersSearchActionType[T]) => (q: String, count: MediaFilter) => getusersSearchActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getusersSearchResponseMimeType =>
+        def processValidgetusersSearchRequest(q: String, count: MediaFilter): Either[Result, Future[GetusersSearchType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((q, count)))
+            
+            new UsersSearchGetValidator(q, count).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new UsersSearchGetValidator(q, count).errors match {
-                            case e if e.isEmpty => processValidgetusersSearchRequest(f)((q, count))(getusersSearchResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getusersSearchResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetusersSearchRequest(q, count) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetusersSearchType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getusersSearchResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getusersSearchResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetusersSearchRequest[T](f: getusersSearchActionType[T])(request: getusersSearchActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetusersSelfMediaLikedType[T] extends ResultWrapper[T]
     def GetusersSelfMediaLiked200(resultP: UsersSelfFeedGetResponses200)(implicit writerP: String => Option[Writeable[UsersSelfFeedGetResponses200]]) = success(new GetusersSelfMediaLikedType[UsersSelfFeedGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetusersSelfMediaLiked200(resultF: Future[UsersSelfFeedGetResponses200])(implicit writerP: String => Option[Writeable[UsersSelfFeedGetResponses200]]) = resultF map { resultP => (new GetusersSelfMediaLikedType[UsersSelfFeedGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -231,28 +290,38 @@ def getusersSearchAction[T] = (f: getusersSearchActionType[T]) => (q: String, co
 
     val getusersSelfMediaLikedActionConstructor  = new getusersSelfMediaLikedSecureAction("basic", "comments", "relationships", "likes")
 
-def getusersSelfMediaLikedAction[T] = (f: getusersSelfMediaLikedActionType[T]) => (count: MediaId, max_like_id: MediaId) => getusersSelfMediaLikedActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getusersSelfMediaLikedAction[T] = (f: getusersSelfMediaLikedActionType[T]) => (count: MediaId, max_like_id: MediaId) => getusersSelfMediaLikedActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getusersSelfMediaLikedResponseMimeType =>
+        def processValidgetusersSelfMediaLikedRequest(count: MediaId, max_like_id: MediaId): Either[Result, Future[GetusersSelfMediaLikedType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((count, max_like_id)))
+            
+            new UsersSelfMediaLikedGetValidator(count, max_like_id).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new UsersSelfMediaLikedGetValidator(count, max_like_id).errors match {
-                            case e if e.isEmpty => processValidgetusersSelfMediaLikedRequest(f)((count, max_like_id))(getusersSelfMediaLikedResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getusersSelfMediaLikedResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetusersSelfMediaLikedRequest(count, max_like_id) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetusersSelfMediaLikedType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getusersSelfMediaLikedResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getusersSelfMediaLikedResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetusersSelfMediaLikedRequest[T](f: getusersSelfMediaLikedActionType[T])(request: getusersSelfMediaLikedActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GettagsByTag_nameType[T] extends ResultWrapper[T]
     def GettagsByTag_name200(resultP: Tag)(implicit writerP: String => Option[Writeable[Tag]]) = success(new GettagsByTag_nameType[Tag] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GettagsByTag_name200(resultF: Future[Tag])(implicit writerP: String => Option[Writeable[Tag]]) = resultF map { resultP => (new GettagsByTag_nameType[Tag] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -264,28 +333,38 @@ def getusersSelfMediaLikedAction[T] = (f: getusersSelfMediaLikedActionType[T]) =
 
     val gettagsByTag_nameActionConstructor  = new gettagsByTag_nameSecureAction("basic", "comments", "relationships", "likes")
 
-def gettagsByTag_nameAction[T] = (f: gettagsByTag_nameActionType[T]) => (tag_name: String) => gettagsByTag_nameActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def gettagsByTag_nameAction[T] = (f: gettagsByTag_nameActionType[T]) => (tag_name: String) => gettagsByTag_nameActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { gettagsByTag_nameResponseMimeType =>
+        def processValidgettagsByTag_nameRequest(tag_name: String): Either[Result, Future[GettagsByTag_nameType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((tag_name)))
+            
+            new TagsTag_nameGetValidator(tag_name).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new TagsTag_nameGetValidator(tag_name).errors match {
-                            case e if e.isEmpty => processValidgettagsByTag_nameRequest(f)((tag_name))(gettagsByTag_nameResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(gettagsByTag_nameResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgettagsByTag_nameRequest(tag_name) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GettagsByTag_nameType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { gettagsByTag_nameResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(gettagsByTag_nameResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgettagsByTag_nameRequest[T](f: gettagsByTag_nameActionType[T])(request: gettagsByTag_nameActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GettagsSearchType[T] extends ResultWrapper[T]
     def GettagsSearch200(resultP: TagsSearchGetResponses200)(implicit writerP: String => Option[Writeable[TagsSearchGetResponses200]]) = success(new GettagsSearchType[TagsSearchGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GettagsSearch200(resultF: Future[TagsSearchGetResponses200])(implicit writerP: String => Option[Writeable[TagsSearchGetResponses200]]) = resultF map { resultP => (new GettagsSearchType[TagsSearchGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -297,28 +376,38 @@ def gettagsByTag_nameAction[T] = (f: gettagsByTag_nameActionType[T]) => (tag_nam
 
     val gettagsSearchActionConstructor  = new gettagsSearchSecureAction("basic", "comments", "relationships", "likes")
 
-def gettagsSearchAction[T] = (f: gettagsSearchActionType[T]) => (q: MediaFilter) => gettagsSearchActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def gettagsSearchAction[T] = (f: gettagsSearchActionType[T]) => (q: MediaFilter) => gettagsSearchActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { gettagsSearchResponseMimeType =>
+        def processValidgettagsSearchRequest(q: MediaFilter): Either[Result, Future[GettagsSearchType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((q)))
+            
+            new TagsSearchGetValidator(q).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new TagsSearchGetValidator(q).errors match {
-                            case e if e.isEmpty => processValidgettagsSearchRequest(f)((q))(gettagsSearchResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(gettagsSearchResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgettagsSearchRequest(q) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GettagsSearchType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { gettagsSearchResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(gettagsSearchResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgettagsSearchRequest[T](f: gettagsSearchActionType[T])(request: gettagsSearchActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetusersByUser_idFollowed_byType[T] extends ResultWrapper[T]
     def GetusersByUser_idFollowed_by200(resultP: UsersUser_idFollowsGetResponses200)(implicit writerP: String => Option[Writeable[UsersUser_idFollowsGetResponses200]]) = success(new GetusersByUser_idFollowed_byType[UsersUser_idFollowsGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetusersByUser_idFollowed_by200(resultF: Future[UsersUser_idFollowsGetResponses200])(implicit writerP: String => Option[Writeable[UsersUser_idFollowsGetResponses200]]) = resultF map { resultP => (new GetusersByUser_idFollowed_byType[UsersUser_idFollowsGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -330,28 +419,38 @@ def gettagsSearchAction[T] = (f: gettagsSearchActionType[T]) => (q: MediaFilter)
 
     val getusersByUser_idFollowed_byActionConstructor  = new getusersByUser_idFollowed_bySecureAction("basic", "comments", "relationships", "likes")
 
-def getusersByUser_idFollowed_byAction[T] = (f: getusersByUser_idFollowed_byActionType[T]) => (user_id: BigDecimal) => getusersByUser_idFollowed_byActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getusersByUser_idFollowed_byAction[T] = (f: getusersByUser_idFollowed_byActionType[T]) => (user_id: BigDecimal) => getusersByUser_idFollowed_byActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getusersByUser_idFollowed_byResponseMimeType =>
+        def processValidgetusersByUser_idFollowed_byRequest(user_id: BigDecimal): Either[Result, Future[GetusersByUser_idFollowed_byType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((user_id)))
+            
+            new UsersUser_idFollowed_byGetValidator(user_id).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new UsersUser_idFollowed_byGetValidator(user_id).errors match {
-                            case e if e.isEmpty => processValidgetusersByUser_idFollowed_byRequest(f)((user_id))(getusersByUser_idFollowed_byResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getusersByUser_idFollowed_byResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetusersByUser_idFollowed_byRequest(user_id) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetusersByUser_idFollowed_byType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getusersByUser_idFollowed_byResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getusersByUser_idFollowed_byResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetusersByUser_idFollowed_byRequest[T](f: getusersByUser_idFollowed_byActionType[T])(request: getusersByUser_idFollowed_byActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetmediaByMedia_idCommentsType[T] extends ResultWrapper[T]
     def GetmediaByMedia_idComments200(resultP: MediaMedia_idCommentsGetResponses200)(implicit writerP: String => Option[Writeable[MediaMedia_idCommentsGetResponses200]]) = success(new GetmediaByMedia_idCommentsType[MediaMedia_idCommentsGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetmediaByMedia_idComments200(resultF: Future[MediaMedia_idCommentsGetResponses200])(implicit writerP: String => Option[Writeable[MediaMedia_idCommentsGetResponses200]]) = resultF map { resultP => (new GetmediaByMedia_idCommentsType[MediaMedia_idCommentsGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -363,28 +462,38 @@ def getusersByUser_idFollowed_byAction[T] = (f: getusersByUser_idFollowed_byActi
 
     val getmediaByMedia_idCommentsActionConstructor  = new getmediaByMedia_idCommentsSecureAction("basic", "comments", "relationships", "likes")
 
-def getmediaByMedia_idCommentsAction[T] = (f: getmediaByMedia_idCommentsActionType[T]) => (media_id: BigInt) => getmediaByMedia_idCommentsActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getmediaByMedia_idCommentsAction[T] = (f: getmediaByMedia_idCommentsActionType[T]) => (media_id: BigInt) => getmediaByMedia_idCommentsActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getmediaByMedia_idCommentsResponseMimeType =>
+        def processValidgetmediaByMedia_idCommentsRequest(media_id: BigInt): Either[Result, Future[GetmediaByMedia_idCommentsType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((media_id)))
+            
+            new MediaMedia_idCommentsGetValidator(media_id).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new MediaMedia_idCommentsGetValidator(media_id).errors match {
-                            case e if e.isEmpty => processValidgetmediaByMedia_idCommentsRequest(f)((media_id))(getmediaByMedia_idCommentsResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getmediaByMedia_idCommentsResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetmediaByMedia_idCommentsRequest(media_id) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetmediaByMedia_idCommentsType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getmediaByMedia_idCommentsResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getmediaByMedia_idCommentsResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetmediaByMedia_idCommentsRequest[T](f: getmediaByMedia_idCommentsActionType[T])(request: getmediaByMedia_idCommentsActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait PostmediaByMedia_idCommentsType[T] extends ResultWrapper[T]
     def PostmediaByMedia_idComments200(resultP: MediaMedia_idCommentsDeleteResponses200)(implicit writerP: String => Option[Writeable[MediaMedia_idCommentsDeleteResponses200]]) = success(new PostmediaByMedia_idCommentsType[MediaMedia_idCommentsDeleteResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def PostmediaByMedia_idComments200(resultF: Future[MediaMedia_idCommentsDeleteResponses200])(implicit writerP: String => Option[Writeable[MediaMedia_idCommentsDeleteResponses200]]) = resultF map { resultP => (new PostmediaByMedia_idCommentsType[MediaMedia_idCommentsDeleteResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -393,45 +502,52 @@ def getmediaByMedia_idCommentsAction[T] = (f: getmediaByMedia_idCommentsActionTy
     private type postmediaByMedia_idCommentsActionRequestType       = (BigInt, LocationLatitude)
     private type postmediaByMedia_idCommentsActionType[T]            = postmediaByMedia_idCommentsActionRequestType => Future[PostmediaByMedia_idCommentsType[T] forSome { type T }]
 
-        private def postmediaByMedia_idCommentsParser(acceptedTypes: Seq[String], maxLength: Int = parse.DefaultMaxTextLength) = {
-            def bodyMimeType: Option[MediaType] => String = mediaType => {
-                val requestType = mediaType.toSeq.map {
-                    case m: MediaRange => m
-                    case MediaType(a,b,c) => new MediaRange(a,b,c,None,Nil)
-                }
-                negotiateContent(requestType, acceptedTypes).orElse(acceptedTypes.headOption).getOrElse("application/json")
+        
+        import MissingDefaultReads._
+        
+        val postmediaByMedia_idCommentsParser = parse.using { request =>
+            request.contentType.map(_.toLowerCase(java.util.Locale.ENGLISH)) match {
+                case Some("application/json") => play.api.mvc.BodyParsers.parse.tolerantJson.map(_.asOpt[BigDecimal])
+                
+                case other => play.api.mvc.BodyParsers.parse.error(Future.successful(UnsupportedMediaType(s"Invalid content type specified $other")))
             }
-            
-            
-            val customParsers = WrappedBodyParsers.optionParser[BigDecimal]
-            optionParser[BigDecimal](bodyMimeType, customParsers, "Invalid LocationLatitude", maxLength) _
         }
 
     val postmediaByMedia_idCommentsActionConstructor  = new postmediaByMedia_idCommentsSecureAction("comments")
 
-def postmediaByMedia_idCommentsAction[T] = (f: postmediaByMedia_idCommentsActionType[T]) => (media_id: BigInt) => postmediaByMedia_idCommentsActionConstructor.async(BodyParsers.parse.using(postmediaByMedia_idCommentsParser(Seq[String]("application/json")))) { request =>
-        val providedTypes = Seq[String]("application/json")
+def postmediaByMedia_idCommentsAction[T] = (f: postmediaByMedia_idCommentsActionType[T]) => (media_id: BigInt) => postmediaByMedia_idCommentsActionConstructor.async(postmediaByMedia_idCommentsParser) { implicit request: Request[LocationLatitude] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { postmediaByMedia_idCommentsResponseMimeType =>
-            val tEXT = request.body
+        def processValidpostmediaByMedia_idCommentsRequest(media_id: BigInt, tEXT: LocationLatitude): Either[Result, Future[PostmediaByMedia_idCommentsType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((media_id, tEXT)))
+            
+            new MediaMedia_idCommentsPostValidator(media_id, tEXT).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
+            val tEXT: LocationLatitude = request.body
             
             
 
-                val result =
-                        new MediaMedia_idCommentsPostValidator(media_id, tEXT).errors match {
-                            case e if e.isEmpty => processValidpostmediaByMedia_idCommentsRequest(f)((media_id, tEXT))(postmediaByMedia_idCommentsResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(postmediaByMedia_idCommentsResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidpostmediaByMedia_idCommentsRequest(media_id, tEXT) match {
+                case Left(l) => success(l)
+                case Right(r: Future[PostmediaByMedia_idCommentsType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { postmediaByMedia_idCommentsResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(postmediaByMedia_idCommentsResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidpostmediaByMedia_idCommentsRequest[T](f: postmediaByMedia_idCommentsActionType[T])(request: postmediaByMedia_idCommentsActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait DeletemediaByMedia_idCommentsType[T] extends ResultWrapper[T]
     def DeletemediaByMedia_idComments200(resultP: MediaMedia_idCommentsDeleteResponses200)(implicit writerP: String => Option[Writeable[MediaMedia_idCommentsDeleteResponses200]]) = success(new DeletemediaByMedia_idCommentsType[MediaMedia_idCommentsDeleteResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def DeletemediaByMedia_idComments200(resultF: Future[MediaMedia_idCommentsDeleteResponses200])(implicit writerP: String => Option[Writeable[MediaMedia_idCommentsDeleteResponses200]]) = resultF map { resultP => (new DeletemediaByMedia_idCommentsType[MediaMedia_idCommentsDeleteResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -443,28 +559,38 @@ def postmediaByMedia_idCommentsAction[T] = (f: postmediaByMedia_idCommentsAction
 
     val deletemediaByMedia_idCommentsActionConstructor  = new deletemediaByMedia_idCommentsSecureAction("basic", "comments", "relationships", "likes")
 
-def deletemediaByMedia_idCommentsAction[T] = (f: deletemediaByMedia_idCommentsActionType[T]) => (media_id: BigInt) => deletemediaByMedia_idCommentsActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def deletemediaByMedia_idCommentsAction[T] = (f: deletemediaByMedia_idCommentsActionType[T]) => (media_id: BigInt) => deletemediaByMedia_idCommentsActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { deletemediaByMedia_idCommentsResponseMimeType =>
+        def processValiddeletemediaByMedia_idCommentsRequest(media_id: BigInt): Either[Result, Future[DeletemediaByMedia_idCommentsType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((media_id)))
+            
+            new MediaMedia_idCommentsDeleteValidator(media_id).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new MediaMedia_idCommentsDeleteValidator(media_id).errors match {
-                            case e if e.isEmpty => processValiddeletemediaByMedia_idCommentsRequest(f)((media_id))(deletemediaByMedia_idCommentsResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(deletemediaByMedia_idCommentsResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValiddeletemediaByMedia_idCommentsRequest(media_id) match {
+                case Left(l) => success(l)
+                case Right(r: Future[DeletemediaByMedia_idCommentsType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { deletemediaByMedia_idCommentsResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(deletemediaByMedia_idCommentsResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValiddeletemediaByMedia_idCommentsRequest[T](f: deletemediaByMedia_idCommentsActionType[T])(request: deletemediaByMedia_idCommentsActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GettagsByTag_nameMediaRecentType[T] extends ResultWrapper[T]
     def GettagsByTag_nameMediaRecent200(resultP: TagsTag_nameMediaRecentGetResponses200)(implicit writerP: String => Option[Writeable[TagsTag_nameMediaRecentGetResponses200]]) = success(new GettagsByTag_nameMediaRecentType[TagsTag_nameMediaRecentGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GettagsByTag_nameMediaRecent200(resultF: Future[TagsTag_nameMediaRecentGetResponses200])(implicit writerP: String => Option[Writeable[TagsTag_nameMediaRecentGetResponses200]]) = resultF map { resultP => (new GettagsByTag_nameMediaRecentType[TagsTag_nameMediaRecentGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -476,28 +602,38 @@ def deletemediaByMedia_idCommentsAction[T] = (f: deletemediaByMedia_idCommentsAc
 
     val gettagsByTag_nameMediaRecentActionConstructor  = new gettagsByTag_nameMediaRecentSecureAction("basic", "comments", "relationships", "likes")
 
-def gettagsByTag_nameMediaRecentAction[T] = (f: gettagsByTag_nameMediaRecentActionType[T]) => (tag_name: String) => gettagsByTag_nameMediaRecentActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def gettagsByTag_nameMediaRecentAction[T] = (f: gettagsByTag_nameMediaRecentActionType[T]) => (tag_name: String) => gettagsByTag_nameMediaRecentActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { gettagsByTag_nameMediaRecentResponseMimeType =>
+        def processValidgettagsByTag_nameMediaRecentRequest(tag_name: String): Either[Result, Future[GettagsByTag_nameMediaRecentType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((tag_name)))
+            
+            new TagsTag_nameMediaRecentGetValidator(tag_name).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new TagsTag_nameMediaRecentGetValidator(tag_name).errors match {
-                            case e if e.isEmpty => processValidgettagsByTag_nameMediaRecentRequest(f)((tag_name))(gettagsByTag_nameMediaRecentResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(gettagsByTag_nameMediaRecentResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgettagsByTag_nameMediaRecentRequest(tag_name) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GettagsByTag_nameMediaRecentType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { gettagsByTag_nameMediaRecentResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(gettagsByTag_nameMediaRecentResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgettagsByTag_nameMediaRecentRequest[T](f: gettagsByTag_nameMediaRecentActionType[T])(request: gettagsByTag_nameMediaRecentActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait PostusersByUser_idRelationshipType[T] extends ResultWrapper[T]
     def PostusersByUser_idRelationship200(resultP: UsersUser_idFollowsGetResponses200)(implicit writerP: String => Option[Writeable[UsersUser_idFollowsGetResponses200]]) = success(new PostusersByUser_idRelationshipType[UsersUser_idFollowsGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def PostusersByUser_idRelationship200(resultF: Future[UsersUser_idFollowsGetResponses200])(implicit writerP: String => Option[Writeable[UsersUser_idFollowsGetResponses200]]) = resultF map { resultP => (new PostusersByUser_idRelationshipType[UsersUser_idFollowsGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -506,45 +642,52 @@ def gettagsByTag_nameMediaRecentAction[T] = (f: gettagsByTag_nameMediaRecentActi
     private type postusersByUser_idRelationshipActionRequestType       = (BigDecimal, UsersUser_idRelationshipPostAction)
     private type postusersByUser_idRelationshipActionType[T]            = postusersByUser_idRelationshipActionRequestType => Future[PostusersByUser_idRelationshipType[T] forSome { type T }]
 
-        private def postusersByUser_idRelationshipParser(acceptedTypes: Seq[String], maxLength: Int = parse.DefaultMaxTextLength) = {
-            def bodyMimeType: Option[MediaType] => String = mediaType => {
-                val requestType = mediaType.toSeq.map {
-                    case m: MediaRange => m
-                    case MediaType(a,b,c) => new MediaRange(a,b,c,None,Nil)
-                }
-                negotiateContent(requestType, acceptedTypes).orElse(acceptedTypes.headOption).getOrElse("application/json")
+        
+        import MissingDefaultReads._
+        
+        val postusersByUser_idRelationshipParser = parse.using { request =>
+            request.contentType.map(_.toLowerCase(java.util.Locale.ENGLISH)) match {
+                case Some("application/json") => play.api.mvc.BodyParsers.parse.tolerantJson.map(_.asOpt[UsersUser_idRelationshipPostActionOpt])
+                
+                case other => play.api.mvc.BodyParsers.parse.error(Future.successful(UnsupportedMediaType(s"Invalid content type specified $other")))
             }
-            
-            
-            val customParsers = WrappedBodyParsers.optionParser[UsersUser_idRelationshipPostActionOpt]
-            optionParser[UsersUser_idRelationshipPostActionOpt](bodyMimeType, customParsers, "Invalid UsersUser_idRelationshipPostAction", maxLength) _
         }
 
     val postusersByUser_idRelationshipActionConstructor  = new postusersByUser_idRelationshipSecureAction("relationships")
 
-def postusersByUser_idRelationshipAction[T] = (f: postusersByUser_idRelationshipActionType[T]) => (user_id: BigDecimal) => postusersByUser_idRelationshipActionConstructor.async(BodyParsers.parse.using(postusersByUser_idRelationshipParser(Seq[String]("application/json")))) { request =>
-        val providedTypes = Seq[String]("application/json")
+def postusersByUser_idRelationshipAction[T] = (f: postusersByUser_idRelationshipActionType[T]) => (user_id: BigDecimal) => postusersByUser_idRelationshipActionConstructor.async(postusersByUser_idRelationshipParser) { implicit request: Request[UsersUser_idRelationshipPostAction] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { postusersByUser_idRelationshipResponseMimeType =>
-            val action = request.body
+        def processValidpostusersByUser_idRelationshipRequest(user_id: BigDecimal, action: UsersUser_idRelationshipPostAction): Either[Result, Future[PostusersByUser_idRelationshipType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((user_id, action)))
+            
+            new UsersUser_idRelationshipPostValidator(user_id, action).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
+            val action: UsersUser_idRelationshipPostAction = request.body
             
             
 
-                val result =
-                        new UsersUser_idRelationshipPostValidator(user_id, action).errors match {
-                            case e if e.isEmpty => processValidpostusersByUser_idRelationshipRequest(f)((user_id, action))(postusersByUser_idRelationshipResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(postusersByUser_idRelationshipResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidpostusersByUser_idRelationshipRequest(user_id, action) match {
+                case Left(l) => success(l)
+                case Right(r: Future[PostusersByUser_idRelationshipType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { postusersByUser_idRelationshipResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(postusersByUser_idRelationshipResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidpostusersByUser_idRelationshipRequest[T](f: postusersByUser_idRelationshipActionType[T])(request: postusersByUser_idRelationshipActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetusersSelfFeedType[T] extends ResultWrapper[T]
     def GetusersSelfFeed200(resultP: UsersSelfFeedGetResponses200)(implicit writerP: String => Option[Writeable[UsersSelfFeedGetResponses200]]) = success(new GetusersSelfFeedType[UsersSelfFeedGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetusersSelfFeed200(resultF: Future[UsersSelfFeedGetResponses200])(implicit writerP: String => Option[Writeable[UsersSelfFeedGetResponses200]]) = resultF map { resultP => (new GetusersSelfFeedType[UsersSelfFeedGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -556,28 +699,38 @@ def postusersByUser_idRelationshipAction[T] = (f: postusersByUser_idRelationship
 
     val getusersSelfFeedActionConstructor  = new getusersSelfFeedSecureAction("basic", "comments", "relationships", "likes")
 
-def getusersSelfFeedAction[T] = (f: getusersSelfFeedActionType[T]) => (count: MediaId, max_id: MediaId, min_id: MediaId) => getusersSelfFeedActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getusersSelfFeedAction[T] = (f: getusersSelfFeedActionType[T]) => (count: MediaId, max_id: MediaId, min_id: MediaId) => getusersSelfFeedActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getusersSelfFeedResponseMimeType =>
+        def processValidgetusersSelfFeedRequest(count: MediaId, max_id: MediaId, min_id: MediaId): Either[Result, Future[GetusersSelfFeedType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((count, max_id, min_id)))
+            
+            new UsersSelfFeedGetValidator(count, max_id, min_id).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new UsersSelfFeedGetValidator(count, max_id, min_id).errors match {
-                            case e if e.isEmpty => processValidgetusersSelfFeedRequest(f)((count, max_id, min_id))(getusersSelfFeedResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getusersSelfFeedResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetusersSelfFeedRequest(count, max_id, min_id) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetusersSelfFeedType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getusersSelfFeedResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getusersSelfFeedResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetusersSelfFeedRequest[T](f: getusersSelfFeedActionType[T])(request: getusersSelfFeedActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetusersByUser_idType[T] extends ResultWrapper[T]
     def GetusersByUser_id200(resultP: UsersUser_idGetResponses200)(implicit writerP: String => Option[Writeable[UsersUser_idGetResponses200]]) = success(new GetusersByUser_idType[UsersUser_idGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetusersByUser_id200(resultF: Future[UsersUser_idGetResponses200])(implicit writerP: String => Option[Writeable[UsersUser_idGetResponses200]]) = resultF map { resultP => (new GetusersByUser_idType[UsersUser_idGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -589,28 +742,38 @@ def getusersSelfFeedAction[T] = (f: getusersSelfFeedActionType[T]) => (count: Me
 
     val getusersByUser_idActionConstructor  = new getusersByUser_idSecureAction("basic")
 
-def getusersByUser_idAction[T] = (f: getusersByUser_idActionType[T]) => (user_id: BigDecimal) => getusersByUser_idActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getusersByUser_idAction[T] = (f: getusersByUser_idActionType[T]) => (user_id: BigDecimal) => getusersByUser_idActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getusersByUser_idResponseMimeType =>
+        def processValidgetusersByUser_idRequest(user_id: BigDecimal): Either[Result, Future[GetusersByUser_idType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((user_id)))
+            
+            new UsersUser_idGetValidator(user_id).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new UsersUser_idGetValidator(user_id).errors match {
-                            case e if e.isEmpty => processValidgetusersByUser_idRequest(f)((user_id))(getusersByUser_idResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getusersByUser_idResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetusersByUser_idRequest(user_id) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetusersByUser_idType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getusersByUser_idResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getusersByUser_idResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetusersByUser_idRequest[T](f: getusersByUser_idActionType[T])(request: getusersByUser_idActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetmediaSearchType[T] extends ResultWrapper[T]
     def GetmediaSearch200(resultP: MediaSearchGetResponses200)(implicit writerP: String => Option[Writeable[MediaSearchGetResponses200]]) = success(new GetmediaSearchType[MediaSearchGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetmediaSearch200(resultF: Future[MediaSearchGetResponses200])(implicit writerP: String => Option[Writeable[MediaSearchGetResponses200]]) = resultF map { resultP => (new GetmediaSearchType[MediaSearchGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -622,28 +785,38 @@ def getusersByUser_idAction[T] = (f: getusersByUser_idActionType[T]) => (user_id
 
     val getmediaSearchActionConstructor  = new getmediaSearchSecureAction("basic", "comments", "relationships", "likes")
 
-def getmediaSearchAction[T] = (f: getmediaSearchActionType[T]) => (mAX_TIMESTAMP: MediaId, dISTANCE: BigInt, lNG: LocationLatitude, mIN_TIMESTAMP: MediaId, lAT: LocationLatitude) => getmediaSearchActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getmediaSearchAction[T] = (f: getmediaSearchActionType[T]) => (mAX_TIMESTAMP: MediaId, dISTANCE: BigInt, lNG: LocationLatitude, mIN_TIMESTAMP: MediaId, lAT: LocationLatitude) => getmediaSearchActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getmediaSearchResponseMimeType =>
+        def processValidgetmediaSearchRequest(mAX_TIMESTAMP: MediaId, dISTANCE: BigInt, lNG: LocationLatitude, mIN_TIMESTAMP: MediaId, lAT: LocationLatitude): Either[Result, Future[GetmediaSearchType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((mAX_TIMESTAMP, dISTANCE, lNG, mIN_TIMESTAMP, lAT)))
+            
+            new MediaSearchGetValidator(mAX_TIMESTAMP, dISTANCE, lNG, mIN_TIMESTAMP, lAT).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new MediaSearchGetValidator(mAX_TIMESTAMP, dISTANCE, lNG, mIN_TIMESTAMP, lAT).errors match {
-                            case e if e.isEmpty => processValidgetmediaSearchRequest(f)((mAX_TIMESTAMP, dISTANCE, lNG, mIN_TIMESTAMP, lAT))(getmediaSearchResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getmediaSearchResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetmediaSearchRequest(mAX_TIMESTAMP, dISTANCE, lNG, mIN_TIMESTAMP, lAT) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetmediaSearchType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getmediaSearchResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getmediaSearchResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetmediaSearchRequest[T](f: getmediaSearchActionType[T])(request: getmediaSearchActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetgeographiesByGeo_idMediaRecentType[T] extends ResultWrapper[T]
     
     def GetgeographiesByGeo_idMediaRecent200(headers: Seq[(String, String)] = Nil) = success(new EmptyReturn(200, headers){})
@@ -655,28 +828,38 @@ def getmediaSearchAction[T] = (f: getmediaSearchActionType[T]) => (mAX_TIMESTAMP
 
     val getgeographiesByGeo_idMediaRecentActionConstructor  = new getgeographiesByGeo_idMediaRecentSecureAction("basic", "comments", "relationships", "likes")
 
-def getgeographiesByGeo_idMediaRecentAction[T] = (f: getgeographiesByGeo_idMediaRecentActionType[T]) => (geo_id: BigInt, count: MediaId, min_id: MediaId) => getgeographiesByGeo_idMediaRecentActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getgeographiesByGeo_idMediaRecentAction[T] = (f: getgeographiesByGeo_idMediaRecentActionType[T]) => (geo_id: BigInt, count: MediaId, min_id: MediaId) => getgeographiesByGeo_idMediaRecentActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getgeographiesByGeo_idMediaRecentResponseMimeType =>
+        def processValidgetgeographiesByGeo_idMediaRecentRequest(geo_id: BigInt, count: MediaId, min_id: MediaId): Either[Result, Future[GetgeographiesByGeo_idMediaRecentType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((geo_id, count, min_id)))
+            
+            new GeographiesGeo_idMediaRecentGetValidator(geo_id, count, min_id).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new GeographiesGeo_idMediaRecentGetValidator(geo_id, count, min_id).errors match {
-                            case e if e.isEmpty => processValidgetgeographiesByGeo_idMediaRecentRequest(f)((geo_id, count, min_id))(getgeographiesByGeo_idMediaRecentResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getgeographiesByGeo_idMediaRecentResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetgeographiesByGeo_idMediaRecentRequest(geo_id, count, min_id) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetgeographiesByGeo_idMediaRecentType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getgeographiesByGeo_idMediaRecentResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getgeographiesByGeo_idMediaRecentResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetgeographiesByGeo_idMediaRecentRequest[T](f: getgeographiesByGeo_idMediaRecentActionType[T])(request: getgeographiesByGeo_idMediaRecentActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetmediaByShortcodeType[T] extends ResultWrapper[T]
     def GetmediaByShortcode200(resultP: Media)(implicit writerP: String => Option[Writeable[Media]]) = success(new GetmediaByShortcodeType[Media] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetmediaByShortcode200(resultF: Future[Media])(implicit writerP: String => Option[Writeable[Media]]) = resultF map { resultP => (new GetmediaByShortcodeType[Media] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -688,28 +871,38 @@ def getgeographiesByGeo_idMediaRecentAction[T] = (f: getgeographiesByGeo_idMedia
 
     val getmediaByShortcodeActionConstructor  = new getmediaByShortcodeSecureAction("basic", "comments", "relationships", "likes")
 
-def getmediaByShortcodeAction[T] = (f: getmediaByShortcodeActionType[T]) => (shortcode: String) => getmediaByShortcodeActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getmediaByShortcodeAction[T] = (f: getmediaByShortcodeActionType[T]) => (shortcode: String) => getmediaByShortcodeActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getmediaByShortcodeResponseMimeType =>
+        def processValidgetmediaByShortcodeRequest(shortcode: String): Either[Result, Future[GetmediaByShortcodeType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((shortcode)))
+            
+            new MediaShortcodeGetValidator(shortcode).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new MediaShortcodeGetValidator(shortcode).errors match {
-                            case e if e.isEmpty => processValidgetmediaByShortcodeRequest(f)((shortcode))(getmediaByShortcodeResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getmediaByShortcodeResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetmediaByShortcodeRequest(shortcode) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetmediaByShortcodeType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getmediaByShortcodeResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getmediaByShortcodeResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetmediaByShortcodeRequest[T](f: getmediaByShortcodeActionType[T])(request: getmediaByShortcodeActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetlocationsSearchType[T] extends ResultWrapper[T]
     def GetlocationsSearch200(resultP: LocationsSearchGetResponses200)(implicit writerP: String => Option[Writeable[LocationsSearchGetResponses200]]) = success(new GetlocationsSearchType[LocationsSearchGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetlocationsSearch200(resultF: Future[LocationsSearchGetResponses200])(implicit writerP: String => Option[Writeable[LocationsSearchGetResponses200]]) = resultF map { resultP => (new GetlocationsSearchType[LocationsSearchGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -721,28 +914,38 @@ def getmediaByShortcodeAction[T] = (f: getmediaByShortcodeActionType[T]) => (sho
 
     val getlocationsSearchActionConstructor  = new getlocationsSearchSecureAction("basic", "comments", "relationships", "likes")
 
-def getlocationsSearchAction[T] = (f: getlocationsSearchActionType[T]) => (foursquare_v2_id: MediaId, facebook_places_id: MediaId, distance: MediaId, lat: LocationLatitude, foursquare_id: MediaId, lng: LocationLatitude) => getlocationsSearchActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getlocationsSearchAction[T] = (f: getlocationsSearchActionType[T]) => (foursquare_v2_id: MediaId, facebook_places_id: MediaId, distance: MediaId, lat: LocationLatitude, foursquare_id: MediaId, lng: LocationLatitude) => getlocationsSearchActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getlocationsSearchResponseMimeType =>
+        def processValidgetlocationsSearchRequest(foursquare_v2_id: MediaId, facebook_places_id: MediaId, distance: MediaId, lat: LocationLatitude, foursquare_id: MediaId, lng: LocationLatitude): Either[Result, Future[GetlocationsSearchType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((foursquare_v2_id, facebook_places_id, distance, lat, foursquare_id, lng)))
+            
+            new LocationsSearchGetValidator(foursquare_v2_id, facebook_places_id, distance, lat, foursquare_id, lng).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new LocationsSearchGetValidator(foursquare_v2_id, facebook_places_id, distance, lat, foursquare_id, lng).errors match {
-                            case e if e.isEmpty => processValidgetlocationsSearchRequest(f)((foursquare_v2_id, facebook_places_id, distance, lat, foursquare_id, lng))(getlocationsSearchResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getlocationsSearchResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetlocationsSearchRequest(foursquare_v2_id, facebook_places_id, distance, lat, foursquare_id, lng) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetlocationsSearchType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getlocationsSearchResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getlocationsSearchResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetlocationsSearchRequest[T](f: getlocationsSearchActionType[T])(request: getlocationsSearchActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetusersSelfRequested_byType[T] extends ResultWrapper[T]
     def GetusersSelfRequested_by200(resultP: UsersSelfRequested_byGetResponses200)(implicit writerP: String => Option[Writeable[UsersSelfRequested_byGetResponses200]]) = success(new GetusersSelfRequested_byType[UsersSelfRequested_byGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetusersSelfRequested_by200(resultF: Future[UsersSelfRequested_byGetResponses200])(implicit writerP: String => Option[Writeable[UsersSelfRequested_byGetResponses200]]) = resultF map { resultP => (new GetusersSelfRequested_byType[UsersSelfRequested_byGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -754,22 +957,29 @@ def getlocationsSearchAction[T] = (f: getlocationsSearchActionType[T]) => (fours
 
     val getusersSelfRequested_byActionConstructor  = new getusersSelfRequested_bySecureAction("basic", "comments", "relationships", "likes")
 
-def getusersSelfRequested_byAction[T] = (f: getusersSelfRequested_byActionType[T]) => getusersSelfRequested_byActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getusersSelfRequested_byAction[T] = (f: getusersSelfRequested_byActionType[T]) => getusersSelfRequested_byActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getusersSelfRequested_byResponseMimeType =>
+        def processValidgetusersSelfRequested_byRequest(): Either[Result, Future[GetusersSelfRequested_byType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f())
+            apiFirstTempResultHolder
+        }
+
             
             
 
-                val result = processValidgetusersSelfRequested_byRequest(f)()(getusersSelfRequested_byResponseMimeType)
-                result
+            processValidgetusersSelfRequested_byRequest() match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetusersSelfRequested_byType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getusersSelfRequested_byResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getusersSelfRequested_byResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetusersSelfRequested_byRequest[T](f: getusersSelfRequested_byActionType[T])(request: getusersSelfRequested_byActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetmediaByMedia_idType[T] extends ResultWrapper[T]
     def GetmediaByMedia_id200(resultP: Media)(implicit writerP: String => Option[Writeable[Media]]) = success(new GetmediaByMedia_idType[Media] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetmediaByMedia_id200(resultF: Future[Media])(implicit writerP: String => Option[Writeable[Media]]) = resultF map { resultP => (new GetmediaByMedia_idType[Media] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -781,28 +991,38 @@ def getusersSelfRequested_byAction[T] = (f: getusersSelfRequested_byActionType[T
 
     val getmediaByMedia_idActionConstructor  = new getmediaByMedia_idSecureAction("basic", "comments", "relationships", "likes")
 
-def getmediaByMedia_idAction[T] = (f: getmediaByMedia_idActionType[T]) => (media_id: BigInt) => getmediaByMedia_idActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getmediaByMedia_idAction[T] = (f: getmediaByMedia_idActionType[T]) => (media_id: BigInt) => getmediaByMedia_idActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getmediaByMedia_idResponseMimeType =>
+        def processValidgetmediaByMedia_idRequest(media_id: BigInt): Either[Result, Future[GetmediaByMedia_idType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((media_id)))
+            
+            new MediaMedia_idGetValidator(media_id).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new MediaMedia_idGetValidator(media_id).errors match {
-                            case e if e.isEmpty => processValidgetmediaByMedia_idRequest(f)((media_id))(getmediaByMedia_idResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getmediaByMedia_idResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetmediaByMedia_idRequest(media_id) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetmediaByMedia_idType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getmediaByMedia_idResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getmediaByMedia_idResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetmediaByMedia_idRequest[T](f: getmediaByMedia_idActionType[T])(request: getmediaByMedia_idActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetlocationsByLocation_idMediaRecentType[T] extends ResultWrapper[T]
     def GetlocationsByLocation_idMediaRecent200(resultP: UsersSelfFeedGetResponses200)(implicit writerP: String => Option[Writeable[UsersSelfFeedGetResponses200]]) = success(new GetlocationsByLocation_idMediaRecentType[UsersSelfFeedGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetlocationsByLocation_idMediaRecent200(resultF: Future[UsersSelfFeedGetResponses200])(implicit writerP: String => Option[Writeable[UsersSelfFeedGetResponses200]]) = resultF map { resultP => (new GetlocationsByLocation_idMediaRecentType[UsersSelfFeedGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -814,28 +1034,38 @@ def getmediaByMedia_idAction[T] = (f: getmediaByMedia_idActionType[T]) => (media
 
     val getlocationsByLocation_idMediaRecentActionConstructor  = new getlocationsByLocation_idMediaRecentSecureAction("basic", "comments", "relationships", "likes")
 
-def getlocationsByLocation_idMediaRecentAction[T] = (f: getlocationsByLocation_idMediaRecentActionType[T]) => (location_id: BigInt, max_timestamp: MediaId, min_timestamp: MediaId, min_id: MediaFilter, max_id: MediaFilter) => getlocationsByLocation_idMediaRecentActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getlocationsByLocation_idMediaRecentAction[T] = (f: getlocationsByLocation_idMediaRecentActionType[T]) => (location_id: BigInt, max_timestamp: MediaId, min_timestamp: MediaId, min_id: MediaFilter, max_id: MediaFilter) => getlocationsByLocation_idMediaRecentActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getlocationsByLocation_idMediaRecentResponseMimeType =>
+        def processValidgetlocationsByLocation_idMediaRecentRequest(location_id: BigInt, max_timestamp: MediaId, min_timestamp: MediaId, min_id: MediaFilter, max_id: MediaFilter): Either[Result, Future[GetlocationsByLocation_idMediaRecentType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((location_id, max_timestamp, min_timestamp, min_id, max_id)))
+            
+            new LocationsLocation_idMediaRecentGetValidator(location_id, max_timestamp, min_timestamp, min_id, max_id).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new LocationsLocation_idMediaRecentGetValidator(location_id, max_timestamp, min_timestamp, min_id, max_id).errors match {
-                            case e if e.isEmpty => processValidgetlocationsByLocation_idMediaRecentRequest(f)((location_id, max_timestamp, min_timestamp, min_id, max_id))(getlocationsByLocation_idMediaRecentResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getlocationsByLocation_idMediaRecentResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetlocationsByLocation_idMediaRecentRequest(location_id, max_timestamp, min_timestamp, min_id, max_id) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetlocationsByLocation_idMediaRecentType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getlocationsByLocation_idMediaRecentResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getlocationsByLocation_idMediaRecentResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetlocationsByLocation_idMediaRecentRequest[T](f: getlocationsByLocation_idMediaRecentActionType[T])(request: getlocationsByLocation_idMediaRecentActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetusersByUser_idMediaRecentType[T] extends ResultWrapper[T]
     def GetusersByUser_idMediaRecent200(resultP: UsersSelfFeedGetResponses200)(implicit writerP: String => Option[Writeable[UsersSelfFeedGetResponses200]]) = success(new GetusersByUser_idMediaRecentType[UsersSelfFeedGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetusersByUser_idMediaRecent200(resultF: Future[UsersSelfFeedGetResponses200])(implicit writerP: String => Option[Writeable[UsersSelfFeedGetResponses200]]) = resultF map { resultP => (new GetusersByUser_idMediaRecentType[UsersSelfFeedGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -847,28 +1077,38 @@ def getlocationsByLocation_idMediaRecentAction[T] = (f: getlocationsByLocation_i
 
     val getusersByUser_idMediaRecentActionConstructor  = new getusersByUser_idMediaRecentSecureAction("basic", "comments", "relationships", "likes")
 
-def getusersByUser_idMediaRecentAction[T] = (f: getusersByUser_idMediaRecentActionType[T]) => (user_id: BigDecimal, max_timestamp: MediaId, min_id: MediaFilter, min_timestamp: MediaId, max_id: MediaFilter, count: MediaId) => getusersByUser_idMediaRecentActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getusersByUser_idMediaRecentAction[T] = (f: getusersByUser_idMediaRecentActionType[T]) => (user_id: BigDecimal, max_timestamp: MediaId, min_id: MediaFilter, min_timestamp: MediaId, max_id: MediaFilter, count: MediaId) => getusersByUser_idMediaRecentActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getusersByUser_idMediaRecentResponseMimeType =>
+        def processValidgetusersByUser_idMediaRecentRequest(user_id: BigDecimal, max_timestamp: MediaId, min_id: MediaFilter, min_timestamp: MediaId, max_id: MediaFilter, count: MediaId): Either[Result, Future[GetusersByUser_idMediaRecentType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f((user_id, max_timestamp, min_id, min_timestamp, max_id, count)))
+            
+            new UsersUser_idMediaRecentGetValidator(user_id, max_timestamp, min_id, min_timestamp, max_id, count).errors match {
+                case e if e.isEmpty =>
+                    apiFirstTempResultHolder
+                case l =>
+                    import ResponseWriters.jsonParsingErrorsWrites
+                    Left(BadRequest(Json.toJson(l)))
+            }
+            
+          
+        }
+
             
             
 
-                val result =
-                        new UsersUser_idMediaRecentGetValidator(user_id, max_timestamp, min_id, min_timestamp, max_id, count).errors match {
-                            case e if e.isEmpty => processValidgetusersByUser_idMediaRecentRequest(f)((user_id, max_timestamp, min_id, min_timestamp, max_id, count))(getusersByUser_idMediaRecentResponseMimeType)
-                            case l =>
-                                implicit val marshaller: Writeable[Seq[ParsingError]] = parsingErrors2Writable(getusersByUser_idMediaRecentResponseMimeType)
-                                success(BadRequest(l))
-                        }
-                result
+            processValidgetusersByUser_idMediaRecentRequest(user_id, max_timestamp, min_id, min_timestamp, max_id, count) match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetusersByUser_idMediaRecentType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getusersByUser_idMediaRecentResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getusersByUser_idMediaRecentResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetusersByUser_idMediaRecentRequest[T](f: getusersByUser_idMediaRecentActionType[T])(request: getusersByUser_idMediaRecentActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     sealed trait GetmediaPopularType[T] extends ResultWrapper[T]
     def GetmediaPopular200(resultP: UsersSelfFeedGetResponses200)(implicit writerP: String => Option[Writeable[UsersSelfFeedGetResponses200]]) = success(new GetmediaPopularType[UsersSelfFeedGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
     def GetmediaPopular200(resultF: Future[UsersSelfFeedGetResponses200])(implicit writerP: String => Option[Writeable[UsersSelfFeedGetResponses200]]) = resultF map { resultP => (new GetmediaPopularType[UsersSelfFeedGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
@@ -880,22 +1120,29 @@ def getusersByUser_idMediaRecentAction[T] = (f: getusersByUser_idMediaRecentActi
 
     val getmediaPopularActionConstructor  = new getmediaPopularSecureAction("basic", "comments", "relationships", "likes")
 
-def getmediaPopularAction[T] = (f: getmediaPopularActionType[T]) => getmediaPopularActionConstructor.async { request =>
-        val providedTypes = Seq[String]("application/json")
+def getmediaPopularAction[T] = (f: getmediaPopularActionType[T]) => getmediaPopularActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        negotiateContent(request.acceptedTypes, providedTypes).map { getmediaPopularResponseMimeType =>
+        def processValidgetmediaPopularRequest(): Either[Result, Future[GetmediaPopularType[_]]] = {
+          lazy val apiFirstTempResultHolder = Right(f())
+            apiFirstTempResultHolder
+        }
+
             
             
 
-                val result = processValidgetmediaPopularRequest(f)()(getmediaPopularResponseMimeType)
-                result
+            processValidgetmediaPopularRequest() match {
+                case Left(l) => success(l)
+                case Right(r: Future[GetmediaPopularType[_] @unchecked]) =>
+                    val providedTypes = Seq[String]("application/json")
+                    val result = negotiateContent(request.acceptedTypes, providedTypes) map { getmediaPopularResponseMimeType =>
+                        import ResponseWrites._
+                        r.map(_.toResult(getmediaPopularResponseMimeType).getOrElse(Results.NotAcceptable))
+                    }
+                    result getOrElse notAcceptable
+            }
             
-        }.getOrElse(success(Status(406)("The server doesn't support any of the requested mime types")))
     }
 
-    private def processValidgetmediaPopularRequest[T](f: getmediaPopularActionType[T])(request: getmediaPopularActionRequestType)(mimeType: String) = {
-        f(request).map(_.toResult(mimeType).getOrElse(Results.NotAcceptable))
-    }
     abstract class EmptyReturn(override val statusCode: Int, headers: Seq[(String, String)]) extends ResultWrapper[Result]  with GetmediaByMedia_idLikesType[Result] with PostmediaByMedia_idLikesType[Result] with DeletemediaByMedia_idLikesType[Result] with GetusersByUser_idFollowsType[Result] with GetlocationsByLocation_idType[Result] with GetusersSearchType[Result] with GetusersSelfMediaLikedType[Result] with GettagsByTag_nameType[Result] with GettagsSearchType[Result] with GetusersByUser_idFollowed_byType[Result] with GetmediaByMedia_idCommentsType[Result] with PostmediaByMedia_idCommentsType[Result] with DeletemediaByMedia_idCommentsType[Result] with GettagsByTag_nameMediaRecentType[Result] with PostusersByUser_idRelationshipType[Result] with GetusersSelfFeedType[Result] with GetusersByUser_idType[Result] with GetmediaSearchType[Result] with GetgeographiesByGeo_idMediaRecentType[Result] with GetmediaByShortcodeType[Result] with GetlocationsSearchType[Result] with GetusersSelfRequested_byType[Result] with GetmediaByMedia_idType[Result] with GetlocationsByLocation_idMediaRecentType[Result] with GetusersByUser_idMediaRecentType[Result] with GetmediaPopularType[Result] { val result = Results.Status(statusCode).withHeaders(headers:_*); val writer = (x: String) => Some(new Writeable((_:Any) => emptyByteString, None)); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(result) }
     case object NotImplementedYetSync extends ResultWrapper[Results.EmptyContent]  with GetmediaByMedia_idLikesType[Results.EmptyContent] with PostmediaByMedia_idLikesType[Results.EmptyContent] with DeletemediaByMedia_idLikesType[Results.EmptyContent] with GetusersByUser_idFollowsType[Results.EmptyContent] with GetlocationsByLocation_idType[Results.EmptyContent] with GetusersSearchType[Results.EmptyContent] with GetusersSelfMediaLikedType[Results.EmptyContent] with GettagsByTag_nameType[Results.EmptyContent] with GettagsSearchType[Results.EmptyContent] with GetusersByUser_idFollowed_byType[Results.EmptyContent] with GetmediaByMedia_idCommentsType[Results.EmptyContent] with PostmediaByMedia_idCommentsType[Results.EmptyContent] with DeletemediaByMedia_idCommentsType[Results.EmptyContent] with GettagsByTag_nameMediaRecentType[Results.EmptyContent] with PostusersByUser_idRelationshipType[Results.EmptyContent] with GetusersSelfFeedType[Results.EmptyContent] with GetusersByUser_idType[Results.EmptyContent] with GetmediaSearchType[Results.EmptyContent] with GetgeographiesByGeo_idMediaRecentType[Results.EmptyContent] with GetmediaByShortcodeType[Results.EmptyContent] with GetlocationsSearchType[Results.EmptyContent] with GetusersSelfRequested_byType[Results.EmptyContent] with GetmediaByMedia_idType[Results.EmptyContent] with GetlocationsByLocation_idMediaRecentType[Results.EmptyContent] with GetusersByUser_idMediaRecentType[Results.EmptyContent] with GetmediaPopularType[Results.EmptyContent] { val statusCode = 501; val result = Results.EmptyContent(); val writer = (x: String) => Some(new DefaultWriteables{}.writeableOf_EmptyContent); override def toResult(mimeType: String): Option[play.api.mvc.Result] = Some(Results.NotImplemented) }
     lazy val NotImplementedYet = Future.successful(NotImplementedYetSync)

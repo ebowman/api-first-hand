@@ -23,7 +23,13 @@ import javax.inject._
 
 package expanded {
 
-    class Expanded_polymorphismYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends Expanded_polymorphismYamlBase {
+    class Expanded_polymorphismYaml @Inject() (
+        // ----- Start of unmanaged code area for injections Expanded_polymorphismYaml
+
+        // ----- End of unmanaged code area for injections Expanded_polymorphismYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends Expanded_polymorphismYamlBase {
         // ----- Start of unmanaged code area for constructor Expanded_polymorphismYaml
 
         // ----- End of unmanaged code area for constructor Expanded_polymorphismYaml

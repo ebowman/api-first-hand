@@ -34,6 +34,7 @@ class BasicOptionalNested_optionalValidator(instance: BasicOptionalNested_option
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
+// ----- composite validators -----
 // ----- call validations -----
 class GetValidator(basic: Basic) extends RecursiveValidator {
     override val validators = Seq(

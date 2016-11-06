@@ -25,7 +25,13 @@ import scala.math.BigInt
 
 package heroku.petstore.api.yaml {
 
-    class HerokuPetstoreApiYaml @Inject() (lifecycle: ApplicationLifecycle, config: ConfigurationProvider) extends HerokuPetstoreApiYamlBase {
+    class HerokuPetstoreApiYaml @Inject() (
+        // ----- Start of unmanaged code area for injections HerokuPetstoreApiYaml
+
+        // ----- End of unmanaged code area for injections HerokuPetstoreApiYaml
+        lifecycle: ApplicationLifecycle,
+        config: ConfigurationProvider
+    ) extends HerokuPetstoreApiYamlBase {
         // ----- Start of unmanaged code area for constructor HerokuPetstoreApiYaml
 
         // ----- End of unmanaged code area for constructor HerokuPetstoreApiYaml
