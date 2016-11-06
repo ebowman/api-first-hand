@@ -1,0 +1,21 @@
+swagger: '2.0'
+info:
+  title: Failing spec
+  description: Failing spec
+  version: '0.0.2'
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  /:
+    get:
+      responses:
+        '200':
+          description: 200
+          schema:
+            type: string
+            enum: [ "Status One", "Status Two", "Status Three" ]

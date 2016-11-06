@@ -680,7 +680,7 @@ object strictModel {
   ) extends VendorExtensions with AllValidations[T] with ObjectValidation {
     require(allOf.forall(_.nonEmpty))
     // TODO this could be handled with a Map[String, Any]
-    require(`type`!=PrimitiveType.OBJECT || properties != NULL || additionalProperties != NULL,
+    require(`type`!=PrimitiveType.OBJECT || properties != NULL || additionalProperties != NULL || allOf != NULL,
       "Support for object definitions without properties is not implemented yet")
     validateSchemaArray(items)
     validateSchemaArray(allOf)

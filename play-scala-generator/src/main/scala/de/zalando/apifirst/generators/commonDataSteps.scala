@@ -87,7 +87,7 @@ trait CommonData {
         case d: TypeDef => useType(d.name, suffix, "")
         case _ => useType(ref, suffix, "")
       }
-    case p: PrimitiveType => useType(t.name, suffix, "")
+    case p: PrimitiveType => useType(p.name, suffix, "")
     case TypeDef(name, _, _) if name.isDefinition && !r.isDefinition =>
       useType(name, suffix, "")
     case _ => useType(r, suffix, "")

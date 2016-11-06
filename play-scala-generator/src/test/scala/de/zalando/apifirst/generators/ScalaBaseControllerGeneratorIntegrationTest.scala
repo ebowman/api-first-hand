@@ -8,7 +8,7 @@ class ScalaBaseControllerGeneratorIntegrationTest extends FunSpec with MustMatch
 
   override val expectationsFolder = super.expectationsFolder + "base_controllers/"
 
-  describe("ScalaSecurityGenerator should generate controller bases") {
+  describe("ScalaBaseControllerGenerator should generate controller bases") {
     (model ++ examples).foreach { ast =>
       testScalaBaseControllerGenerator(ast)
     }

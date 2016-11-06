@@ -148,6 +148,8 @@ trait ActionResults extends EnrichmentStep[ApiCall] {
   def singleResultType(table: DenotationTable)(ref: ParameterRef): String = {
     val tpe = app.findType(ref.name)
     tpe match {
+      case p: EnumType =>
+        typeNameDenotation(table, ref.name)
       case c: Container =>
         // TODO this should be readable from model
         c.name.simple + c.nestedTypes.map { t => typeNameDenotation(table, t.name) }.mkString("[", ", ", "]")
