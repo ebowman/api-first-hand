@@ -1048,16 +1048,16 @@ Please take a look at activator template's configuration for complete example.
 The PlayScala generator supports custom templates. In order to override default template for some of the components,
 please provide your custom template named in accordance to the following list:
 
-    * `play_scala_test.mustache` - for unit tests
-    * `play_validation.mustache` - for validators 
-    * `generators.mustache` - for test data generators
-    * `model.mustache` - for model classes and query and path bindables
-    * `play_scala_controller_base.mustache` - for Play controller bases 
-    * `play_scala_controller_security.mustache` - for security adapters used by controller bases
-    * `play_scala_form_parser.mustache` - for form parsers used by the controller bases
-    * `play_scala_controller.mustache` - for Play controller skeletons supposed to be augmented by the programmer
-    * `play_scala_response_writers.mustache` - for custom serializers to be augmented by the programmer
-    * `play_scala_security_extractors.mustache` - for custom security extractors to be augmented by the programmer 
+  * `play_scala_test.mustache` - for unit tests
+  * `play_validation.mustache` - for validators 
+  * `generators.mustache` - for test data generators
+  * `model.mustache` - for model classes and query and path bindables
+  * `play_scala_controller_base.mustache` - for Play controller bases 
+  * `play_scala_controller_security.mustache` - for security adapters used by controller bases
+  * `play_scala_form_parser.mustache` - for form parsers used by the controller bases
+  * `play_scala_controller.mustache` - for Play controller skeletons supposed to be augmented by the programmer
+  * `play_scala_response_writers.mustache` - for custom serializers to be augmented by the programmer
+  * `play_scala_security_extractors.mustache` - for custom security extractors to be augmented by the programmer 
 
 
 Please be aware that generated artifacts need to preserve some specific shape in order to be compiled together without errors.
