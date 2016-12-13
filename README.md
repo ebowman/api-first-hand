@@ -135,7 +135,7 @@ mappings required for the the Swagger UI sandbox.
 
 There are a couple of commented out links to other examples. If you activate some specification by moving it from 
 the `examples` folder into the `conf` folder, you'll need to uncomment an appropriate line in the `routes` file in
-order for play to be able to find it.  
+order for Play to be able to find it.  
 
 
 ## Swagger Domain Definitions
@@ -1002,7 +1002,7 @@ To use the plugin in a plain Play project:
 - Take a look at the `project/plugins.sbt` of the generated project and add required plugins and resolvers to the `project/plugins.sbt` of your Play project
 - Do the same for `build.sbt`
 - Put a Swagger specification with a ```.yaml``` or ```.json``` extension into the ```conf``` directory
-- Add a specification link (`->`) to the play's routes file
+- Add a specification link (`->`) to the Play's routes file
 
 
 ## Plugin Architecture
@@ -1052,10 +1052,10 @@ please provide your custom template named in accordance to the following list:
     * `play_validation.mustache` - for validators 
     * `generators.mustache` - for test data generators
     * `model.mustache` - for model classes and query and path bindables
-    * `play_scala_controller_base.mustache` - for play controller bases 
+    * `play_scala_controller_base.mustache` - for Play controller bases 
     * `play_scala_controller_security.mustache` - for security adapters used by controller bases
     * `play_scala_form_parser.mustache` - for form parsers used by the controller bases
-    * `play_scala_controller.mustache` - for play controller skeletons supposed to be augmented by the programmer
+    * `play_scala_controller.mustache` - for Play controller skeletons supposed to be augmented by the programmer
     * `play_scala_response_writers.mustache` - for custom serializers to be augmented by the programmer
     * `play_scala_security_extractors.mustache` - for custom security extractors to be augmented by the programmer 
 
