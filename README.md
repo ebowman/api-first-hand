@@ -1031,7 +1031,7 @@ There are a couple of sub-projects:
     - `ApiFirstCore` - a wrapper for AST-related functionality
     - `ApiFirstPlayScalaCodeGenerator` - a wrapper for the Play-Scala generator
 
-Because of the modular plugin architecture, all modules must be enabled separatly in sbt's build.sbt. 
+Because of the modular plugin architecture, all modules must be enabled separatly in sbt's `build.sbt`. 
 It is also necessary to configure which parser(s) must be used by the plugin, like that: 
 
 ```scala
