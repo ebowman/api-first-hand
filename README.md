@@ -46,8 +46,8 @@ The template project contains following:
     * `controllers/Swagger.scala` - a backend side of the Swagger UI
     * `generated_controllers/example.yaml.scala` - a dummy implementation of the example controller. Will be (re)generated if deleted
     * `security/example.yaml.scala` - a marshaller for OAuth2 tokens. Will not be regenerated until 
-        a) deleted or renamed
-        b) explicitly requested by issuing a `playScalaSecurity` command 
+        1. deleted or renamed
+        2. explicitly requested by issuing a `playScalaSecurity` command 
 
 
 ## Welcome to Api-First-Hand
