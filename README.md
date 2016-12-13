@@ -83,8 +83,8 @@ Manual generation and compilation of:
 
 is supported in the case if
 
-a) No security extractor or unmarshaller with the same name already exists
-b) The developer issues `playScalaSecurity` or `playScalaMarshallers` sbt command 
+1. No security extractor or unmarshaller with the same name already exists
+2. The developer issues `playScalaSecurity` or `playScalaMarshallers` sbt command 
 
 ## Run Your Application
 
