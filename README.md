@@ -99,7 +99,7 @@ run statically from the within Play, which provides a sandbox for your service.
 The template is configured with a template Swagger API definition called `example.yaml` 
 and located in the `conf` directory of the Play application. 
 
-The `example.yaml` definition provides an example [API description](https://github.com/zalando/api-first-hand-activator/blob/master/conf/example.yaml)
+The `example.yaml` definition provides an example [API description](https://github.com/zalando/play-swagger-service/blob/master/conf/example.yaml).
 
 This definition contains three end points: 
 - the `/token` path, which accept the `GET` and `POST` methods
