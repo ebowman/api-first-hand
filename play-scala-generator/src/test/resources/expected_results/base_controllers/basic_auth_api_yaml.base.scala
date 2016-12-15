@@ -34,7 +34,7 @@ trait BasicAuthApiYamlBase extends Controller with PlayBodyParsing  with BasicAu
 def getAction[T] = (f: getActionType[T]) => getActionConstructor.async { implicit request: Request[AnyContent] =>
 
         def processValidgetRequest(): Either[Result, Future[GetType[_]]] = {
-          lazy val apiFirstTempResultHolder = Right(f())
+          lazy val apiFirstTempResultHolder = Right(f(()))
             apiFirstTempResultHolder
         }
 

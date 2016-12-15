@@ -960,7 +960,7 @@ def getlocationsSearchAction[T] = (f: getlocationsSearchActionType[T]) => (fours
 def getusersSelfRequested_byAction[T] = (f: getusersSelfRequested_byActionType[T]) => getusersSelfRequested_byActionConstructor.async { implicit request: Request[AnyContent] =>
 
         def processValidgetusersSelfRequested_byRequest(): Either[Result, Future[GetusersSelfRequested_byType[_]]] = {
-          lazy val apiFirstTempResultHolder = Right(f())
+          lazy val apiFirstTempResultHolder = Right(f(()))
             apiFirstTempResultHolder
         }
 
@@ -1123,7 +1123,7 @@ def getusersByUser_idMediaRecentAction[T] = (f: getusersByUser_idMediaRecentActi
 def getmediaPopularAction[T] = (f: getmediaPopularActionType[T]) => getmediaPopularActionConstructor.async { implicit request: Request[AnyContent] =>
 
         def processValidgetmediaPopularRequest(): Either[Result, Future[GetmediaPopularType[_]]] = {
-          lazy val apiFirstTempResultHolder = Right(f())
+          lazy val apiFirstTempResultHolder = Right(f(()))
             apiFirstTempResultHolder
         }
 

@@ -126,7 +126,7 @@ def putplantsByPlant_idWateringsByWatering_idAction[T] = (f: putplantsByPlant_id
 def getusersMeAction[T] = (f: getusersMeActionType[T]) => getusersMeActionConstructor.async { implicit request: Request[AnyContent] =>
 
         def processValidgetusersMeRequest(): Either[Result, Future[GetusersMeType[_]]] = {
-          lazy val apiFirstTempResultHolder = Right(f())
+          lazy val apiFirstTempResultHolder = Right(f(()))
             apiFirstTempResultHolder
         }
 

@@ -35,7 +35,7 @@ trait UberApiYamlBase extends Controller with PlayBodyParsing {
 def getmeAction[T] = (f: getmeActionType[T]) => getmeActionConstructor.async { implicit request: Request[AnyContent] =>
 
         def processValidgetmeRequest(): Either[Result, Future[GetmeType[_]]] = {
-          lazy val apiFirstTempResultHolder = Right(f())
+          lazy val apiFirstTempResultHolder = Right(f(()))
             apiFirstTempResultHolder
         }
 

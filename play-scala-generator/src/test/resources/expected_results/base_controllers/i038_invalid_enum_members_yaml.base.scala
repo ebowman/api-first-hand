@@ -31,7 +31,7 @@ trait I038_invalid_enum_membersYamlBase extends Controller with PlayBodyParsing 
 def getAction[T] = (f: getActionType[T]) => getActionConstructor.async { implicit request: Request[AnyContent] =>
 
         def processValidgetRequest(): Either[Result, Future[GetType[_]]] = {
-          lazy val apiFirstTempResultHolder = Right(f())
+          lazy val apiFirstTempResultHolder = Right(f(()))
             apiFirstTempResultHolder
         }
 
