@@ -994,7 +994,7 @@ Running the test is as simple as running a test set from sbt. Just type `test` f
 To build a plugin, do the following:
 
 - Clone the repository to your local filesystem
-- Run ```sbt +publishLocal``` in the Api-First-Hand directory. This will publish the plugin into your local ivy repository
+- Run ```sbt publishLocal``` in the Api-First-Hand directory. This will publish the plugin into your local ivy repository
 
 To use the plugin in a plain Play project:
 
