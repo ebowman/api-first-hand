@@ -1,9 +1,9 @@
 
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{ Action, Controller }
 
 import play.api.data.validation.Constraint
 
-import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+import play.api.inject.{ ApplicationLifecycle, ConfigurationProvider }
 
 import de.zalando.play.controllers._
 
@@ -33,12 +33,12 @@ package simple_petstore_api_yaml {
         // ----- Start of unmanaged code area for constructor SimplePetstoreApiYaml
 
         // ----- End of unmanaged code area for constructor SimplePetstoreApiYaml
-        val addPet = addPetAction { (pet: NewPet) =>  
+        val addPet = addPetAction { (pet: NewPet) =>
             // ----- Start of unmanaged code area for action  SimplePetstoreApiYaml.addPet
             NotImplementedYet
             // ----- End of unmanaged code area for action  SimplePetstoreApiYaml.addPet
         }
-    
+
     }
 }
 package simple_petstore_api_yaml {
@@ -59,16 +59,16 @@ package simple_petstore_api_yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  Dashboard.methodLevel
         }
-        val pathLevelGet = pathLevelGetAction { (id: Long) =>  
+        val pathLevelGet = pathLevelGetAction { (id: Long) =>
             // ----- Start of unmanaged code area for action  Dashboard.pathLevelGet
             NotImplementedYet
             // ----- End of unmanaged code area for action  Dashboard.pathLevelGet
         }
-        val pathLevelDelete = pathLevelDeleteAction { (id: Long) =>  
+        val pathLevelDelete = pathLevelDeleteAction { (id: Long) =>
             // ----- Start of unmanaged code area for action  Dashboard.pathLevelDelete
             NotImplementedYet
             // ----- End of unmanaged code area for action  Dashboard.pathLevelDelete
         }
-    
+
     }
 }

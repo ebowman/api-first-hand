@@ -1,9 +1,9 @@
 
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{ Action, Controller }
 
 import play.api.data.validation.Constraint
 
-import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+import play.api.inject.{ ApplicationLifecycle, ConfigurationProvider }
 
 import de.zalando.play.controllers._
 
@@ -33,11 +33,11 @@ package admin {
         // ----- Start of unmanaged code area for constructor Dashboard
 
         // ----- End of unmanaged code area for constructor Dashboard
-        val index = indexAction {  _ =>  
+        val index = indexAction {  _ =>
             // ----- Start of unmanaged code area for action  Dashboard.index
             NotImplementedYet
             // ----- End of unmanaged code area for action  Dashboard.index
         }
-    
+
     }
 }

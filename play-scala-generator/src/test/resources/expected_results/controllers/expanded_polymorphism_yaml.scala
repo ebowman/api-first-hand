@@ -1,9 +1,9 @@
 
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{ Action, Controller }
 
 import play.api.data.validation.Constraint
 
-import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+import play.api.inject.{ ApplicationLifecycle, ConfigurationProvider }
 
 import de.zalando.play.controllers._
 
@@ -39,16 +39,16 @@ package expanded {
             NotImplementedYet
             // ----- End of unmanaged code area for action  Expanded_polymorphismYaml.findPets
         }
-        val addPet = addPetAction { (pet: NewPet) =>  
+        val addPet = addPetAction { (pet: NewPet) =>
             // ----- Start of unmanaged code area for action  Expanded_polymorphismYaml.addPet
             NotImplementedYet
             // ----- End of unmanaged code area for action  Expanded_polymorphismYaml.addPet
         }
-        val deletePet = deletePetAction { (id: Long) =>  
+        val deletePet = deletePetAction { (id: Long) =>
             // ----- Start of unmanaged code area for action  Expanded_polymorphismYaml.deletePet
             NotImplementedYet
             // ----- End of unmanaged code area for action  Expanded_polymorphismYaml.deletePet
         }
-    
+
     }
 }

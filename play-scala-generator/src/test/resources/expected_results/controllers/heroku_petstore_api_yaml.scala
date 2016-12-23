@@ -1,9 +1,9 @@
 
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{ Action, Controller }
 
 import play.api.data.validation.Constraint
 
-import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+import play.api.inject.{ ApplicationLifecycle, ConfigurationProvider }
 
 import de.zalando.play.controllers._
 
@@ -35,26 +35,26 @@ package heroku.petstore.api.yaml {
         // ----- Start of unmanaged code area for constructor HerokuPetstoreApiYaml
 
         // ----- End of unmanaged code area for constructor HerokuPetstoreApiYaml
-        val get = getAction { (limit: BigInt) =>  
+        val get = getAction { (limit: BigInt) =>
             // ----- Start of unmanaged code area for action  HerokuPetstoreApiYaml.get
             NotImplementedYet
             // ----- End of unmanaged code area for action  HerokuPetstoreApiYaml.get
         }
-        val put = putAction { (pet: PutPet) =>  
+        val put = putAction { (pet: PutPet) =>
             // ----- Start of unmanaged code area for action  HerokuPetstoreApiYaml.put
             NotImplementedYet
             // ----- End of unmanaged code area for action  HerokuPetstoreApiYaml.put
         }
-        val post = postAction { (pet: Pet) =>  
+        val post = postAction { (pet: Pet) =>
             // ----- Start of unmanaged code area for action  HerokuPetstoreApiYaml.post
             NotImplementedYet
             // ----- End of unmanaged code area for action  HerokuPetstoreApiYaml.post
         }
-        val getbyPetId = getbyPetIdAction { (petId: String) =>  
+        val getbyPetId = getbyPetIdAction { (petId: String) =>
             // ----- Start of unmanaged code area for action  HerokuPetstoreApiYaml.getbyPetId
             NotImplementedYet
             // ----- End of unmanaged code area for action  HerokuPetstoreApiYaml.getbyPetId
         }
-    
+
     }
 }

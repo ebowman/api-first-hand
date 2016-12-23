@@ -1,9 +1,9 @@
 
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{ Action, Controller }
 
 import play.api.data.validation.Constraint
 
-import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+import play.api.inject.{ ApplicationLifecycle, ConfigurationProvider }
 
 import de.zalando.play.controllers._
 
@@ -33,7 +33,7 @@ package uber.api.yaml {
         // ----- Start of unmanaged code area for constructor UberApiYaml
 
         // ----- End of unmanaged code area for constructor UberApiYaml
-        val getme = getmeAction {  _ =>  
+        val getme = getmeAction {  _ =>
             // ----- Start of unmanaged code area for action  UberApiYaml.getme
             NotImplementedYet
             // ----- End of unmanaged code area for action  UberApiYaml.getme
@@ -62,6 +62,6 @@ package uber.api.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  UberApiYaml.gethistory
         }
-    
+
     }
 }

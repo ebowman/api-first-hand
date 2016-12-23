@@ -1,9 +1,9 @@
 
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{ Action, Controller }
 
 import play.api.data.validation.Constraint
 
-import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+import play.api.inject.{ ApplicationLifecycle, ConfigurationProvider }
 
 import de.zalando.play.controllers._
 
@@ -33,11 +33,11 @@ package basic.auth.api.yaml {
         // ----- Start of unmanaged code area for constructor BasicAuthApiYaml
 
         // ----- End of unmanaged code area for constructor BasicAuthApiYaml
-        val get = getAction {  _ =>  
+        val get = getAction {  _ =>
             // ----- Start of unmanaged code area for action  BasicAuthApiYaml.get
             NotImplementedYet
             // ----- End of unmanaged code area for action  BasicAuthApiYaml.get
         }
-    
+
     }
 }

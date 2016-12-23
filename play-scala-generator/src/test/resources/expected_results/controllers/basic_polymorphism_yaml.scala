@@ -1,9 +1,9 @@
 
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{ Action, Controller }
 
 import play.api.data.validation.Constraint
 
-import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+import play.api.inject.{ ApplicationLifecycle, ConfigurationProvider }
 
 import de.zalando.play.controllers._
 
@@ -33,11 +33,11 @@ package basic_polymorphism.yaml {
         // ----- Start of unmanaged code area for constructor Basic_polymorphismYaml
 
         // ----- End of unmanaged code area for constructor Basic_polymorphismYaml
-        val put = putAction { (dummy: PutDummy) =>  
+        val put = putAction { (dummy: PutDummy) =>
             // ----- Start of unmanaged code area for action  Basic_polymorphismYaml.put
             NotImplementedYet
             // ----- End of unmanaged code area for action  Basic_polymorphismYaml.put
         }
-    
+
     }
 }

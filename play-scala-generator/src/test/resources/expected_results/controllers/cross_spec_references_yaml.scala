@@ -1,9 +1,9 @@
 
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{ Action, Controller }
 
 import play.api.data.validation.Constraint
 
-import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+import play.api.inject.{ ApplicationLifecycle, ConfigurationProvider }
 
 import de.zalando.play.controllers._
 
@@ -33,11 +33,11 @@ package cross_spec_references.yaml {
         // ----- Start of unmanaged code area for constructor Cross_spec_referencesYaml
 
         // ----- End of unmanaged code area for constructor Cross_spec_referencesYaml
-        val post = postAction { (root: ModelSchemaRoot) =>  
+        val post = postAction { (root: ModelSchemaRoot) =>
             // ----- Start of unmanaged code area for action  Cross_spec_referencesYaml.post
             NotImplementedYet
             // ----- End of unmanaged code area for action  Cross_spec_referencesYaml.post
         }
-    
+
     }
 }

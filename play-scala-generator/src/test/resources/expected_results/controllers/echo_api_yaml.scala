@@ -1,9 +1,9 @@
 
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{ Action, Controller }
 
 import play.api.data.validation.Constraint
 
-import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+import play.api.inject.{ ApplicationLifecycle, ConfigurationProvider }
 
 import de.zalando.play.controllers._
 
@@ -33,12 +33,12 @@ package echo {
         // ----- Start of unmanaged code area for constructor EchoHandler
 
         // ----- End of unmanaged code area for constructor EchoHandler
-        val method = methodAction {  _ =>  
+        val method = methodAction {  _ =>
             // ----- Start of unmanaged code area for action  EchoHandler.method
             NotImplementedYet
             // ----- End of unmanaged code area for action  EchoHandler.method
         }
-    
+
     }
 }
 package echo {
@@ -59,11 +59,11 @@ package echo {
             NotImplementedYet
             // ----- End of unmanaged code area for action  EchoApiYaml.post
         }
-        val gettest_pathById = gettest_pathByIdAction { (id: String) =>  
+        val gettest_pathById = gettest_pathByIdAction { (id: String) =>
             // ----- Start of unmanaged code area for action  EchoApiYaml.gettest_pathById
             NotImplementedYet
             // ----- End of unmanaged code area for action  EchoApiYaml.gettest_pathById
         }
-    
+
     }
 }
