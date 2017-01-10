@@ -42,7 +42,7 @@ object Generators extends JsValueGenerators {
         epochSec = (System.currentTimeMillis + l) / 1000
         epochDay = epochSec / 24 / 60 / 60
     } yield LocalDate.ofEpochDay(epochDay))
-
+    
     implicit lazy val arbDateTime: Arbitrary[ZonedDateTime] = Arbitrary(for {
         d <- arbitrary[java.util.Date]
     } yield ZonedDateTime.ofInstant(d.toInstant, java.time.ZoneId.systemDefault()))

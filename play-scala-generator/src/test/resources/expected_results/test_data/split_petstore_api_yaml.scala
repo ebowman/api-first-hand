@@ -98,8 +98,8 @@ object Generators extends JsValueGenerators {
     def _genList[T](gen: Gen[T], format: String): Gen[ArrayWrapper[T]] = for {
         items <- Gen.containerOf[List,T](gen)
     } yield ArrayWrapper(format)(items)
-
-
+    
+    
     implicit lazy val arbDateTime: Arbitrary[ZonedDateTime] = Arbitrary(for {
         d <- arbitrary[java.util.Date]
     } yield ZonedDateTime.ofInstant(d.toInstant, java.time.ZoneId.systemDefault()))

@@ -31,12 +31,12 @@ object Generators extends JsValueGenerators {
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
 
-
-
+    
+    
     implicit lazy val arbDateTime: Arbitrary[ZonedDateTime] = Arbitrary(for {
         d <- arbitrary[java.util.Date]
     } yield ZonedDateTime.ofInstant(d.toInstant, java.time.ZoneId.systemDefault()))
-
+    
     
     
 
