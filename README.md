@@ -701,7 +701,7 @@ constraints and make sure that your controller methods are only called if the in
 complies to those constraints. 
 
 In the example below, the API definition of the `token` parameter of 
-type `Base64String`, as the form parameter, contains validation rules for the lenght of the perameter as well as a regexp pattern the value of the parameter must confirm to.
+type `Base64String`, as the form parameter, contains validation rules for the length of the parameter as well as a regexp pattern the value of the parameter must confirm to.
 The parameter is also required.
 
 ```yaml
