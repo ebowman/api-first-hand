@@ -46,8 +46,8 @@ The template project contains following:
     * `controllers/Swagger.scala` - a backend side of the Swagger UI
     * `generated_controllers/example.yaml.scala` - a dummy implementation of the example controller. Will be (re)generated if deleted
     * `security/example.yaml.scala` - a marshaller for OAuth2 tokens. Will not be regenerated until 
-        a) deleted or renamed
-        b) explicitly requested by issuing a `playScalaSecurity` command 
+        1. deleted or renamed
+        2. explicitly requested by issuing a `playScalaSecurity` command 
 
 
 ## Welcome to Api-First-Hand
@@ -83,8 +83,8 @@ Manual generation and compilation of:
 
 is supported in the case if
 
-a) No security extractor or unmarshaller with the same name already exists
-b) The developer issues `playScalaSecurity` or `playScalaMarshallers` sbt command 
+1. No security extractor or unmarshaller with the same name already exists
+2. The developer issues `playScalaSecurity` or `playScalaMarshallers` sbt command 
 
 ## Run Your Application
 
@@ -99,7 +99,7 @@ run statically from the within Play, which provides a sandbox for your service.
 The template is configured with a template Swagger API definition called `example.yaml` 
 and located in the `conf` directory of the Play application. 
 
-The `example.yaml` definition provides an example [API description](https://github.com/zalando/api-first-hand-activator/blob/master/conf/example.yaml)
+The `example.yaml` definition provides an example [API description](https://github.com/zalando/play-swagger-service/blob/master/conf/example.yaml).
 
 This definition contains three end points: 
 - the `/token` path, which accept the `GET` and `POST` methods
@@ -135,7 +135,7 @@ mappings required for the the Swagger UI sandbox.
 
 There are a couple of commented out links to other examples. If you activate some specification by moving it from 
 the `examples` folder into the `conf` folder, you'll need to uncomment an appropriate line in the `routes` file in
-order for play to be able to find it.  
+order for Play to be able to find it.  
 
 
 ## Swagger Domain Definitions
@@ -994,7 +994,7 @@ Running the test is as simple as running a test set from sbt. Just type `test` f
 To build a plugin, do the following:
 
 - Clone the repository to your local filesystem
-- Run ```sbt +publishLocal``` in the Api-First-Hand directory. This will publish the plugin into your local ivy repository
+- Run ```sbt publishLocal``` in the Api-First-Hand directory. This will publish the plugin into your local ivy repository
 
 To use the plugin in a plain Play project:
 
@@ -1002,7 +1002,7 @@ To use the plugin in a plain Play project:
 - Take a look at the `project/plugins.sbt` of the generated project and add required plugins and resolvers to the `project/plugins.sbt` of your Play project
 - Do the same for `build.sbt`
 - Put a Swagger specification with a ```.yaml``` or ```.json``` extension into the ```conf``` directory
-- Add a specification link (`->`) to the play's routes file
+- Add a specification link (`->`) to the Play's routes file
 
 
 ## Plugin Architecture
@@ -1031,7 +1031,7 @@ There are a couple of sub-projects:
     - `ApiFirstCore` - a wrapper for AST-related functionality
     - `ApiFirstPlayScalaCodeGenerator` - a wrapper for the Play-Scala generator
 
-Because of the modular plugin architecture, all modules must be enabled separatly in sbt's build.sbt. 
+Because of the modular plugin architecture, all modules must be enabled separatly in sbt's `build.sbt`. 
 It is also necessary to configure which parser(s) must be used by the plugin, like that: 
 
 ```scala
@@ -1048,16 +1048,16 @@ Please take a look at activator template's configuration for complete example.
 The PlayScala generator supports custom templates. In order to override default template for some of the components,
 please provide your custom template named in accordance to the following list:
 
-    * `play_scala_test.mustache` - for unit tests
-    * `play_validation.mustache` - for validators 
-    * `generators.mustache` - for test data generators
-    * `model.mustache` - for model classes and query and path bindables
-    * `play_scala_controller_base.mustache` - for play controller bases 
-    * `play_scala_controller_security.mustache` - for security adapters used by controller bases
-    * `play_scala_form_parser.mustache` - for form parsers used by the controller bases
-    * `play_scala_controller.mustache` - for play controller skeletons supposed to be augmented by the programmer
-    * `play_scala_response_writers.mustache` - for custom serializers to be augmented by the programmer
-    * `play_scala_security_extractors.mustache` - for custom security extractors to be augmented by the programmer 
+  * `play_scala_test.mustache` - for unit tests
+  * `play_validation.mustache` - for validators 
+  * `generators.mustache` - for test data generators
+  * `model.mustache` - for model classes and query and path bindables
+  * `play_scala_controller_base.mustache` - for Play controller bases 
+  * `play_scala_controller_security.mustache` - for security adapters used by controller bases
+  * `play_scala_form_parser.mustache` - for form parsers used by the controller bases
+  * `play_scala_controller.mustache` - for Play controller skeletons supposed to be augmented by the programmer
+  * `play_scala_response_writers.mustache` - for custom serializers to be augmented by the programmer
+  * `play_scala_security_extractors.mustache` - for custom security extractors to be augmented by the programmer 
 
 
 Please be aware that generated artifacts need to preserve some specific shape in order to be compiled together without errors.
