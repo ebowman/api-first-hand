@@ -44,8 +44,8 @@ object Generators extends JsValueGenerators {
     } yield LocalDate.ofEpochDay(epochDay))
     
     implicit lazy val arbDateTime: Arbitrary[ZonedDateTime] = Arbitrary(for {
-        l <- arbitrary[Long]
-    } yield ZonedDateTime.of(java.time.LocalDateTime.ofEpochSecond(l, 0, java.time.ZoneOffset.UTC), java.time.ZoneId.systemDefault()))
+        d <- arbitrary[java.util.Date]
+    } yield ZonedDateTime.ofInstant(d.toInstant, java.time.ZoneId.systemDefault()))
     
     implicit lazy val arbBinaryString: Arbitrary[BinaryString] = Arbitrary(for {
         s <- arbitrary[String]
