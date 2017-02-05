@@ -1,9 +1,9 @@
 
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{ Action, Controller }
 
 import play.api.data.validation.Constraint
 
-import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+import play.api.inject.{ ApplicationLifecycle, ConfigurationProvider }
 
 import de.zalando.play.controllers._
 
@@ -33,11 +33,11 @@ package error_in_array.yaml {
         // ----- Start of unmanaged code area for constructor Error_in_arrayYaml
 
         // ----- End of unmanaged code area for constructor Error_in_arrayYaml
-        val getschemaModel = getschemaModelAction { (root: ModelSchemaRoot) =>  
+        val getschemaModel = getschemaModelAction { (root: ModelSchemaRoot) =>
             // ----- Start of unmanaged code area for action  Error_in_arrayYaml.getschemaModel
             NotImplementedYet
             // ----- End of unmanaged code area for action  Error_in_arrayYaml.getschemaModel
         }
-    
+
     }
 }

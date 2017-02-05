@@ -1,9 +1,9 @@
 
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{ Action, Controller }
 
 import play.api.data.validation.Constraint
 
-import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
+import play.api.inject.{ ApplicationLifecycle, ConfigurationProvider }
 
 import de.zalando.play.controllers._
 
@@ -33,11 +33,11 @@ package all_of_imports.yaml {
         // ----- Start of unmanaged code area for constructor All_of_importsYaml
 
         // ----- End of unmanaged code area for constructor All_of_importsYaml
-        val post = postAction { (body: DatetimeValue) =>  
+        val post = postAction { (body: DatetimeValue) =>
             // ----- Start of unmanaged code area for action  All_of_importsYaml.post
             NotImplementedYet
             // ----- End of unmanaged code area for action  All_of_importsYaml.post
         }
-    
+
     }
 }

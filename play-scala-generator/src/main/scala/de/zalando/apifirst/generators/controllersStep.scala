@@ -202,9 +202,9 @@ object PlayScalaControllerAnalyzer {
   case class UnmanagedPart(marker: ApiCall, relevantCode: Seq[String])
 
   val controllerImports = Seq(
-    "play.api.mvc.{Action, Controller}",
+    "play.api.mvc.{ Action, Controller }",
     "play.api.data.validation.Constraint",
-    "play.api.inject.{ApplicationLifecycle,ConfigurationProvider}",
+    "play.api.inject.{ ApplicationLifecycle, ConfigurationProvider }",
     "de.zalando.play.controllers._",
     "PlayBodyParsing._",
     "PlayValidations._",
