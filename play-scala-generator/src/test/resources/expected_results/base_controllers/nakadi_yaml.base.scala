@@ -38,7 +38,7 @@ trait NakadiYamlBase extends Controller with PlayBodyParsing {
 def nakadiHackGet_metricsAction[T] = (f: nakadiHackGet_metricsActionType[T]) => nakadiHackGet_metricsActionConstructor.async { implicit request: Request[AnyContent] =>
 
         def processValidnakadiHackGet_metricsRequest(): Either[Result, Future[NakadiHackGet_metricsType[_]]] = {
-          lazy val apiFirstTempResultHolder = Right(f())
+          lazy val apiFirstTempResultHolder = Right(f(()))
             apiFirstTempResultHolder
         }
 
@@ -170,7 +170,7 @@ def nakadiHackGet_partitionAction[T] = (f: nakadiHackGet_partitionActionType[T])
 def nakadiHackGet_topicsAction[T] = (f: nakadiHackGet_topicsActionType[T]) => nakadiHackGet_topicsActionConstructor.async { implicit request: Request[AnyContent] =>
 
         def processValidnakadiHackGet_topicsRequest(): Either[Result, Future[NakadiHackGet_topicsType[_]]] = {
-          lazy val apiFirstTempResultHolder = Right(f())
+          lazy val apiFirstTempResultHolder = Right(f(()))
             apiFirstTempResultHolder
         }
 

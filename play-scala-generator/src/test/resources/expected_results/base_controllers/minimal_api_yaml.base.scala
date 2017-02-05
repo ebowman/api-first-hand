@@ -34,7 +34,7 @@ trait DashboardBase extends Controller with PlayBodyParsing {
 def indexAction[T] = (f: indexActionType[T]) => indexActionConstructor.async { implicit request: Request[AnyContent] =>
 
         def processValidindexRequest(): Either[Result, Future[IndexType[_]]] = {
-          lazy val apiFirstTempResultHolder = Right(f())
+          lazy val apiFirstTempResultHolder = Right(f(()))
             apiFirstTempResultHolder
         }
 

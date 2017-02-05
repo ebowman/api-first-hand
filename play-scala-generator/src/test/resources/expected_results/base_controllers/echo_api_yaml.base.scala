@@ -36,7 +36,7 @@ trait EchoHandlerBase extends Controller with PlayBodyParsing {
 def methodAction[T] = (f: methodActionType[T]) => methodActionConstructor.async { implicit request: Request[AnyContent] =>
 
         def processValidmethodRequest(): Either[Result, Future[MethodType[_]]] = {
-          lazy val apiFirstTempResultHolder = Right(f())
+          lazy val apiFirstTempResultHolder = Right(f(()))
             apiFirstTempResultHolder
         }
 

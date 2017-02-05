@@ -691,7 +691,7 @@ def deleteOrderAction[T] = (f: deleteOrderActionType[T]) => (orderId: String) =>
 def logoutUserAction[T] = (f: logoutUserActionType[T]) => logoutUserActionConstructor.async { implicit request: Request[AnyContent] =>
 
         def processValidlogoutUserRequest(): Either[Result, Future[LogoutUserType[_]]] = {
-          lazy val apiFirstTempResultHolder = Right(f())
+          lazy val apiFirstTempResultHolder = Right(f(()))
             apiFirstTempResultHolder
         }
 
