@@ -217,9 +217,9 @@
 				Field("definitions" / "Location" / "latitude", Opt(BDcml)), 
 				Field("definitions" / "Location" / "longitude", Opt(BDcml)))))), 
 			Field("definitions" / "Media" / "created_time", Opt(BInt)), 
-			Field("definitions" / "Media" / "comments:", Opt(TypeDef("paths" / "/users/self/feed" / "get" / "responses" / "200" / "data" / "comments:", Seq(
-				Field("paths" / "/users/self/feed" / "get" / "responses" / "200" / "data" / "comments:" / "count", Opt(BInt)), 
-				Field("paths" / "/users/self/feed" / "get" / "responses" / "200" / "data" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
+			Field("definitions" / "Media" / "comments:", Opt(TypeDef("definitions" / "Media" / "comments:", Seq(
+				Field("definitions" / "Media" / "comments:" / "count", Opt(BInt)), 
+				Field("definitions" / "Media" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
 					Field("definitions" / "Comment" / "id", Opt(Str)), 
 					Field("definitions" / "Comment" / "created_time", Opt(Str)), 
 					Field("definitions" / "Comment" / "text", Opt(Str)), 
@@ -237,34 +237,34 @@
 				Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 				Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))), 
 			Field("definitions" / "Media" / "filter", Opt(Str)), 
-			Field("definitions" / "Media" / "likes", Opt(TypeDef("paths" / "/users/self/feed" / "get" / "responses" / "200" / "data" / "likes", Seq(
-				Field("paths" / "/users/self/feed" / "get" / "responses" / "200" / "data" / "likes" / "count", Opt(BInt)), 
-				Field("paths" / "/users/self/feed" / "get" / "responses" / "200" / "data" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
+			Field("definitions" / "Media" / "likes", Opt(TypeDef("definitions" / "Media" / "likes", Seq(
+				Field("definitions" / "Media" / "likes" / "count", Opt(BInt)), 
+				Field("definitions" / "Media" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
 					Field("definitions" / "MiniProfile" / "user_name", Opt(Str)), 
 					Field("definitions" / "MiniProfile" / "full_name", Opt(Str)), 
 					Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 					Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))))))), 
 			Field("definitions" / "Media" / "id", Opt(BInt)), 
-			Field("definitions" / "Media" / "videos", Opt(TypeDef("paths" / "/users/self/feed" / "get" / "responses" / "200" / "data" / "videos", Seq(
-				Field("paths" / "/users/self/feed" / "get" / "responses" / "200" / "data" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "videos", Opt(TypeDef("definitions" / "Media" / "videos", Seq(
+				Field("definitions" / "Media" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))), 
-				Field("paths" / "/users/self/feed" / "get" / "responses" / "200" / "data" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
 			Field("definitions" / "Media" / "type", Opt(Str)), 
-			Field("definitions" / "Media" / "images", Opt(TypeDef("paths" / "/users/self/feed" / "get" / "responses" / "200" / "data" / "images", Seq(
-				Field("paths" / "/users/self/feed" / "get" / "responses" / "200" / "data" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "images", Opt(TypeDef("definitions" / "Media" / "images", Seq(
+				Field("definitions" / "Media" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))), 
-				Field("paths" / "/users/self/feed" / "get" / "responses" / "200" / "data" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))), 
-				Field("paths" / "/users/self/feed" / "get" / "responses" / "200" / "data" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
@@ -282,9 +282,9 @@
 				Field("definitions" / "Location" / "latitude", Opt(BDcml)), 
 				Field("definitions" / "Location" / "longitude", Opt(BDcml)))))), 
 			Field("definitions" / "Media" / "created_time", Opt(BInt)), 
-			Field("definitions" / "Media" / "comments:", Opt(TypeDef("paths" / "/media/popular" / "get" / "responses" / "200" / "data" / "comments:", Seq(
-				Field("paths" / "/media/popular" / "get" / "responses" / "200" / "data" / "comments:" / "count", Opt(BInt)), 
-				Field("paths" / "/media/popular" / "get" / "responses" / "200" / "data" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
+			Field("definitions" / "Media" / "comments:", Opt(TypeDef("definitions" / "Media" / "comments:", Seq(
+				Field("definitions" / "Media" / "comments:" / "count", Opt(BInt)), 
+				Field("definitions" / "Media" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
 					Field("definitions" / "Comment" / "id", Opt(Str)), 
 					Field("definitions" / "Comment" / "created_time", Opt(Str)), 
 					Field("definitions" / "Comment" / "text", Opt(Str)), 
@@ -302,34 +302,34 @@
 				Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 				Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))), 
 			Field("definitions" / "Media" / "filter", Opt(Str)), 
-			Field("definitions" / "Media" / "likes", Opt(TypeDef("paths" / "/media/popular" / "get" / "responses" / "200" / "data" / "likes", Seq(
-				Field("paths" / "/media/popular" / "get" / "responses" / "200" / "data" / "likes" / "count", Opt(BInt)), 
-				Field("paths" / "/media/popular" / "get" / "responses" / "200" / "data" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
+			Field("definitions" / "Media" / "likes", Opt(TypeDef("definitions" / "Media" / "likes", Seq(
+				Field("definitions" / "Media" / "likes" / "count", Opt(BInt)), 
+				Field("definitions" / "Media" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
 					Field("definitions" / "MiniProfile" / "user_name", Opt(Str)), 
 					Field("definitions" / "MiniProfile" / "full_name", Opt(Str)), 
 					Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 					Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))))))), 
 			Field("definitions" / "Media" / "id", Opt(BInt)), 
-			Field("definitions" / "Media" / "videos", Opt(TypeDef("paths" / "/media/popular" / "get" / "responses" / "200" / "data" / "videos", Seq(
-				Field("paths" / "/media/popular" / "get" / "responses" / "200" / "data" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "videos", Opt(TypeDef("definitions" / "Media" / "videos", Seq(
+				Field("definitions" / "Media" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))), 
-				Field("paths" / "/media/popular" / "get" / "responses" / "200" / "data" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
 			Field("definitions" / "Media" / "type", Opt(Str)), 
-			Field("definitions" / "Media" / "images", Opt(TypeDef("paths" / "/media/popular" / "get" / "responses" / "200" / "data" / "images", Seq(
-				Field("paths" / "/media/popular" / "get" / "responses" / "200" / "data" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "images", Opt(TypeDef("definitions" / "Media" / "images", Seq(
+				Field("definitions" / "Media" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))), 
-				Field("paths" / "/media/popular" / "get" / "responses" / "200" / "data" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))), 
-				Field("paths" / "/media/popular" / "get" / "responses" / "200" / "data" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
@@ -392,9 +392,9 @@
 				Field("definitions" / "Location" / "latitude", Opt(BDcml)), 
 				Field("definitions" / "Location" / "longitude", Opt(BDcml)))))), 
 			Field("definitions" / "Media" / "created_time", Opt(BInt)), 
-			Field("definitions" / "Media" / "comments:", Opt(TypeDef("paths" / "/users/{user-id}/media/recent" / "get" / "responses" / "200" / "data" / "comments:", Seq(
-				Field("paths" / "/users/{user-id}/media/recent" / "get" / "responses" / "200" / "data" / "comments:" / "count", Opt(BInt)), 
-				Field("paths" / "/users/{user-id}/media/recent" / "get" / "responses" / "200" / "data" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
+			Field("definitions" / "Media" / "comments:", Opt(TypeDef("definitions" / "Media" / "comments:", Seq(
+				Field("definitions" / "Media" / "comments:" / "count", Opt(BInt)), 
+				Field("definitions" / "Media" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
 					Field("definitions" / "Comment" / "id", Opt(Str)), 
 					Field("definitions" / "Comment" / "created_time", Opt(Str)), 
 					Field("definitions" / "Comment" / "text", Opt(Str)), 
@@ -412,34 +412,34 @@
 				Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 				Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))), 
 			Field("definitions" / "Media" / "filter", Opt(Str)), 
-			Field("definitions" / "Media" / "likes", Opt(TypeDef("paths" / "/users/{user-id}/media/recent" / "get" / "responses" / "200" / "data" / "likes", Seq(
-				Field("paths" / "/users/{user-id}/media/recent" / "get" / "responses" / "200" / "data" / "likes" / "count", Opt(BInt)), 
-				Field("paths" / "/users/{user-id}/media/recent" / "get" / "responses" / "200" / "data" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
+			Field("definitions" / "Media" / "likes", Opt(TypeDef("definitions" / "Media" / "likes", Seq(
+				Field("definitions" / "Media" / "likes" / "count", Opt(BInt)), 
+				Field("definitions" / "Media" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
 					Field("definitions" / "MiniProfile" / "user_name", Opt(Str)), 
 					Field("definitions" / "MiniProfile" / "full_name", Opt(Str)), 
 					Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 					Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))))))), 
 			Field("definitions" / "Media" / "id", Opt(BInt)), 
-			Field("definitions" / "Media" / "videos", Opt(TypeDef("paths" / "/users/{user-id}/media/recent" / "get" / "responses" / "200" / "data" / "videos", Seq(
-				Field("paths" / "/users/{user-id}/media/recent" / "get" / "responses" / "200" / "data" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "videos", Opt(TypeDef("definitions" / "Media" / "videos", Seq(
+				Field("definitions" / "Media" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))), 
-				Field("paths" / "/users/{user-id}/media/recent" / "get" / "responses" / "200" / "data" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
 			Field("definitions" / "Media" / "type", Opt(Str)), 
-			Field("definitions" / "Media" / "images", Opt(TypeDef("paths" / "/users/{user-id}/media/recent" / "get" / "responses" / "200" / "data" / "images", Seq(
-				Field("paths" / "/users/{user-id}/media/recent" / "get" / "responses" / "200" / "data" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "images", Opt(TypeDef("definitions" / "Media" / "images", Seq(
+				Field("definitions" / "Media" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))), 
-				Field("paths" / "/users/{user-id}/media/recent" / "get" / "responses" / "200" / "data" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))), 
-				Field("paths" / "/users/{user-id}/media/recent" / "get" / "responses" / "200" / "data" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
@@ -457,9 +457,9 @@
 				Field("definitions" / "Location" / "latitude", Opt(BDcml)), 
 				Field("definitions" / "Location" / "longitude", Opt(BDcml)))))), 
 			Field("definitions" / "Media" / "created_time", Opt(BInt)), 
-			Field("definitions" / "Media" / "comments:", Opt(TypeDef("paths" / "/users/self/media/liked" / "get" / "responses" / "200" / "data" / "comments:", Seq(
-				Field("paths" / "/users/self/media/liked" / "get" / "responses" / "200" / "data" / "comments:" / "count", Opt(BInt)), 
-				Field("paths" / "/users/self/media/liked" / "get" / "responses" / "200" / "data" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
+			Field("definitions" / "Media" / "comments:", Opt(TypeDef("definitions" / "Media" / "comments:", Seq(
+				Field("definitions" / "Media" / "comments:" / "count", Opt(BInt)), 
+				Field("definitions" / "Media" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
 					Field("definitions" / "Comment" / "id", Opt(Str)), 
 					Field("definitions" / "Comment" / "created_time", Opt(Str)), 
 					Field("definitions" / "Comment" / "text", Opt(Str)), 
@@ -477,34 +477,34 @@
 				Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 				Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))), 
 			Field("definitions" / "Media" / "filter", Opt(Str)), 
-			Field("definitions" / "Media" / "likes", Opt(TypeDef("paths" / "/users/self/media/liked" / "get" / "responses" / "200" / "data" / "likes", Seq(
-				Field("paths" / "/users/self/media/liked" / "get" / "responses" / "200" / "data" / "likes" / "count", Opt(BInt)), 
-				Field("paths" / "/users/self/media/liked" / "get" / "responses" / "200" / "data" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
+			Field("definitions" / "Media" / "likes", Opt(TypeDef("definitions" / "Media" / "likes", Seq(
+				Field("definitions" / "Media" / "likes" / "count", Opt(BInt)), 
+				Field("definitions" / "Media" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
 					Field("definitions" / "MiniProfile" / "user_name", Opt(Str)), 
 					Field("definitions" / "MiniProfile" / "full_name", Opt(Str)), 
 					Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 					Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))))))), 
 			Field("definitions" / "Media" / "id", Opt(BInt)), 
-			Field("definitions" / "Media" / "videos", Opt(TypeDef("paths" / "/users/self/media/liked" / "get" / "responses" / "200" / "data" / "videos", Seq(
-				Field("paths" / "/users/self/media/liked" / "get" / "responses" / "200" / "data" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "videos", Opt(TypeDef("definitions" / "Media" / "videos", Seq(
+				Field("definitions" / "Media" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))), 
-				Field("paths" / "/users/self/media/liked" / "get" / "responses" / "200" / "data" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
 			Field("definitions" / "Media" / "type", Opt(Str)), 
-			Field("definitions" / "Media" / "images", Opt(TypeDef("paths" / "/users/self/media/liked" / "get" / "responses" / "200" / "data" / "images", Seq(
-				Field("paths" / "/users/self/media/liked" / "get" / "responses" / "200" / "data" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "images", Opt(TypeDef("definitions" / "Media" / "images", Seq(
+				Field("definitions" / "Media" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))), 
-				Field("paths" / "/users/self/media/liked" / "get" / "responses" / "200" / "data" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))), 
-				Field("paths" / "/users/self/media/liked" / "get" / "responses" / "200" / "data" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
@@ -522,9 +522,9 @@
 				Field("definitions" / "Location" / "latitude", Opt(BDcml)), 
 				Field("definitions" / "Location" / "longitude", Opt(BDcml)))))), 
 			Field("definitions" / "Media" / "created_time", Opt(BInt)), 
-			Field("definitions" / "Media" / "comments:", Opt(TypeDef("paths" / "/locations/{location-id}/media/recent" / "get" / "responses" / "200" / "data" / "comments:", Seq(
-				Field("paths" / "/locations/{location-id}/media/recent" / "get" / "responses" / "200" / "data" / "comments:" / "count", Opt(BInt)), 
-				Field("paths" / "/locations/{location-id}/media/recent" / "get" / "responses" / "200" / "data" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
+			Field("definitions" / "Media" / "comments:", Opt(TypeDef("definitions" / "Media" / "comments:", Seq(
+				Field("definitions" / "Media" / "comments:" / "count", Opt(BInt)), 
+				Field("definitions" / "Media" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
 					Field("definitions" / "Comment" / "id", Opt(Str)), 
 					Field("definitions" / "Comment" / "created_time", Opt(Str)), 
 					Field("definitions" / "Comment" / "text", Opt(Str)), 
@@ -542,34 +542,34 @@
 				Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 				Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))), 
 			Field("definitions" / "Media" / "filter", Opt(Str)), 
-			Field("definitions" / "Media" / "likes", Opt(TypeDef("paths" / "/locations/{location-id}/media/recent" / "get" / "responses" / "200" / "data" / "likes", Seq(
-				Field("paths" / "/locations/{location-id}/media/recent" / "get" / "responses" / "200" / "data" / "likes" / "count", Opt(BInt)), 
-				Field("paths" / "/locations/{location-id}/media/recent" / "get" / "responses" / "200" / "data" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
+			Field("definitions" / "Media" / "likes", Opt(TypeDef("definitions" / "Media" / "likes", Seq(
+				Field("definitions" / "Media" / "likes" / "count", Opt(BInt)), 
+				Field("definitions" / "Media" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
 					Field("definitions" / "MiniProfile" / "user_name", Opt(Str)), 
 					Field("definitions" / "MiniProfile" / "full_name", Opt(Str)), 
 					Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 					Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))))))), 
 			Field("definitions" / "Media" / "id", Opt(BInt)), 
-			Field("definitions" / "Media" / "videos", Opt(TypeDef("paths" / "/locations/{location-id}/media/recent" / "get" / "responses" / "200" / "data" / "videos", Seq(
-				Field("paths" / "/locations/{location-id}/media/recent" / "get" / "responses" / "200" / "data" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "videos", Opt(TypeDef("definitions" / "Media" / "videos", Seq(
+				Field("definitions" / "Media" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))), 
-				Field("paths" / "/locations/{location-id}/media/recent" / "get" / "responses" / "200" / "data" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
 			Field("definitions" / "Media" / "type", Opt(Str)), 
-			Field("definitions" / "Media" / "images", Opt(TypeDef("paths" / "/locations/{location-id}/media/recent" / "get" / "responses" / "200" / "data" / "images", Seq(
-				Field("paths" / "/locations/{location-id}/media/recent" / "get" / "responses" / "200" / "data" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "images", Opt(TypeDef("definitions" / "Media" / "images", Seq(
+				Field("definitions" / "Media" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))), 
-				Field("paths" / "/locations/{location-id}/media/recent" / "get" / "responses" / "200" / "data" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))), 
-				Field("paths" / "/locations/{location-id}/media/recent" / "get" / "responses" / "200" / "data" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 					Field("definitions" / "Image" / "width", Opt(BInt)), 
 					Field("definitions" / "Image" / "height", Opt(BInt)), 
 					Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
@@ -602,9 +602,9 @@
 					Field("definitions" / "Location" / "latitude", Opt(BDcml)), 
 					Field("definitions" / "Location" / "longitude", Opt(BDcml)))))), 
 				Field("definitions" / "Media" / "created_time", Opt(BInt)), 
-				Field("definitions" / "Media" / "comments:", Opt(TypeDef("paths" / "/media/search" / "get" / "responses" / "200" / "data" / "comments:", Seq(
-					Field("paths" / "/media/search" / "get" / "responses" / "200" / "data" / "comments:" / "count", Opt(BInt)), 
-					Field("paths" / "/media/search" / "get" / "responses" / "200" / "data" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
+				Field("definitions" / "Media" / "comments:", Opt(TypeDef("definitions" / "Media" / "comments:", Seq(
+					Field("definitions" / "Media" / "comments:" / "count", Opt(BInt)), 
+					Field("definitions" / "Media" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
 						Field("definitions" / "Comment" / "id", Opt(Str)), 
 						Field("definitions" / "Comment" / "created_time", Opt(Str)), 
 						Field("definitions" / "Comment" / "text", Opt(Str)), 
@@ -622,34 +622,34 @@
 					Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 					Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))), 
 				Field("definitions" / "Media" / "filter", Opt(Str)), 
-				Field("definitions" / "Media" / "likes", Opt(TypeDef("paths" / "/media/search" / "get" / "responses" / "200" / "data" / "likes", Seq(
-					Field("paths" / "/media/search" / "get" / "responses" / "200" / "data" / "likes" / "count", Opt(BInt)), 
-					Field("paths" / "/media/search" / "get" / "responses" / "200" / "data" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
+				Field("definitions" / "Media" / "likes", Opt(TypeDef("definitions" / "Media" / "likes", Seq(
+					Field("definitions" / "Media" / "likes" / "count", Opt(BInt)), 
+					Field("definitions" / "Media" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
 						Field("definitions" / "MiniProfile" / "user_name", Opt(Str)), 
 						Field("definitions" / "MiniProfile" / "full_name", Opt(Str)), 
 						Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 						Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))))))), 
 				Field("definitions" / "Media" / "id", Opt(BInt)), 
-				Field("definitions" / "Media" / "videos", Opt(TypeDef("paths" / "/media/search" / "get" / "responses" / "200" / "data" / "videos", Seq(
-					Field("paths" / "/media/search" / "get" / "responses" / "200" / "data" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "videos", Opt(TypeDef("definitions" / "Media" / "videos", Seq(
+					Field("definitions" / "Media" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 						Field("definitions" / "Image" / "width", Opt(BInt)), 
 						Field("definitions" / "Image" / "height", Opt(BInt)), 
 						Field("definitions" / "Image" / "url", Opt(Str)))))), 
-					Field("paths" / "/media/search" / "get" / "responses" / "200" / "data" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+					Field("definitions" / "Media" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 						Field("definitions" / "Image" / "width", Opt(BInt)), 
 						Field("definitions" / "Image" / "height", Opt(BInt)), 
 						Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
 				Field("definitions" / "Media" / "type", Opt(Str)), 
-				Field("definitions" / "Media" / "images", Opt(TypeDef("paths" / "/media/search" / "get" / "responses" / "200" / "data" / "images", Seq(
-					Field("paths" / "/media/search" / "get" / "responses" / "200" / "data" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+				Field("definitions" / "Media" / "images", Opt(TypeDef("definitions" / "Media" / "images", Seq(
+					Field("definitions" / "Media" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 						Field("definitions" / "Image" / "width", Opt(BInt)), 
 						Field("definitions" / "Image" / "height", Opt(BInt)), 
 						Field("definitions" / "Image" / "url", Opt(Str)))))), 
-					Field("paths" / "/media/search" / "get" / "responses" / "200" / "data" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
+					Field("definitions" / "Media" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
 						Field("definitions" / "Image" / "width", Opt(BInt)), 
 						Field("definitions" / "Image" / "height", Opt(BInt)), 
 						Field("definitions" / "Image" / "url", Opt(Str)))))), 
-					Field("paths" / "/media/search" / "get" / "responses" / "200" / "data" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+					Field("definitions" / "Media" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 						Field("definitions" / "Image" / "width", Opt(BInt)), 
 						Field("definitions" / "Image" / "height", Opt(BInt)), 
 						Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
@@ -675,9 +675,9 @@
 			Field("definitions" / "Location" / "latitude", Opt(BDcml)), 
 			Field("definitions" / "Location" / "longitude", Opt(BDcml)))))), 
 		Field("definitions" / "Media" / "created_time", Opt(BInt)), 
-		Field("definitions" / "Media" / "comments:", Opt(TypeDef("paths" / "/media/{media-id}" / "get" / "responses" / "200" / "comments:", Seq(
-			Field("paths" / "/media/{media-id}" / "get" / "responses" / "200" / "comments:" / "count", Opt(BInt)), 
-			Field("paths" / "/media/{media-id}" / "get" / "responses" / "200" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
+		Field("definitions" / "Media" / "comments:", Opt(TypeDef("definitions" / "Media" / "comments:", Seq(
+			Field("definitions" / "Media" / "comments:" / "count", Opt(BInt)), 
+			Field("definitions" / "Media" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
 				Field("definitions" / "Comment" / "id", Opt(Str)), 
 				Field("definitions" / "Comment" / "created_time", Opt(Str)), 
 				Field("definitions" / "Comment" / "text", Opt(Str)), 
@@ -695,34 +695,34 @@
 			Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 			Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))), 
 		Field("definitions" / "Media" / "filter", Opt(Str)), 
-		Field("definitions" / "Media" / "likes", Opt(TypeDef("paths" / "/media/{media-id}" / "get" / "responses" / "200" / "likes", Seq(
-			Field("paths" / "/media/{media-id}" / "get" / "responses" / "200" / "likes" / "count", Opt(BInt)), 
-			Field("paths" / "/media/{media-id}" / "get" / "responses" / "200" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
+		Field("definitions" / "Media" / "likes", Opt(TypeDef("definitions" / "Media" / "likes", Seq(
+			Field("definitions" / "Media" / "likes" / "count", Opt(BInt)), 
+			Field("definitions" / "Media" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
 				Field("definitions" / "MiniProfile" / "user_name", Opt(Str)), 
 				Field("definitions" / "MiniProfile" / "full_name", Opt(Str)), 
 				Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 				Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))))))), 
 		Field("definitions" / "Media" / "id", Opt(BInt)), 
-		Field("definitions" / "Media" / "videos", Opt(TypeDef("paths" / "/media/{media-id}" / "get" / "responses" / "200" / "videos", Seq(
-			Field("paths" / "/media/{media-id}" / "get" / "responses" / "200" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+		Field("definitions" / "Media" / "videos", Opt(TypeDef("definitions" / "Media" / "videos", Seq(
+			Field("definitions" / "Media" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 				Field("definitions" / "Image" / "width", Opt(BInt)), 
 				Field("definitions" / "Image" / "height", Opt(BInt)), 
 				Field("definitions" / "Image" / "url", Opt(Str)))))), 
-			Field("paths" / "/media/{media-id}" / "get" / "responses" / "200" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 				Field("definitions" / "Image" / "width", Opt(BInt)), 
 				Field("definitions" / "Image" / "height", Opt(BInt)), 
 				Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
 		Field("definitions" / "Media" / "type", Opt(Str)), 
-		Field("definitions" / "Media" / "images", Opt(TypeDef("paths" / "/media/{media-id}" / "get" / "responses" / "200" / "images", Seq(
-			Field("paths" / "/media/{media-id}" / "get" / "responses" / "200" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+		Field("definitions" / "Media" / "images", Opt(TypeDef("definitions" / "Media" / "images", Seq(
+			Field("definitions" / "Media" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 				Field("definitions" / "Image" / "width", Opt(BInt)), 
 				Field("definitions" / "Image" / "height", Opt(BInt)), 
 				Field("definitions" / "Image" / "url", Opt(Str)))))), 
-			Field("paths" / "/media/{media-id}" / "get" / "responses" / "200" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
 				Field("definitions" / "Image" / "width", Opt(BInt)), 
 				Field("definitions" / "Image" / "height", Opt(BInt)), 
 				Field("definitions" / "Image" / "url", Opt(Str)))))), 
-			Field("paths" / "/media/{media-id}" / "get" / "responses" / "200" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 				Field("definitions" / "Image" / "width", Opt(BInt)), 
 				Field("definitions" / "Image" / "height", Opt(BInt)), 
 				Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
@@ -739,9 +739,9 @@
 			Field("definitions" / "Location" / "latitude", Opt(BDcml)), 
 			Field("definitions" / "Location" / "longitude", Opt(BDcml)))))), 
 		Field("definitions" / "Media" / "created_time", Opt(BInt)), 
-		Field("definitions" / "Media" / "comments:", Opt(TypeDef("paths" / "/media/{shortcode}" / "get" / "responses" / "200" / "comments:", Seq(
-			Field("paths" / "/media/{shortcode}" / "get" / "responses" / "200" / "comments:" / "count", Opt(BInt)), 
-			Field("paths" / "/media/{shortcode}" / "get" / "responses" / "200" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
+		Field("definitions" / "Media" / "comments:", Opt(TypeDef("definitions" / "Media" / "comments:", Seq(
+			Field("definitions" / "Media" / "comments:" / "count", Opt(BInt)), 
+			Field("definitions" / "Media" / "comments:" / "data", Opt(ArrResult(TypeDef("definitions" / "Comment", Seq(
 				Field("definitions" / "Comment" / "id", Opt(Str)), 
 				Field("definitions" / "Comment" / "created_time", Opt(Str)), 
 				Field("definitions" / "Comment" / "text", Opt(Str)), 
@@ -759,34 +759,34 @@
 			Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 			Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))), 
 		Field("definitions" / "Media" / "filter", Opt(Str)), 
-		Field("definitions" / "Media" / "likes", Opt(TypeDef("paths" / "/media/{shortcode}" / "get" / "responses" / "200" / "likes", Seq(
-			Field("paths" / "/media/{shortcode}" / "get" / "responses" / "200" / "likes" / "count", Opt(BInt)), 
-			Field("paths" / "/media/{shortcode}" / "get" / "responses" / "200" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
+		Field("definitions" / "Media" / "likes", Opt(TypeDef("definitions" / "Media" / "likes", Seq(
+			Field("definitions" / "Media" / "likes" / "count", Opt(BInt)), 
+			Field("definitions" / "Media" / "likes" / "data", Opt(ArrResult(TypeDef("definitions" / "MiniProfile", Seq(
 				Field("definitions" / "MiniProfile" / "user_name", Opt(Str)), 
 				Field("definitions" / "MiniProfile" / "full_name", Opt(Str)), 
 				Field("definitions" / "MiniProfile" / "id", Opt(BInt)), 
 				Field("definitions" / "MiniProfile" / "profile_picture", Opt(Str))))))))))), 
 		Field("definitions" / "Media" / "id", Opt(BInt)), 
-		Field("definitions" / "Media" / "videos", Opt(TypeDef("paths" / "/media/{shortcode}" / "get" / "responses" / "200" / "videos", Seq(
-			Field("paths" / "/media/{shortcode}" / "get" / "responses" / "200" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+		Field("definitions" / "Media" / "videos", Opt(TypeDef("definitions" / "Media" / "videos", Seq(
+			Field("definitions" / "Media" / "videos" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 				Field("definitions" / "Image" / "width", Opt(BInt)), 
 				Field("definitions" / "Image" / "height", Opt(BInt)), 
 				Field("definitions" / "Image" / "url", Opt(Str)))))), 
-			Field("paths" / "/media/{shortcode}" / "get" / "responses" / "200" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "videos" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 				Field("definitions" / "Image" / "width", Opt(BInt)), 
 				Field("definitions" / "Image" / "height", Opt(BInt)), 
 				Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
 		Field("definitions" / "Media" / "type", Opt(Str)), 
-		Field("definitions" / "Media" / "images", Opt(TypeDef("paths" / "/media/{shortcode}" / "get" / "responses" / "200" / "images", Seq(
-			Field("paths" / "/media/{shortcode}" / "get" / "responses" / "200" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+		Field("definitions" / "Media" / "images", Opt(TypeDef("definitions" / "Media" / "images", Seq(
+			Field("definitions" / "Media" / "images" / "low_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 				Field("definitions" / "Image" / "width", Opt(BInt)), 
 				Field("definitions" / "Image" / "height", Opt(BInt)), 
 				Field("definitions" / "Image" / "url", Opt(Str)))))), 
-			Field("paths" / "/media/{shortcode}" / "get" / "responses" / "200" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "images" / "thumbnail", Opt(TypeDef("definitions" / "Image", Seq(
 				Field("definitions" / "Image" / "width", Opt(BInt)), 
 				Field("definitions" / "Image" / "height", Opt(BInt)), 
 				Field("definitions" / "Image" / "url", Opt(Str)))))), 
-			Field("paths" / "/media/{shortcode}" / "get" / "responses" / "200" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
+			Field("definitions" / "Media" / "images" / "standard_resolution", Opt(TypeDef("definitions" / "Image", Seq(
 				Field("definitions" / "Image" / "width", Opt(BInt)), 
 				Field("definitions" / "Image" / "height", Opt(BInt)), 
 				Field("definitions" / "Image" / "url", Opt(Str)))))))))), 
@@ -811,10 +811,10 @@
 			Field("definitions" / "User" / "full_name", Opt(Str)), 
 			Field("definitions" / "User" / "bio", Opt(Str)), 
 			Field("definitions" / "User" / "id", Opt(BInt)), 
-			Field("definitions" / "User" / "counts", Opt(TypeDef("paths" / "/users/{user-id}" / "get" / "responses" / "200" / "data" / "counts", Seq(
-				Field("paths" / "/users/{user-id}" / "get" / "responses" / "200" / "data" / "counts" / "media", Opt(BInt)), 
-				Field("paths" / "/users/{user-id}" / "get" / "responses" / "200" / "data" / "counts" / "follows", Opt(BInt)), 
-				Field("paths" / "/users/{user-id}" / "get" / "responses" / "200" / "data" / "counts" / "follwed_by", Opt(BInt))))))))))))
+			Field("definitions" / "User" / "counts", Opt(TypeDef("definitions" / "User" / "counts", Seq(
+				Field("definitions" / "User" / "counts" / "media", Opt(BInt)), 
+				Field("definitions" / "User" / "counts" / "follows", Opt(BInt)), 
+				Field("definitions" / "User" / "counts" / "follwed_by", Opt(BInt))))))))))))
 "paths" / "/media/{media-id}/comments" / "get" / "responses" / "200" ->
 	TypeDef("paths" / "/media/{media-id}/comments" / "get" / "responses" / "200", Seq(
 		Field("paths" / "/media/{media-id}/comments" / "get" / "responses" / "200" / "meta", Opt(TypeDef("paths" / "/media/{media-id}/comments" / "get" / "responses" / "200" / "meta", Seq(

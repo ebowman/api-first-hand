@@ -136,7 +136,7 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
         } getOrElse {
           val typeName = typeNameFromInlinedReference(param) getOrElse name
           val catchAll = fromSchemaOrBoolean(name / "additionalProperties", param.additionalProperties, param, isNonBodyParameter)
-          val normal = fromSchemaProperties(name, param.properties, paramRequired(param.required, param.default), isNonBodyParameter)
+          val normal = fromSchemaProperties(typeName, param.properties, paramRequired(param.required, param.default), isNonBodyParameter)
           val types = fromTypes(name, normal ++ catchAll.toSeq.flatten, typeName)
           Option(param.discriminator) foreach { d => memoizeDiscriminator(name, typeName / d) }
           checkRequired(name, required, param.default)(Seq(types))
