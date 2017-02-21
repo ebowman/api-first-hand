@@ -23,29 +23,23 @@ object simple_petstore_api_yaml extends WithModel {
 			Seq(
 					Field(Reference("⌿definitions⌿pet⌿id"), Lng(TypeMeta(Some("int64"), List()))),
 					Field(Reference("⌿definitions⌿pet⌿name"), Str(None, TypeMeta(None, List()))),
-					Field(Reference("⌿definitions⌿pet⌿tag"), TypeRef(Reference("⌿definitions⌿newPet⌿tag")))
+					Field(Reference("⌿definitions⌿pet⌿tag"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 3"), List())),
 	Reference("⌿definitions⌿newPet") → 
 		TypeDef(Reference("⌿definitions⌿newPet"), 
 			Seq(
+					Field(Reference("⌿definitions⌿newPet⌿id"), Opt(Lng(TypeMeta(Some("int64"), List())), TypeMeta(None, List()))),
 					Field(Reference("⌿definitions⌿newPet⌿name"), Str(None, TypeMeta(None, List()))),
-					Field(Reference("⌿definitions⌿newPet⌿id"), TypeRef(Reference("⌿definitions⌿newPet⌿id"))),
-					Field(Reference("⌿definitions⌿newPet⌿tag"), TypeRef(Reference("⌿definitions⌿newPet⌿tag")))
+					Field(Reference("⌿definitions⌿newPet⌿tag"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 3"), List())),
-	Reference("⌿definitions⌿newPet⌿tag") → 
-		Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())),
-	Reference("⌿definitions⌿newPet⌿id") → 
-		Opt(Lng(TypeMeta(Some("int64"), List())), TypeMeta(None, List())),
 	Reference("⌿paths⌿/pets/{id}⌿delete⌿id") → 
 		Lng(TypeMeta(Some("int64"), List())),
 	Reference("⌿paths⌿/pets⌿get⌿limit") → 
 		Opt(Intgr(TypeMeta(Some("int32"), List("max(200.toInt, false)", "min(1.toInt, false)"))), TypeMeta(None, List())),
 	Reference("⌿paths⌿/pets⌿get⌿tags") → 
-		Opt(TypeRef(Reference("⌿paths⌿/pets⌿get⌿tags⌿Opt")), TypeMeta(None, List())),
+		Opt(Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List())),
 	Reference("⌿paths⌿/pets/{id}⌿delete⌿responses⌿204") → 
 		Null(TypeMeta(None, List())),
-	Reference("⌿paths⌿/pets⌿get⌿tags⌿Opt") → 
-		Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv"),
 	Reference("⌿paths⌿/pets⌿get⌿responses⌿200") → 
 		ArrResult(TypeRef(Reference("⌿definitions⌿pet")), TypeMeta(None, List()))
 ) 

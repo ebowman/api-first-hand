@@ -15,70 +15,66 @@ object type_deduplication_yaml extends WithModel {
 	Reference("⌿definitions⌿SunlightNeeds") → 
 		TypeDef(Reference("⌿definitions⌿SunlightNeeds"), 
 			Seq(
-					Field(Reference("⌿definitions⌿SunlightNeeds⌿amount"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id")))
+					Field(Reference("⌿definitions⌿SunlightNeeds⌿amount"), Opt(Str(None, TypeMeta(Some("Amount of sunlight the plant need."), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿definitions⌿Plant") → 
 		TypeDef(Reference("⌿definitions⌿Plant"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Plant⌿species"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿Plant⌿name"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿Plant⌿description"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿Plant⌿owner_id"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿Plant⌿plant_id"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿Plant⌿godparent"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id")))
+					Field(Reference("⌿definitions⌿Plant⌿species"), Opt(Str(None, TypeMeta(Some("Species of the plant."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Plant⌿name"), Opt(Str(None, TypeMeta(Some("User defined name of the plant."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Plant⌿description"), Opt(Str(None, TypeMeta(Some("User defined description of the plant."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Plant⌿owner_id"), Opt(Str(None, TypeMeta(Some("ID of the owner of this plant."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Plant⌿plant_id"), Opt(Str(None, TypeMeta(Some("Unique identifier representing a plant."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Plant⌿godparent"), Opt(Str(None, TypeMeta(Some("ID of the godparent of this plant. Can be empty if no godparent is assigned"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 6"), List())),
 	Reference("⌿definitions⌿User") → 
 		TypeDef(Reference("⌿definitions⌿User"), 
 			Seq(
-					Field(Reference("⌿definitions⌿User⌿user_id"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿User⌿name"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿User⌿area_id"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id")))
+					Field(Reference("⌿definitions⌿User⌿user_id"), Opt(Str(None, TypeMeta(Some("ID of the user."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿User⌿name"), Opt(Str(None, TypeMeta(Some("Display name of the user."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿User⌿area_id"), Opt(Str(None, TypeMeta(Some("Id of the area where the user is usually located."), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 3"), List())),
 	Reference("⌿definitions⌿SigninData") → 
 		TypeDef(Reference("⌿definitions⌿SigninData"), 
 			Seq(
-					Field(Reference("⌿definitions⌿SigninData⌿username"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿SigninData⌿password"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿SigninData⌿email"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id")))
+					Field(Reference("⌿definitions⌿SigninData⌿username"), Opt(Str(None, TypeMeta(Some("Name of the new user."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿SigninData⌿password"), Opt(Str(None, TypeMeta(Some("Password of the new user."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿SigninData⌿email"), Opt(Str(None, TypeMeta(Some("E-mail address of the new user."), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 3"), List())),
 	Reference("⌿definitions⌿Watering") → 
 		TypeDef(Reference("⌿definitions⌿Watering"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Watering⌿watering_id"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿Watering⌿user_id"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿Watering⌿date"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id")))
+					Field(Reference("⌿definitions⌿Watering⌿watering_id"), Opt(Str(None, TypeMeta(Some("Id of the watering."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Watering⌿user_id"), Opt(Str(None, TypeMeta(Some("Id of the user responsible for watering this plant."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Watering⌿date"), Opt(Str(None, TypeMeta(Some("Date of the last time the plant was watered."), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 3"), List())),
 	Reference("⌿definitions⌿Area") → 
 		TypeDef(Reference("⌿definitions⌿Area"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Area⌿area_id"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿Area⌿building"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿Area⌿floor"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿Area⌿room"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id")))
+					Field(Reference("⌿definitions⌿Area⌿area_id"), Opt(Str(None, TypeMeta(Some("ID of the area."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Area⌿building"), Opt(Str(None, TypeMeta(Some("Name of the building."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Area⌿floor"), Opt(Str(None, TypeMeta(Some("Name of the floor."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Area⌿room"), Opt(Str(None, TypeMeta(Some("Name of the room within the building."), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 4"), List())),
 	Reference("⌿definitions⌿Location") → 
 		TypeDef(Reference("⌿definitions⌿Location"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Location⌿area_id"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿Location⌿details"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id")))
+					Field(Reference("⌿definitions⌿Location⌿area_id"), Opt(Str(None, TypeMeta(Some("ID of the area of the location."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Location⌿details"), Opt(Str(None, TypeMeta(Some("""Details of the location within the specified area (e.g. "desk 1" or "windowsill" )."""), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
 	Reference("⌿definitions⌿Error") → 
 		TypeDef(Reference("⌿definitions⌿Error"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Error⌿code"), TypeRef(Reference("⌿definitions⌿Error⌿code"))),
-					Field(Reference("⌿definitions⌿Error⌿message"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿Error⌿fields"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id")))
+					Field(Reference("⌿definitions⌿Error⌿code"), Opt(Intgr(TypeMeta(Some("int32"), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Error⌿message"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Error⌿fields"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 3"), List())),
 	Reference("⌿definitions⌿WaterNeeds") → 
 		TypeDef(Reference("⌿definitions⌿WaterNeeds"), 
 			Seq(
-					Field(Reference("⌿definitions⌿WaterNeeds⌿amount"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id"))),
-					Field(Reference("⌿definitions⌿WaterNeeds⌿period"), TypeRef(Reference("⌿definitions⌿Plant⌿plant_id")))
+					Field(Reference("⌿definitions⌿WaterNeeds⌿amount"), Opt(Str(None, TypeMeta(Some("Amount of water to be used."), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿WaterNeeds⌿period"), Opt(Str(None, TypeMeta(Some("How often the plant shall be watered."), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
-	Reference("⌿definitions⌿Plant⌿plant_id") → 
-		Opt(Str(None, TypeMeta(Some("Unique identifier representing a plant."), List())), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Error⌿code") → 
-		Opt(Intgr(TypeMeta(Some("int32"), List())), TypeMeta(None, List())),
 	Reference("⌿paths⌿/plants/{plant_id}/waterings⌿get⌿plant_id") → 
 		Str(None, TypeMeta(None, List())),
 	Reference("⌿paths⌿/users⌿get⌿limit") → 

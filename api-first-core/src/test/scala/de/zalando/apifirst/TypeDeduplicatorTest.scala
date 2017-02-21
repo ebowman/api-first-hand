@@ -108,5 +108,4 @@ class TypeDeduplicatorTest extends FunSpec with MustMatchers {
     if (discriminators.isEmpty)
       result.params.foreach(_._2.typeName.asInstanceOf[TypeRef].name mustBe reference2)
   }
-
 }

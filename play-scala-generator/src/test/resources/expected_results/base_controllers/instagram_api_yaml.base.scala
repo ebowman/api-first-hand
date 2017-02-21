@@ -241,15 +241,15 @@ def getlocationsByLocation_idAction[T] = (f: getlocationsByLocation_idActionType
     def GetusersSearch200(resultF: Future[UsersUser_idFollowsGetResponses200])(implicit writerP: String => Option[Writeable[UsersUser_idFollowsGetResponses200]]) = resultF map { resultP => (new GetusersSearchType[UsersUser_idFollowsGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type getusersSearchActionRequestType       = (String, MediaFilter)
+    private type getusersSearchActionRequestType       = (String, Option[String])
     private type getusersSearchActionType[T]            = getusersSearchActionRequestType => Future[GetusersSearchType[T] forSome { type T }]
 
 
     val getusersSearchActionConstructor  = new getusersSearchSecureAction("basic", "comments", "relationships", "likes")
 
-def getusersSearchAction[T] = (f: getusersSearchActionType[T]) => (q: String, count: MediaFilter) => getusersSearchActionConstructor.async { implicit request: Request[AnyContent] =>
+def getusersSearchAction[T] = (f: getusersSearchActionType[T]) => (q: String, count: Option[String]) => getusersSearchActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetusersSearchRequest(q: String, count: MediaFilter): Either[Result, Future[GetusersSearchType[_]]] = {
+        def processValidgetusersSearchRequest(q: String, count: Option[String]): Either[Result, Future[GetusersSearchType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((q, count)))
             
             new UsersSearchGetValidator(q, count).errors match {
@@ -284,15 +284,15 @@ def getusersSearchAction[T] = (f: getusersSearchActionType[T]) => (q: String, co
     def GetusersSelfMediaLiked200(resultF: Future[UsersSelfFeedGetResponses200])(implicit writerP: String => Option[Writeable[UsersSelfFeedGetResponses200]]) = resultF map { resultP => (new GetusersSelfMediaLikedType[UsersSelfFeedGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type getusersSelfMediaLikedActionRequestType       = (MediaId, MediaId)
+    private type getusersSelfMediaLikedActionRequestType       = (Option[BigInt], Option[BigInt])
     private type getusersSelfMediaLikedActionType[T]            = getusersSelfMediaLikedActionRequestType => Future[GetusersSelfMediaLikedType[T] forSome { type T }]
 
 
     val getusersSelfMediaLikedActionConstructor  = new getusersSelfMediaLikedSecureAction("basic", "comments", "relationships", "likes")
 
-def getusersSelfMediaLikedAction[T] = (f: getusersSelfMediaLikedActionType[T]) => (count: MediaId, max_like_id: MediaId) => getusersSelfMediaLikedActionConstructor.async { implicit request: Request[AnyContent] =>
+def getusersSelfMediaLikedAction[T] = (f: getusersSelfMediaLikedActionType[T]) => (count: Option[BigInt], max_like_id: Option[BigInt]) => getusersSelfMediaLikedActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetusersSelfMediaLikedRequest(count: MediaId, max_like_id: MediaId): Either[Result, Future[GetusersSelfMediaLikedType[_]]] = {
+        def processValidgetusersSelfMediaLikedRequest(count: Option[BigInt], max_like_id: Option[BigInt]): Either[Result, Future[GetusersSelfMediaLikedType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((count, max_like_id)))
             
             new UsersSelfMediaLikedGetValidator(count, max_like_id).errors match {
@@ -370,15 +370,15 @@ def gettagsByTag_nameAction[T] = (f: gettagsByTag_nameActionType[T]) => (tag_nam
     def GettagsSearch200(resultF: Future[TagsSearchGetResponses200])(implicit writerP: String => Option[Writeable[TagsSearchGetResponses200]]) = resultF map { resultP => (new GettagsSearchType[TagsSearchGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type gettagsSearchActionRequestType       = (MediaFilter)
+    private type gettagsSearchActionRequestType       = (Option[String])
     private type gettagsSearchActionType[T]            = gettagsSearchActionRequestType => Future[GettagsSearchType[T] forSome { type T }]
 
 
     val gettagsSearchActionConstructor  = new gettagsSearchSecureAction("basic", "comments", "relationships", "likes")
 
-def gettagsSearchAction[T] = (f: gettagsSearchActionType[T]) => (q: MediaFilter) => gettagsSearchActionConstructor.async { implicit request: Request[AnyContent] =>
+def gettagsSearchAction[T] = (f: gettagsSearchActionType[T]) => (q: Option[String]) => gettagsSearchActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgettagsSearchRequest(q: MediaFilter): Either[Result, Future[GettagsSearchType[_]]] = {
+        def processValidgettagsSearchRequest(q: Option[String]): Either[Result, Future[GettagsSearchType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((q)))
             
             new TagsSearchGetValidator(q).errors match {
@@ -499,7 +499,7 @@ def getmediaByMedia_idCommentsAction[T] = (f: getmediaByMedia_idCommentsActionTy
     def PostmediaByMedia_idComments200(resultF: Future[MediaMedia_idCommentsDeleteResponses200])(implicit writerP: String => Option[Writeable[MediaMedia_idCommentsDeleteResponses200]]) = resultF map { resultP => (new PostmediaByMedia_idCommentsType[MediaMedia_idCommentsDeleteResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type postmediaByMedia_idCommentsActionRequestType       = (BigInt, LocationLatitude)
+    private type postmediaByMedia_idCommentsActionRequestType       = (BigInt, Option[BigDecimal])
     private type postmediaByMedia_idCommentsActionType[T]            = postmediaByMedia_idCommentsActionRequestType => Future[PostmediaByMedia_idCommentsType[T] forSome { type T }]
 
         
@@ -515,9 +515,9 @@ def getmediaByMedia_idCommentsAction[T] = (f: getmediaByMedia_idCommentsActionTy
 
     val postmediaByMedia_idCommentsActionConstructor  = new postmediaByMedia_idCommentsSecureAction("comments")
 
-def postmediaByMedia_idCommentsAction[T] = (f: postmediaByMedia_idCommentsActionType[T]) => (media_id: BigInt) => postmediaByMedia_idCommentsActionConstructor.async(postmediaByMedia_idCommentsParser) { implicit request: Request[LocationLatitude] =>
+def postmediaByMedia_idCommentsAction[T] = (f: postmediaByMedia_idCommentsActionType[T]) => (media_id: BigInt) => postmediaByMedia_idCommentsActionConstructor.async(postmediaByMedia_idCommentsParser) { implicit request: Request[Option[BigDecimal]] =>
 
-        def processValidpostmediaByMedia_idCommentsRequest(media_id: BigInt, tEXT: LocationLatitude): Either[Result, Future[PostmediaByMedia_idCommentsType[_]]] = {
+        def processValidpostmediaByMedia_idCommentsRequest(media_id: BigInt, tEXT: Option[BigDecimal]): Either[Result, Future[PostmediaByMedia_idCommentsType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((media_id, tEXT)))
             
             new MediaMedia_idCommentsPostValidator(media_id, tEXT).errors match {
@@ -531,7 +531,7 @@ def postmediaByMedia_idCommentsAction[T] = (f: postmediaByMedia_idCommentsAction
           
         }
 
-            val tEXT: LocationLatitude = request.body
+            val tEXT: Option[BigDecimal] = request.body
             
             
 
@@ -639,7 +639,7 @@ def gettagsByTag_nameMediaRecentAction[T] = (f: gettagsByTag_nameMediaRecentActi
     def PostusersByUser_idRelationship200(resultF: Future[UsersUser_idFollowsGetResponses200])(implicit writerP: String => Option[Writeable[UsersUser_idFollowsGetResponses200]]) = resultF map { resultP => (new PostusersByUser_idRelationshipType[UsersUser_idFollowsGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type postusersByUser_idRelationshipActionRequestType       = (BigDecimal, UsersUser_idRelationshipPostAction)
+    private type postusersByUser_idRelationshipActionRequestType       = (BigDecimal, Option[UsersUser_idRelationshipPostActionOptionEnum])
     private type postusersByUser_idRelationshipActionType[T]            = postusersByUser_idRelationshipActionRequestType => Future[PostusersByUser_idRelationshipType[T] forSome { type T }]
 
         
@@ -647,7 +647,7 @@ def gettagsByTag_nameMediaRecentAction[T] = (f: gettagsByTag_nameMediaRecentActi
         
         val postusersByUser_idRelationshipParser = parse.using { request =>
             request.contentType.map(_.toLowerCase(java.util.Locale.ENGLISH)) match {
-                case Some("application/json") => play.api.mvc.BodyParsers.parse.tolerantJson.map(_.asOpt[UsersUser_idRelationshipPostActionOpt])
+                case Some("application/json") => play.api.mvc.BodyParsers.parse.tolerantJson.map(_.asOpt[UsersUser_idRelationshipPostActionOptionEnum])
                 
                 case other => play.api.mvc.BodyParsers.parse.error(Future.successful(UnsupportedMediaType(s"Invalid content type specified $other")))
             }
@@ -655,9 +655,9 @@ def gettagsByTag_nameMediaRecentAction[T] = (f: gettagsByTag_nameMediaRecentActi
 
     val postusersByUser_idRelationshipActionConstructor  = new postusersByUser_idRelationshipSecureAction("relationships")
 
-def postusersByUser_idRelationshipAction[T] = (f: postusersByUser_idRelationshipActionType[T]) => (user_id: BigDecimal) => postusersByUser_idRelationshipActionConstructor.async(postusersByUser_idRelationshipParser) { implicit request: Request[UsersUser_idRelationshipPostAction] =>
+def postusersByUser_idRelationshipAction[T] = (f: postusersByUser_idRelationshipActionType[T]) => (user_id: BigDecimal) => postusersByUser_idRelationshipActionConstructor.async(postusersByUser_idRelationshipParser) { implicit request: Request[Option[UsersUser_idRelationshipPostActionOptionEnum]] =>
 
-        def processValidpostusersByUser_idRelationshipRequest(user_id: BigDecimal, action: UsersUser_idRelationshipPostAction): Either[Result, Future[PostusersByUser_idRelationshipType[_]]] = {
+        def processValidpostusersByUser_idRelationshipRequest(user_id: BigDecimal, action: Option[UsersUser_idRelationshipPostActionOptionEnum]): Either[Result, Future[PostusersByUser_idRelationshipType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((user_id, action)))
             
             new UsersUser_idRelationshipPostValidator(user_id, action).errors match {
@@ -671,7 +671,7 @@ def postusersByUser_idRelationshipAction[T] = (f: postusersByUser_idRelationship
           
         }
 
-            val action: UsersUser_idRelationshipPostAction = request.body
+            val action: Option[UsersUser_idRelationshipPostActionOptionEnum] = request.body
             
             
 
@@ -693,15 +693,15 @@ def postusersByUser_idRelationshipAction[T] = (f: postusersByUser_idRelationship
     def GetusersSelfFeed200(resultF: Future[UsersSelfFeedGetResponses200])(implicit writerP: String => Option[Writeable[UsersSelfFeedGetResponses200]]) = resultF map { resultP => (new GetusersSelfFeedType[UsersSelfFeedGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type getusersSelfFeedActionRequestType       = (MediaId, MediaId, MediaId)
+    private type getusersSelfFeedActionRequestType       = (Option[BigInt], Option[BigInt], Option[BigInt])
     private type getusersSelfFeedActionType[T]            = getusersSelfFeedActionRequestType => Future[GetusersSelfFeedType[T] forSome { type T }]
 
 
     val getusersSelfFeedActionConstructor  = new getusersSelfFeedSecureAction("basic", "comments", "relationships", "likes")
 
-def getusersSelfFeedAction[T] = (f: getusersSelfFeedActionType[T]) => (count: MediaId, max_id: MediaId, min_id: MediaId) => getusersSelfFeedActionConstructor.async { implicit request: Request[AnyContent] =>
+def getusersSelfFeedAction[T] = (f: getusersSelfFeedActionType[T]) => (count: Option[BigInt], max_id: Option[BigInt], min_id: Option[BigInt]) => getusersSelfFeedActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetusersSelfFeedRequest(count: MediaId, max_id: MediaId, min_id: MediaId): Either[Result, Future[GetusersSelfFeedType[_]]] = {
+        def processValidgetusersSelfFeedRequest(count: Option[BigInt], max_id: Option[BigInt], min_id: Option[BigInt]): Either[Result, Future[GetusersSelfFeedType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((count, max_id, min_id)))
             
             new UsersSelfFeedGetValidator(count, max_id, min_id).errors match {
@@ -779,15 +779,15 @@ def getusersByUser_idAction[T] = (f: getusersByUser_idActionType[T]) => (user_id
     def GetmediaSearch200(resultF: Future[MediaSearchGetResponses200])(implicit writerP: String => Option[Writeable[MediaSearchGetResponses200]]) = resultF map { resultP => (new GetmediaSearchType[MediaSearchGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type getmediaSearchActionRequestType       = (MediaId, BigInt, LocationLatitude, MediaId, LocationLatitude)
+    private type getmediaSearchActionRequestType       = (Option[BigInt], BigInt, Option[BigDecimal], Option[BigInt], Option[BigDecimal])
     private type getmediaSearchActionType[T]            = getmediaSearchActionRequestType => Future[GetmediaSearchType[T] forSome { type T }]
 
 
     val getmediaSearchActionConstructor  = new getmediaSearchSecureAction("basic", "comments", "relationships", "likes")
 
-def getmediaSearchAction[T] = (f: getmediaSearchActionType[T]) => (mAX_TIMESTAMP: MediaId, dISTANCE: BigInt, lNG: LocationLatitude, mIN_TIMESTAMP: MediaId, lAT: LocationLatitude) => getmediaSearchActionConstructor.async { implicit request: Request[AnyContent] =>
+def getmediaSearchAction[T] = (f: getmediaSearchActionType[T]) => (mAX_TIMESTAMP: Option[BigInt], dISTANCE: BigInt, lNG: Option[BigDecimal], mIN_TIMESTAMP: Option[BigInt], lAT: Option[BigDecimal]) => getmediaSearchActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetmediaSearchRequest(mAX_TIMESTAMP: MediaId, dISTANCE: BigInt, lNG: LocationLatitude, mIN_TIMESTAMP: MediaId, lAT: LocationLatitude): Either[Result, Future[GetmediaSearchType[_]]] = {
+        def processValidgetmediaSearchRequest(mAX_TIMESTAMP: Option[BigInt], dISTANCE: BigInt, lNG: Option[BigDecimal], mIN_TIMESTAMP: Option[BigInt], lAT: Option[BigDecimal]): Either[Result, Future[GetmediaSearchType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((mAX_TIMESTAMP, dISTANCE, lNG, mIN_TIMESTAMP, lAT)))
             
             new MediaSearchGetValidator(mAX_TIMESTAMP, dISTANCE, lNG, mIN_TIMESTAMP, lAT).errors match {
@@ -822,15 +822,15 @@ def getmediaSearchAction[T] = (f: getmediaSearchActionType[T]) => (mAX_TIMESTAMP
     def GetgeographiesByGeo_idMediaRecent200(headers: Seq[(String, String)] = Nil) = success(new EmptyReturn(200, headers){})
     
 
-    private type getgeographiesByGeo_idMediaRecentActionRequestType       = (BigInt, MediaId, MediaId)
+    private type getgeographiesByGeo_idMediaRecentActionRequestType       = (BigInt, Option[BigInt], Option[BigInt])
     private type getgeographiesByGeo_idMediaRecentActionType[T]            = getgeographiesByGeo_idMediaRecentActionRequestType => Future[GetgeographiesByGeo_idMediaRecentType[T] forSome { type T }]
 
 
     val getgeographiesByGeo_idMediaRecentActionConstructor  = new getgeographiesByGeo_idMediaRecentSecureAction("basic", "comments", "relationships", "likes")
 
-def getgeographiesByGeo_idMediaRecentAction[T] = (f: getgeographiesByGeo_idMediaRecentActionType[T]) => (geo_id: BigInt, count: MediaId, min_id: MediaId) => getgeographiesByGeo_idMediaRecentActionConstructor.async { implicit request: Request[AnyContent] =>
+def getgeographiesByGeo_idMediaRecentAction[T] = (f: getgeographiesByGeo_idMediaRecentActionType[T]) => (geo_id: BigInt, count: Option[BigInt], min_id: Option[BigInt]) => getgeographiesByGeo_idMediaRecentActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetgeographiesByGeo_idMediaRecentRequest(geo_id: BigInt, count: MediaId, min_id: MediaId): Either[Result, Future[GetgeographiesByGeo_idMediaRecentType[_]]] = {
+        def processValidgetgeographiesByGeo_idMediaRecentRequest(geo_id: BigInt, count: Option[BigInt], min_id: Option[BigInt]): Either[Result, Future[GetgeographiesByGeo_idMediaRecentType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((geo_id, count, min_id)))
             
             new GeographiesGeo_idMediaRecentGetValidator(geo_id, count, min_id).errors match {
@@ -908,15 +908,15 @@ def getmediaByShortcodeAction[T] = (f: getmediaByShortcodeActionType[T]) => (sho
     def GetlocationsSearch200(resultF: Future[LocationsSearchGetResponses200])(implicit writerP: String => Option[Writeable[LocationsSearchGetResponses200]]) = resultF map { resultP => (new GetlocationsSearchType[LocationsSearchGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type getlocationsSearchActionRequestType       = (MediaId, MediaId, MediaId, LocationLatitude, MediaId, LocationLatitude)
+    private type getlocationsSearchActionRequestType       = (Option[BigInt], Option[BigInt], Option[BigInt], Option[BigDecimal], Option[BigInt], Option[BigDecimal])
     private type getlocationsSearchActionType[T]            = getlocationsSearchActionRequestType => Future[GetlocationsSearchType[T] forSome { type T }]
 
 
     val getlocationsSearchActionConstructor  = new getlocationsSearchSecureAction("basic", "comments", "relationships", "likes")
 
-def getlocationsSearchAction[T] = (f: getlocationsSearchActionType[T]) => (foursquare_v2_id: MediaId, facebook_places_id: MediaId, distance: MediaId, lat: LocationLatitude, foursquare_id: MediaId, lng: LocationLatitude) => getlocationsSearchActionConstructor.async { implicit request: Request[AnyContent] =>
+def getlocationsSearchAction[T] = (f: getlocationsSearchActionType[T]) => (foursquare_v2_id: Option[BigInt], facebook_places_id: Option[BigInt], distance: Option[BigInt], lat: Option[BigDecimal], foursquare_id: Option[BigInt], lng: Option[BigDecimal]) => getlocationsSearchActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetlocationsSearchRequest(foursquare_v2_id: MediaId, facebook_places_id: MediaId, distance: MediaId, lat: LocationLatitude, foursquare_id: MediaId, lng: LocationLatitude): Either[Result, Future[GetlocationsSearchType[_]]] = {
+        def processValidgetlocationsSearchRequest(foursquare_v2_id: Option[BigInt], facebook_places_id: Option[BigInt], distance: Option[BigInt], lat: Option[BigDecimal], foursquare_id: Option[BigInt], lng: Option[BigDecimal]): Either[Result, Future[GetlocationsSearchType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((foursquare_v2_id, facebook_places_id, distance, lat, foursquare_id, lng)))
             
             new LocationsSearchGetValidator(foursquare_v2_id, facebook_places_id, distance, lat, foursquare_id, lng).errors match {
@@ -1028,15 +1028,15 @@ def getmediaByMedia_idAction[T] = (f: getmediaByMedia_idActionType[T]) => (media
     def GetlocationsByLocation_idMediaRecent200(resultF: Future[UsersSelfFeedGetResponses200])(implicit writerP: String => Option[Writeable[UsersSelfFeedGetResponses200]]) = resultF map { resultP => (new GetlocationsByLocation_idMediaRecentType[UsersSelfFeedGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type getlocationsByLocation_idMediaRecentActionRequestType       = (BigInt, MediaId, MediaId, MediaFilter, MediaFilter)
+    private type getlocationsByLocation_idMediaRecentActionRequestType       = (BigInt, Option[BigInt], Option[BigInt], Option[String], Option[String])
     private type getlocationsByLocation_idMediaRecentActionType[T]            = getlocationsByLocation_idMediaRecentActionRequestType => Future[GetlocationsByLocation_idMediaRecentType[T] forSome { type T }]
 
 
     val getlocationsByLocation_idMediaRecentActionConstructor  = new getlocationsByLocation_idMediaRecentSecureAction("basic", "comments", "relationships", "likes")
 
-def getlocationsByLocation_idMediaRecentAction[T] = (f: getlocationsByLocation_idMediaRecentActionType[T]) => (location_id: BigInt, max_timestamp: MediaId, min_timestamp: MediaId, min_id: MediaFilter, max_id: MediaFilter) => getlocationsByLocation_idMediaRecentActionConstructor.async { implicit request: Request[AnyContent] =>
+def getlocationsByLocation_idMediaRecentAction[T] = (f: getlocationsByLocation_idMediaRecentActionType[T]) => (location_id: BigInt, max_timestamp: Option[BigInt], min_timestamp: Option[BigInt], min_id: Option[String], max_id: Option[String]) => getlocationsByLocation_idMediaRecentActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetlocationsByLocation_idMediaRecentRequest(location_id: BigInt, max_timestamp: MediaId, min_timestamp: MediaId, min_id: MediaFilter, max_id: MediaFilter): Either[Result, Future[GetlocationsByLocation_idMediaRecentType[_]]] = {
+        def processValidgetlocationsByLocation_idMediaRecentRequest(location_id: BigInt, max_timestamp: Option[BigInt], min_timestamp: Option[BigInt], min_id: Option[String], max_id: Option[String]): Either[Result, Future[GetlocationsByLocation_idMediaRecentType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((location_id, max_timestamp, min_timestamp, min_id, max_id)))
             
             new LocationsLocation_idMediaRecentGetValidator(location_id, max_timestamp, min_timestamp, min_id, max_id).errors match {
@@ -1071,15 +1071,15 @@ def getlocationsByLocation_idMediaRecentAction[T] = (f: getlocationsByLocation_i
     def GetusersByUser_idMediaRecent200(resultF: Future[UsersSelfFeedGetResponses200])(implicit writerP: String => Option[Writeable[UsersSelfFeedGetResponses200]]) = resultF map { resultP => (new GetusersByUser_idMediaRecentType[UsersSelfFeedGetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type getusersByUser_idMediaRecentActionRequestType       = (BigDecimal, MediaId, MediaFilter, MediaId, MediaFilter, MediaId)
+    private type getusersByUser_idMediaRecentActionRequestType       = (BigDecimal, Option[BigInt], Option[String], Option[BigInt], Option[String], Option[BigInt])
     private type getusersByUser_idMediaRecentActionType[T]            = getusersByUser_idMediaRecentActionRequestType => Future[GetusersByUser_idMediaRecentType[T] forSome { type T }]
 
 
     val getusersByUser_idMediaRecentActionConstructor  = new getusersByUser_idMediaRecentSecureAction("basic", "comments", "relationships", "likes")
 
-def getusersByUser_idMediaRecentAction[T] = (f: getusersByUser_idMediaRecentActionType[T]) => (user_id: BigDecimal, max_timestamp: MediaId, min_id: MediaFilter, min_timestamp: MediaId, max_id: MediaFilter, count: MediaId) => getusersByUser_idMediaRecentActionConstructor.async { implicit request: Request[AnyContent] =>
+def getusersByUser_idMediaRecentAction[T] = (f: getusersByUser_idMediaRecentActionType[T]) => (user_id: BigDecimal, max_timestamp: Option[BigInt], min_id: Option[String], min_timestamp: Option[BigInt], max_id: Option[String], count: Option[BigInt]) => getusersByUser_idMediaRecentActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetusersByUser_idMediaRecentRequest(user_id: BigDecimal, max_timestamp: MediaId, min_id: MediaFilter, min_timestamp: MediaId, max_id: MediaFilter, count: MediaId): Either[Result, Future[GetusersByUser_idMediaRecentType[_]]] = {
+        def processValidgetusersByUser_idMediaRecentRequest(user_id: BigDecimal, max_timestamp: Option[BigInt], min_id: Option[String], min_timestamp: Option[BigInt], max_id: Option[String], count: Option[BigInt]): Either[Result, Future[GetusersByUser_idMediaRecentType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((user_id, max_timestamp, min_id, min_timestamp, max_id, count)))
             
             new UsersUser_idMediaRecentGetValidator(user_id, max_timestamp, min_id, min_timestamp, max_id, count).errors match {

@@ -14,6 +14,13 @@ class ModelSchemaNameConstraints(override val instance: String) extends Validati
 class ModelSchemaNameValidator(instance: String) extends RecursiveValidator {
     override val validators = Seq(new ModelSchemaNameConstraints(instance))
 }
+class ModelSchemaDescriptionOptConstraints(override val instance: String) extends ValidationBase[String] {
+    override def constraints: Seq[Constraint[String]] =
+        Seq()
+}
+class ModelSchemaDescriptionOptValidator(instance: String) extends RecursiveValidator {
+    override val validators = Seq(new ModelSchemaDescriptionOptConstraints(instance))
+}
 class ModelSchemaSizeRegisterConstraints(override val instance: String) extends ValidationBase[String] {
     override def constraints: Seq[Constraint[String]] =
         Seq(maxLength(10), minLength(10), pattern("""/[1-9][A-Z0-9]*/""".r))
@@ -35,20 +42,6 @@ class ModelSchemaPartnerArticleModelIdConstraints(override val instance: BigInt)
 class ModelSchemaPartnerArticleModelIdValidator(instance: BigInt) extends RecursiveValidator {
     override val validators = Seq(new ModelSchemaPartnerArticleModelIdConstraints(instance))
 }
-class MetaCopyrightOptConstraints(override val instance: String) extends ValidationBase[String] {
-    override def constraints: Seq[Constraint[String]] =
-        Seq()
-}
-class MetaCopyrightOptValidator(instance: String) extends RecursiveValidator {
-    override val validators = Seq(new MetaCopyrightOptConstraints(instance))
-}
-class ModelSchemaAgeGroupsArrResultEnumConstraints(override val instance: String) extends ValidationBase[String] {
-    override def constraints: Seq[Constraint[String]] =
-        Seq(enum("baby,kid,teen,adult"))
-}
-class ModelSchemaAgeGroupsArrResultEnumValidator(instance: String) extends RecursiveValidator {
-    override val validators = Seq(new ModelSchemaAgeGroupsArrResultEnumConstraints(instance))
-}
 class ModelSchemaKeywordsOptConstraints(override val instance: String) extends ValidationBase[String] {
     override def constraints: Seq[Constraint[String]] =
         Seq(pattern("""/([\w\s]{1,255}|([\w\s]{1,255}, )+[\w\s]{1,255})/""".r))
@@ -63,6 +56,20 @@ class ModelSchemaLengthRegisterOptConstraints(override val instance: String) ext
 class ModelSchemaLengthRegisterOptValidator(instance: String) extends RecursiveValidator {
     override val validators = Seq(new ModelSchemaLengthRegisterOptConstraints(instance))
 }
+class ModelSchemaSpecialDescriptionsOptArrConstraints(override val instance: String) extends ValidationBase[String] {
+    override def constraints: Seq[Constraint[String]] =
+        Seq()
+}
+class ModelSchemaSpecialDescriptionsOptArrValidator(instance: String) extends RecursiveValidator {
+    override val validators = Seq(new ModelSchemaSpecialDescriptionsOptArrConstraints(instance))
+}
+class ModelSchemaArticleModelAttributesOptArrConstraints(override val instance: String) extends ValidationBase[String] {
+    override def constraints: Seq[Constraint[String]] =
+        Seq()
+}
+class ModelSchemaArticleModelAttributesOptArrValidator(instance: String) extends RecursiveValidator {
+    override val validators = Seq(new ModelSchemaArticleModelAttributesOptArrConstraints(instance))
+}
 class ModelSchemaSilhouetteIdEnumConstraints(override val instance: String) extends ValidationBase[String] {
     override def constraints: Seq[Constraint[String]] =
         Seq(enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards"))
@@ -70,12 +77,33 @@ class ModelSchemaSilhouetteIdEnumConstraints(override val instance: String) exte
 class ModelSchemaSilhouetteIdEnumValidator(instance: String) extends RecursiveValidator {
     override val validators = Seq(new ModelSchemaSilhouetteIdEnumConstraints(instance))
 }
-class PetPhotoUrlsArrConstraints(override val instance: String) extends ValidationBase[String] {
+class ModelSchemaAgeGroupsSeqEnumEnumConstraints(override val instance: String) extends ValidationBase[String] {
+    override def constraints: Seq[Constraint[String]] =
+        Seq(enum("baby,kid,teen,adult"))
+}
+class ModelSchemaAgeGroupsSeqEnumEnumValidator(instance: String) extends RecursiveValidator {
+    override val validators = Seq(new ModelSchemaAgeGroupsSeqEnumEnumConstraints(instance))
+}
+class MetaCopyrightOptConstraints(override val instance: String) extends ValidationBase[String] {
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
-class PetPhotoUrlsArrValidator(instance: String) extends RecursiveValidator {
-    override val validators = Seq(new PetPhotoUrlsArrConstraints(instance))
+class MetaCopyrightOptValidator(instance: String) extends RecursiveValidator {
+    override val validators = Seq(new MetaCopyrightOptConstraints(instance))
+}
+class LinksSelfOptConstraints(override val instance: String) extends ValidationBase[String] {
+    override def constraints: Seq[Constraint[String]] =
+        Seq()
+}
+class LinksSelfOptValidator(instance: String) extends RecursiveValidator {
+    override val validators = Seq(new LinksSelfOptConstraints(instance))
+}
+class LinksRelatedOptConstraints(override val instance: String) extends ValidationBase[String] {
+    override def constraints: Seq[Constraint[String]] =
+        Seq()
+}
+class LinksRelatedOptValidator(instance: String) extends RecursiveValidator {
+    override val validators = Seq(new LinksRelatedOptConstraints(instance))
 }
 // ----- complex type validators -----
 class PostRootValidator(instance: ModelSchemaRoot) extends RecursiveValidator {
@@ -85,77 +113,96 @@ class PostRootValidator(instance: ModelSchemaRoot) extends RecursiveValidator {
         new ModelSchemaRootLinksValidator(instance.links)
     )
 }
-class ModelSchemaRootDataOptValidator(instance: ModelSchemaRootDataOpt) extends RecursiveValidator {
+class ModelSchemaRootDataOptionModelSchemaValidator(instance: ModelSchemaRootDataOptionModelSchema) extends RecursiveValidator {
     override val validators = Seq(
         new ModelSchemaNameValidator(instance.name), 
+        new ModelSchemaDescriptionValidator(instance.description), 
         new ModelSchemaSizeRegisterValidator(instance.sizeRegister), 
         new ModelSchemaBrandValidator(instance.brand), 
         new ModelSchemaPartnerArticleModelIdValidator(instance.partnerArticleModelId), 
-        new MetaCopyrightValidator(instance.description), 
-        new ModelSchemaAgeGroupsValidator(instance.ageGroups), 
         new ModelSchemaKeywordsValidator(instance.keywords), 
         new ModelSchemaLengthRegisterValidator(instance.lengthRegister), 
-        new ModelSchemaSilhouetteIdValidator(instance.silhouetteId), 
         new ModelSchemaSpecialDescriptionsValidator(instance.specialDescriptions), 
-        new ModelSchemaSpecialDescriptionsValidator(instance.articleModelAttributes)
+        new ModelSchemaArticleModelAttributesValidator(instance.articleModelAttributes), 
+        new ModelSchemaSilhouetteIdValidator(instance.silhouetteId), 
+        new ModelSchemaAgeGroupsValidator(instance.ageGroups)
     )
 }
-class ModelSchemaRootMetaOptValidator(instance: ModelSchemaRootMetaOpt) extends RecursiveValidator {
+class ModelSchemaRootMetaOptionMetaValidator(instance: ModelSchemaRootMetaOptionMeta) extends RecursiveValidator {
     override val validators = Seq(
         new MetaCopyrightValidator(instance.copyright)
     )
 }
-class ModelSchemaRootLinksOptValidator(instance: ModelSchemaRootLinksOpt) extends RecursiveValidator {
+class ModelSchemaRootLinksOptionLinksValidator(instance: ModelSchemaRootLinksOptionLinks) extends RecursiveValidator {
     override val validators = Seq(
-        new MetaCopyrightValidator(instance.self), 
-        new MetaCopyrightValidator(instance.related)
+        new LinksSelfValidator(instance.self), 
+        new LinksRelatedValidator(instance.related)
     )
 }
 
 // ----- enum delegating validators -----
-class ModelSchemaAgeGroupsArrResultValidator(instance: ModelSchemaAgeGroupsArrResult) extends RecursiveValidator {
-    override val validators = Seq(new ModelSchemaAgeGroupsArrResultEnumValidator(instance.value))
-}
 class ModelSchemaSilhouetteIdValidator(instance: ModelSchemaSilhouetteId) extends RecursiveValidator {
     override val validators = Seq(new ModelSchemaSilhouetteIdEnumValidator(instance.value))
 }
+class ModelSchemaAgeGroupsSeqEnumValidator(instance: ModelSchemaAgeGroupsSeqEnum) extends RecursiveValidator {
+    override val validators = Seq(new ModelSchemaAgeGroupsSeqEnumEnumValidator(instance.value))
+}
 
 // ----- option delegating validators -----
-class ModelSchemaRootDataValidator(instance: ModelSchemaRootData) extends RecursiveValidator {
-    override val validators = instance.toSeq.map { new ModelSchemaRootDataOptValidator(_) }
+class ModelSchemaRootDataValidator(instance: Option[ModelSchema]) extends RecursiveValidator {
+    override val validators = instance.toSeq.map { new ModelSchemaRootDataOptionModelSchemaValidator(_) }
 }
-class MetaCopyrightValidator(instance: MetaCopyright) extends RecursiveValidator {
-    override val validators = instance.toSeq.map { new MetaCopyrightOptValidator(_) }
+class ModelSchemaDescriptionValidator(instance: Option[String]) extends RecursiveValidator {
+    override val validators = instance.toSeq.map { new ModelSchemaDescriptionOptValidator(_) }
 }
-class ModelSchemaKeywordsValidator(instance: ModelSchemaKeywords) extends RecursiveValidator {
+class ModelSchemaKeywordsValidator(instance: Option[String]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new ModelSchemaKeywordsOptValidator(_) }
 }
-class ModelSchemaLengthRegisterValidator(instance: ModelSchemaLengthRegister) extends RecursiveValidator {
+class ModelSchemaLengthRegisterValidator(instance: Option[String]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new ModelSchemaLengthRegisterOptValidator(_) }
 }
-class ModelSchemaSpecialDescriptionsValidator(instance: ModelSchemaSpecialDescriptions) extends RecursiveValidator {
-    override val validators = instance.toSeq.map { new PetPhotoUrlsValidator(_) }
+class ModelSchemaSpecialDescriptionsValidator(instance: Option[Seq[String]]) extends RecursiveValidator {
+    override val validators = instance.toSeq.map { new ModelSchemaSpecialDescriptionsOptValidator(_) }
 }
-class ModelSchemaRootMetaValidator(instance: ModelSchemaRootMeta) extends RecursiveValidator {
-    override val validators = instance.toSeq.map { new ModelSchemaRootMetaOptValidator(_) }
+class ModelSchemaArticleModelAttributesValidator(instance: Option[Seq[String]]) extends RecursiveValidator {
+    override val validators = instance.toSeq.map { new ModelSchemaArticleModelAttributesOptValidator(_) }
 }
-class ModelSchemaRootLinksValidator(instance: ModelSchemaRootLinks) extends RecursiveValidator {
-    override val validators = instance.toSeq.map { new ModelSchemaRootLinksOptValidator(_) }
+class ModelSchemaRootMetaValidator(instance: Option[Meta]) extends RecursiveValidator {
+    override val validators = instance.toSeq.map { new ModelSchemaRootMetaOptionMetaValidator(_) }
+}
+class MetaCopyrightValidator(instance: Option[String]) extends RecursiveValidator {
+    override val validators = instance.toSeq.map { new MetaCopyrightOptValidator(_) }
+}
+class ModelSchemaRootLinksValidator(instance: Option[Links]) extends RecursiveValidator {
+    override val validators = instance.toSeq.map { new ModelSchemaRootLinksOptionLinksValidator(_) }
+}
+class LinksSelfValidator(instance: Option[String]) extends RecursiveValidator {
+    override val validators = instance.toSeq.map { new LinksSelfOptValidator(_) }
+}
+class LinksRelatedValidator(instance: Option[String]) extends RecursiveValidator {
+    override val validators = instance.toSeq.map { new LinksRelatedOptValidator(_) }
 }
 // ----- array delegating validators -----
-class ModelSchemaAgeGroupsConstraints(override val instance: ModelSchemaAgeGroups) extends ValidationBase[ModelSchemaAgeGroups] {
-    override def constraints: Seq[Constraint[ModelSchemaAgeGroups]] =
-        Seq(maxItems(4))
-}
-class ModelSchemaAgeGroupsValidator(instance: ModelSchemaAgeGroups) extends RecursiveValidator {
-    override val validators = new ModelSchemaAgeGroupsConstraints(instance) +: instance.map { new ModelSchemaAgeGroupsArrResultValidator(_)}
-}
-class PetPhotoUrlsConstraints(override val instance: PetPhotoUrls) extends ValidationBase[PetPhotoUrls] {
-    override def constraints: Seq[Constraint[PetPhotoUrls]] =
+class ModelSchemaSpecialDescriptionsOptConstraints(override val instance: Seq[String]) extends ValidationBase[Seq[String]] {
+    override def constraints: Seq[Constraint[Seq[String]]] =
         Seq()
 }
-class PetPhotoUrlsValidator(instance: PetPhotoUrls) extends RecursiveValidator {
-    override val validators = new PetPhotoUrlsConstraints(instance) +: instance.map { new PetPhotoUrlsArrValidator(_)}
+class ModelSchemaSpecialDescriptionsOptValidator(instance: Seq[String]) extends RecursiveValidator {
+    override val validators = new ModelSchemaSpecialDescriptionsOptConstraints(instance) +: instance.map { new ModelSchemaSpecialDescriptionsOptArrValidator(_)}
+}
+class ModelSchemaArticleModelAttributesOptConstraints(override val instance: Seq[String]) extends ValidationBase[Seq[String]] {
+    override def constraints: Seq[Constraint[Seq[String]]] =
+        Seq(minItems(1))
+}
+class ModelSchemaArticleModelAttributesOptValidator(instance: Seq[String]) extends RecursiveValidator {
+    override val validators = new ModelSchemaArticleModelAttributesOptConstraints(instance) +: instance.map { new ModelSchemaArticleModelAttributesOptArrValidator(_)}
+}
+class ModelSchemaAgeGroupsConstraints(override val instance: Seq[ModelSchemaAgeGroupsSeqEnum]) extends ValidationBase[Seq[ModelSchemaAgeGroupsSeqEnum]] {
+    override def constraints: Seq[Constraint[Seq[ModelSchemaAgeGroupsSeqEnum]]] =
+        Seq(maxItems(4))
+}
+class ModelSchemaAgeGroupsValidator(instance: Seq[ModelSchemaAgeGroupsSeqEnum]) extends RecursiveValidator {
+    override val validators = new ModelSchemaAgeGroupsConstraints(instance) +: instance.map { new ModelSchemaAgeGroupsSeqEnumValidator(_)}
 }
 // ----- catch all simple validators -----
 // ----- composite validators -----

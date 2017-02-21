@@ -27,49 +27,49 @@ object ResponseWriters extends ResponseWritersBase {
     * in order for play-swagger to be able to provide safety net for
     * different response types
     */
-    val writable_application_json_MediaMedia_idLikesGetResponses200_esc: Writeable[MediaMedia_idLikesGetResponses200] =
+    val writable_application_json_MediaMedia_idLikesGetResponses200: Writeable[MediaMedia_idLikesGetResponses200] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_MediaMedia_idCommentsDeleteResponses200_esc: Writeable[MediaMedia_idCommentsDeleteResponses200] =
+    val writable_application_json_MediaMedia_idCommentsDeleteResponses200: Writeable[MediaMedia_idCommentsDeleteResponses200] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_UsersUser_idFollowsGetResponses200_esc: Writeable[UsersUser_idFollowsGetResponses200] =
+    val writable_application_json_UsersUser_idFollowsGetResponses200: Writeable[UsersUser_idFollowsGetResponses200] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_LocationsLocation_idGetResponses200_esc: Writeable[LocationsLocation_idGetResponses200] =
+    val writable_application_json_LocationsLocation_idGetResponses200: Writeable[LocationsLocation_idGetResponses200] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_UsersSelfFeedGetResponses200_esc: Writeable[UsersSelfFeedGetResponses200] =
+    val writable_application_json_UsersSelfFeedGetResponses200: Writeable[UsersSelfFeedGetResponses200] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_Tag_esc: Writeable[Tag] =
+    val writable_application_json_Tag: Writeable[Tag] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_TagsSearchGetResponses200_esc: Writeable[TagsSearchGetResponses200] =
+    val writable_application_json_TagsSearchGetResponses200: Writeable[TagsSearchGetResponses200] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_MediaMedia_idCommentsGetResponses200_esc: Writeable[MediaMedia_idCommentsGetResponses200] =
+    val writable_application_json_MediaMedia_idCommentsGetResponses200: Writeable[MediaMedia_idCommentsGetResponses200] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_TagsTag_nameMediaRecentGetResponses200_esc: Writeable[TagsTag_nameMediaRecentGetResponses200] =
+    val writable_application_json_TagsTag_nameMediaRecentGetResponses200: Writeable[TagsTag_nameMediaRecentGetResponses200] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_UsersUser_idGetResponses200_esc: Writeable[UsersUser_idGetResponses200] =
+    val writable_application_json_UsersUser_idGetResponses200: Writeable[UsersUser_idGetResponses200] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_MediaSearchGetResponses200_esc: Writeable[MediaSearchGetResponses200] =
+    val writable_application_json_MediaSearchGetResponses200: Writeable[MediaSearchGetResponses200] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_Null_esc: Writeable[Null] =
+    val writable_application_json_Null: Writeable[Null] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_Media_esc: Writeable[Media] =
+    val writable_application_json_Media: Writeable[Media] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_LocationsSearchGetResponses200_esc: Writeable[LocationsSearchGetResponses200] =
+    val writable_application_json_LocationsSearchGetResponses200: Writeable[LocationsSearchGetResponses200] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_UsersSelfRequested_byGetResponses200_esc: Writeable[UsersSelfRequested_byGetResponses200] =
+    val writable_application_json_UsersSelfRequested_byGetResponses200: Writeable[UsersSelfRequested_byGetResponses200] =
         Writeable(a => ???, Some("application/json"))
 
     /**
@@ -77,21 +77,21 @@ object ResponseWriters extends ResponseWritersBase {
     * as a marshaller for different mime types and types of response
     */
     override val custom: Seq[WriteableWrapper[_]] = Seq(
-        writable_application_json_MediaMedia_idLikesGetResponses200_esc, 
-        writable_application_json_MediaMedia_idCommentsDeleteResponses200_esc, 
-        writable_application_json_UsersUser_idFollowsGetResponses200_esc, 
-        writable_application_json_LocationsLocation_idGetResponses200_esc, 
-        writable_application_json_UsersSelfFeedGetResponses200_esc, 
-        writable_application_json_Tag_esc, 
-        writable_application_json_TagsSearchGetResponses200_esc, 
-        writable_application_json_MediaMedia_idCommentsGetResponses200_esc, 
-        writable_application_json_TagsTag_nameMediaRecentGetResponses200_esc, 
-        writable_application_json_UsersUser_idGetResponses200_esc, 
-        writable_application_json_MediaSearchGetResponses200_esc, 
-        writable_application_json_Null_esc, 
-        writable_application_json_Media_esc, 
-        writable_application_json_LocationsSearchGetResponses200_esc, 
-        writable_application_json_UsersSelfRequested_byGetResponses200_esc
+        writable_application_json_MediaMedia_idLikesGetResponses200, 
+        writable_application_json_MediaMedia_idCommentsDeleteResponses200, 
+        writable_application_json_UsersUser_idFollowsGetResponses200, 
+        writable_application_json_LocationsLocation_idGetResponses200, 
+        writable_application_json_UsersSelfFeedGetResponses200, 
+        writable_application_json_Tag, 
+        writable_application_json_TagsSearchGetResponses200, 
+        writable_application_json_MediaMedia_idCommentsGetResponses200, 
+        writable_application_json_TagsTag_nameMediaRecentGetResponses200, 
+        writable_application_json_UsersUser_idGetResponses200, 
+        writable_application_json_MediaSearchGetResponses200, 
+        writable_application_json_Null, 
+        writable_application_json_Media, 
+        writable_application_json_LocationsSearchGetResponses200, 
+        writable_application_json_UsersSelfRequested_byGetResponses200
     )
 }
 
@@ -108,16 +108,16 @@ object WrappedBodyParsers extends WrappedBodyParsersBase {
     * in order for play-swagger to be able to provide safety net for
     * different response types
     */
-    val reader_application_json_LocationLatitude_esc: Parser[LocationLatitude] =
+    val reader_application_json_Option_BigDecimal__esc: Parser[Option[BigDecimal]] =
         (content: ByteString) => ???
-    val reader_application_json_UsersUser_idRelationshipPostAction_esc: Parser[UsersUser_idRelationshipPostAction] =
+    val reader_application_json_Option_UsersUser_idRelationshipPostActionOptionEnum__esc: Parser[Option[UsersUser_idRelationshipPostActionOptionEnum]] =
         (content: ByteString) => ???
     /**
     * This collection contains all {@Writeable}s which could be used in
     * as a marshaller for different mime types and types of response
     */
     override val custom: Seq[(String, ParserWrapper[_])] = Seq(
-            "application/json" -> reader_application_json_LocationLatitude_esc, 
-            "application/json" -> reader_application_json_UsersUser_idRelationshipPostAction_esc
+            "application/json" -> reader_application_json_Option_BigDecimal__esc, 
+            "application/json" -> reader_application_json_Option_UsersUser_idRelationshipPostActionOptionEnum__esc
     )
 }

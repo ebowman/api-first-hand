@@ -11,36 +11,36 @@ package instagram.api
 package yaml {
 
 
-    case class UsersSelfFeedGetResponses200(data: UsersSelfFeedGetResponses200Data) 
-    case class MediaMedia_idCommentsDeleteResponses200(meta: MediaMedia_idCommentsDeleteResponses200Meta, data: MediaFilter) 
-    case class MediaSearchGetResponses200DataOptArrResult(location: MediaLocation, created_time: MediaId, comments_esc: MediaComments_esc, tags: MediaTags, users_in_photo: MediaUsers_in_photo, filter: MediaFilter, likes: MediaLikes, id: MediaId, videos: MediaVideos, `type`: MediaFilter, images: MediaImages, user: CommentFrom, distance: LocationLatitude) 
-    case class UsersUser_idFollowsGetResponses200(data: MediaUsers_in_photo) 
-    case class UserCountsOpt(media: MediaId, follows: MediaId, follwed_by: MediaId) 
-    case class User(website: MediaFilter, profile_picture: MediaFilter, username: MediaFilter, full_name: MediaFilter, bio: MediaFilter, id: MediaId, counts: UserCounts) 
-    case class TagsTag_nameMediaRecentGetResponses200(data: MediaTags) 
-    case class Image(width: MediaId, height: MediaId, url: MediaFilter) 
-    case class UsersSelfRequested_byGetResponses200(meta: TagsSearchGetResponses200Meta, data: MediaUsers_in_photo) 
-    case class Tag(media_count: MediaId, name: MediaFilter) 
-    case class UsersSelfRequested_byGetResponses200MetaOpt(code: MediaId) 
-    case class LocationsLocation_idGetResponses200(data: MediaLocation) 
-    case class Comment(id: MediaFilter, created_time: MediaFilter, text: MediaFilter, from: CommentFrom) 
-    case class Media(location: MediaLocation, created_time: MediaId, comments_esc: MediaComments_esc, tags: MediaTags, users_in_photo: MediaUsers_in_photo, filter: MediaFilter, likes: MediaLikes, id: MediaId, videos: MediaVideos, `type`: MediaFilter, images: MediaImages, user: CommentFrom) 
-    case class MediaMedia_idLikesGetResponses200(meta: MediaMedia_idCommentsDeleteResponses200Meta, data: MediaMedia_idLikesGetResponses200Data) 
-    case class MediaMedia_idLikesGetResponses200MetaOpt(code: LocationLatitude) 
-    case class MediaSearchGetResponses200(data: MediaSearchGetResponses200Data) 
-    case class TagsSearchGetResponses200(meta: TagsSearchGetResponses200Meta, data: MediaTags) 
-    case class Like(first_name: MediaFilter, id: MediaFilter, last_name: MediaFilter, `type`: MediaFilter, user_name: MediaFilter) 
-    case class MediaComments_Opt(count: MediaId, data: MediaComments_Data) 
-    case class UsersUser_idGetResponses200(data: UsersUser_idGetResponses200Data) 
-    case class MediaMedia_idCommentsGetResponses200(meta: MediaMedia_idCommentsDeleteResponses200Meta, data: MediaComments_Data) 
-    case class MediaVideosOpt(low_resolution: MediaVideosLow_resolution, standard_resolution: MediaVideosLow_resolution) 
-    case class Location(id: MediaFilter, name: MediaFilter, latitude: LocationLatitude, longitude: LocationLatitude) 
-    case class MiniProfile(user_name: MediaFilter, full_name: MediaFilter, id: MediaId, profile_picture: MediaFilter) 
-    case class MediaLikesOpt(count: MediaId, data: MediaUsers_in_photo) 
-    case class LocationsSearchGetResponses200(data: LocationsSearchGetResponses200Data) 
-    case class MediaImagesOpt(low_resolution: MediaVideosLow_resolution, thumbnail: MediaVideosLow_resolution, standard_resolution: MediaVideosLow_resolution) 
+    case class UserCountsOptionCounts(media: Option[BigInt], follows: Option[BigInt], follwed_by: Option[BigInt]) 
+    case class UsersSelfFeedGetResponses200(data: Option[Seq[Media]]) 
+    case class MediaSearchGetResponses200DataOptionSeqData(created_time: Option[BigInt], filter: Option[String], id: Option[BigInt], `type`: Option[String], location: Option[Location], comments_esc: Option[MediaComments_OptionComments_esc], tags: Option[Seq[Tag]], users_in_photo: Option[Seq[MiniProfile]], likes: Option[MediaLikesOptionLikes], videos: Option[MediaVideosOptionVideos], images: Option[MediaImagesOptionImages], user: Option[MiniProfile], distance: Option[BigDecimal]) 
+    case class TagsSearchGetResponses200MetaOptionMeta(code: Option[BigInt]) 
+    case class MediaMedia_idCommentsDeleteResponses200(data: Option[String], meta: Option[MediaMedia_idCommentsDeleteResponses200MetaOptionMeta]) 
+    case class UsersUser_idFollowsGetResponses200(data: Option[Seq[MiniProfile]]) 
+    case class User(website: Option[String], profile_picture: Option[String], username: Option[String], full_name: Option[String], bio: Option[String], id: Option[BigInt], counts: Option[UserCountsOptionCounts]) 
+    case class TagsTag_nameMediaRecentGetResponses200(data: Option[Seq[Tag]]) 
+    case class Image(width: Option[BigInt], height: Option[BigInt], url: Option[String]) 
+    case class UsersSelfRequested_byGetResponses200(meta: Option[TagsSearchGetResponses200MetaOptionMeta], data: Option[Seq[MiniProfile]]) 
+    case class MediaMedia_idCommentsDeleteResponses200MetaOptionMeta(code: Option[BigDecimal]) 
+    case class Tag(media_count: Option[BigInt], name: Option[String]) 
+    case class LocationsLocation_idGetResponses200(data: Option[Location]) 
+    case class Comment(id: Option[String], created_time: Option[String], text: Option[String], from: Option[MiniProfile]) 
+    case class Media(created_time: Option[BigInt], filter: Option[String], id: Option[BigInt], `type`: Option[String], location: Option[Location], comments_esc: Option[MediaComments_OptionComments_esc], tags: Option[Seq[Tag]], users_in_photo: Option[Seq[MiniProfile]], likes: Option[MediaLikesOptionLikes], videos: Option[MediaVideosOptionVideos], images: Option[MediaImagesOptionImages], user: Option[MiniProfile]) 
+    case class MediaMedia_idLikesGetResponses200(meta: Option[MediaMedia_idCommentsDeleteResponses200MetaOptionMeta], data: Option[Seq[Like]]) 
+    case class MediaSearchGetResponses200(data: Option[Seq[MediaSearchGetResponses200DataOptionSeqData]]) 
+    case class TagsSearchGetResponses200(meta: Option[TagsSearchGetResponses200MetaOptionMeta], data: Option[Seq[Tag]]) 
+    case class Like(first_name: Option[String], id: Option[String], last_name: Option[String], `type`: Option[String], user_name: Option[String]) 
+    case class UsersUser_idGetResponses200(data: Option[User]) 
+    case class MediaMedia_idCommentsGetResponses200(meta: Option[MediaMedia_idCommentsDeleteResponses200MetaOptionMeta], data: Option[Seq[Comment]]) 
+    case class MediaLikesOptionLikes(count: Option[BigInt], data: Option[Seq[MiniProfile]]) 
+    case class Location(id: Option[String], name: Option[String], latitude: Option[BigDecimal], longitude: Option[BigDecimal]) 
+    case class MediaComments_OptionComments_esc(count: Option[BigInt], data: Option[Seq[Comment]]) 
+    case class MiniProfile(user_name: Option[String], full_name: Option[String], id: Option[BigInt], profile_picture: Option[String]) 
+    case class MediaVideosOptionVideos(low_resolution: Option[Image], standard_resolution: Option[Image]) 
+    case class MediaImagesOptionImages(low_resolution: Option[Image], thumbnail: Option[Image], standard_resolution: Option[Image]) 
+    case class LocationsSearchGetResponses200(data: Option[Seq[Location]]) 
 
-    case class UsersUser_idRelationshipPostActionOpt(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
+    case class UsersUser_idRelationshipPostActionOptionEnum(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
 
     import play.api.libs.json._
     import play.api.libs.functional.syntax._
@@ -130,16 +130,16 @@ package yaml {
     implicit val MediaWrites: Writes[Media] = new Writes[Media] {
         def writes(ss: Media) =
           Json.obj(
-            "location" -> ss.location, 
             "created_time" -> ss.created_time, 
+            "filter" -> ss.filter, 
+            "id" -> ss.id, 
+            "`type`" -> ss.`type`, 
+            "location" -> ss.location, 
             "comments_esc" -> ss.comments_esc, 
             "tags" -> ss.tags, 
             "users_in_photo" -> ss.users_in_photo, 
-            "filter" -> ss.filter, 
             "likes" -> ss.likes, 
-            "id" -> ss.id, 
             "videos" -> ss.videos, 
-            "`type`" -> ss.`type`, 
             "images" -> ss.images, 
             "user" -> ss.user
           )
@@ -183,8 +183,8 @@ package yaml {
     implicit val MediaMedia_idCommentsDeleteResponses200Writes: Writes[MediaMedia_idCommentsDeleteResponses200] = new Writes[MediaMedia_idCommentsDeleteResponses200] {
         def writes(ss: MediaMedia_idCommentsDeleteResponses200) =
           Json.obj(
-            "meta" -> ss.meta, 
-            "data" -> ss.data
+            "data" -> ss.data, 
+            "meta" -> ss.meta
           )
         }
     implicit val LikeWrites: Writes[Like] = new Writes[Like] {
@@ -212,46 +212,17 @@ package yaml {
 //noinspection ScalaStyle
 package object yaml {
 
-    type TagsSearchGetResponses200Meta = Option[UsersSelfRequested_byGetResponses200MetaOpt]
-    type MediaFilter = Option[String]
-    type MediaMedia_idCommentsDeleteResponses200Meta = Option[MediaMedia_idLikesGetResponses200MetaOpt]
-    type UsersSelfFeedGetResponses200Data = Option[UsersSelfFeedGetResponses200DataOpt]
-    type MediaTags = Option[MediaTagsOpt]
-    type MediaMedia_idLikesGetResponses200Data = Option[MediaMedia_idLikesGetResponses200DataOpt]
-    type MediaId = Option[BigInt]
-    type MediaVideosLow_resolution = Option[Image]
-    type UsersUser_idRelationshipPostAction = Option[UsersUser_idRelationshipPostActionOpt]
-    type MediaTagsOpt = Seq[Tag]
-    type MediaImages = Option[MediaImagesOpt]
-    type MediaLikes = Option[MediaLikesOpt]
-    type MediaUsers_in_photoOpt = Seq[MiniProfile]
-    type MediaMedia_idLikesGetResponses200DataOpt = Seq[Like]
-    type LocationsSearchGetResponses200Data = Option[LocationsSearchGetResponses200DataOpt]
-    type MediaComments_esc = Option[MediaComments_Opt]
-    type MediaSearchGetResponses200DataOpt = Seq[MediaSearchGetResponses200DataOptArrResult]
-    type CommentFrom = Option[MiniProfile]
-    type LocationsSearchGetResponses200DataOpt = Seq[Location]
-    type MediaSearchGetResponses200Data = Option[MediaSearchGetResponses200DataOpt]
-    type UsersSelfFeedGetResponses200DataOpt = Seq[Media]
-    type MediaComments_DataOpt = Seq[Comment]
-    type UsersUser_idGetResponses200Data = Option[User]
-    type MediaVideos = Option[MediaVideosOpt]
-    type MediaLocation = Option[Location]
     type GeographiesGeo_idMediaRecentGetResponses200 = Null
-    type MediaComments_Data = Option[MediaComments_DataOpt]
-    type MediaUsers_in_photo = Option[MediaUsers_in_photoOpt]
-    type LocationLatitude = Option[BigDecimal]
-    type UserCounts = Option[UserCountsOpt]
 
-    object UsersUser_idRelationshipPostActionOpt {
+    object UsersUser_idRelationshipPostActionOptionEnum {
         
-        val Unfollow = new UsersUser_idRelationshipPostActionOpt("unfollow")
-        val Approve = new UsersUser_idRelationshipPostActionOpt("approve")
-        val Block = new UsersUser_idRelationshipPostActionOpt("block")
-        val Unblock = new UsersUser_idRelationshipPostActionOpt("unblock")
-        val Follow = new UsersUser_idRelationshipPostActionOpt("follow")
+        val Unfollow = new UsersUser_idRelationshipPostActionOptionEnum("unfollow")
+        val Approve = new UsersUser_idRelationshipPostActionOptionEnum("approve")
+        val Block = new UsersUser_idRelationshipPostActionOptionEnum("block")
+        val Unblock = new UsersUser_idRelationshipPostActionOptionEnum("unblock")
+        val Follow = new UsersUser_idRelationshipPostActionOptionEnum("follow")
 
-        implicit def stringToUsersUser_idRelationshipPostActionOpt: String => UsersUser_idRelationshipPostActionOpt = {
+        implicit def stringToUsersUser_idRelationshipPostActionOptionEnum: String => UsersUser_idRelationshipPostActionOptionEnum = {
             case "unfollow" => Unfollow
             case "approve" => Approve
             case "block" => Block

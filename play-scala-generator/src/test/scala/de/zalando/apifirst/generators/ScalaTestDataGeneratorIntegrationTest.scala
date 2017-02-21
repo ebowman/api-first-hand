@@ -23,8 +23,8 @@ class ScalaTestDataGeneratorIntegrationTest extends FunSpec with MustMatchers wi
       val model = ast.model
       val scalaModel = new ScalaGenerator(model).generateGenerators(name, ast.model.packageName.getOrElse(name))
       val expected = asInFile(name, "scala")
-      if (expected.isEmpty)
-        dump(scalaModel, name, "scala")
+      //      if (expected.isEmpty)
+      dump(scalaModel, name, "scala")
       clean(scalaModel) mustBe clean(expected)
     }
   }

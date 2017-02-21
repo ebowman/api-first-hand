@@ -21,8 +21,8 @@ object echo_api_yaml extends WithModel {
 	Reference("⌿paths⌿/⌿post⌿responses⌿200") → 
 		TypeDef(Reference("⌿paths⌿/⌿post⌿responses⌿200"), 
 			Seq(
-					Field(Reference("⌿paths⌿/⌿post⌿responses⌿200⌿name"), TypeRef(Reference("⌿paths⌿/⌿post⌿name"))),
-					Field(Reference("⌿paths⌿/⌿post⌿responses⌿200⌿year"), TypeRef(Reference("⌿paths⌿/⌿post⌿name")))
+					Field(Reference("⌿paths⌿/⌿post⌿responses⌿200⌿name"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿paths⌿/⌿post⌿responses⌿200⌿year"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List()))
 ) 
  

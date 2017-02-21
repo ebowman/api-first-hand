@@ -25,15 +25,15 @@ trait SecurityApiYamlBase extends Controller with PlayBodyParsing  with Security
     def GetPetsById200(resultF: Future[Seq[Pet]])(implicit writerP: String => Option[Writeable[Seq[Pet]]]) = resultF map { resultP => (new GetPetsByIdType[Seq[Pet]] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type getPetsByIdActionRequestType       = (PetsIdGetId)
+    private type getPetsByIdActionRequestType       = (ArrayWrapper[String])
     private type getPetsByIdActionType[T]            = getPetsByIdActionRequestType => Future[GetPetsByIdType[T] forSome { type T }]
 
 
     val getPetsByIdActionConstructor  = new getPetsByIdSecureAction("user")
 
-def getPetsByIdAction[T] = (f: getPetsByIdActionType[T]) => (id: PetsIdGetId) => getPetsByIdActionConstructor.async { implicit request: Request[AnyContent] =>
+def getPetsByIdAction[T] = (f: getPetsByIdActionType[T]) => (id: ArrayWrapper[String]) => getPetsByIdActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetPetsByIdRequest(id: PetsIdGetId): Either[Result, Future[GetPetsByIdType[_]]] = {
+        def processValidgetPetsByIdRequest(id: ArrayWrapper[String]): Either[Result, Future[GetPetsByIdType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((id)))
             
             new PetsIdGetValidator(id).errors match {

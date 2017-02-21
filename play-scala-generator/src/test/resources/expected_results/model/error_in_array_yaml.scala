@@ -8,32 +8,32 @@ package error_in_array
 package yaml {
 
 
-    case class ModelSchemaRoot(data: ModelSchemaRootData, meta: ModelSchemaRootMeta, links: ModelSchemaRootLinks) 
-    case class Errors(errors: ErrorsErrors) 
-    case class ErrorSourceNameClash(pointer: MetaCopyright, parameter: MetaCopyright) 
-    case class Meta(copyright: MetaCopyright) 
-    case class ModelSchema(name: String, sizeRegister: String, brand: String, partnerArticleModelId: BigInt, description: MetaCopyright, ageGroups: ModelSchemaAgeGroups, keywords: ModelSchemaKeywords, lengthRegister: ModelSchemaLengthRegister, silhouetteId: ModelSchemaSilhouetteId, specialDescriptions: ModelSchemaSpecialDescriptions, articleModelAttributes: ModelSchemaSpecialDescriptions) 
-    case class Error(source: ErrorSource, code: MetaCopyright, status: MetaCopyright, detail: MetaCopyright, title: MetaCopyright) 
-    case class Links(self: MetaCopyright, related: MetaCopyright) 
+    case class ModelSchemaRoot(data: Option[ModelSchema], meta: Option[Meta], links: Option[Links]) 
+    case class Errors(errors: Option[Seq[Error]]) 
+    case class ErrorSource(pointer: Option[String], parameter: Option[String]) 
+    case class Meta(copyright: Option[String]) 
+    case class ModelSchema(name: String, description: Option[String], sizeRegister: String, brand: String, partnerArticleModelId: BigInt, keywords: Option[String], lengthRegister: Option[String], specialDescriptions: Option[Seq[String]], articleModelAttributes: Option[Seq[String]], silhouetteId: ModelSchemaSilhouetteId, ageGroups: Seq[ModelSchemaAgeGroupsSeqEnum]) 
+    case class Error(code: Option[String], status: Option[String], detail: Option[String], title: Option[String], source: Option[ErrorSource]) 
+    case class Links(self: Option[String], related: Option[String]) 
 
     case class ModelSchemaSilhouetteId(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
-    case class ModelSchemaAgeGroupsArrResult(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
+    case class ModelSchemaAgeGroupsSeqEnum(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
 
     import play.api.libs.json._
     import play.api.libs.functional.syntax._
     import de.zalando.play.controllers.MissingDefaultReads
     object BodyReads extends MissingDefaultReads {
         implicit val LinksReads: Reads[Links] = (
-            (JsPath \ "self").readNullable[String] and (JsPath \ "related").readNullable[String]
+            (JsPath \ "self").read[Option[String]] and (JsPath \ "related").read[Option[String]]
         )(Links.apply _)
         implicit val MetaReads: Reads[Meta] = (
-            (JsPath \ "copyright").readNullable[String]
+            (JsPath \ "copyright").read[Option[String]]
         ).map(Meta.apply )
         implicit val ModelSchemaReads: Reads[ModelSchema] = (
-            (JsPath \ "name").read[String] and (JsPath \ "sizeRegister").read[String] and (JsPath \ "brand").read[String] and (JsPath \ "partnerArticleModelId").read[BigInt] and (JsPath \ "description").readNullable[String] and (JsPath \ "ageGroups").read[ModelSchemaAgeGroups] and (JsPath \ "keywords").readNullable[String] and (JsPath \ "lengthRegister").readNullable[String] and (JsPath \ "silhouetteId").read[ModelSchemaSilhouetteId] and (JsPath \ "specialDescriptions").readNullable[ModelSchemaSpecialDescriptionsOpt] and (JsPath \ "articleModelAttributes").readNullable[ModelSchemaSpecialDescriptionsOpt]
+            (JsPath \ "name").read[String] and (JsPath \ "description").read[Option[String]] and (JsPath \ "sizeRegister").read[String] and (JsPath \ "brand").read[String] and (JsPath \ "partnerArticleModelId").read[BigInt] and (JsPath \ "keywords").read[Option[String]] and (JsPath \ "lengthRegister").read[Option[String]] and (JsPath \ "specialDescriptions").read[Option[Seq[String]]] and (JsPath \ "articleModelAttributes").read[Option[Seq[String]]] and (JsPath \ "silhouetteId").read[ModelSchemaSilhouetteId] and (JsPath \ "ageGroups").read[Seq[ModelSchemaAgeGroupsSeqEnum]]
         )(ModelSchema.apply _)
         implicit val ModelSchemaRootReads: Reads[ModelSchemaRoot] = (
-            (JsPath \ "data").readNullable[ModelSchema] and (JsPath \ "meta").readNullable[Meta] and (JsPath \ "links").readNullable[Links]
+            (JsPath \ "data").read[Option[ModelSchema]] and (JsPath \ "meta").read[Option[Meta]] and (JsPath \ "links").read[Option[Links]]
         )(ModelSchemaRoot.apply _)
     }
 
@@ -58,16 +58,16 @@ package yaml {
         def writes(ss: ModelSchema) =
           Json.obj(
             "name" -> ss.name, 
+            "description" -> ss.description, 
             "sizeRegister" -> ss.sizeRegister, 
             "brand" -> ss.brand, 
             "partnerArticleModelId" -> ss.partnerArticleModelId, 
-            "description" -> ss.description, 
-            "ageGroups" -> ss.ageGroups, 
             "keywords" -> ss.keywords, 
             "lengthRegister" -> ss.lengthRegister, 
-            "silhouetteId" -> ss.silhouetteId, 
             "specialDescriptions" -> ss.specialDescriptions, 
-            "articleModelAttributes" -> ss.articleModelAttributes
+            "articleModelAttributes" -> ss.articleModelAttributes, 
+            "silhouetteId" -> ss.silhouetteId, 
+            "ageGroups" -> ss.ageGroups
           )
         }
     implicit val ModelSchemaRootWrites: Writes[ModelSchemaRoot] = new Writes[ModelSchemaRoot] {
@@ -86,18 +86,6 @@ package yaml {
 //noinspection ScalaStyle
 package object yaml {
 
-    type ModelSchemaSpecialDescriptionsOpt = Seq[String]
-    type MetaCopyright = Option[String]
-    type ModelSchemaKeywords = Option[String]
-    type ModelSchemaSpecialDescriptions = Option[ModelSchemaSpecialDescriptionsOpt]
-    type ErrorsErrorsOpt = Seq[Error]
-    type ModelSchemaRootData = Option[ModelSchema]
-    type ErrorSource = Option[ErrorSourceNameClash]
-    type ModelSchemaRootLinks = Option[Links]
-    type ModelSchemaLengthRegister = Option[String]
-    type ErrorsErrors = Option[ErrorsErrorsOpt]
-    type ModelSchemaAgeGroups = Seq[ModelSchemaAgeGroupsArrResult]
-    type ModelSchemaRootMeta = Option[Meta]
 
     object ModelSchemaSilhouetteId {
         
@@ -293,14 +281,14 @@ package object yaml {
                 throw new IllegalArgumentException("Couldn't parse parameter " + other)
         }
     }
-    object ModelSchemaAgeGroupsArrResult {
+    object ModelSchemaAgeGroupsSeqEnum {
         
-        val Baby = new ModelSchemaAgeGroupsArrResult("baby")
-        val Kid = new ModelSchemaAgeGroupsArrResult("kid")
-        val Teen = new ModelSchemaAgeGroupsArrResult("teen")
-        val Adult = new ModelSchemaAgeGroupsArrResult("adult")
+        val Baby = new ModelSchemaAgeGroupsSeqEnum("baby")
+        val Kid = new ModelSchemaAgeGroupsSeqEnum("kid")
+        val Teen = new ModelSchemaAgeGroupsSeqEnum("teen")
+        val Adult = new ModelSchemaAgeGroupsSeqEnum("adult")
 
-        implicit def stringToModelSchemaAgeGroupsArrResult: String => ModelSchemaAgeGroupsArrResult = {
+        implicit def stringToModelSchemaAgeGroupsSeqEnum: String => ModelSchemaAgeGroupsSeqEnum = {
             case "baby" => Baby
             case "kid" => Kid
             case "teen" => Teen

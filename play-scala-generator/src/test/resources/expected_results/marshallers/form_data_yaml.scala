@@ -8,8 +8,8 @@ import de.zalando.play.controllers._
 import WriteableWrapper.writeable2wrapper
 import akka.util.ByteString
 
-import java.io.File
 import scala.math.BigInt
+import java.io.File
 
 
 
@@ -27,10 +27,10 @@ object ResponseWriters extends ResponseWritersBase {
     * in order for play-swagger to be able to provide safety net for
     * different response types
     */
-    val writable_application_json_MultipartPostResponses200_esc: Writeable[MultipartPostResponses200] =
+    val writable_application_json_MultipartPostResponses200: Writeable[MultipartPostResponses200] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_BothPostResponses200_esc: Writeable[BothPostResponses200] =
+    val writable_application_json_BothPostResponses200: Writeable[BothPostResponses200] =
         Writeable(a => ???, Some("application/json"))
 
     /**
@@ -38,8 +38,8 @@ object ResponseWriters extends ResponseWritersBase {
     * as a marshaller for different mime types and types of response
     */
     override val custom: Seq[WriteableWrapper[_]] = Seq(
-        writable_application_json_MultipartPostResponses200_esc, 
-        writable_application_json_BothPostResponses200_esc
+        writable_application_json_MultipartPostResponses200, 
+        writable_application_json_BothPostResponses200
     )
 }
 

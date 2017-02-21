@@ -246,19 +246,19 @@ object PlayScalaControllerAnalyzer {
   }
 }
 
-trait ParameterData {
+trait ParameterData extends Denotator {
 
   def app: StrictModel
 
   def parameterMap(table: DenotationTable): ParameterRef => Map[String, String] = param => {
     val parameter = app.findParameter(param)
     val typeName = parameter.typeName
-    val commonTypeName = typeNameDenotation(table, typeName.name)
+    val commonTypeName = denotate(table, typeName)
     val (parser, parserType) = typeName match {
       case TypeRef(ref) =>
         app.findType(ref) match {
           case Opt(underlyingType, _) =>
-            val tpeName = typeNameDenotation(table, underlyingType.name)
+            val tpeName = denotate(table, underlyingType)
             ("optionParser", tpeName)
           case _ => ("anyParser", commonTypeName)
         }

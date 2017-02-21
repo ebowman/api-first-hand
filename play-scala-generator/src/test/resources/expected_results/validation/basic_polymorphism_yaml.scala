@@ -29,14 +29,14 @@ class PetValidator(instance: IPet) extends RecursiveValidator {
 }
 
 // ----- option delegating validators -----
-class PutDummyValidator(instance: PutDummy) extends RecursiveValidator {
+class PutDummyValidator(instance: Option[Pet]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new PetValidator(_) }
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
 // ----- composite validators -----
 // ----- call validations -----
-class PutValidator(dummy: PutDummy) extends RecursiveValidator {
+class PutValidator(dummy: Option[Pet]) extends RecursiveValidator {
     override val validators = Seq(
         new PutDummyValidator(dummy)
     

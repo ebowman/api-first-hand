@@ -44,10 +44,11 @@ trait MarshallersStep extends EnrichmentStep[StrictModel] {
     } yield (mime, resultType)
     requiredPairs map { p =>
       val mime = p._1.replace('/', '_').replace('+', '_')
+      val typeName = p._2.replace("[", "").replace("]", "")
       Map(
         "mime_type" -> p._1,
         "result_type" -> p._2,
-        "writable_name" -> ScalaName.escape(s"writable_${mime}_${p._2})")
+        "writable_name" -> ScalaName.escape(s"writable_${mime}_${typeName}")
       )
     }
   }

@@ -15,32 +15,14 @@ object nested_arrays_yaml extends WithModel {
 	Reference("⌿definitions⌿Activity") → 
 		TypeDef(Reference("⌿definitions⌿Activity"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Activity⌿actions"), TypeRef(Reference("⌿definitions⌿Activity⌿actions")))
+					Field(Reference("⌿definitions⌿Activity⌿actions"), Opt(Str(None, TypeMeta(Some("The text of the error message"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿definitions⌿Example") → 
 		TypeDef(Reference("⌿definitions⌿Example"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Example⌿messages"), TypeRef(Reference("⌿definitions⌿Example⌿messages"))),
-					Field(Reference("⌿definitions⌿Example⌿nestedArrays"), TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays")))
-			), TypeMeta(Some("Named types: 2"), List())),
-	Reference("⌿definitions⌿Example⌿messages") → 
-		Opt(TypeRef(Reference("⌿definitions⌿Example⌿messages⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Example⌿nestedArrays") → 
-		Opt(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Activity⌿actions") → 
-		Opt(Str(None, TypeMeta(Some("The text of the error message"), List())), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt") → 
-		ArrResult(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Example⌿messages⌿Opt") → 
-		ArrResult(TypeRef(Reference("⌿definitions⌿Example⌿messages⌿Opt⌿ArrResult")), TypeMeta(Some("The text of the error message"), List())),
-	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult") → 
-		ArrResult(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult⌿ArrResult")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Example⌿messages⌿Opt⌿ArrResult") → 
-		ArrResult(TypeRef(Reference("⌿definitions⌿Activity")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult⌿ArrResult") → 
-		ArrResult(TypeRef(Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult⌿ArrResult⌿ArrResult")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Example⌿nestedArrays⌿Opt⌿ArrResult⌿ArrResult⌿ArrResult") → 
-		ArrResult(Str(Some("nested arrays"), TypeMeta(Some("nested arrays"), List())), TypeMeta(None, List()))
+					Field(Reference("⌿definitions⌿Example⌿nestedArrays"), Opt(ArrResult(ArrResult(ArrResult(ArrResult(Str(Some("nested arrays"), TypeMeta(Some("nested arrays"), List())), TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Example⌿messages"), Opt(ArrResult(ArrResult(TypeRef(Reference("⌿definitions⌿Activity")), TypeMeta(None, List())), TypeMeta(Some("The text of the error message"), List())), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 2"), List()))
 ) 
  
  def parameters = Map[ParameterRef, Parameter](

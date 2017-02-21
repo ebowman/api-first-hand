@@ -23,21 +23,19 @@ object form_data_yaml extends WithModel {
 	Reference("⌿paths⌿/multipart⌿post⌿responses⌿200") → 
 		TypeDef(Reference("⌿paths⌿/multipart⌿post⌿responses⌿200"), 
 			Seq(
-					Field(Reference("⌿paths⌿/multipart⌿post⌿responses⌿200⌿name"), TypeRef(Reference("⌿paths⌿/both⌿post⌿responses⌿200⌿name"))),
-					Field(Reference("⌿paths⌿/multipart⌿post⌿responses⌿200⌿year"), TypeRef(Reference("⌿paths⌿/both⌿post⌿year"))),
-					Field(Reference("⌿paths⌿/multipart⌿post⌿responses⌿200⌿fileSize"), TypeRef(Reference("⌿paths⌿/both⌿post⌿year"))),
-					Field(Reference("⌿paths⌿/multipart⌿post⌿responses⌿200⌿fileName"), TypeRef(Reference("⌿paths⌿/both⌿post⌿responses⌿200⌿name")))
+					Field(Reference("⌿paths⌿/multipart⌿post⌿responses⌿200⌿name"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿paths⌿/multipart⌿post⌿responses⌿200⌿year"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿paths⌿/multipart⌿post⌿responses⌿200⌿fileSize"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿paths⌿/multipart⌿post⌿responses⌿200⌿fileName"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 4"), List())),
 	Reference("⌿paths⌿/both⌿post⌿responses⌿200") → 
 		TypeDef(Reference("⌿paths⌿/both⌿post⌿responses⌿200"), 
 			Seq(
-					Field(Reference("⌿paths⌿/both⌿post⌿responses⌿200⌿name"), TypeRef(Reference("⌿paths⌿/both⌿post⌿responses⌿200⌿name"))),
-					Field(Reference("⌿paths⌿/both⌿post⌿responses⌿200⌿year"), TypeRef(Reference("⌿paths⌿/both⌿post⌿year"))),
-					Field(Reference("⌿paths⌿/both⌿post⌿responses⌿200⌿avatarSize"), TypeRef(Reference("⌿paths⌿/both⌿post⌿year"))),
-					Field(Reference("⌿paths⌿/both⌿post⌿responses⌿200⌿ringtoneSize"), TypeRef(Reference("⌿paths⌿/both⌿post⌿year")))
-			), TypeMeta(Some("Named types: 4"), List())),
-	Reference("⌿paths⌿/both⌿post⌿responses⌿200⌿name") → 
-		Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))
+					Field(Reference("⌿paths⌿/both⌿post⌿responses⌿200⌿name"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿paths⌿/both⌿post⌿responses⌿200⌿year"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿paths⌿/both⌿post⌿responses⌿200⌿avatarSize"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿paths⌿/both⌿post⌿responses⌿200⌿ringtoneSize"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 4"), List()))
 ) 
  
  def parameters = Map[ParameterRef, Parameter](

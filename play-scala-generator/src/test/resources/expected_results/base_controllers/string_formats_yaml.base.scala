@@ -12,11 +12,11 @@ import scala.concurrent.Future
 import scala.util._
 import de.zalando.play.controllers.Base64String
 import Base64String._
+import de.zalando.play.controllers.BinaryString
+import BinaryString._
 import java.time.ZonedDateTime
 import java.util.UUID
 import java.time.LocalDate
-import de.zalando.play.controllers.BinaryString
-import BinaryString._
 
 import de.zalando.play.controllers.PlayPathBindables
 
@@ -31,7 +31,7 @@ trait String_formatsYamlBase extends Controller with PlayBodyParsing {
     def Get200(headers: Seq[(String, String)] = Nil) = success(new EmptyReturn(200, headers){})
     
 
-    private type getActionRequestType       = (GetDate_time, GetDate, GetBase64, GetUuid, BinaryString)
+    private type getActionRequestType       = (Option[ZonedDateTime], Option[LocalDate], Option[Base64String], Option[UUID], BinaryString)
     private type getActionType[T]            = getActionRequestType => Future[GetType[T] forSome { type T }]
 
         
@@ -46,9 +46,9 @@ trait String_formatsYamlBase extends Controller with PlayBodyParsing {
 
     val getActionConstructor  = Action
 
-def getAction[T] = (f: getActionType[T]) => (date_time: GetDate_time, date: GetDate, base64: GetBase64, uuid: GetUuid) => getActionConstructor.async(getParser) { implicit request: Request[BinaryString] =>
+def getAction[T] = (f: getActionType[T]) => (date_time: Option[ZonedDateTime], date: Option[LocalDate], base64: Option[Base64String], uuid: Option[UUID]) => getActionConstructor.async(getParser) { implicit request: Request[BinaryString] =>
 
-        def processValidgetRequest(date_time: GetDate_time, date: GetDate, base64: GetBase64, uuid: GetUuid, petId: BinaryString): Either[Result, Future[GetType[_]]] = {
+        def processValidgetRequest(date_time: Option[ZonedDateTime], date: Option[LocalDate], base64: Option[Base64String], uuid: Option[UUID], petId: BinaryString): Either[Result, Future[GetType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((date_time, date, base64, uuid, petId)))
             
             new GetValidator(date_time, date, base64, uuid, petId).errors match {

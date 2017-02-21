@@ -16,13 +16,9 @@ object options_yaml extends WithModel {
 		TypeDef(Reference("⌿definitions⌿Basic"), 
 			Seq(
 					Field(Reference("⌿definitions⌿Basic⌿id"), Lng(TypeMeta(Some("int64"), List()))),
-					Field(Reference("⌿definitions⌿Basic⌿required"), TypeRef(Reference("⌿definitions⌿Basic⌿required"))),
-					Field(Reference("⌿definitions⌿Basic⌿optional"), TypeRef(Reference("⌿definitions⌿Basic⌿optional")))
-			), TypeMeta(Some("Named types: 3"), List())),
-	Reference("⌿definitions⌿Basic⌿required") → 
-		ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Basic⌿optional") → 
-		Opt(TypeRef(Reference("⌿definitions⌿Basic⌿required")), TypeMeta(None, List()))
+					Field(Reference("⌿definitions⌿Basic⌿required"), ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Basic⌿optional"), Opt(ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 3"), List()))
 ) 
  
  def parameters = Map[ParameterRef, Parameter](

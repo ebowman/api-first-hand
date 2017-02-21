@@ -10,15 +10,13 @@ object Generators extends JsValueGenerators {
     
 
     
-    def createPetsIdGetIdGenerator = _generate(PetsIdGetIdGenerator)
-    def createPetsIdGetResponses200Generator = _generate(PetsIdGetResponses200Generator)
-    def createPetTagGenerator = _generate(PetTagGenerator)
+    def createArrayWrapperStringGenerator = _generate(ArrayWrapperStringGenerator)
+    def createSeqPetGenerator = _generate(SeqPetGenerator)
     
 
     
-    def PetsIdGetIdGenerator = _genList(arbitrary[String], "csv")
-    def PetsIdGetResponses200Generator: Gen[List[Pet]] = Gen.containerOf[List,Pet](PetGenerator)
-    def PetTagGenerator = Gen.option(arbitrary[String])
+    def ArrayWrapperStringGenerator = _genList(arbitrary[String], "csv")
+    def SeqPetGenerator: Gen[List[Pet]] = Gen.containerOf[List,Pet](PetGenerator)
     
 
     def createErrorModelGenerator = _generate(ErrorModelGenerator)
@@ -31,7 +29,7 @@ object Generators extends JsValueGenerators {
     } yield ErrorModel(code, message)
     def PetGenerator = for {
         name <- arbitrary[String]
-        tag <- PetTagGenerator
+        tag <- Gen.option(arbitrary[String])
     } yield Pet(name, tag)
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample

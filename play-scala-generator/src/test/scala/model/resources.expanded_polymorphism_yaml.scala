@@ -16,7 +16,7 @@ object expanded_polymorphism_yaml extends WithModel {
 		TypeDef(Reference("⌿definitions⌿NewPet"), 
 			Seq(
 					Field(Reference("⌿definitions⌿NewPet⌿name"), Str(None, TypeMeta(None, List()))),
-					Field(Reference("⌿definitions⌿NewPet⌿tag"), TypeRef(Reference("⌿definitions⌿NewPet⌿tag")))
+					Field(Reference("⌿definitions⌿NewPet⌿tag"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
 	Reference("⌿definitions⌿Pet") → 
 					AllOf(Reference("⌿definitions⌿Pet⌿Pet"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
@@ -33,18 +33,14 @@ object expanded_polymorphism_yaml extends WithModel {
 			Seq(
 					Field(Reference("⌿definitions⌿Pet⌿id"), Lng(TypeMeta(Some("int64"), List())))
 			), TypeMeta(Some("Named types: 1"), List())),
-	Reference("⌿definitions⌿NewPet⌿tag") → 
-		Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())),
 	Reference("⌿paths⌿/pets/{id}⌿delete⌿id") → 
 		Lng(TypeMeta(Some("int64"), List())),
 	Reference("⌿paths⌿/pets⌿get⌿limit") → 
 		Opt(Intgr(TypeMeta(Some("int32"), List("max(10.toInt, false)", "min(1.toInt, false)"))), TypeMeta(None, List())),
 	Reference("⌿paths⌿/pets⌿get⌿tags") → 
-		Opt(TypeRef(Reference("⌿paths⌿/pets⌿get⌿tags⌿Opt")), TypeMeta(None, List())),
+		Opt(Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv"), TypeMeta(None, List())),
 	Reference("⌿paths⌿/pets/{id}⌿delete⌿responses⌿204") → 
 		Null(TypeMeta(None, List())),
-	Reference("⌿paths⌿/pets⌿get⌿tags⌿Opt") → 
-		Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv"),
 	Reference("⌿paths⌿/pets⌿get⌿responses⌿200") → 
 		ArrResult(TypeRef(Reference("⌿definitions⌿Pet")), TypeMeta(None, List()))
 ) 

@@ -27,7 +27,7 @@ trait Wrong_field_nameYamlBase extends Controller with PlayBodyParsing {
     def Get200(resultF: Future[StatusAndCode])(implicit writerP: String => Option[Writeable[StatusAndCode]]) = resultF map { resultP => (new GetType[StatusAndCode] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type getActionRequestType       = (GetOptCodes, GetCodes)
+    private type getActionRequestType       = (Option[GetOptCodesOpt], GetCodes)
     private type getActionType[T]            = getActionRequestType => Future[GetType[T] forSome { type T }]
 
 
@@ -35,7 +35,7 @@ trait Wrong_field_nameYamlBase extends Controller with PlayBodyParsing {
 
 def getAction[T] = (f: getActionType[T]) => getActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetRequest(optCodes: GetOptCodes, codes: GetCodes): Either[Result, Future[GetType[_]]] = {
+        def processValidgetRequest(optCodes: Option[GetOptCodesOpt], codes: GetCodes): Either[Result, Future[GetType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((optCodes, codes)))
             
             new GetValidator(optCodes, codes).errors match {
@@ -50,7 +50,7 @@ def getAction[T] = (f: getActionType[T]) => getActionConstructor.async { implici
         }
 
             
-            val optCodes: Either[String,GetOptCodes] = fromParametersOptional[GetOptCodes]("header")("optCodes", request.headers.toMap, None)
+            val optCodes: Either[String,Option[GetOptCodesOpt]] = fromParametersOptional[Option[GetOptCodesOpt]]("header")("optCodes", request.headers.toMap, None)
             
             val codes: Either[String,GetCodes] = fromParameters[GetCodes]("header")("codes", request.headers.toMap, None)
             

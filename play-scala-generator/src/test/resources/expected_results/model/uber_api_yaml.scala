@@ -1,8 +1,8 @@
 package uber.api
 
 
-    import java.util.UUID
     import scala.math.BigDecimal
+    import java.util.UUID
 
     import de.zalando.play.controllers.PlayPathBindables
 
@@ -11,12 +11,12 @@ package uber.api
 package yaml {
 
 
-    case class Activity(uuid: ProfilePicture) 
-    case class PriceEstimate(low_estimate: PriceEstimateHigh_estimate, display_name: ProfilePicture, estimate: ProfilePicture, high_estimate: PriceEstimateHigh_estimate, product_id: ProfilePicture, currency_code: ProfilePicture, surge_multiplier: PriceEstimateHigh_estimate) 
-    case class Product(image: ProfilePicture, description: ProfilePicture, display_name: ProfilePicture, product_id: ProfilePicture, capacity: ProfilePicture) 
-    case class Profile(first_name: ProfilePicture, email: ProfilePicture, promo_code: ProfilePicture, last_name: ProfilePicture, picture: ProfilePicture) 
-    case class Activities(offset: ErrorCode, limit: ErrorCode, count: ErrorCode, history: ActivitiesHistory) 
-    case class Error(code: ErrorCode, message: ProfilePicture, fields: ProfilePicture) 
+    case class Activity(uuid: Option[String]) 
+    case class PriceEstimate(low_estimate: Option[BigDecimal], display_name: Option[String], estimate: Option[String], high_estimate: Option[BigDecimal], product_id: Option[String], currency_code: Option[String], surge_multiplier: Option[BigDecimal]) 
+    case class Product(image: Option[String], description: Option[String], display_name: Option[String], product_id: Option[String], capacity: Option[String]) 
+    case class Profile(first_name: Option[String], email: Option[String], promo_code: Option[String], last_name: Option[String], picture: Option[String]) 
+    case class Activities(offset: Option[Int], limit: Option[Int], count: Option[Int], history: Option[Seq[Activity]]) 
+    case class Error(code: Option[Int], message: Option[String], fields: Option[String]) 
 
 
     import play.api.libs.json._
@@ -78,14 +78,6 @@ package yaml {
 //noinspection ScalaStyle
 package object yaml {
 
-    type ActivitiesHistory = Option[ActivitiesHistoryOpt]
-    type ProfilePicture = Option[String]
-    type ErrorCode = Option[Int]
-    type EstimatesTimeGetCustomer_uuid = Option[UUID]
-    type ProductsGetResponses200 = Seq[Product]
-    type PriceEstimateHigh_estimate = Option[BigDecimal]
-    type EstimatesPriceGetResponses200 = Seq[PriceEstimate]
-    type ActivitiesHistoryOpt = Seq[Activity]
 
 
 import play.api.mvc.{QueryStringBindable, PathBindable}

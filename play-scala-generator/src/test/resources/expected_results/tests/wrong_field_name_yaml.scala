@@ -53,7 +53,7 @@ class Wrong_field_name_yamlSpec extends WordSpec with OptionValues with WsScalaT
 
 
     "GET /status/" should {
-        def testInvalidInput(input: (GetOptCodes, GetCodes)): Prop = {
+        def testInvalidInput(input: (Option[GetOptCodesOpt], GetCodes)): Prop = {
 
             val (optCodes, codes) = input
 
@@ -101,7 +101,7 @@ class Wrong_field_name_yamlSpec extends WordSpec with OptionValues with WsScalaT
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (GetOptCodes, GetCodes)): Prop = {
+        def testValidInput(input: (Option[GetOptCodesOpt], GetCodes)): Prop = {
             val (optCodes, codes) = input
             
             val url = s"""/status/"""
@@ -156,7 +156,7 @@ class Wrong_field_name_yamlSpec extends WordSpec with OptionValues with WsScalaT
         }
         "discard invalid data" in {
             val genInputs = for {
-                        optCodes <- GetOptCodesGenerator
+                        optCodes <- OptionGetOptCodesOptGenerator
                         codes <- GetCodesGenerator
                     
                 } yield (optCodes, codes)
@@ -168,7 +168,7 @@ class Wrong_field_name_yamlSpec extends WordSpec with OptionValues with WsScalaT
         }
         "do something with valid data" in {
             val genInputs = for {
-                    optCodes <- GetOptCodesGenerator
+                    optCodes <- OptionGetOptCodesOptGenerator
                     codes <- GetCodesGenerator
                 
             } yield (optCodes, codes)

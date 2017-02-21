@@ -1,12 +1,12 @@
 package de.zalando.apifirst.generators
 
-import de.zalando.apifirst.Application.{ StrictModel, ApiCall, Parameter }
+import de.zalando.apifirst.Application.{ ApiCall, Parameter, StrictModel }
 import de.zalando.apifirst.Domain._
 import de.zalando.apifirst.naming.Reference
 
 import scala.annotation.tailrec
-
 import de.zalando.apifirst.ScalaName._
+import de.zalando.apifirst.TypeAnalyzer
 import de.zalando.apifirst.generators.DenotationNames._
 
 /**
@@ -76,7 +76,7 @@ trait CommonDataStep extends EnrichmentStep[Type] with CommonData {
 
 }
 
-trait CommonData {
+trait CommonData extends TypeAnalyzer {
 
   def app: StrictModel
 
@@ -84,14 +84,18 @@ trait CommonData {
     case TypeRef(ref) =>
       app.findType(ref) match {
         case p: PrimitiveType => useType(p.name, suffix, "")
+        case c: Container if isRecursiveContainerType(c) => getRecursiveContainerName(c, r, suffix)
         case d: TypeDef => useType(d.name, suffix, "")
         case _ => useType(ref, suffix, "")
       }
     case p: PrimitiveType => useType(p.name, suffix, "")
-    case TypeDef(name, _, _) if name.isDefinition && !r.isDefinition =>
-      useType(name, suffix, "")
+    case TypeDef(name, _, _) if name.isDefinition && !r.isDefinition => useType(name, suffix, "")
+    case c: Container if isRecursiveContainerType(c) => getRecursiveContainerName(c, r, suffix)
     case _ => useType(r, suffix, "")
   }
+
+  protected def getRecursiveContainerName(c: Container, r: Reference, suffix: String) =
+    s"${c.name.simple}[${typeName(c.tpe, r, suffix)}]"
 
   @tailrec
   protected final def memberName(t: Type, r: Reference, suffix: String = ""): String = t match {

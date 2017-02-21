@@ -8,8 +8,8 @@ import de.zalando.play.controllers._
 import WriteableWrapper.writeable2wrapper
 import akka.util.ByteString
 
-import de.zalando.play.controllers.ArrayWrapper
 import java.time.ZonedDateTime
+import de.zalando.play.controllers.ArrayWrapper
 
 
 
@@ -27,40 +27,40 @@ object ResponseWriters extends ResponseWritersBase {
     * in order for play-swagger to be able to provide safety net for
     * different response types
     */
-    val writable_application_json_Null_esc: Writeable[Null] =
+    val writable_application_json_Null: Writeable[Null] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_PetsFindByStatusGetResponses200_esc: Writeable[PetsFindByStatusGetResponses200] =
+    val writable_application_json_SeqPet: Writeable[Seq[Pet]] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_xml_Null_esc: Writeable[Null] =
+    val writable_application_xml_Null: Writeable[Null] =
         Writeable(a => ???, Some("application/xml"))
 
-    val writable_application_xml_PetsFindByStatusGetResponses200_esc: Writeable[PetsFindByStatusGetResponses200] =
+    val writable_application_xml_SeqPet: Writeable[Seq[Pet]] =
         Writeable(a => ???, Some("application/xml"))
 
-    val writable_application_json_Order_esc: Writeable[Order] =
+    val writable_application_json_Order: Writeable[Order] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_xml_Order_esc: Writeable[Order] =
+    val writable_application_xml_Order: Writeable[Order] =
         Writeable(a => ???, Some("application/xml"))
 
-    val writable_application_json_User_esc: Writeable[User] =
+    val writable_application_json_User: Writeable[User] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_xml_User_esc: Writeable[User] =
+    val writable_application_xml_User: Writeable[User] =
         Writeable(a => ???, Some("application/xml"))
 
-    val writable_application_json_Pet_esc: Writeable[Pet] =
+    val writable_application_json_Pet: Writeable[Pet] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_xml_Pet_esc: Writeable[Pet] =
+    val writable_application_xml_Pet: Writeable[Pet] =
         Writeable(a => ???, Some("application/xml"))
 
-    val writable_application_json_String_esc: Writeable[String] =
+    val writable_application_json_String: Writeable[String] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_xml_String_esc: Writeable[String] =
+    val writable_application_xml_String: Writeable[String] =
         Writeable(a => ???, Some("application/xml"))
 
     /**
@@ -68,18 +68,18 @@ object ResponseWriters extends ResponseWritersBase {
     * as a marshaller for different mime types and types of response
     */
     override val custom: Seq[WriteableWrapper[_]] = Seq(
-        writable_application_json_Null_esc, 
-        writable_application_json_PetsFindByStatusGetResponses200_esc, 
-        writable_application_xml_Null_esc, 
-        writable_application_xml_PetsFindByStatusGetResponses200_esc, 
-        writable_application_json_Order_esc, 
-        writable_application_xml_Order_esc, 
-        writable_application_json_User_esc, 
-        writable_application_xml_User_esc, 
-        writable_application_json_Pet_esc, 
-        writable_application_xml_Pet_esc, 
-        writable_application_json_String_esc, 
-        writable_application_xml_String_esc
+        writable_application_json_Null, 
+        writable_application_json_SeqPet, 
+        writable_application_xml_Null, 
+        writable_application_xml_SeqPet, 
+        writable_application_json_Order, 
+        writable_application_xml_Order, 
+        writable_application_json_User, 
+        writable_application_xml_User, 
+        writable_application_json_Pet, 
+        writable_application_xml_Pet, 
+        writable_application_json_String, 
+        writable_application_xml_String
     )
 }
 
@@ -96,25 +96,25 @@ object WrappedBodyParsers extends WrappedBodyParsersBase {
     * in order for play-swagger to be able to provide safety net for
     * different response types
     */
-    val reader_application_json_StoresOrderPostBody_esc: Parser[StoresOrderPostBody] =
+    val reader_application_json_Option_Order__esc: Parser[Option[Order]] =
         (content: ByteString) => ???
-    val reader_application_json_UsersUsernamePutBody_esc: Parser[UsersUsernamePutBody] =
+    val reader_application_json_Option_User__esc: Parser[Option[User]] =
         (content: ByteString) => ???
-    val reader_application_json_UsersCreateWithListPostBody_esc: Parser[UsersCreateWithListPostBody] =
+    val reader_application_json_Option_Seq_User___esc: Parser[Option[Seq[User]]] =
         (content: ByteString) => ???
-    val reader_application_json_PetsPostBody_esc: Parser[PetsPostBody] =
+    val reader_application_json_Option_Pet__esc: Parser[Option[Pet]] =
         (content: ByteString) => ???
-    val reader_application_xml_PetsPostBody_esc: Parser[PetsPostBody] =
+    val reader_application_xml_Option_Pet__esc: Parser[Option[Pet]] =
         (content: ByteString) => ???
     /**
     * This collection contains all {@Writeable}s which could be used in
     * as a marshaller for different mime types and types of response
     */
     override val custom: Seq[(String, ParserWrapper[_])] = Seq(
-            "application/json" -> reader_application_json_StoresOrderPostBody_esc, 
-            "application/json" -> reader_application_json_UsersUsernamePutBody_esc, 
-            "application/json" -> reader_application_json_UsersCreateWithListPostBody_esc, 
-            "application/json" -> reader_application_json_PetsPostBody_esc, 
-            "application/xml" -> reader_application_xml_PetsPostBody_esc
+            "application/json" -> reader_application_json_Option_Order__esc, 
+            "application/json" -> reader_application_json_Option_User__esc, 
+            "application/json" -> reader_application_json_Option_Seq_User___esc, 
+            "application/json" -> reader_application_json_Option_Pet__esc, 
+            "application/xml" -> reader_application_xml_Option_Pet__esc
     )
 }

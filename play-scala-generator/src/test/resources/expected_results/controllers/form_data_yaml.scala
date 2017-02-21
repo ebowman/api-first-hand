@@ -25,6 +25,7 @@ import java.io.File
 
 package form_data.yaml {
     // ----- Start of unmanaged code area for package Form_dataYaml
+    
     // ----- End of unmanaged code area for package Form_dataYaml
     class Form_dataYaml @Inject() (
         // ----- Start of unmanaged code area for injections Form_dataYaml
@@ -36,24 +37,24 @@ package form_data.yaml {
         // ----- Start of unmanaged code area for constructor Form_dataYaml
 
         // ----- End of unmanaged code area for constructor Form_dataYaml
-        val postmultipart = postmultipartAction { input: (String, BothPostYear, MultipartPostAvatar) =>
+        val postmultipart = postmultipartAction { input: (String, Option[BigInt], Option[File]) =>
             val (name, year, avatar) = input
             // ----- Start of unmanaged code area for action  Form_dataYaml.postmultipart
             NotImplementedYet
             // ----- End of unmanaged code area for action  Form_dataYaml.postmultipart
         }
-        val posturl_encoded = posturl_encodedAction { input: (String, BothPostYear, File) =>
+        val posturl_encoded = posturl_encodedAction { input: (String, Option[BigInt], File) =>
             val (name, year, avatar) = input
             // ----- Start of unmanaged code area for action  Form_dataYaml.posturl_encoded
             NotImplementedYet
             // ----- End of unmanaged code area for action  Form_dataYaml.posturl_encoded
         }
-        val postboth = postbothAction { input: (String, BothPostYear, MultipartPostAvatar, File) =>
+        val postboth = postbothAction { input: (String, Option[BigInt], Option[File], File) =>
             val (name, year, avatar, ringtone) = input
             // ----- Start of unmanaged code area for action  Form_dataYaml.postboth
             NotImplementedYet
             // ----- End of unmanaged code area for action  Form_dataYaml.postboth
         }
-
+    
     }
 }

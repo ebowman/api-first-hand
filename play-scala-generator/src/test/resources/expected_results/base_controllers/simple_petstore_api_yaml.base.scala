@@ -86,15 +86,15 @@ trait DashboardBase extends Controller with PlayBodyParsing {
     def MethodLevel200(resultF: Future[Seq[Pet]])(implicit writerP: String => Option[Writeable[Seq[Pet]]]) = resultF map { resultP => (new MethodLevelType[Seq[Pet]] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type methodLevelActionRequestType       = (PetsGetTags, PetsGetLimit)
+    private type methodLevelActionRequestType       = (Option[ArrayWrapper[String]], Option[Int])
     private type methodLevelActionType[T]            = methodLevelActionRequestType => Future[MethodLevelType[T] forSome { type T }]
 
 
     val methodLevelActionConstructor  = Action
 
-def methodLevelAction[T] = (f: methodLevelActionType[T]) => (tags: PetsGetTags, limit: PetsGetLimit) => methodLevelActionConstructor.async { implicit request: Request[AnyContent] =>
+def methodLevelAction[T] = (f: methodLevelActionType[T]) => (tags: Option[ArrayWrapper[String]], limit: Option[Int]) => methodLevelActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidmethodLevelRequest(tags: PetsGetTags, limit: PetsGetLimit): Either[Result, Future[MethodLevelType[_]]] = {
+        def processValidmethodLevelRequest(tags: Option[ArrayWrapper[String]], limit: Option[Int]): Either[Result, Future[MethodLevelType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((tags, limit)))
             
             new PetsGetValidator(tags, limit).errors match {

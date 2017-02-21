@@ -27,8 +27,8 @@ import org.scalatestplus.play.{OneAppPerTest, WsScalaTestClient}
 
 import Generators._
 
-import de.zalando.play.controllers.ArrayWrapper
 import java.time.ZonedDateTime
+import de.zalando.play.controllers.ArrayWrapper
 
 //noinspection ScalaStyle
 class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
@@ -55,7 +55,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
 
 
     "POST /v2/users" should {
-        def testInvalidInput(body: UsersUsernamePutBody): Prop = {
+        def testInvalidInput(body: Option[User]): Prop = {
 
 
             val url = s"""/v2/users"""
@@ -103,7 +103,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(body: UsersUsernamePutBody): Prop = {
+        def testValidInput(body: Option[User]): Prop = {
             
             val parsed_body = parserConstructor("Null").writeValueAsString(body)
             
@@ -157,7 +157,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
         }
         "discard invalid data" in {
             val genInputs = for {
-                    body <- UsersUsernamePutBodyGenerator
+                    body <- OptionUserGenerator
                 } yield body
             val inputs = genInputs suchThat { body =>
                 new UsersPostValidator(body).errors.nonEmpty
@@ -167,7 +167,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
         }
         "do something with valid data" in {
             val genInputs = for {
-                body <- UsersUsernamePutBodyGenerator
+                body <- OptionUserGenerator
             } yield body
             val inputs = genInputs suchThat { body =>
                 new UsersPostValidator(body).errors.isEmpty
@@ -179,7 +179,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
     }
 
     "POST /v2/stores/order" should {
-        def testInvalidInput(body: StoresOrderPostBody): Prop = {
+        def testInvalidInput(body: Option[Order]): Prop = {
 
 
             val url = s"""/v2/stores/order"""
@@ -227,7 +227,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(body: StoresOrderPostBody): Prop = {
+        def testValidInput(body: Option[Order]): Prop = {
             
             val parsed_body = parserConstructor("application/json").writeValueAsString(body)
             
@@ -284,7 +284,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
         }
         "discard invalid data" in {
             val genInputs = for {
-                    body <- StoresOrderPostBodyGenerator
+                    body <- OptionOrderGenerator
                 } yield body
             val inputs = genInputs suchThat { body =>
                 new StoresOrderPostValidator(body).errors.nonEmpty
@@ -294,7 +294,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
         }
         "do something with valid data" in {
             val genInputs = for {
-                body <- StoresOrderPostBodyGenerator
+                body <- OptionOrderGenerator
             } yield body
             val inputs = genInputs suchThat { body =>
                 new StoresOrderPostValidator(body).errors.isEmpty
@@ -306,7 +306,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
     }
 
     "POST /v2/users/createWithArray" should {
-        def testInvalidInput(body: UsersCreateWithListPostBody): Prop = {
+        def testInvalidInput(body: Option[Seq[User]]): Prop = {
 
 
             val url = s"""/v2/users/createWithArray"""
@@ -354,7 +354,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(body: UsersCreateWithListPostBody): Prop = {
+        def testValidInput(body: Option[Seq[User]]): Prop = {
             
             val parsed_body = parserConstructor("Null").writeValueAsString(body)
             
@@ -408,7 +408,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
         }
         "discard invalid data" in {
             val genInputs = for {
-                    body <- UsersCreateWithListPostBodyGenerator
+                    body <- OptionSeqUserGenerator
                 } yield body
             val inputs = genInputs suchThat { body =>
                 new UsersCreateWithArrayPostValidator(body).errors.nonEmpty
@@ -418,7 +418,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
         }
         "do something with valid data" in {
             val genInputs = for {
-                body <- UsersCreateWithListPostBodyGenerator
+                body <- OptionSeqUserGenerator
             } yield body
             val inputs = genInputs suchThat { body =>
                 new UsersCreateWithArrayPostValidator(body).errors.isEmpty
@@ -430,7 +430,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
     }
 
     "GET /v2/users/login" should {
-        def testInvalidInput(input: (OrderStatus, OrderStatus)): Prop = {
+        def testInvalidInput(input: (Option[String], Option[String])): Prop = {
 
             val (username, password) = input
 
@@ -478,7 +478,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (OrderStatus, OrderStatus)): Prop = {
+        def testValidInput(input: (Option[String], Option[String])): Prop = {
             val (username, password) = input
             
             val url = s"""/v2/users/login?${toQuery("username", username)}&${toQuery("password", password)}"""
@@ -534,8 +534,8 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
         }
         "discard invalid data" in {
             val genInputs = for {
-                        username <- OrderStatusGenerator
-                        password <- OrderStatusGenerator
+                        username <- OptionStringGenerator
+                        password <- OptionStringGenerator
                     
                 } yield (username, password)
             val inputs = genInputs suchThat { case (username, password) =>
@@ -546,8 +546,8 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
         }
         "do something with valid data" in {
             val genInputs = for {
-                    username <- OrderStatusGenerator
-                    password <- OrderStatusGenerator
+                    username <- OptionStringGenerator
+                    password <- OptionStringGenerator
                 
             } yield (username, password)
             val inputs = genInputs suchThat { case (username, password) =>
@@ -810,7 +810,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
     }
 
     "POST /v2/users/createWithList" should {
-        def testInvalidInput(body: UsersCreateWithListPostBody): Prop = {
+        def testInvalidInput(body: Option[Seq[User]]): Prop = {
 
 
             val url = s"""/v2/users/createWithList"""
@@ -858,7 +858,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(body: UsersCreateWithListPostBody): Prop = {
+        def testValidInput(body: Option[Seq[User]]): Prop = {
             
             val parsed_body = parserConstructor("Null").writeValueAsString(body)
             
@@ -912,7 +912,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
         }
         "discard invalid data" in {
             val genInputs = for {
-                    body <- UsersCreateWithListPostBodyGenerator
+                    body <- OptionSeqUserGenerator
                 } yield body
             val inputs = genInputs suchThat { body =>
                 new UsersCreateWithListPostValidator(body).errors.nonEmpty
@@ -922,7 +922,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
         }
         "do something with valid data" in {
             val genInputs = for {
-                body <- UsersCreateWithListPostBodyGenerator
+                body <- OptionSeqUserGenerator
             } yield body
             val inputs = genInputs suchThat { body =>
                 new UsersCreateWithListPostValidator(body).errors.isEmpty
@@ -1182,7 +1182,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
     }
 
     "PUT /v2/users/{username}" should {
-        def testInvalidInput(input: (String, UsersUsernamePutBody)): Prop = {
+        def testInvalidInput(input: (String, Option[User])): Prop = {
 
             val (username, body) = input
 
@@ -1231,7 +1231,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, UsersUsernamePutBody)): Prop = {
+        def testValidInput(input: (String, Option[User])): Prop = {
             val (username, body) = input
             
             val parsed_body = parserConstructor("application/json").writeValueAsString(body)
@@ -1290,7 +1290,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
         "discard invalid data" in {
             val genInputs = for {
                         username <- StringGenerator
-                        body <- UsersUsernamePutBodyGenerator
+                        body <- OptionUserGenerator
                     
                 } yield (username, body)
             val inputs = genInputs suchThat { case (username, body) =>
@@ -1302,7 +1302,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
         "do something with valid data" in {
             val genInputs = for {
                     username <- StringGenerator
-                    body <- UsersUsernamePutBodyGenerator
+                    body <- OptionUserGenerator
                 
             } yield (username, body)
             val inputs = genInputs suchThat { case (username, body) =>

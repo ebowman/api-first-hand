@@ -68,7 +68,7 @@ trait EchoApiYamlBase extends Controller with PlayBodyParsing {
     def Post200(resultF: Future[PostResponses200])(implicit writerP: String => Option[Writeable[PostResponses200]]) = resultF map { resultP => (new PostType[PostResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type postActionRequestType       = (PostName, PostName)
+    private type postActionRequestType       = (Option[String], Option[String])
     private type postActionType[T]            = postActionRequestType => Future[PostType[T] forSome { type T }]
 
 
@@ -76,7 +76,7 @@ trait EchoApiYamlBase extends Controller with PlayBodyParsing {
 
 def postAction[T] = (f: postActionType[T]) => postActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidpostRequest(name: PostName, year: PostName): Either[Result, Future[PostType[_]]] = {
+        def processValidpostRequest(name: Option[String], year: Option[String]): Either[Result, Future[PostType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((name, year)))
             
             new PostValidator(name, year).errors match {

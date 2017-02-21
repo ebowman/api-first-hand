@@ -1,8 +1,8 @@
 package form_data
 
 
-    import java.io.File
     import scala.math.BigInt
+    import java.io.File
 
     import de.zalando.play.controllers.PlayPathBindables
 
@@ -11,8 +11,8 @@ package form_data
 package yaml {
 
 
-    case class MultipartPostResponses200(name: BothPostResponses200Name, year: BothPostYear, fileSize: BothPostYear, fileName: BothPostResponses200Name) 
-    case class BothPostResponses200(name: BothPostResponses200Name, year: BothPostYear, avatarSize: BothPostYear, ringtoneSize: BothPostYear) 
+    case class MultipartPostResponses200(name: Option[String], year: Option[BigInt], fileSize: Option[BigInt], fileName: Option[String]) 
+    case class BothPostResponses200(name: Option[String], year: Option[BigInt], avatarSize: Option[BigInt], ringtoneSize: Option[BigInt]) 
 
 
     import play.api.libs.json._
@@ -45,9 +45,6 @@ package yaml {
 //noinspection ScalaStyle
 package object yaml {
 
-    type MultipartPostAvatar = Option[File]
-    type BothPostResponses200Name = Option[String]
-    type BothPostYear = Option[BigInt]
 
 
 import play.api.mvc.{QueryStringBindable, PathBindable}

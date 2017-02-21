@@ -16,16 +16,14 @@ class ParameterDereferencerTest extends FunSpec with MustMatchers {
       testChangeNothing()
     }
 
-    it("should dereference container Opt types") {
-      testContainerType(Opt.apply)
+    it("should change nothing if parameters contain only containers") {
+      testContainer()
     }
-    it("should dereference container CatchAll types") {
-      testContainerType(CatchAll.apply)
-    }
-    it("should dereference  composition OneOf types") {
+
+    it("should dereference composition OneOf types") {
       testCompositionType(OneOf.apply)
     }
-    it("should dereference  composition AllOf types") {
+    it("should dereference composition AllOf types") {
       testCompositionType(OneOf.apply)
     }
     it("should dereference TypeDefs") {
@@ -40,6 +38,18 @@ class ParameterDereferencerTest extends FunSpec with MustMatchers {
     val types = Map[Reference, Type](
       reference1 -> Intgr(Some("Limit for search queries")),
       reference2 -> Intgr(None)
+    )
+    val params: ParameterLookupTable = Map(
+      ParameterRef(reference1) -> Parameter("limit", TypeRef(reference1), None, None, "", encode = false, ParameterPlace.BODY),
+      ParameterRef(reference2) -> Parameter("id", TypeRef(reference2), None, None, "", encode = false, ParameterPlace.BODY)
+    )
+    checkExpectations(types)(params)
+  }
+
+  def testContainer(): Unit = {
+    val types = Map[Reference, Type](
+      reference1 -> Opt(Intgr(Some("Limit for search queries")), Some("some other stuff")),
+      reference2 -> CatchAll(Intgr(None), None)
     )
     val params: ParameterLookupTable = Map(
       ParameterRef(reference1) -> Parameter("limit", TypeRef(reference1), None, None, "", encode = false, ParameterPlace.BODY),

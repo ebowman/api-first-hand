@@ -10,7 +10,7 @@ package heroku.petstore.api
 package yaml {
 
 
-    case class Pet(name: PetName, birthday: PetBirthday) 
+    case class Pet(name: Option[String], birthday: Option[Int]) 
 
 
     import play.api.libs.json._
@@ -18,7 +18,7 @@ package yaml {
     import de.zalando.play.controllers.MissingDefaultReads
     object BodyReads extends MissingDefaultReads {
         implicit val PetReads: Reads[Pet] = (
-            (JsPath \ "name").readNullable[String] and (JsPath \ "birthday").readNullable[Int]
+            (JsPath \ "name").read[Option[String]] and (JsPath \ "birthday").read[Option[Int]]
         )(Pet.apply _)
     }
 
@@ -41,11 +41,7 @@ package yaml {
 //noinspection ScalaStyle
 package object yaml {
 
-    type PetName = Option[String]
-    type PetBirthday = Option[Int]
     type PostResponses200 = Null
-    type PutPet = Option[Pet]
-    type GetResponses200 = Seq[Pet]
 
 
 import play.api.mvc.{QueryStringBindable, PathBindable}

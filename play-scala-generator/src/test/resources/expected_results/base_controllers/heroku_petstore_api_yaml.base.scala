@@ -68,7 +68,7 @@ def getAction[T] = (f: getActionType[T]) => (limit: BigInt) => getActionConstruc
     def Put200(headers: Seq[(String, String)] = Nil) = success(new EmptyReturn(200, headers){})
     
 
-    private type putActionRequestType       = (PutPet)
+    private type putActionRequestType       = (Option[Pet])
     private type putActionType[T]            = putActionRequestType => Future[PutType[T] forSome { type T }]
 
         
@@ -85,9 +85,9 @@ def getAction[T] = (f: getActionType[T]) => (limit: BigInt) => getActionConstruc
 
     val putActionConstructor  = Action
 
-def putAction[T] = (f: putActionType[T]) => putActionConstructor.async(putParser) { implicit request: Request[PutPet] =>
+def putAction[T] = (f: putActionType[T]) => putActionConstructor.async(putParser) { implicit request: Request[Option[Pet]] =>
 
-        def processValidputRequest(pet: PutPet): Either[Result, Future[PutType[_]]] = {
+        def processValidputRequest(pet: Option[Pet]): Either[Result, Future[PutType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((pet)))
             
             new PutValidator(pet).errors match {
@@ -101,7 +101,7 @@ def putAction[T] = (f: putActionType[T]) => putActionConstructor.async(putParser
           
         }
 
-            val pet: PutPet = request.body
+            val pet: Option[Pet] = request.body
             
             
 

@@ -31,16 +31,18 @@ class ScalaGeneratorsTest extends FunSpec with MustMatchers {
       val result = new ScalaGenerator(model).generateGenerators("test.yaml", "test.yaml")
       result mustBeAs
         """package test.yaml
+          |
           |import org.scalacheck.Gen
           |import org.scalacheck.Arbitrary
           |import play.api.libs.json.scalacheck.JsValueGenerators
           |import Arbitrary._
+          |
           |object Generators extends JsValueGenerators {
-          |   def createOptiGenerator = _generate(OptiGenerator)
-          |   def createStriGenerator = _generate(StriGenerator)
-          |   def OptiGenerator = Gen.option(arbitrary[Long])
-          |   def StriGenerator = Gen.option(arbitrary[String])
-          |   def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
+          |    def createOptionLongGenerator = _generate(OptionLongGenerator)
+          |    def createOptionStringGenerator = _generate(OptionStringGenerator)
+          |    def OptionLongGenerator = Gen.option(arbitrary[Long])
+          |    def OptionStringGenerator = Gen.option(arbitrary[String])
+          |    def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
           |}"""
     }
 
@@ -49,18 +51,21 @@ class ScalaGeneratorsTest extends FunSpec with MustMatchers {
         "definitions" / "Option" -> Opt(Lng(None), None),
         "definitions" / "String" -> Opt(Str(None, None), None)
       )
-      new ScalaGenerator(model).generateGenerators("overloaded.yaml", "overloaded.yaml") mustBeAs
+      val result = new ScalaGenerator(model).generateGenerators("overloaded.yaml", "overloaded.yaml")
+      result mustBeAs
         """package overloaded.yaml
+          |
           |import org.scalacheck.Gen
           |import org.scalacheck.Arbitrary
           |import play.api.libs.json.scalacheck.JsValueGenerators
           |import Arbitrary._
+          |
           |object Generators extends JsValueGenerators {
-          |   def createOptionGenerator = _generate(OptionGenerator)
-          |   def createStringGenerator = _generate(StringGenerator)
-          |   def OptionGenerator = Gen.option(arbitrary[Long])
-          |   def StringGenerator = Gen.option(arbitrary[String])
-          |   def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
+          |    def createOptionLongGenerator = _generate(OptionLongGenerator)
+          |    def createOptionStringGenerator = _generate(OptionStringGenerator)
+          |    def OptionLongGenerator = Gen.option(arbitrary[Long])
+          |    def OptionStringGenerator = Gen.option(arbitrary[String])
+          |    def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
           |}"""
     }
 
@@ -70,21 +75,24 @@ class ScalaGeneratorsTest extends FunSpec with MustMatchers {
         "definitions" / "Dbl" -> Arr(Dbl(None), None, "tsv"),
         "definitions" / "Flt" -> Arr(Flt(None), None, "ssv")
       )
-      new ScalaGenerator(model).generateGenerators("test.yaml", "test.yaml") mustBeAs
+      val result = new ScalaGenerator(model).generateGenerators("test.yaml", "test.yaml")
+      result mustBeAs
         """package test.yaml
+          |
           |import org.scalacheck.Gen
           |import org.scalacheck.Arbitrary
           |import play.api.libs.json.scalacheck.JsValueGenerators
           |import Arbitrary._
           |import de.zalando.play.controllers.ArrayWrapper
+          |
           |object Generators extends JsValueGenerators {
-          |   def createIntGenerator = _generate(IntGenerator)
-          |   def createDblGenerator = _generate(DblGenerator)
-          |   def createFltGenerator = _generate(FltGenerator)
-          |   def IntGenerator = _genList(arbitrary[Int], "csv")
-          |   def DblGenerator = _genList(arbitrary[Double], "tsv")
-          |   def FltGenerator = _genList(arbitrary[Float], "ssv")
-          |   def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
+          |    def createArrayWrapperIntGenerator = _generate(ArrayWrapperIntGenerator)
+          |    def createArrayWrapperDoubleGenerator = _generate(ArrayWrapperDoubleGenerator)
+          |    def createArrayWrapperFloatGenerator = _generate(ArrayWrapperFloatGenerator)
+          |    def ArrayWrapperIntGenerator = _genList(arbitrary[Int], "csv")
+          |    def ArrayWrapperDoubleGenerator = _genList(arbitrary[Double], "tsv")
+          |    def ArrayWrapperFloatGenerator = _genList(arbitrary[Float], "ssv")
+          |    def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
           |    def _genList[T](gen: Gen[T], format: String): Gen[ArrayWrapper[T]] = for {
           |        items <- Gen.containerOf[List,T](gen)
           |    } yield ArrayWrapper(format)(items)
@@ -95,7 +103,8 @@ class ScalaGeneratorsTest extends FunSpec with MustMatchers {
       val model = Map(
         "parameters" / "all" -> CatchAll(Bool(None), None)
       )
-      new ScalaGenerator(model).generateGenerators("test.yaml", "test.yaml") mustBeAs
+      val result = new ScalaGenerator(model).generateGenerators("test.yaml", "test.yaml")
+      result mustBeAs
         """package test.yaml
           |import org.scalacheck.Gen
           |import org.scalacheck.Arbitrary
@@ -166,20 +175,21 @@ class ScalaGeneratorsTest extends FunSpec with MustMatchers {
         "definitions" / "Passwords" -> Arr(Password(None), None, "pipes")
       )
       val result = new ScalaGenerator(model).generateGenerators("test.yaml", "test.yaml")
-
       result mustBeAs
         """package test.yaml
+          |
           |import org.scalacheck.Gen
           |import org.scalacheck.Arbitrary
           |import play.api.libs.json.scalacheck.JsValueGenerators
           |import Arbitrary._
           |import de.zalando.play.controllers.ArrayWrapper
+          |
           |object Generators extends JsValueGenerators {
-          |   def createOptionalDataGenerator = _generate(OptionalDataGenerator)
-          |   def createPasswordsGenerator = _generate(PasswordsGenerator)
-          |   def OptionalDataGenerator = Gen.option(PasswordsGenerator)
-          |   def PasswordsGenerator = _genList(arbitrary[String], "pipes")
-          |   def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
+          |    def createOptionArrayWrapperStringGenerator = _generate(OptionArrayWrapperStringGenerator)
+          |    def createArrayWrapperStringGenerator = _generate(ArrayWrapperStringGenerator)
+          |    def OptionArrayWrapperStringGenerator = Gen.option(ArrayWrapperStringGenerator)
+          |    def ArrayWrapperStringGenerator = _genList(arbitrary[String], "pipes")
+          |    def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
           |    def _genList[T](gen: Gen[T], format: String): Gen[ArrayWrapper[T]] = for {
           |        items <- Gen.containerOf[List,T](gen)
           |    } yield ArrayWrapper(format)(items)

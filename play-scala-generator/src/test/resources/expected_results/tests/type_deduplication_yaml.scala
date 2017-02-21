@@ -1048,7 +1048,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
     }
 
     "GET /api/user/{user_id}/plants" should {
-        def testInvalidInput(input: (String, UsersGetLimit, UsersGetLimit)): Prop = {
+        def testInvalidInput(input: (String, Option[BigInt], Option[BigInt])): Prop = {
 
             val (user_id, limit, offset) = input
 
@@ -1094,7 +1094,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, UsersGetLimit, UsersGetLimit)): Prop = {
+        def testValidInput(input: (String, Option[BigInt], Option[BigInt])): Prop = {
             val (user_id, limit, offset) = input
             
             val url = s"""/api/user/${toPath(user_id)}/plants?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
@@ -1149,8 +1149,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         "discard invalid data" in {
             val genInputs = for {
                         user_id <- StringGenerator
-                        limit <- UsersGetLimitGenerator
-                        offset <- UsersGetLimitGenerator
+                        limit <- OptionBigIntGenerator
+                        offset <- OptionBigIntGenerator
                     
                 } yield (user_id, limit, offset)
             val inputs = genInputs suchThat { case (user_id, limit, offset) =>
@@ -1162,8 +1162,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         "do something with valid data" in {
             val genInputs = for {
                     user_id <- StringGenerator
-                    limit <- UsersGetLimitGenerator
-                    offset <- UsersGetLimitGenerator
+                    limit <- OptionBigIntGenerator
+                    offset <- OptionBigIntGenerator
                 
             } yield (user_id, limit, offset)
             val inputs = genInputs suchThat { case (user_id, limit, offset) =>
@@ -1425,7 +1425,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
     }
 
     "GET /api/plants/{plant_id}/waterings" should {
-        def testInvalidInput(input: (String, UsersGetLimit, UsersGetLimit)): Prop = {
+        def testInvalidInput(input: (String, Option[BigInt], Option[BigInt])): Prop = {
 
             val (plant_id, limit, offset) = input
 
@@ -1471,7 +1471,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, UsersGetLimit, UsersGetLimit)): Prop = {
+        def testValidInput(input: (String, Option[BigInt], Option[BigInt])): Prop = {
             val (plant_id, limit, offset) = input
             
             val url = s"""/api/plants/${toPath(plant_id)}/waterings?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
@@ -1526,8 +1526,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         "discard invalid data" in {
             val genInputs = for {
                         plant_id <- StringGenerator
-                        limit <- UsersGetLimitGenerator
-                        offset <- UsersGetLimitGenerator
+                        limit <- OptionBigIntGenerator
+                        offset <- OptionBigIntGenerator
                     
                 } yield (plant_id, limit, offset)
             val inputs = genInputs suchThat { case (plant_id, limit, offset) =>
@@ -1539,8 +1539,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         "do something with valid data" in {
             val genInputs = for {
                     plant_id <- StringGenerator
-                    limit <- UsersGetLimitGenerator
-                    offset <- UsersGetLimitGenerator
+                    limit <- OptionBigIntGenerator
+                    offset <- OptionBigIntGenerator
                 
             } yield (plant_id, limit, offset)
             val inputs = genInputs suchThat { case (plant_id, limit, offset) =>
@@ -1680,7 +1680,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
     }
 
     "GET /api/users" should {
-        def testInvalidInput(input: (UsersGetLimit, UsersGetLimit)): Prop = {
+        def testInvalidInput(input: (Option[BigInt], Option[BigInt])): Prop = {
 
             val (limit, offset) = input
 
@@ -1726,7 +1726,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (UsersGetLimit, UsersGetLimit)): Prop = {
+        def testValidInput(input: (Option[BigInt], Option[BigInt])): Prop = {
             val (limit, offset) = input
             
             val url = s"""/api/users?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
@@ -1779,8 +1779,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         }
         "discard invalid data" in {
             val genInputs = for {
-                        limit <- UsersGetLimitGenerator
-                        offset <- UsersGetLimitGenerator
+                        limit <- OptionBigIntGenerator
+                        offset <- OptionBigIntGenerator
                     
                 } yield (limit, offset)
             val inputs = genInputs suchThat { case (limit, offset) =>
@@ -1791,8 +1791,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         }
         "do something with valid data" in {
             val genInputs = for {
-                    limit <- UsersGetLimitGenerator
-                    offset <- UsersGetLimitGenerator
+                    limit <- OptionBigIntGenerator
+                    offset <- OptionBigIntGenerator
                 
             } yield (limit, offset)
             val inputs = genInputs suchThat { case (limit, offset) =>
@@ -2300,7 +2300,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
     }
 
     "GET /api/plants" should {
-        def testInvalidInput(input: (PlantsGetLimit, PlantsGetOffset)): Prop = {
+        def testInvalidInput(input: (Option[BigInt], Option[BigInt])): Prop = {
 
             val (limit, offset) = input
 
@@ -2346,7 +2346,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (PlantsGetLimit, PlantsGetOffset)): Prop = {
+        def testValidInput(input: (Option[BigInt], Option[BigInt])): Prop = {
             val (limit, offset) = input
             
             val url = s"""/api/plants?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
@@ -2399,8 +2399,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         }
         "discard invalid data" in {
             val genInputs = for {
-                        limit <- PlantsGetLimitGenerator
-                        offset <- PlantsGetOffsetGenerator
+                        limit <- OptionBigIntGenerator
+                        offset <- OptionBigIntGenerator
                     
                 } yield (limit, offset)
             val inputs = genInputs suchThat { case (limit, offset) =>
@@ -2411,8 +2411,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         }
         "do something with valid data" in {
             val genInputs = for {
-                    limit <- PlantsGetLimitGenerator
-                    offset <- PlantsGetOffsetGenerator
+                    limit <- OptionBigIntGenerator
+                    offset <- OptionBigIntGenerator
                 
             } yield (limit, offset)
             val inputs = genInputs suchThat { case (limit, offset) =>
@@ -2916,7 +2916,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
     }
 
     "GET /api/areas" should {
-        def testInvalidInput(input: (UsersGetLimit, UsersGetLimit)): Prop = {
+        def testInvalidInput(input: (Option[BigInt], Option[BigInt])): Prop = {
 
             val (limit, offset) = input
 
@@ -2962,7 +2962,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (UsersGetLimit, UsersGetLimit)): Prop = {
+        def testValidInput(input: (Option[BigInt], Option[BigInt])): Prop = {
             val (limit, offset) = input
             
             val url = s"""/api/areas?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
@@ -3015,8 +3015,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         }
         "discard invalid data" in {
             val genInputs = for {
-                        limit <- UsersGetLimitGenerator
-                        offset <- UsersGetLimitGenerator
+                        limit <- OptionBigIntGenerator
+                        offset <- OptionBigIntGenerator
                     
                 } yield (limit, offset)
             val inputs = genInputs suchThat { case (limit, offset) =>
@@ -3027,8 +3027,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         }
         "do something with valid data" in {
             val genInputs = for {
-                    limit <- UsersGetLimitGenerator
-                    offset <- UsersGetLimitGenerator
+                    limit <- OptionBigIntGenerator
+                    offset <- OptionBigIntGenerator
                 
             } yield (limit, offset)
             val inputs = genInputs suchThat { case (limit, offset) =>
@@ -3772,7 +3772,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
     }
 
     "GET /api/plants/{plant_id}/pictures" should {
-        def testInvalidInput(input: (String, UsersGetLimit, UsersGetLimit)): Prop = {
+        def testInvalidInput(input: (String, Option[BigInt], Option[BigInt])): Prop = {
 
             val (plant_id, limit, offset) = input
 
@@ -3818,7 +3818,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, UsersGetLimit, UsersGetLimit)): Prop = {
+        def testValidInput(input: (String, Option[BigInt], Option[BigInt])): Prop = {
             val (plant_id, limit, offset) = input
             
             val url = s"""/api/plants/${toPath(plant_id)}/pictures?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
@@ -3873,8 +3873,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         "discard invalid data" in {
             val genInputs = for {
                         plant_id <- StringGenerator
-                        limit <- UsersGetLimitGenerator
-                        offset <- UsersGetLimitGenerator
+                        limit <- OptionBigIntGenerator
+                        offset <- OptionBigIntGenerator
                     
                 } yield (plant_id, limit, offset)
             val inputs = genInputs suchThat { case (plant_id, limit, offset) =>
@@ -3886,8 +3886,8 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         "do something with valid data" in {
             val genInputs = for {
                     plant_id <- StringGenerator
-                    limit <- UsersGetLimitGenerator
-                    offset <- UsersGetLimitGenerator
+                    limit <- OptionBigIntGenerator
+                    offset <- OptionBigIntGenerator
                 
             } yield (plant_id, limit, offset)
             val inputs = genInputs suchThat { case (plant_id, limit, offset) =>

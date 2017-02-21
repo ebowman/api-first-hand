@@ -2,7 +2,7 @@ package de.zalando.apifirst.generators
 
 import de.zalando.apifirst.Domain._
 import de.zalando.apifirst.ScalaName._
-import de.zalando.apifirst.StringUtil
+import de.zalando.apifirst.{ StringUtil, TypeAnalyzer }
 import de.zalando.apifirst.naming.Reference
 import de.zalando.apifirst.generators.DenotationNames._
 
@@ -11,7 +11,7 @@ import de.zalando.apifirst.generators.DenotationNames._
  * @since 30.12.2015.
  */
 
-trait ClassesStep extends EnrichmentStep[Type] {
+trait ClassesStep extends EnrichmentStep[Type] with Denotator {
 
   override def steps: Seq[SingleStep] = classes +: super.steps
 
@@ -45,10 +45,11 @@ trait ClassesStep extends EnrichmentStep[Type] {
             if (underlying.isInstanceOf[Opt]) Option(typeNameDenotation(table, underlying.asInstanceOf[Opt].nestedTypes.head.name)) else None
           case _ => None
         }
+
         Map(
           "name" -> escape(f.name.simple),
           "nullable_type_name" -> nullableType,
-          TYPE_NAME -> typeNameDenotation(table, f.tpe.name)
+          TYPE_NAME -> denotate(table, f.tpe)
         )
       },
       "imports" -> t.realImports
@@ -113,7 +114,7 @@ trait TraitsStep extends EnrichmentStep[Type] {
   protected def typeDefProps(k: Reference, t: Type)(table: DenotationTable): Map[String, Any] // FIXME should be defined only once
 }
 
-trait AliasesStep extends EnrichmentStep[Type] {
+trait AliasesStep extends EnrichmentStep[Type] with Denotator with TypeAnalyzer {
 
   override def steps: Seq[SingleStep] = aliases +: super.steps
 
@@ -124,7 +125,7 @@ trait AliasesStep extends EnrichmentStep[Type] {
    */
   protected val aliases: SingleStep = typeDef => table => typeDef match {
     case (ref, t: EnumType) => empty
-    case (ref, t: Container) =>
+    case (ref, t: Container) if !isRecursiveContainerType(t) =>
       Map("aliases" -> aliasProps(ref, t)(table))
 
     case (k, v: Null) =>
@@ -139,9 +140,7 @@ trait AliasesStep extends EnrichmentStep[Type] {
     Map(
       "name" -> typeNameDenotation(table, k),
       "alias" -> v.name.simple,
-      "underlying_type" -> v.nestedTypes.map { t =>
-        abstractTypeNameDenotation(table, t.name).getOrElse(typeNameDenotation(table, t.name))
-      }.mkString("[", ", ", "]"),
+      "underlying_type" -> v.nestedTypes.map { denotateWithAbstract(table, _) }.mkString("[", ", ", "]"),
       "imports" -> v.realImports
     )
   }
@@ -153,5 +152,21 @@ trait AliasesStep extends EnrichmentStep[Type] {
       "imports" -> v.realImports,
       "underlying_type" -> ""
     )
+  }
+}
+
+trait Denotator extends TypeAnalyzer {
+
+  protected def denotate(table: DenotationTable, t: Type): String = t match {
+    case c: Container if isRecursiveContainerType(t) =>
+      s"${typeNameDenotation(table, c.name)}[${denotate(table, c.tpe)}]"
+    case other => typeNameDenotation(table, other.name)
+  }
+
+  protected def denotateWithAbstract(table: DenotationTable, t: Type): String = t match {
+    case c: Container if isRecursiveContainerType(t) =>
+      s"${typeNameDenotation(table, c.name)}[${denotateWithAbstract(table, c.tpe)}]"
+    case other =>
+      abstractTypeNameDenotation(table, other.name).getOrElse(typeNameDenotation(table, other.name))
   }
 }

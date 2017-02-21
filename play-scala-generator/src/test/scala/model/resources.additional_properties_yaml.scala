@@ -18,9 +18,7 @@ object additional_properties_yaml extends WithModel {
 					Field(Reference("⌿definitions⌿KeyedArrays⌿additionalProperties"), TypeRef(Reference("⌿definitions⌿KeyedArrays⌿additionalProperties")))
 			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿definitions⌿KeyedArrays⌿additionalProperties") → 
-		CatchAll(TypeRef(Reference("⌿definitions⌿KeyedArrays⌿additionalProperties⌿CatchAll")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿KeyedArrays⌿additionalProperties⌿CatchAll") → 
-		ArrResult(BInt(TypeMeta(None, List())), TypeMeta(None, List()))
+		CatchAll(ArrResult(BInt(TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List()))
 ) 
  
  def parameters = Map[ParameterRef, Parameter](

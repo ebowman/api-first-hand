@@ -180,7 +180,7 @@ class Expanded_polymorphism_yamlSpec extends WordSpec with OptionValues with WsS
     }
 
     "GET /api/pets" should {
-        def testInvalidInput(input: (PetsGetTags, PetsGetLimit)): Prop = {
+        def testInvalidInput(input: (Option[ArrayWrapper[String]], Option[Int])): Prop = {
 
             val (tags, limit) = input
 
@@ -228,7 +228,7 @@ class Expanded_polymorphism_yamlSpec extends WordSpec with OptionValues with WsS
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (PetsGetTags, PetsGetLimit)): Prop = {
+        def testValidInput(input: (Option[ArrayWrapper[String]], Option[Int])): Prop = {
             val (tags, limit) = input
             
             val url = s"""/api/pets?${toQuery("tags", tags)}&${toQuery("limit", limit)}"""
@@ -283,8 +283,8 @@ class Expanded_polymorphism_yamlSpec extends WordSpec with OptionValues with WsS
         }
         "discard invalid data" in {
             val genInputs = for {
-                        tags <- PetsGetTagsGenerator
-                        limit <- PetsGetLimitGenerator
+                        tags <- OptionArrayWrapperStringGenerator
+                        limit <- OptionIntGenerator
                     
                 } yield (tags, limit)
             val inputs = genInputs suchThat { case (tags, limit) =>
@@ -295,8 +295,8 @@ class Expanded_polymorphism_yamlSpec extends WordSpec with OptionValues with WsS
         }
         "do something with valid data" in {
             val genInputs = for {
-                    tags <- PetsGetTagsGenerator
-                    limit <- PetsGetLimitGenerator
+                    tags <- OptionArrayWrapperStringGenerator
+                    limit <- OptionIntGenerator
                 
             } yield (tags, limit)
             val inputs = genInputs suchThat { case (tags, limit) =>

@@ -6,8 +6,8 @@
 package nested_arrays_yaml {
 
 
-    case class Activity(actions: ActivityActions) 
-    case class Example(messages: ExampleMessages, nestedArrays: ExampleNestedArrays) 
+    case class Activity(actions: Option[String]) 
+    case class Example(nestedArrays: Option[Seq[Seq[Seq[Seq[String]]]]], messages: Option[Seq[Seq[Activity]]]) 
 
 
 }
@@ -17,15 +17,6 @@ package nested_arrays_yaml {
 //noinspection ScalaStyle
 package object nested_arrays_yaml {
 
-    type ExampleNestedArraysOptArrResultArrResult = Seq[ExampleNestedArraysOptArrResultArrResultArrResult]
-    type ExampleNestedArraysOpt = Seq[ExampleNestedArraysOptArrResult]
-    type ExampleMessagesOpt = Seq[ExampleMessagesOptArrResult]
-    type ExampleMessages = Option[ExampleMessagesOpt]
-    type ExampleNestedArraysOptArrResultArrResultArrResult = Seq[String]
-    type ExampleNestedArraysOptArrResult = Seq[ExampleNestedArraysOptArrResultArrResult]
-    type ExampleNestedArrays = Option[ExampleNestedArraysOpt]
-    type ExampleMessagesOptArrResult = Seq[Activity]
-    type ActivityActions = Option[String]
 
 
 

@@ -4,26 +4,24 @@ import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 import play.api.libs.json.scalacheck.JsValueGenerators
 import Arbitrary._
-import java.io.File
 import scala.math.BigInt
+import java.io.File
 
 object Generators extends JsValueGenerators {
     
 
     
-    def createMultipartPostAvatarGenerator = _generate(MultipartPostAvatarGenerator)
-    def createBothPostResponses200NameGenerator = _generate(BothPostResponses200NameGenerator)
+    def createOptionFileGenerator = _generate(OptionFileGenerator)
     def createStringGenerator = _generate(StringGenerator)
     def createFileGenerator = _generate(FileGenerator)
-    def createBothPostYearGenerator = _generate(BothPostYearGenerator)
+    def createOptionBigIntGenerator = _generate(OptionBigIntGenerator)
     
 
     
-    def MultipartPostAvatarGenerator = Gen.option(arbitrary[File])
-    def BothPostResponses200NameGenerator = Gen.option(arbitrary[String])
+    def OptionFileGenerator = Gen.option(arbitrary[File])
     def StringGenerator = arbitrary[String]
     def FileGenerator = arbitrary[File]
-    def BothPostYearGenerator = Gen.option(arbitrary[BigInt])
+    def OptionBigIntGenerator = Gen.option(arbitrary[BigInt])
     
 
     def createMultipartPostResponses200Generator = _generate(MultipartPostResponses200Generator)
@@ -31,16 +29,16 @@ object Generators extends JsValueGenerators {
 
 
     def MultipartPostResponses200Generator = for {
-        name <- BothPostResponses200NameGenerator
-        year <- BothPostYearGenerator
-        fileSize <- BothPostYearGenerator
-        fileName <- BothPostResponses200NameGenerator
+        name <- Gen.option(arbitrary[String])
+        year <- Gen.option(arbitrary[BigInt])
+        fileSize <- Gen.option(arbitrary[BigInt])
+        fileName <- Gen.option(arbitrary[String])
     } yield MultipartPostResponses200(name, year, fileSize, fileName)
     def BothPostResponses200Generator = for {
-        name <- BothPostResponses200NameGenerator
-        year <- BothPostYearGenerator
-        avatarSize <- BothPostYearGenerator
-        ringtoneSize <- BothPostYearGenerator
+        name <- Gen.option(arbitrary[String])
+        year <- Gen.option(arbitrary[BigInt])
+        avatarSize <- Gen.option(arbitrary[BigInt])
+        ringtoneSize <- Gen.option(arbitrary[BigInt])
     } yield BothPostResponses200(name, year, avatarSize, ringtoneSize)
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample

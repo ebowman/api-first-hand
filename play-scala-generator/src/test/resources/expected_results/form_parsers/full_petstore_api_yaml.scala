@@ -6,8 +6,8 @@ import play.api.mvc.MultipartFormData.FilePart
 import play.api.mvc.{AnyContent, Request}
 import de.zalando.play.controllers.PlayBodyParsing
 
-import de.zalando.play.controllers.ArrayWrapper
 import java.time.ZonedDateTime
+import de.zalando.play.controllers.ArrayWrapper
 
 import de.zalando.play.controllers.PlayPathBindables
 

@@ -15,17 +15,13 @@ object nested_options_validation_yaml extends WithModel {
 	Reference("⌿definitions⌿Basic") → 
 		TypeDef(Reference("⌿definitions⌿Basic"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Basic⌿optional"), TypeRef(Reference("⌿definitions⌿Basic⌿optional")))
+					Field(Reference("⌿definitions⌿Basic⌿optional"), Opt(TypeRef(Reference("⌿definitions⌿Basic⌿optional⌿Option⌿optional")), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
-	Reference("⌿definitions⌿Basic⌿optional") → 
-		Opt(TypeRef(Reference("⌿definitions⌿Basic⌿optional⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Basic⌿optional⌿Opt") → 
+	Reference("⌿definitions⌿Basic⌿optional⌿Option⌿optional") → 
 		TypeDef(Reference("⌿definitions⌿Basic⌿optional"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Basic⌿optional⌿nested_optional"), TypeRef(Reference("⌿definitions⌿Basic⌿optional⌿nested_optional")))
+					Field(Reference("⌿definitions⌿Basic⌿optional⌿nested_optional"), Opt(Str(None, TypeMeta(None, List("maxLength(6)", "minLength(5)"))), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
-	Reference("⌿definitions⌿Basic⌿optional⌿nested_optional") → 
-		Opt(Str(None, TypeMeta(None, List("maxLength(6)", "minLength(5)"))), TypeMeta(None, List())),
 	Reference("⌿paths⌿/⌿get⌿responses⌿200") → 
 		Null(TypeMeta(None, List()))
 ) 

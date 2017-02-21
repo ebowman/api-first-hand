@@ -18,8 +18,7 @@ package additional_properties_yaml {
 //noinspection ScalaStyle
 package object additional_properties_yaml {
 
-    type KeyedArraysAdditionalProperties = Map[String, KeyedArraysAdditionalPropertiesCatchAll]
-    type KeyedArraysAdditionalPropertiesCatchAll = Seq[BigInt]
+    type KeyedArraysAdditionalProperties = Map[String, Seq[BigInt]]
 
 
 

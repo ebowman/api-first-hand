@@ -155,7 +155,7 @@ object StringUtil {
 case class ScalaName(ref: Reference) {
   import ScalaName._
   import StringUtil._
-  val parts = ref.parts.flatMap(_.split("/").filter(_.nonEmpty)) match {
+  val parts: List[String] = ref.parts.flatMap(_.split("/").filter(_.nonEmpty)) match {
     case Nil =>
       throw new IllegalArgumentException(s"At least one part required to construct a name, but got $ref")
     case single :: Nil => "" :: removeVars(single) :: Nil
@@ -172,6 +172,7 @@ case class ScalaName(ref: Reference) {
       if (prefix.trim.isEmpty) (withSuffix, capitalize _) else (prefix :: withSuffix, camelize _)
     escape(caseTransformer("/", withPrefix.mkString("/")))
   }
+  def typeLongAlias: String = parts.reverse.mkString
 
   def methodName: String = escape(camelize("/", parts.last))
   def names: (String, String, String) = (packageName, className, methodName)

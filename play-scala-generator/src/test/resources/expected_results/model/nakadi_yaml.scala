@@ -10,25 +10,25 @@ package nakadi
 package yaml {
 
 
-    case class EventMetaDataNameClash(root_id: EventMetaDataParent_id, parent_id: EventMetaDataParent_id, scopes: EventMetaDataScopes, id: EventMetaDataParent_id, created: EventEvent_type) 
+    case class EventMetaData(root_id: Option[UUID], parent_id: Option[UUID], scopes: Option[Seq[String]], id: Option[UUID], created: Option[String]) 
     case class Topic(name: String) 
-    case class Metrics(name: EventEvent_type) 
-    case class Event(event_type: EventEvent_type, partitioning_key: EventEvent_type, metadata: EventMetadata) 
+    case class Metrics(name: Option[String]) 
+    case class Event(event_type: Option[String], partitioning_key: Option[String], metadata: Option[EventMetaData]) 
     case class Cursor(partition: String, offset: String) 
     case class Problem(detail: String) 
     case class TopicPartition(partition: String, oldest_available_offset: String, newest_available_offset: String) 
-    case class SimpleStreamEvent(cursor: Cursor, events: SimpleStreamEventEvents) 
+    case class SimpleStreamEvent(cursor: Cursor, events: Option[Seq[Event]]) 
 
 
     import play.api.libs.json._
     import play.api.libs.functional.syntax._
     import de.zalando.play.controllers.MissingDefaultReads
     object BodyReads extends MissingDefaultReads {
-        implicit val EventMetaDataNameClashReads: Reads[EventMetaDataNameClash] = (
-            (JsPath \ "root_id").readNullable[UUID] and (JsPath \ "parent_id").readNullable[UUID] and (JsPath \ "scopes").readNullable[EventMetaDataScopesOpt] and (JsPath \ "id").readNullable[UUID] and (JsPath \ "created").readNullable[String]
-        )(EventMetaDataNameClash.apply _)
+        implicit val EventMetaDataReads: Reads[EventMetaData] = (
+            (JsPath \ "root_id").read[Option[UUID]] and (JsPath \ "parent_id").read[Option[UUID]] and (JsPath \ "scopes").read[Option[Seq[String]]] and (JsPath \ "id").read[Option[UUID]] and (JsPath \ "created").read[Option[String]]
+        )(EventMetaData.apply _)
         implicit val EventReads: Reads[Event] = (
-            (JsPath \ "event_type").readNullable[String] and (JsPath \ "partitioning_key").readNullable[String] and (JsPath \ "metadata").readNullable[EventMetaDataNameClash]
+            (JsPath \ "event_type").read[Option[String]] and (JsPath \ "partitioning_key").read[Option[String]] and (JsPath \ "metadata").read[Option[EventMetaData]]
         )(Event.apply _)
     }
 
@@ -50,8 +50,8 @@ package yaml {
             "newest_available_offset" -> ss.newest_available_offset
           )
         }
-    implicit val EventMetaDataNameClashWrites: Writes[EventMetaDataNameClash] = new Writes[EventMetaDataNameClash] {
-        def writes(ss: EventMetaDataNameClash) =
+    implicit val EventMetaDataWrites: Writes[EventMetaData] = new Writes[EventMetaData] {
+        def writes(ss: EventMetaData) =
           Json.obj(
             "root_id" -> ss.root_id, 
             "parent_id" -> ss.parent_id, 
@@ -102,18 +102,7 @@ package yaml {
 //noinspection ScalaStyle
 package object yaml {
 
-    type TopicsTopicEventsGetStream_timeout = Option[Int]
-    type EventEvent_type = Option[String]
-    type SimpleStreamEventEventsOpt = Seq[Event]
-    type EventMetaDataParent_id = Option[UUID]
-    type EventMetadata = Option[EventMetaDataNameClash]
     type TopicsTopicEventsPostResponses201 = Null
-    type EventMetaDataScopesOpt = Seq[String]
-    type TopicsTopicPartitionsGetResponses200 = Seq[TopicPartition]
-    type TopicsTopicEventsBatchPostEvent = Option[Event]
-    type SimpleStreamEventEvents = Option[SimpleStreamEventEventsOpt]
-    type EventMetaDataScopes = Option[EventMetaDataScopesOpt]
-    type TopicsGetResponses200 = Seq[Topic]
 
 
 import play.api.mvc.{QueryStringBindable, PathBindable}

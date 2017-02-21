@@ -8,7 +8,7 @@
 package echo {
 
 
-    case class PostResponses200(name: PostName, year: PostName) 
+    case class PostResponses200(name: Option[String], year: Option[String]) 
 
 
     import play.api.libs.json._
@@ -31,7 +31,6 @@ package echo {
 package object echo {
 
     type Test_pathIdGetResponses200 = Null
-    type PostName = Option[String]
 
 
 import play.api.mvc.{QueryStringBindable, PathBindable}

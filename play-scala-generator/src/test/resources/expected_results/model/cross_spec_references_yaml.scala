@@ -8,15 +8,15 @@ package cross_spec_references
 package yaml {
 
 
-    case class PetCategoryOpt(id: PetId, name: MetaCopyright) 
-    case class ModelSchemaRootDataOpt(name: String, sizeRegister: String, brand: String, partnerArticleModelId: BigInt, description: MetaCopyright, ageGroups: ModelSchemaAgeGroups, keywords: ModelSchemaKeywords, lengthRegister: ModelSchemaLengthRegister, silhouetteId: ModelSchemaSilhouetteId, specialDescriptions: ModelSchemaSpecialDescriptions, articleModelAttributes: ModelSchemaSpecialDescriptions) 
-    case class ModelSchemaRootMetaOpt(copyright: MetaCopyright) 
-    case class ModelSchemaRoot(data: ModelSchemaRootData, meta: ModelSchemaRootMeta, links: ModelSchemaRootLinks) 
-    case class Pet(name: String, tags: PetTags, photoUrls: PetPhotoUrls, id: PetId, status: MetaCopyright, category: PetCategory) 
-    case class ModelSchemaRootLinksOpt(self: MetaCopyright, related: MetaCopyright) 
+    case class ModelSchemaRootMetaOptionMeta(copyright: Option[String]) 
+    case class PetCategoryOptionCategory(id: Option[Long], name: Option[String]) 
+    case class ModelSchemaRoot(data: Option[ModelSchemaRootDataOptionModelSchema], meta: Option[ModelSchemaRootMetaOptionMeta], links: Option[ModelSchemaRootLinksOptionLinks]) 
+    case class ModelSchemaRootLinksOptionLinks(self: Option[String], related: Option[String]) 
+    case class Pet(name: String, photoUrls: Seq[String], id: Option[Long], status: Option[String], tags: Option[Seq[PetCategoryOptionCategory]], category: Option[PetCategoryOptionCategory]) 
+    case class ModelSchemaRootDataOptionModelSchema(name: String, description: Option[String], sizeRegister: String, brand: String, partnerArticleModelId: BigInt, keywords: Option[String], lengthRegister: Option[String], specialDescriptions: Option[Seq[String]], articleModelAttributes: Option[Seq[String]], silhouetteId: ModelSchemaSilhouetteId, ageGroups: Seq[ModelSchemaAgeGroupsSeqEnum]) 
 
     case class ModelSchemaSilhouetteId(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
-    case class ModelSchemaAgeGroupsArrResult(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
+    case class ModelSchemaAgeGroupsSeqEnum(override val value: String) extends AnyVal with de.zalando.play.controllers.StringAnyVal
 
 }
 
@@ -25,19 +25,6 @@ package yaml {
 //noinspection ScalaStyle
 package object yaml {
 
-    type MetaCopyright = Option[String]
-    type ModelSchemaKeywords = Option[String]
-    type ModelSchemaSpecialDescriptions = Option[PetPhotoUrls]
-    type ModelSchemaRootData = Option[ModelSchemaRootDataOpt]
-    type PetId = Option[Long]
-    type ModelSchemaRootLinks = Option[ModelSchemaRootLinksOpt]
-    type PetTags = Option[PetTagsOpt]
-    type PetPhotoUrls = Seq[String]
-    type ModelSchemaLengthRegister = Option[String]
-    type ModelSchemaAgeGroups = Seq[ModelSchemaAgeGroupsArrResult]
-    type PetCategory = Option[PetCategoryOpt]
-    type PetTagsOpt = Seq[PetCategoryOpt]
-    type ModelSchemaRootMeta = Option[ModelSchemaRootMetaOpt]
 
     object ModelSchemaSilhouetteId {
         
@@ -233,14 +220,14 @@ package object yaml {
                 throw new IllegalArgumentException("Couldn't parse parameter " + other)
         }
     }
-    object ModelSchemaAgeGroupsArrResult {
+    object ModelSchemaAgeGroupsSeqEnum {
         
-        val Baby = new ModelSchemaAgeGroupsArrResult("baby")
-        val Kid = new ModelSchemaAgeGroupsArrResult("kid")
-        val Teen = new ModelSchemaAgeGroupsArrResult("teen")
-        val Adult = new ModelSchemaAgeGroupsArrResult("adult")
+        val Baby = new ModelSchemaAgeGroupsSeqEnum("baby")
+        val Kid = new ModelSchemaAgeGroupsSeqEnum("kid")
+        val Teen = new ModelSchemaAgeGroupsSeqEnum("teen")
+        val Adult = new ModelSchemaAgeGroupsSeqEnum("adult")
 
-        implicit def stringToModelSchemaAgeGroupsArrResult: String => ModelSchemaAgeGroupsArrResult = {
+        implicit def stringToModelSchemaAgeGroupsSeqEnum: String => ModelSchemaAgeGroupsSeqEnum = {
             case "baby" => Baby
             case "kid" => Kid
             case "teen" => Teen

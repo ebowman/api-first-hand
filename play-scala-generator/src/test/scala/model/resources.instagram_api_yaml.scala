@@ -15,200 +15,192 @@ object instagram_api_yaml extends WithModel {
 	Reference("⌿definitions⌿User") → 
 		TypeDef(Reference("⌿definitions⌿User"), 
 			Seq(
-					Field(Reference("⌿definitions⌿User⌿website"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿User⌿profile_picture"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿User⌿username"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿User⌿full_name"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿User⌿bio"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿User⌿id"), TypeRef(Reference("⌿definitions⌿Media⌿id"))),
-					Field(Reference("⌿definitions⌿User⌿counts"), TypeRef(Reference("⌿definitions⌿User⌿counts")))
+					Field(Reference("⌿definitions⌿User⌿website"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿User⌿profile_picture"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿User⌿username"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿User⌿full_name"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿User⌿bio"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿User⌿id"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿User⌿counts"), Opt(TypeRef(Reference("⌿definitions⌿User⌿counts⌿Option⌿counts")), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 7"), List())),
 	Reference("⌿definitions⌿Image") → 
 		TypeDef(Reference("⌿definitions⌿Image"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Image⌿width"), TypeRef(Reference("⌿definitions⌿Media⌿id"))),
-					Field(Reference("⌿definitions⌿Image⌿height"), TypeRef(Reference("⌿definitions⌿Media⌿id"))),
-					Field(Reference("⌿definitions⌿Image⌿url"), TypeRef(Reference("⌿definitions⌿Media⌿filter")))
+					Field(Reference("⌿definitions⌿Image⌿width"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Image⌿height"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Image⌿url"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 3"), List())),
 	Reference("⌿definitions⌿Tag") → 
 		TypeDef(Reference("⌿definitions⌿Tag"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Tag⌿media_count"), TypeRef(Reference("⌿definitions⌿Media⌿id"))),
-					Field(Reference("⌿definitions⌿Tag⌿name"), TypeRef(Reference("⌿definitions⌿Media⌿filter")))
+					Field(Reference("⌿definitions⌿Tag⌿media_count"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Tag⌿name"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
 	Reference("⌿definitions⌿Comment") → 
 		TypeDef(Reference("⌿definitions⌿Comment"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Comment⌿id"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿Comment⌿created_time"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿Comment⌿text"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿Comment⌿from"), TypeRef(Reference("⌿definitions⌿Comment⌿from")))
+					Field(Reference("⌿definitions⌿Comment⌿id"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Comment⌿created_time"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Comment⌿text"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Comment⌿from"), Opt(TypeRef(Reference("⌿definitions⌿MiniProfile")), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 4"), List())),
 	Reference("⌿definitions⌿Media") → 
 		TypeDef(Reference("⌿definitions⌿Media"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Media⌿location"), TypeRef(Reference("⌿definitions⌿Media⌿location"))),
-					Field(Reference("⌿definitions⌿Media⌿created_time"), TypeRef(Reference("⌿definitions⌿Media⌿id"))),
-					Field(Reference("⌿definitions⌿Media⌿comments:"), TypeRef(Reference("⌿definitions⌿Media⌿comments:"))),
-					Field(Reference("⌿definitions⌿Media⌿tags"), TypeRef(Reference("⌿definitions⌿Media⌿tags"))),
-					Field(Reference("⌿definitions⌿Media⌿users_in_photo"), TypeRef(Reference("⌿definitions⌿Media⌿users_in_photo"))),
-					Field(Reference("⌿definitions⌿Media⌿filter"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿Media⌿likes"), TypeRef(Reference("⌿definitions⌿Media⌿likes"))),
-					Field(Reference("⌿definitions⌿Media⌿id"), TypeRef(Reference("⌿definitions⌿Media⌿id"))),
-					Field(Reference("⌿definitions⌿Media⌿videos"), TypeRef(Reference("⌿definitions⌿Media⌿videos"))),
-					Field(Reference("⌿definitions⌿Media⌿type"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿Media⌿images"), TypeRef(Reference("⌿definitions⌿Media⌿images"))),
-					Field(Reference("⌿definitions⌿Media⌿user"), TypeRef(Reference("⌿definitions⌿Comment⌿from")))
+					Field(Reference("⌿definitions⌿Media⌿created_time"), Opt(BInt(TypeMeta(Some("Epoc time (ms)"), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿filter"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿id"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿type"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿location"), Opt(TypeRef(Reference("⌿definitions⌿Location")), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿comments:"), Opt(TypeRef(Reference("⌿definitions⌿Media⌿comments:⌿Option⌿comments:")), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿tags"), Opt(ArrResult(TypeRef(Reference("⌿definitions⌿Tag")), TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿users_in_photo"), Opt(ArrResult(TypeRef(Reference("⌿definitions⌿MiniProfile")), TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿likes"), Opt(TypeRef(Reference("⌿definitions⌿Media⌿likes⌿Option⌿likes")), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿videos"), Opt(TypeRef(Reference("⌿definitions⌿Media⌿videos⌿Option⌿videos")), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿images"), Opt(TypeRef(Reference("⌿definitions⌿Media⌿images⌿Option⌿images")), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿user"), Opt(TypeRef(Reference("⌿definitions⌿MiniProfile")), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 12"), List())),
 	Reference("⌿definitions⌿Like") → 
 		TypeDef(Reference("⌿definitions⌿Like"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Like⌿first_name"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿Like⌿id"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿Like⌿last_name"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿Like⌿type"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿Like⌿user_name"), TypeRef(Reference("⌿definitions⌿Media⌿filter")))
+					Field(Reference("⌿definitions⌿Like⌿first_name"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Like⌿id"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Like⌿last_name"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Like⌿type"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Like⌿user_name"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 5"), List())),
 	Reference("⌿definitions⌿Location") → 
 		TypeDef(Reference("⌿definitions⌿Location"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Location⌿id"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿Location⌿name"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿Location⌿latitude"), TypeRef(Reference("⌿definitions⌿Location⌿latitude"))),
-					Field(Reference("⌿definitions⌿Location⌿longitude"), TypeRef(Reference("⌿definitions⌿Location⌿latitude")))
+					Field(Reference("⌿definitions⌿Location⌿id"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Location⌿name"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Location⌿latitude"), Opt(BDcml(TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Location⌿longitude"), Opt(BDcml(TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 4"), List())),
 	Reference("⌿definitions⌿MiniProfile") → 
 		TypeDef(Reference("⌿definitions⌿MiniProfile"), 
 			Seq(
-					Field(Reference("⌿definitions⌿MiniProfile⌿user_name"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿MiniProfile⌿full_name"), TypeRef(Reference("⌿definitions⌿Media⌿filter"))),
-					Field(Reference("⌿definitions⌿MiniProfile⌿id"), TypeRef(Reference("⌿definitions⌿Media⌿id"))),
-					Field(Reference("⌿definitions⌿MiniProfile⌿profile_picture"), TypeRef(Reference("⌿definitions⌿Media⌿filter")))
+					Field(Reference("⌿definitions⌿MiniProfile⌿user_name"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿MiniProfile⌿full_name"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿MiniProfile⌿id"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿MiniProfile⌿profile_picture"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 4"), List())),
-	Reference("⌿definitions⌿Media⌿filter") → 
-		Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Media⌿tags") → 
-		Opt(TypeRef(Reference("⌿definitions⌿Media⌿tags⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Media⌿id") → 
-		Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Media⌿images") → 
-		Opt(TypeRef(Reference("⌿definitions⌿Media⌿images⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Media⌿likes") → 
-		Opt(TypeRef(Reference("⌿definitions⌿Media⌿likes⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Media⌿comments:") → 
-		Opt(TypeRef(Reference("⌿definitions⌿Media⌿comments:⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Comment⌿from") → 
-		Opt(TypeRef(Reference("⌿definitions⌿MiniProfile")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Media⌿videos") → 
-		Opt(TypeRef(Reference("⌿definitions⌿Media⌿videos⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Media⌿location") → 
-		Opt(TypeRef(Reference("⌿definitions⌿Location")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Media⌿users_in_photo") → 
-		Opt(TypeRef(Reference("⌿definitions⌿Media⌿users_in_photo⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Location⌿latitude") → 
-		Opt(BDcml(TypeMeta(None, List())), TypeMeta(None, List())),
 	Reference("⌿parameters⌿user-id-param⌿user-id") → 
 		BDcml(TypeMeta(None, List())),
-	Reference("⌿definitions⌿User⌿counts") → 
-		Opt(TypeRef(Reference("⌿definitions⌿User⌿counts⌿Opt")), TypeMeta(None, List())),
 	Reference("⌿parameters⌿tag-name⌿tag-name") → 
 		Str(None, TypeMeta(None, List())),
+	Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count") → 
+		Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List())),
 	Reference("⌿paths⌿/locations/{location-id}⌿⌿location-id") → 
 		BInt(TypeMeta(None, List())),
-	Reference("⌿definitions⌿Media⌿videos⌿low_resolution") → 
-		Opt(TypeRef(Reference("⌿definitions⌿Image")), TypeMeta(None, List())),
+	Reference("⌿paths⌿/locations/search⌿get⌿lng") → 
+		Opt(BDcml(TypeMeta(None, List())), TypeMeta(None, List())),
+	Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿max_id") → 
+		Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())),
 	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action") → 
-		Opt(TypeRef(Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Media⌿tags⌿Opt") → 
-		ArrResult(TypeRef(Reference("⌿definitions⌿Tag")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿User⌿counts⌿Opt") → 
-		TypeDef(Reference("⌿definitions⌿User⌿counts"), 
-			Seq(
-					Field(Reference("⌿definitions⌿User⌿counts⌿media"), TypeRef(Reference("⌿definitions⌿Media⌿id"))),
-					Field(Reference("⌿definitions⌿User⌿counts⌿follows"), TypeRef(Reference("⌿definitions⌿Media⌿id"))),
-					Field(Reference("⌿definitions⌿User⌿counts⌿follwed_by"), TypeRef(Reference("⌿definitions⌿Media⌿id")))
-			), TypeMeta(Some("Named types: 3"), List())),
+		Opt(TypeRef(Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Option⌿Enum")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/media/search⌿get⌿DISTANCE") → 
 		BInt(TypeMeta(None, List("""max(BigInt("5000"), false)"""))),
-	Reference("⌿definitions⌿Media⌿users_in_photo⌿Opt") → 
-		ArrResult(TypeRef(Reference("⌿definitions⌿MiniProfile")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Media⌿comments:⌿Opt") → 
-		TypeDef(Reference("⌿definitions⌿Media⌿comments:"), 
+	Reference("⌿definitions⌿User⌿counts⌿Option⌿counts") → 
+		TypeDef(Reference("⌿definitions⌿User⌿counts"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Media⌿comments:⌿count"), TypeRef(Reference("⌿definitions⌿Media⌿id"))),
-					Field(Reference("⌿definitions⌿Media⌿comments:⌿data"), TypeRef(Reference("⌿definitions⌿Media⌿comments:⌿data")))
-			), TypeMeta(Some("Named types: 2"), List())),
-	Reference("⌿definitions⌿Media⌿videos⌿Opt") → 
-		TypeDef(Reference("⌿definitions⌿Media⌿videos"), 
-			Seq(
-					Field(Reference("⌿definitions⌿Media⌿videos⌿low_resolution"), TypeRef(Reference("⌿definitions⌿Media⌿videos⌿low_resolution"))),
-					Field(Reference("⌿definitions⌿Media⌿videos⌿standard_resolution"), TypeRef(Reference("⌿definitions⌿Media⌿videos⌿low_resolution")))
-			), TypeMeta(Some("Named types: 2"), List())),
-	Reference("⌿definitions⌿Media⌿comments:⌿data") → 
-		Opt(TypeRef(Reference("⌿definitions⌿Media⌿comments:⌿data⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Media⌿likes⌿Opt") → 
-		TypeDef(Reference("⌿definitions⌿Media⌿likes"), 
-			Seq(
-					Field(Reference("⌿definitions⌿Media⌿likes⌿count"), TypeRef(Reference("⌿definitions⌿Media⌿id"))),
-					Field(Reference("⌿definitions⌿Media⌿likes⌿data"), TypeRef(Reference("⌿definitions⌿Media⌿users_in_photo")))
-			), TypeMeta(Some("Named types: 2"), List())),
-	Reference("⌿definitions⌿Media⌿images⌿Opt") → 
-		TypeDef(Reference("⌿definitions⌿Media⌿images"), 
-			Seq(
-					Field(Reference("⌿definitions⌿Media⌿images⌿low_resolution"), TypeRef(Reference("⌿definitions⌿Media⌿videos⌿low_resolution"))),
-					Field(Reference("⌿definitions⌿Media⌿images⌿thumbnail"), TypeRef(Reference("⌿definitions⌿Media⌿videos⌿low_resolution"))),
-					Field(Reference("⌿definitions⌿Media⌿images⌿standard_resolution"), TypeRef(Reference("⌿definitions⌿Media⌿videos⌿low_resolution")))
+					Field(Reference("⌿definitions⌿User⌿counts⌿media"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿User⌿counts⌿follows"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿User⌿counts⌿follwed_by"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 3"), List())),
 	Reference("⌿paths⌿/users/self/feed⌿get⌿responses⌿200") → 
 		TypeDef(Reference("⌿paths⌿/users/self/feed⌿get⌿responses⌿200"), 
 			Seq(
-					Field(Reference("⌿paths⌿/users/self/feed⌿get⌿responses⌿200⌿data"), TypeRef(Reference("⌿paths⌿/users/self/feed⌿get⌿responses⌿200⌿data")))
+					Field(Reference("⌿paths⌿/users/self/feed⌿get⌿responses⌿200⌿data"), Opt(ArrResult(TypeRef(Reference("⌿definitions⌿Media")), TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200") → 
 		TypeDef(Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200"), 
 			Seq(
-					Field(Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200⌿meta"), TypeRef(Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200⌿meta"))),
-					Field(Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200⌿data"), TypeRef(Reference("⌿definitions⌿Media⌿filter")))
+					Field(Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200⌿data"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200⌿meta"), Opt(TypeRef(Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200⌿meta⌿Option⌿meta")), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
 	Reference("⌿paths⌿/users/{user-id}/follows⌿get⌿responses⌿200") → 
 		TypeDef(Reference("⌿paths⌿/users/{user-id}/follows⌿get⌿responses⌿200"), 
 			Seq(
-					Field(Reference("⌿paths⌿/users/{user-id}/follows⌿get⌿responses⌿200⌿data"), TypeRef(Reference("⌿definitions⌿Media⌿users_in_photo")))
+					Field(Reference("⌿paths⌿/users/{user-id}/follows⌿get⌿responses⌿200⌿data"), Opt(ArrResult(TypeRef(Reference("⌿definitions⌿MiniProfile")), TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿paths⌿/tags/{tag-name}/media/recent⌿get⌿responses⌿200") → 
 		TypeDef(Reference("⌿paths⌿/tags/{tag-name}/media/recent⌿get⌿responses⌿200"), 
 			Seq(
-					Field(Reference("⌿paths⌿/tags/{tag-name}/media/recent⌿get⌿responses⌿200⌿data"), TypeRef(Reference("⌿definitions⌿Media⌿tags")))
+					Field(Reference("⌿paths⌿/tags/{tag-name}/media/recent⌿get⌿responses⌿200⌿data"), Opt(ArrResult(TypeRef(Reference("⌿definitions⌿Tag")), TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿paths⌿/users/self/requested-by⌿get⌿responses⌿200") → 
 		TypeDef(Reference("⌿paths⌿/users/self/requested-by⌿get⌿responses⌿200"), 
 			Seq(
-					Field(Reference("⌿paths⌿/users/self/requested-by⌿get⌿responses⌿200⌿meta"), TypeRef(Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200⌿meta"))),
-					Field(Reference("⌿paths⌿/users/self/requested-by⌿get⌿responses⌿200⌿data"), TypeRef(Reference("⌿definitions⌿Media⌿users_in_photo")))
+					Field(Reference("⌿paths⌿/users/self/requested-by⌿get⌿responses⌿200⌿meta"), Opt(TypeRef(Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200⌿meta⌿Option⌿meta")), TypeMeta(None, List()))),
+					Field(Reference("⌿paths⌿/users/self/requested-by⌿get⌿responses⌿200⌿data"), Opt(ArrResult(TypeRef(Reference("⌿definitions⌿MiniProfile")), TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
 	Reference("⌿paths⌿/locations/{location-id}⌿get⌿responses⌿200") → 
 		TypeDef(Reference("⌿paths⌿/locations/{location-id}⌿get⌿responses⌿200"), 
 			Seq(
-					Field(Reference("⌿paths⌿/locations/{location-id}⌿get⌿responses⌿200⌿data"), TypeRef(Reference("⌿definitions⌿Media⌿location")))
+					Field(Reference("⌿paths⌿/locations/{location-id}⌿get⌿responses⌿200⌿data"), Opt(TypeRef(Reference("⌿definitions⌿Location")), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿paths⌿/media/{media-id}/likes⌿get⌿responses⌿200") → 
 		TypeDef(Reference("⌿paths⌿/media/{media-id}/likes⌿get⌿responses⌿200"), 
 			Seq(
-					Field(Reference("⌿paths⌿/media/{media-id}/likes⌿get⌿responses⌿200⌿meta"), TypeRef(Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200⌿meta"))),
-					Field(Reference("⌿paths⌿/media/{media-id}/likes⌿get⌿responses⌿200⌿data"), TypeRef(Reference("⌿paths⌿/media/{media-id}/likes⌿get⌿responses⌿200⌿data")))
+					Field(Reference("⌿paths⌿/media/{media-id}/likes⌿get⌿responses⌿200⌿meta"), Opt(TypeRef(Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200⌿meta⌿Option⌿meta")), TypeMeta(None, List()))),
+					Field(Reference("⌿paths⌿/media/{media-id}/likes⌿get⌿responses⌿200⌿data"), Opt(ArrResult(TypeRef(Reference("⌿definitions⌿Like")), TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
 	Reference("⌿paths⌿/media/search⌿get⌿responses⌿200") → 
 		TypeDef(Reference("⌿paths⌿/media/search⌿get⌿responses⌿200"), 
 			Seq(
-					Field(Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data"), TypeRef(Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data")))
+					Field(Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data"), Opt(ArrResult(TypeRef(Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data⌿Option⌿Seq⌿data")), TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200") → 
 		TypeDef(Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200"), 
 			Seq(
-					Field(Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200⌿meta"), TypeRef(Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200⌿meta"))),
-					Field(Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200⌿data"), TypeRef(Reference("⌿definitions⌿Media⌿tags")))
+					Field(Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200⌿meta"), Opt(TypeRef(Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200⌿meta⌿Option⌿meta")), TypeMeta(None, List()))),
+					Field(Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200⌿data"), Opt(ArrResult(TypeRef(Reference("⌿definitions⌿Tag")), TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
-	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Opt") → 
+	Reference("⌿paths⌿/users/{user-id}⌿get⌿responses⌿200") → 
+		TypeDef(Reference("⌿paths⌿/users/{user-id}⌿get⌿responses⌿200"), 
+			Seq(
+					Field(Reference("⌿paths⌿/users/{user-id}⌿get⌿responses⌿200⌿data"), Opt(TypeRef(Reference("⌿definitions⌿User")), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 1"), List())),
+	Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200") → 
+		TypeDef(Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200"), 
+			Seq(
+					Field(Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200⌿meta"), Opt(TypeRef(Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200⌿meta⌿Option⌿meta")), TypeMeta(None, List()))),
+					Field(Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200⌿data"), Opt(ArrResult(TypeRef(Reference("⌿definitions⌿Comment")), TypeMeta(None, List())), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 2"), List())),
+	Reference("⌿definitions⌿Media⌿likes⌿Option⌿likes") → 
+		TypeDef(Reference("⌿definitions⌿Media⌿likes"), 
+			Seq(
+					Field(Reference("⌿definitions⌿Media⌿likes⌿count"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿likes⌿data"), Opt(ArrResult(TypeRef(Reference("⌿definitions⌿MiniProfile")), TypeMeta(None, List())), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 2"), List())),
+	Reference("⌿definitions⌿Media⌿comments:⌿Option⌿comments:") → 
+		TypeDef(Reference("⌿definitions⌿Media⌿comments:"), 
+			Seq(
+					Field(Reference("⌿definitions⌿Media⌿comments:⌿count"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿comments:⌿data"), Opt(ArrResult(TypeRef(Reference("⌿definitions⌿Comment")), TypeMeta(None, List())), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 2"), List())),
+	Reference("⌿paths⌿/geographies/{geo-id}/media/recent⌿get⌿responses⌿200") → 
+		Null(TypeMeta(None, List())),
+	Reference("⌿definitions⌿Media⌿videos⌿Option⌿videos") → 
+		TypeDef(Reference("⌿definitions⌿Media⌿videos"), 
+			Seq(
+					Field(Reference("⌿definitions⌿Media⌿videos⌿low_resolution"), Opt(TypeRef(Reference("⌿definitions⌿Image")), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿videos⌿standard_resolution"), Opt(TypeRef(Reference("⌿definitions⌿Image")), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 2"), List())),
+	Reference("⌿definitions⌿Media⌿images⌿Option⌿images") → 
+		TypeDef(Reference("⌿definitions⌿Media⌿images"), 
+			Seq(
+					Field(Reference("⌿definitions⌿Media⌿images⌿low_resolution"), Opt(TypeRef(Reference("⌿definitions⌿Image")), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿images⌿thumbnail"), Opt(TypeRef(Reference("⌿definitions⌿Image")), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Media⌿images⌿standard_resolution"), Opt(TypeRef(Reference("⌿definitions⌿Image")), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 3"), List())),
+	Reference("⌿paths⌿/locations/search⌿get⌿responses⌿200") → 
+		TypeDef(Reference("⌿paths⌿/locations/search⌿get⌿responses⌿200"), 
+			Seq(
+					Field(Reference("⌿paths⌿/locations/search⌿get⌿responses⌿200⌿data"), Opt(ArrResult(TypeRef(Reference("⌿definitions⌿Location")), TypeMeta(None, List())), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 1"), List())),
+	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Option⌿Enum") → 
 					EnumTrait(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")""")), 
 				Set(
 					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "follow", TypeMeta(Some("follow"), List())),
@@ -218,128 +210,86 @@ object instagram_api_yaml extends WithModel {
 					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "block", TypeMeta(Some("block"), List()))
 
 				)),
-	Reference("⌿definitions⌿Media⌿comments:⌿data⌿Opt") → 
-		ArrResult(TypeRef(Reference("⌿definitions⌿Comment")), TypeMeta(None, List())),
-	Reference("⌿paths⌿/users/{user-id}⌿get⌿responses⌿200") → 
-		TypeDef(Reference("⌿paths⌿/users/{user-id}⌿get⌿responses⌿200"), 
-			Seq(
-					Field(Reference("⌿paths⌿/users/{user-id}⌿get⌿responses⌿200⌿data"), TypeRef(Reference("⌿paths⌿/users/{user-id}⌿get⌿responses⌿200⌿data")))
-			), TypeMeta(Some("Named types: 1"), List())),
-	Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200") → 
-		TypeDef(Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200"), 
-			Seq(
-					Field(Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200⌿meta"), TypeRef(Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200⌿meta"))),
-					Field(Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿responses⌿200⌿data"), TypeRef(Reference("⌿definitions⌿Media⌿comments:⌿data")))
-			), TypeMeta(Some("Named types: 2"), List())),
-	Reference("⌿paths⌿/geographies/{geo-id}/media/recent⌿get⌿responses⌿200") → 
-		Null(TypeMeta(None, List())),
-	Reference("⌿paths⌿/locations/search⌿get⌿responses⌿200") → 
-		TypeDef(Reference("⌿paths⌿/locations/search⌿get⌿responses⌿200"), 
-			Seq(
-					Field(Reference("⌿paths⌿/locations/search⌿get⌿responses⌿200⌿data"), TypeRef(Reference("⌿paths⌿/locations/search⌿get⌿responses⌿200⌿data")))
-			), TypeMeta(Some("Named types: 1"), List())),
-	Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200⌿meta") → 
-		Opt(TypeRef(Reference("⌿paths⌿/users/self/requested-by⌿get⌿responses⌿200⌿meta⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200⌿meta") → 
-		Opt(TypeRef(Reference("⌿paths⌿/media/{media-id}/likes⌿get⌿responses⌿200⌿meta⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿paths⌿/users/self/feed⌿get⌿responses⌿200⌿data") → 
-		Opt(TypeRef(Reference("⌿paths⌿/users/self/feed⌿get⌿responses⌿200⌿data⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿paths⌿/media/{media-id}/likes⌿get⌿responses⌿200⌿data") → 
-		Opt(TypeRef(Reference("⌿paths⌿/media/{media-id}/likes⌿get⌿responses⌿200⌿data⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Opt⌿follow") → 
-					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "follow", TypeMeta(Some("follow"), List())),
-	Reference("⌿paths⌿/locations/search⌿get⌿responses⌿200⌿data") → 
-		Opt(TypeRef(Reference("⌿paths⌿/locations/search⌿get⌿responses⌿200⌿data⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data") → 
-		Opt(TypeRef(Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿paths⌿/users/{user-id}⌿get⌿responses⌿200⌿data") → 
-		Opt(TypeRef(Reference("⌿definitions⌿User")), TypeMeta(None, List())),
-	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Opt⌿unblock") → 
+	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Option⌿Enum⌿unblock") → 
 					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "unblock", TypeMeta(Some("unblock"), List())),
-	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Opt⌿approve") → 
+	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Option⌿Enum⌿approve") → 
 					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "approve", TypeMeta(Some("approve"), List())),
-	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Opt⌿unfollow") → 
-					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "unfollow", TypeMeta(Some("unfollow"), List())),
-	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Opt⌿block") → 
+	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Option⌿Enum⌿follow") → 
+					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "follow", TypeMeta(Some("follow"), List())),
+	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Option⌿Enum⌿block") → 
 					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "block", TypeMeta(Some("block"), List())),
-	Reference("⌿paths⌿/users/self/requested-by⌿get⌿responses⌿200⌿meta⌿Opt") → 
+	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action⌿Option⌿Enum⌿unfollow") → 
+					EnumObject(Str(None, TypeMeta(None, List("""enum("approve,unblock,block,unfollow,follow")"""))), "unfollow", TypeMeta(Some("unfollow"), List())),
+	Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200⌿meta⌿Option⌿meta") → 
 		TypeDef(Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200⌿meta"), 
 			Seq(
-					Field(Reference("⌿paths⌿/users/self/requested-by⌿get⌿responses⌿200⌿meta⌿code"), TypeRef(Reference("⌿definitions⌿Media⌿id")))
+					Field(Reference("⌿paths⌿/tags/search⌿get⌿responses⌿200⌿meta⌿code"), Opt(BInt(TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
-	Reference("⌿paths⌿/media/{media-id}/likes⌿get⌿responses⌿200⌿data⌿Opt") → 
-		ArrResult(TypeRef(Reference("⌿definitions⌿Like")), TypeMeta(None, List())),
-	Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data⌿Opt") → 
-		ArrResult(TypeRef(Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data⌿Opt⌿ArrResult")), TypeMeta(None, List())),
-	Reference("⌿paths⌿/locations/search⌿get⌿responses⌿200⌿data⌿Opt") → 
-		ArrResult(TypeRef(Reference("⌿definitions⌿Location")), TypeMeta(None, List())),
-	Reference("⌿paths⌿/media/{media-id}/likes⌿get⌿responses⌿200⌿meta⌿Opt") → 
+	Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200⌿meta⌿Option⌿meta") → 
 		TypeDef(Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200⌿meta"), 
 			Seq(
-					Field(Reference("⌿paths⌿/media/{media-id}/likes⌿get⌿responses⌿200⌿meta⌿code"), TypeRef(Reference("⌿definitions⌿Location⌿latitude")))
+					Field(Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿responses⌿200⌿meta⌿code"), Opt(BDcml(TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
-	Reference("⌿paths⌿/users/self/feed⌿get⌿responses⌿200⌿data⌿Opt") → 
-		ArrResult(TypeRef(Reference("⌿definitions⌿Media")), TypeMeta(None, List())),
-	Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data⌿Opt⌿ArrResult") → 
+	Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data⌿Option⌿Seq⌿data") → 
 					AllOf(Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data⌿data"), TypeMeta(Some("Schemas: 2"), List()),  Seq(
 			TypeRef(Reference("⌿definitions⌿Media")),
-			TypeRef(Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data⌿Opt⌿ArrResult⌿AllOf1"))) , None),
-	Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data⌿Opt⌿ArrResult⌿AllOf1") → 
+			TypeRef(Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data⌿Option⌿Seq⌿data⌿AllOf1"))) , None),
+	Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data⌿Option⌿Seq⌿data⌿AllOf1") → 
 		TypeDef(Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data"), 
 			Seq(
-					Field(Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data⌿distance"), TypeRef(Reference("⌿definitions⌿Location⌿latitude")))
+					Field(Reference("⌿paths⌿/media/search⌿get⌿responses⌿200⌿data⌿distance"), Opt(BDcml(TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List()))
 ) 
  
  def parameters = Map[ParameterRef, Parameter](
-	ParameterRef(	Reference("⌿paths⌿/locations/{location-id}/media/recent⌿get⌿min_timestamp")) → Parameter("min_timestamp", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/locations/{location-id}/media/recent⌿get⌿min_timestamp")) → Parameter("min_timestamp", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
 	ParameterRef(	Reference("⌿paths⌿/media/{media-id}/likes⌿delete⌿media-id")) → Parameter("media-id", BInt(TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
 	ParameterRef(	Reference("⌿paths⌿/locations/{location-id}⌿get⌿location-id")) → Parameter("location-id", BInt(TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
-	ParameterRef(	Reference("⌿paths⌿/media/search⌿get⌿MAX_TIMESTAMP")) → Parameter("MAX_TIMESTAMP", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/media/search⌿get⌿MAX_TIMESTAMP")) → Parameter("MAX_TIMESTAMP", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
 	ParameterRef(	Reference("⌿paths⌿/media/{media-id}/likes⌿post⌿media-id")) → Parameter("media-id", BInt(TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
 	ParameterRef(	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action")) → Parameter("action", TypeRef(Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿action")), None, None, ".+", encode = false, ParameterPlace.withName("body")),
 	ParameterRef(	Reference("⌿paths⌿/users/{user-id}⌿get⌿user-id")) → Parameter("user-id", BDcml(TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
 	ParameterRef(	Reference("⌿paths⌿/users/{user-id}/followed-by⌿get⌿user-id")) → Parameter("user-id", BDcml(TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
-	ParameterRef(	Reference("⌿paths⌿/users/self/feed⌿get⌿count")) → Parameter("count", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/users/self/feed⌿get⌿min_id")) → Parameter("min_id", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/locations/{location-id}/media/recent⌿get⌿max_timestamp")) → Parameter("max_timestamp", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/locations/search⌿get⌿foursquare_v2_id")) → Parameter("foursquare_v2_id", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿max_timestamp")) → Parameter("max_timestamp", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿min_id")) → Parameter("min_id", TypeRef(Reference("⌿definitions⌿Media⌿filter")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/users/self/feed⌿get⌿count")) → Parameter("count", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/users/self/feed⌿get⌿min_id")) → Parameter("min_id", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/locations/{location-id}/media/recent⌿get⌿max_timestamp")) → Parameter("max_timestamp", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/locations/search⌿get⌿foursquare_v2_id")) → Parameter("foursquare_v2_id", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿max_timestamp")) → Parameter("max_timestamp", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿min_id")) → Parameter("min_id", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿max_id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
 	ParameterRef(	Reference("⌿paths⌿/tags/{tag-name}⌿get⌿tag-name")) → Parameter("tag-name", Str(None, TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
 	ParameterRef(	Reference("⌿paths⌿/media/search⌿get⌿DISTANCE")) → Parameter("DISTANCE", BInt(TypeMeta(None, List("""max(BigInt("5000"), false)"""))), None, Some("1000"), ".+", encode = true, ParameterPlace.withName("query")),
 	ParameterRef(	Reference("⌿paths⌿/tags/{tag-name}/media/recent⌿get⌿tag-name")) → Parameter("tag-name", Str(None, TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
-	ParameterRef(	Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿min_timestamp")) → Parameter("min_timestamp", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/media/{media-id}/comments⌿post⌿TEXT")) → Parameter("TEXT", TypeRef(Reference("⌿definitions⌿Location⌿latitude")), None, None, ".+", encode = false, ParameterPlace.withName("body")),
+	ParameterRef(	Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿min_timestamp")) → Parameter("min_timestamp", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/media/{media-id}/comments⌿post⌿TEXT")) → Parameter("TEXT", TypeRef(Reference("⌿paths⌿/locations/search⌿get⌿lng")), None, None, ".+", encode = false, ParameterPlace.withName("body")),
 	ParameterRef(	Reference("⌿paths⌿/users/{user-id}/follows⌿get⌿user-id")) → Parameter("user-id", BDcml(TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
 	ParameterRef(	Reference("⌿paths⌿/locations/{location-id}/media/recent⌿get⌿location-id")) → Parameter("location-id", BInt(TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
-	ParameterRef(	Reference("⌿paths⌿/users/self/feed⌿get⌿max_id")) → Parameter("max_id", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/users/self/media/liked⌿get⌿count")) → Parameter("count", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/media/search⌿get⌿LNG")) → Parameter("LNG", TypeRef(Reference("⌿definitions⌿Location⌿latitude")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/geographies/{geo-id}/media/recent⌿get⌿min_id")) → Parameter("min_id", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/locations/search⌿get⌿facebook_places_id")) → Parameter("facebook_places_id", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/users/self/feed⌿get⌿max_id")) → Parameter("max_id", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/users/self/media/liked⌿get⌿count")) → Parameter("count", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/media/search⌿get⌿LNG")) → Parameter("LNG", TypeRef(Reference("⌿paths⌿/locations/search⌿get⌿lng")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/geographies/{geo-id}/media/recent⌿get⌿min_id")) → Parameter("min_id", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/locations/search⌿get⌿facebook_places_id")) → Parameter("facebook_places_id", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
 	ParameterRef(	Reference("⌿paths⌿/media/{media-id}/comments⌿post⌿media-id")) → Parameter("media-id", BInt(TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
 	ParameterRef(	Reference("⌿paths⌿/media/{media-id}⌿get⌿media-id")) → Parameter("media-id", BInt(TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
-	ParameterRef(	Reference("⌿paths⌿/users/self/media/liked⌿get⌿max_like_id")) → Parameter("max_like_id", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/media/search⌿get⌿MIN_TIMESTAMP")) → Parameter("MIN_TIMESTAMP", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/locations/search⌿get⌿distance")) → Parameter("distance", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/users/search⌿get⌿count")) → Parameter("count", TypeRef(Reference("⌿definitions⌿Media⌿filter")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/locations/{location-id}/media/recent⌿get⌿max_id")) → Parameter("max_id", TypeRef(Reference("⌿definitions⌿Media⌿filter")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/media/search⌿get⌿LAT")) → Parameter("LAT", TypeRef(Reference("⌿definitions⌿Location⌿latitude")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/locations/search⌿get⌿lat")) → Parameter("lat", TypeRef(Reference("⌿definitions⌿Location⌿latitude")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/locations/search⌿get⌿foursquare_id")) → Parameter("foursquare_id", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/locations/{location-id}/media/recent⌿get⌿min_id")) → Parameter("min_id", TypeRef(Reference("⌿definitions⌿Media⌿filter")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/tags/search⌿get⌿q")) → Parameter("q", TypeRef(Reference("⌿definitions⌿Media⌿filter")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿max_id")) → Parameter("max_id", TypeRef(Reference("⌿definitions⌿Media⌿filter")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/users/self/media/liked⌿get⌿max_like_id")) → Parameter("max_like_id", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/media/search⌿get⌿MIN_TIMESTAMP")) → Parameter("MIN_TIMESTAMP", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/locations/search⌿get⌿distance")) → Parameter("distance", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/users/search⌿get⌿count")) → Parameter("count", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿max_id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/locations/{location-id}/media/recent⌿get⌿max_id")) → Parameter("max_id", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿max_id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/media/search⌿get⌿LAT")) → Parameter("LAT", TypeRef(Reference("⌿paths⌿/locations/search⌿get⌿lng")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/locations/search⌿get⌿lat")) → Parameter("lat", TypeRef(Reference("⌿paths⌿/locations/search⌿get⌿lng")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/locations/search⌿get⌿foursquare_id")) → Parameter("foursquare_id", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/locations/{location-id}/media/recent⌿get⌿min_id")) → Parameter("min_id", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿max_id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/tags/search⌿get⌿q")) → Parameter("q", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿max_id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿max_id")) → Parameter("max_id", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿max_id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
 	ParameterRef(	Reference("⌿paths⌿/media/{media-id}/likes⌿get⌿media-id")) → Parameter("media-id", BInt(TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
 	ParameterRef(	Reference("⌿paths⌿/users/{user-id}/relationship⌿post⌿user-id")) → Parameter("user-id", BDcml(TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
 	ParameterRef(	Reference("⌿paths⌿/media/{media-id}/comments⌿delete⌿media-id")) → Parameter("media-id", BInt(TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
 	ParameterRef(	Reference("⌿paths⌿/media/{media-id}/comments⌿get⌿media-id")) → Parameter("media-id", BInt(TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
 	ParameterRef(	Reference("⌿paths⌿/users/search⌿get⌿q")) → Parameter("q", Str(None, TypeMeta(None, List())), None, None, ".+", encode = true, ParameterPlace.withName("query")),
 	ParameterRef(	Reference("⌿paths⌿/media/{shortcode}⌿get⌿shortcode")) → Parameter("shortcode", Str(None, TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
-	ParameterRef(	Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")) → Parameter("count", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/geographies/{geo-id}/media/recent⌿get⌿count")) → Parameter("count", TypeRef(Reference("⌿definitions⌿Media⌿id")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
-	ParameterRef(	Reference("⌿paths⌿/locations/search⌿get⌿lng")) → Parameter("lng", TypeRef(Reference("⌿definitions⌿Location⌿latitude")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")) → Parameter("count", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/geographies/{geo-id}/media/recent⌿get⌿count")) → Parameter("count", TypeRef(Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿count")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
+	ParameterRef(	Reference("⌿paths⌿/locations/search⌿get⌿lng")) → Parameter("lng", TypeRef(Reference("⌿paths⌿/locations/search⌿get⌿lng")), None, None, ".+", encode = true, ParameterPlace.withName("query")),
 	ParameterRef(	Reference("⌿paths⌿/users/{user-id}/media/recent⌿get⌿user-id")) → Parameter("user-id", BDcml(TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path")),
 	ParameterRef(	Reference("⌿paths⌿/geographies/{geo-id}/media/recent⌿get⌿geo-id")) → Parameter("geo-id", BInt(TypeMeta(None, List())), None, None, "[^/]+", encode = true, ParameterPlace.withName("path"))
 ) 

@@ -7,15 +7,7 @@ import Arbitrary._
 
 object Generators extends JsValueGenerators {
     
-
     
-    def createBasicRequiredGenerator = _generate(BasicRequiredGenerator)
-    def createBasicOptionalGenerator = _generate(BasicOptionalGenerator)
-    
-
-    
-    def BasicRequiredGenerator: Gen[List[String]] = Gen.containerOf[List,String](arbitrary[String])
-    def BasicOptionalGenerator = Gen.option(BasicRequiredGenerator)
     
 
     def createBasicGenerator = _generate(BasicGenerator)
@@ -23,8 +15,8 @@ object Generators extends JsValueGenerators {
 
     def BasicGenerator = for {
         id <- arbitrary[Long]
-        required <- BasicRequiredGenerator
-        optional <- BasicOptionalGenerator
+        required <- Gen.containerOf[List,String](arbitrary[String])
+        optional <- Gen.option(Gen.containerOf[List,String](arbitrary[String]))
     } yield Basic(id, required, optional)
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample

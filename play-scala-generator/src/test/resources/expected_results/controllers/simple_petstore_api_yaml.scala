@@ -23,6 +23,7 @@ import javax.inject._
 
 package simple_petstore_api_yaml {
     // ----- Start of unmanaged code area for package SimplePetstoreApiYaml
+    
     // ----- End of unmanaged code area for package SimplePetstoreApiYaml
     class SimplePetstoreApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections SimplePetstoreApiYaml
@@ -34,16 +35,17 @@ package simple_petstore_api_yaml {
         // ----- Start of unmanaged code area for constructor SimplePetstoreApiYaml
 
         // ----- End of unmanaged code area for constructor SimplePetstoreApiYaml
-        val addPet = addPetAction { (pet: NewPet) =>
+        val addPet = addPetAction { (pet: NewPet) =>  
             // ----- Start of unmanaged code area for action  SimplePetstoreApiYaml.addPet
             NotImplementedYet
             // ----- End of unmanaged code area for action  SimplePetstoreApiYaml.addPet
         }
-
+    
     }
 }
 package simple_petstore_api_yaml {
     // ----- Start of unmanaged code area for package Dashboard
+    
     // ----- End of unmanaged code area for package Dashboard
     class Dashboard @Inject() (
         // ----- Start of unmanaged code area for injections Dashboard
@@ -55,22 +57,22 @@ package simple_petstore_api_yaml {
         // ----- Start of unmanaged code area for constructor Dashboard
 
         // ----- End of unmanaged code area for constructor Dashboard
-        val methodLevel = methodLevelAction { input: (PetsGetTags, PetsGetLimit) =>
+        val methodLevel = methodLevelAction { input: (Option[ArrayWrapper[String]], Option[Int]) =>
             val (tags, limit) = input
             // ----- Start of unmanaged code area for action  Dashboard.methodLevel
             NotImplementedYet
             // ----- End of unmanaged code area for action  Dashboard.methodLevel
         }
-        val pathLevelGet = pathLevelGetAction { (id: Long) =>
+        val pathLevelGet = pathLevelGetAction { (id: Long) =>  
             // ----- Start of unmanaged code area for action  Dashboard.pathLevelGet
             NotImplementedYet
             // ----- End of unmanaged code area for action  Dashboard.pathLevelGet
         }
-        val pathLevelDelete = pathLevelDeleteAction { (id: Long) =>
+        val pathLevelDelete = pathLevelDeleteAction { (id: Long) =>  
             // ----- Start of unmanaged code area for action  Dashboard.pathLevelDelete
             NotImplementedYet
             // ----- End of unmanaged code area for action  Dashboard.pathLevelDelete
         }
-
+    
     }
 }

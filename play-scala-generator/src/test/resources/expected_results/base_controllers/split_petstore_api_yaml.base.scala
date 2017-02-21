@@ -10,8 +10,8 @@ import PlayBodyParsing._
 import scala.concurrent.Future
 
 import scala.util._
-import de.zalando.play.controllers.ArrayWrapper
 import java.time.ZonedDateTime
+import de.zalando.play.controllers.ArrayWrapper
 
 import de.zalando.play.controllers.PlayPathBindables
 
@@ -32,15 +32,15 @@ trait SplitPetstoreApiYamlBase extends Controller with PlayBodyParsing  with Spl
     def FindPetsByTagsIndexOutOfBoundsException(resultP: java.lang.IndexOutOfBoundsException)(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = success(new FindPetsByTagsType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP })
     def FindPetsByTagsIndexOutOfBoundsException(resultF: Future[java.lang.IndexOutOfBoundsException])(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = resultF map { resultP => (new FindPetsByTagsType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP }) }
 
-    private type findPetsByTagsActionRequestType       = (PetsFindByStatusGetStatus)
+    private type findPetsByTagsActionRequestType       = (Option[ArrayWrapper[String]])
     private type findPetsByTagsActionType[T]            = findPetsByTagsActionRequestType => Future[FindPetsByTagsType[T] forSome { type T }]
 
 
     val findPetsByTagsActionConstructor  = new findPetsByTagsSecureAction("write_pets", "read_pets")
 
-def findPetsByTagsAction[T] = (f: findPetsByTagsActionType[T]) => (tags: PetsFindByStatusGetStatus) => findPetsByTagsActionConstructor.async { implicit request: Request[AnyContent] =>
+def findPetsByTagsAction[T] = (f: findPetsByTagsActionType[T]) => (tags: Option[ArrayWrapper[String]]) => findPetsByTagsActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidfindPetsByTagsRequest(tags: PetsFindByStatusGetStatus): Either[Result, Future[FindPetsByTagsType[_]]] = {
+        def processValidfindPetsByTagsRequest(tags: Option[ArrayWrapper[String]]): Either[Result, Future[FindPetsByTagsType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((tags)))
             
             new PetsFindByTagsGetValidator(tags).errors match {
@@ -81,7 +81,7 @@ def findPetsByTagsAction[T] = (f: findPetsByTagsActionType[T]) => (tags: PetsFin
     def PlaceOrderIndexOutOfBoundsException(resultP: java.lang.IndexOutOfBoundsException)(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = success(new PlaceOrderType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP })
     def PlaceOrderIndexOutOfBoundsException(resultF: Future[java.lang.IndexOutOfBoundsException])(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = resultF map { resultP => (new PlaceOrderType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP }) }
 
-    private type placeOrderActionRequestType       = (StoresOrderPostBody)
+    private type placeOrderActionRequestType       = (Option[Order])
     private type placeOrderActionType[T]            = placeOrderActionRequestType => Future[PlaceOrderType[T] forSome { type T }]
 
         
@@ -96,9 +96,9 @@ def findPetsByTagsAction[T] = (f: findPetsByTagsActionType[T]) => (tags: PetsFin
 
     val placeOrderActionConstructor  = Action
 
-def placeOrderAction[T] = (f: placeOrderActionType[T]) => placeOrderActionConstructor.async(placeOrderParser) { implicit request: Request[StoresOrderPostBody] =>
+def placeOrderAction[T] = (f: placeOrderActionType[T]) => placeOrderActionConstructor.async(placeOrderParser) { implicit request: Request[Option[Order]] =>
 
-        def processValidplaceOrderRequest(body: StoresOrderPostBody): Either[Result, Future[PlaceOrderType[_]]] = {
+        def processValidplaceOrderRequest(body: Option[Order]): Either[Result, Future[PlaceOrderType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((body)))
             
             new StoresOrderPostValidator(body).errors match {
@@ -112,7 +112,7 @@ def placeOrderAction[T] = (f: placeOrderActionType[T]) => placeOrderActionConstr
           
         }
 
-            val body: StoresOrderPostBody = request.body
+            val body: Option[Order] = request.body
             
             
 
@@ -136,7 +136,7 @@ def placeOrderAction[T] = (f: placeOrderActionType[T]) => placeOrderActionConstr
     def CreateUserIndexOutOfBoundsException(resultP: java.lang.IndexOutOfBoundsException)(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = success(new CreateUserType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP })
     def CreateUserIndexOutOfBoundsException(resultF: Future[java.lang.IndexOutOfBoundsException])(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = resultF map { resultP => (new CreateUserType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP }) }
 
-    private type createUserActionRequestType       = (UsersUsernamePutBody)
+    private type createUserActionRequestType       = (Option[User])
     private type createUserActionType[T]            = createUserActionRequestType => Future[CreateUserType[T] forSome { type T }]
 
         
@@ -151,9 +151,9 @@ def placeOrderAction[T] = (f: placeOrderActionType[T]) => placeOrderActionConstr
 
     val createUserActionConstructor  = Action
 
-def createUserAction[T] = (f: createUserActionType[T]) => createUserActionConstructor.async(createUserParser) { implicit request: Request[UsersUsernamePutBody] =>
+def createUserAction[T] = (f: createUserActionType[T]) => createUserActionConstructor.async(createUserParser) { implicit request: Request[Option[User]] =>
 
-        def processValidcreateUserRequest(body: UsersUsernamePutBody): Either[Result, Future[CreateUserType[_]]] = {
+        def processValidcreateUserRequest(body: Option[User]): Either[Result, Future[CreateUserType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((body)))
             
             new UsersPostValidator(body).errors match {
@@ -167,7 +167,7 @@ def createUserAction[T] = (f: createUserActionType[T]) => createUserActionConstr
           
         }
 
-            val body: UsersUsernamePutBody = request.body
+            val body: Option[User] = request.body
             
             
 
@@ -191,7 +191,7 @@ def createUserAction[T] = (f: createUserActionType[T]) => createUserActionConstr
     def CreateUsersWithListInputIndexOutOfBoundsException(resultP: java.lang.IndexOutOfBoundsException)(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = success(new CreateUsersWithListInputType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP })
     def CreateUsersWithListInputIndexOutOfBoundsException(resultF: Future[java.lang.IndexOutOfBoundsException])(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = resultF map { resultP => (new CreateUsersWithListInputType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP }) }
 
-    private type createUsersWithListInputActionRequestType       = (UsersCreateWithListPostBody)
+    private type createUsersWithListInputActionRequestType       = (Option[Seq[User]])
     private type createUsersWithListInputActionType[T]            = createUsersWithListInputActionRequestType => Future[CreateUsersWithListInputType[T] forSome { type T }]
 
         
@@ -206,9 +206,9 @@ def createUserAction[T] = (f: createUserActionType[T]) => createUserActionConstr
 
     val createUsersWithListInputActionConstructor  = Action
 
-def createUsersWithListInputAction[T] = (f: createUsersWithListInputActionType[T]) => createUsersWithListInputActionConstructor.async(createUsersWithListInputParser) { implicit request: Request[UsersCreateWithListPostBody] =>
+def createUsersWithListInputAction[T] = (f: createUsersWithListInputActionType[T]) => createUsersWithListInputActionConstructor.async(createUsersWithListInputParser) { implicit request: Request[Option[Seq[User]]] =>
 
-        def processValidcreateUsersWithListInputRequest(body: UsersCreateWithListPostBody): Either[Result, Future[CreateUsersWithListInputType[_]]] = {
+        def processValidcreateUsersWithListInputRequest(body: Option[Seq[User]]): Either[Result, Future[CreateUsersWithListInputType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((body)))
             
             new UsersCreateWithListPostValidator(body).errors match {
@@ -222,7 +222,7 @@ def createUsersWithListInputAction[T] = (f: createUsersWithListInputActionType[T
           
         }
 
-            val body: UsersCreateWithListPostBody = request.body
+            val body: Option[Seq[User]] = request.body
             
             
 
@@ -301,7 +301,7 @@ def getUserByNameAction[T] = (f: getUserByNameActionType[T]) => (username: Strin
     def UpdateUserIndexOutOfBoundsException(resultP: java.lang.IndexOutOfBoundsException)(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = success(new UpdateUserType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP })
     def UpdateUserIndexOutOfBoundsException(resultF: Future[java.lang.IndexOutOfBoundsException])(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = resultF map { resultP => (new UpdateUserType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP }) }
 
-    private type updateUserActionRequestType       = (String, UsersUsernamePutBody)
+    private type updateUserActionRequestType       = (String, Option[User])
     private type updateUserActionType[T]            = updateUserActionRequestType => Future[UpdateUserType[T] forSome { type T }]
 
         
@@ -316,9 +316,9 @@ def getUserByNameAction[T] = (f: getUserByNameActionType[T]) => (username: Strin
 
     val updateUserActionConstructor  = Action
 
-def updateUserAction[T] = (f: updateUserActionType[T]) => (username: String) => updateUserActionConstructor.async(updateUserParser) { implicit request: Request[UsersUsernamePutBody] =>
+def updateUserAction[T] = (f: updateUserActionType[T]) => (username: String) => updateUserActionConstructor.async(updateUserParser) { implicit request: Request[Option[User]] =>
 
-        def processValidupdateUserRequest(username: String, body: UsersUsernamePutBody): Either[Result, Future[UpdateUserType[_]]] = {
+        def processValidupdateUserRequest(username: String, body: Option[User]): Either[Result, Future[UpdateUserType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((username, body)))
             
             new UsersUsernamePutValidator(username, body).errors match {
@@ -332,7 +332,7 @@ def updateUserAction[T] = (f: updateUserActionType[T]) => (username: String) => 
           
         }
 
-            val body: UsersUsernamePutBody = request.body
+            val body: Option[User] = request.body
             
             
 
@@ -411,7 +411,7 @@ def deleteUserAction[T] = (f: deleteUserActionType[T]) => (username: String) => 
     def UpdatePetIndexOutOfBoundsException(resultP: java.lang.IndexOutOfBoundsException)(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = success(new UpdatePetType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP })
     def UpdatePetIndexOutOfBoundsException(resultF: Future[java.lang.IndexOutOfBoundsException])(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = resultF map { resultP => (new UpdatePetType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP }) }
 
-    private type updatePetActionRequestType       = (PetsPostBody)
+    private type updatePetActionRequestType       = (Option[Pet])
     private type updatePetActionType[T]            = updatePetActionRequestType => Future[UpdatePetType[T] forSome { type T }]
 
         
@@ -428,9 +428,9 @@ def deleteUserAction[T] = (f: deleteUserActionType[T]) => (username: String) => 
 
     val updatePetActionConstructor  = new updatePetSecureAction("write_pets", "read_pets")
 
-def updatePetAction[T] = (f: updatePetActionType[T]) => updatePetActionConstructor.async(updatePetParser) { implicit request: Request[PetsPostBody] =>
+def updatePetAction[T] = (f: updatePetActionType[T]) => updatePetActionConstructor.async(updatePetParser) { implicit request: Request[Option[Pet]] =>
 
-        def processValidupdatePetRequest(body: PetsPostBody): Either[Result, Future[UpdatePetType[_]]] = {
+        def processValidupdatePetRequest(body: Option[Pet]): Either[Result, Future[UpdatePetType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((body)))
             
             new PetsPutValidator(body).errors match {
@@ -444,7 +444,7 @@ def updatePetAction[T] = (f: updatePetActionType[T]) => updatePetActionConstruct
           
         }
 
-            val body: PetsPostBody = request.body
+            val body: Option[Pet] = request.body
             
             
 
@@ -470,7 +470,7 @@ def updatePetAction[T] = (f: updatePetActionType[T]) => updatePetActionConstruct
     def AddPetIndexOutOfBoundsException(resultP: java.lang.IndexOutOfBoundsException)(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = success(new AddPetType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP })
     def AddPetIndexOutOfBoundsException(resultF: Future[java.lang.IndexOutOfBoundsException])(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = resultF map { resultP => (new AddPetType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP }) }
 
-    private type addPetActionRequestType       = (PetsPostBody)
+    private type addPetActionRequestType       = (Option[Pet])
     private type addPetActionType[T]            = addPetActionRequestType => Future[AddPetType[T] forSome { type T }]
 
         
@@ -487,9 +487,9 @@ def updatePetAction[T] = (f: updatePetActionType[T]) => updatePetActionConstruct
 
     val addPetActionConstructor  = new addPetSecureAction("write_pets", "read_pets")
 
-def addPetAction[T] = (f: addPetActionType[T]) => addPetActionConstructor.async(addPetParser) { implicit request: Request[PetsPostBody] =>
+def addPetAction[T] = (f: addPetActionType[T]) => addPetActionConstructor.async(addPetParser) { implicit request: Request[Option[Pet]] =>
 
-        def processValidaddPetRequest(body: PetsPostBody): Either[Result, Future[AddPetType[_]]] = {
+        def processValidaddPetRequest(body: Option[Pet]): Either[Result, Future[AddPetType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((body)))
             
             new PetsPostValidator(body).errors match {
@@ -503,7 +503,7 @@ def addPetAction[T] = (f: addPetActionType[T]) => addPetActionConstructor.async(
           
         }
 
-            val body: PetsPostBody = request.body
+            val body: Option[Pet] = request.body
             
             
 
@@ -527,7 +527,7 @@ def addPetAction[T] = (f: addPetActionType[T]) => addPetActionConstructor.async(
     def CreateUsersWithArrayInputIndexOutOfBoundsException(resultP: java.lang.IndexOutOfBoundsException)(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = success(new CreateUsersWithArrayInputType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP })
     def CreateUsersWithArrayInputIndexOutOfBoundsException(resultF: Future[java.lang.IndexOutOfBoundsException])(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = resultF map { resultP => (new CreateUsersWithArrayInputType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP }) }
 
-    private type createUsersWithArrayInputActionRequestType       = (UsersCreateWithListPostBody)
+    private type createUsersWithArrayInputActionRequestType       = (Option[Seq[User]])
     private type createUsersWithArrayInputActionType[T]            = createUsersWithArrayInputActionRequestType => Future[CreateUsersWithArrayInputType[T] forSome { type T }]
 
         
@@ -542,9 +542,9 @@ def addPetAction[T] = (f: addPetActionType[T]) => addPetActionConstructor.async(
 
     val createUsersWithArrayInputActionConstructor  = Action
 
-def createUsersWithArrayInputAction[T] = (f: createUsersWithArrayInputActionType[T]) => createUsersWithArrayInputActionConstructor.async(createUsersWithArrayInputParser) { implicit request: Request[UsersCreateWithListPostBody] =>
+def createUsersWithArrayInputAction[T] = (f: createUsersWithArrayInputActionType[T]) => createUsersWithArrayInputActionConstructor.async(createUsersWithArrayInputParser) { implicit request: Request[Option[Seq[User]]] =>
 
-        def processValidcreateUsersWithArrayInputRequest(body: UsersCreateWithListPostBody): Either[Result, Future[CreateUsersWithArrayInputType[_]]] = {
+        def processValidcreateUsersWithArrayInputRequest(body: Option[Seq[User]]): Either[Result, Future[CreateUsersWithArrayInputType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((body)))
             
             new UsersCreateWithArrayPostValidator(body).errors match {
@@ -558,7 +558,7 @@ def createUsersWithArrayInputAction[T] = (f: createUsersWithArrayInputActionType
           
         }
 
-            val body: UsersCreateWithListPostBody = request.body
+            val body: Option[Seq[User]] = request.body
             
             
 
@@ -891,15 +891,15 @@ def deletePetAction[T] = (f: deletePetActionType[T]) => (petId: Long) => deleteP
     def FindPetsByStatusIndexOutOfBoundsException(resultP: java.lang.IndexOutOfBoundsException)(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = success(new FindPetsByStatusType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP })
     def FindPetsByStatusIndexOutOfBoundsException(resultF: Future[java.lang.IndexOutOfBoundsException])(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = resultF map { resultP => (new FindPetsByStatusType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP }) }
 
-    private type findPetsByStatusActionRequestType       = (PetsFindByStatusGetStatus)
+    private type findPetsByStatusActionRequestType       = (Option[ArrayWrapper[String]])
     private type findPetsByStatusActionType[T]            = findPetsByStatusActionRequestType => Future[FindPetsByStatusType[T] forSome { type T }]
 
 
     val findPetsByStatusActionConstructor  = new findPetsByStatusSecureAction("write_pets", "read_pets")
 
-def findPetsByStatusAction[T] = (f: findPetsByStatusActionType[T]) => (status: PetsFindByStatusGetStatus) => findPetsByStatusActionConstructor.async { implicit request: Request[AnyContent] =>
+def findPetsByStatusAction[T] = (f: findPetsByStatusActionType[T]) => (status: Option[ArrayWrapper[String]]) => findPetsByStatusActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidfindPetsByStatusRequest(status: PetsFindByStatusGetStatus): Either[Result, Future[FindPetsByStatusType[_]]] = {
+        def processValidfindPetsByStatusRequest(status: Option[ArrayWrapper[String]]): Either[Result, Future[FindPetsByStatusType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((status)))
             
             new PetsFindByStatusGetValidator(status).errors match {
@@ -940,15 +940,15 @@ def findPetsByStatusAction[T] = (f: findPetsByStatusActionType[T]) => (status: P
     def LoginUserIndexOutOfBoundsException(resultP: java.lang.IndexOutOfBoundsException)(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = success(new LoginUserType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP })
     def LoginUserIndexOutOfBoundsException(resultF: Future[java.lang.IndexOutOfBoundsException])(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = resultF map { resultP => (new LoginUserType[java.lang.IndexOutOfBoundsException] { val statusCode = 405; val result = resultP; val writer = writerP }) }
 
-    private type loginUserActionRequestType       = (OrderStatus, OrderStatus)
+    private type loginUserActionRequestType       = (Option[String], Option[String])
     private type loginUserActionType[T]            = loginUserActionRequestType => Future[LoginUserType[T] forSome { type T }]
 
 
     val loginUserActionConstructor  = Action
 
-def loginUserAction[T] = (f: loginUserActionType[T]) => (username: OrderStatus, password: OrderStatus) => loginUserActionConstructor.async { implicit request: Request[AnyContent] =>
+def loginUserAction[T] = (f: loginUserActionType[T]) => (username: Option[String], password: Option[String]) => loginUserActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidloginUserRequest(username: OrderStatus, password: OrderStatus): Either[Result, Future[LoginUserType[_]]] = {
+        def processValidloginUserRequest(username: Option[String], password: Option[String]): Either[Result, Future[LoginUserType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((username, password)))
             
             new UsersLoginGetValidator(username, password).errors match {

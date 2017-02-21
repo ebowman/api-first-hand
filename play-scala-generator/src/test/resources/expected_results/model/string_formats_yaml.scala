@@ -3,11 +3,11 @@ package string_formats
 
     import de.zalando.play.controllers.Base64String
     import Base64String._
+    import de.zalando.play.controllers.BinaryString
+    import BinaryString._
     import java.time.ZonedDateTime
     import java.util.UUID
     import java.time.LocalDate
-    import de.zalando.play.controllers.BinaryString
-    import BinaryString._
 
     import de.zalando.play.controllers.PlayPathBindables
 
@@ -25,10 +25,6 @@ package yaml {
 //noinspection ScalaStyle
 package object yaml {
 
-    type GetBase64 = Option[Base64String]
-    type GetDate_time = Option[ZonedDateTime]
-    type GetUuid = Option[UUID]
-    type GetDate = Option[LocalDate]
     type GetResponses200 = Null
 
 

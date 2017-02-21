@@ -15,11 +15,11 @@ object nakadi_yaml extends WithModel {
 	Reference("⌿definitions⌿EventMetaData") → 
 		TypeDef(Reference("⌿definitions⌿EventMetaData"), 
 			Seq(
-					Field(Reference("⌿definitions⌿EventMetaData⌿root_id"), TypeRef(Reference("⌿definitions⌿EventMetaData⌿parent_id"))),
-					Field(Reference("⌿definitions⌿EventMetaData⌿parent_id"), TypeRef(Reference("⌿definitions⌿EventMetaData⌿parent_id"))),
-					Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), TypeRef(Reference("⌿definitions⌿EventMetaData⌿scopes"))),
-					Field(Reference("⌿definitions⌿EventMetaData⌿id"), TypeRef(Reference("⌿definitions⌿EventMetaData⌿parent_id"))),
-					Field(Reference("⌿definitions⌿EventMetaData⌿created"), TypeRef(Reference("⌿definitions⌿Event⌿event_type")))
+					Field(Reference("⌿definitions⌿EventMetaData⌿root_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿EventMetaData⌿parent_id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿EventMetaData⌿scopes"), Opt(ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿EventMetaData⌿id"), Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿EventMetaData⌿created"), Opt(Str(Some("data-time"), TypeMeta(Some("data-time"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 5"), List())),
 	Reference("⌿definitions⌿Topic") → 
 		TypeDef(Reference("⌿definitions⌿Topic"), 
@@ -29,14 +29,14 @@ object nakadi_yaml extends WithModel {
 	Reference("⌿definitions⌿Metrics") → 
 		TypeDef(Reference("⌿definitions⌿Metrics"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Metrics⌿name"), TypeRef(Reference("⌿definitions⌿Event⌿event_type")))
+					Field(Reference("⌿definitions⌿Metrics⌿name"), Opt(Str(None, TypeMeta(Some("Metric name"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
 	Reference("⌿definitions⌿Event") → 
 		TypeDef(Reference("⌿definitions⌿Event"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Event⌿event_type"), TypeRef(Reference("⌿definitions⌿Event⌿event_type"))),
-					Field(Reference("⌿definitions⌿Event⌿partitioning_key"), TypeRef(Reference("⌿definitions⌿Event⌿event_type"))),
-					Field(Reference("⌿definitions⌿Event⌿metadata"), TypeRef(Reference("⌿definitions⌿Event⌿metadata")))
+					Field(Reference("⌿definitions⌿Event⌿event_type"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Event⌿partitioning_key"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Event⌿metadata"), Opt(TypeRef(Reference("⌿definitions⌿EventMetaData")), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 3"), List())),
 	Reference("⌿definitions⌿Cursor") → 
 		TypeDef(Reference("⌿definitions⌿Cursor"), 
@@ -60,28 +60,14 @@ object nakadi_yaml extends WithModel {
 		TypeDef(Reference("⌿definitions⌿SimpleStreamEvent"), 
 			Seq(
 					Field(Reference("⌿definitions⌿SimpleStreamEvent⌿cursor"), TypeRef(Reference("⌿definitions⌿Cursor"))),
-					Field(Reference("⌿definitions⌿SimpleStreamEvent⌿events"), TypeRef(Reference("⌿definitions⌿SimpleStreamEvent⌿events")))
+					Field(Reference("⌿definitions⌿SimpleStreamEvent⌿events"), Opt(ArrResult(TypeRef(Reference("⌿definitions⌿Event")), TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
-	Reference("⌿definitions⌿Event⌿event_type") → 
-		Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())),
-	Reference("⌿definitions⌿EventMetaData⌿parent_id") → 
-		Opt(UUID(TypeMeta(Some("uuid"), List())), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Event⌿metadata") → 
-		Opt(TypeRef(Reference("⌿definitions⌿EventMetaData")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿SimpleStreamEvent⌿events") → 
-		Opt(TypeRef(Reference("⌿definitions⌿SimpleStreamEvent⌿events⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿EventMetaData⌿scopes") → 
-		Opt(TypeRef(Reference("⌿definitions⌿EventMetaData⌿scopes⌿Opt")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/topics/{topic}/events/batch⌿post⌿topic") → 
 		Str(None, TypeMeta(None, List())),
 	Reference("⌿paths⌿/topics/{topic}/events⌿get⌿stream_timeout") → 
 		Opt(Intgr(TypeMeta(Some("int32"), List())), TypeMeta(None, List())),
 	Reference("⌿paths⌿/topics/{topic}/events⌿get⌿batch_limit") → 
 		Intgr(TypeMeta(Some("int32"), List())),
-	Reference("⌿definitions⌿SimpleStreamEvent⌿events⌿Opt") → 
-		ArrResult(TypeRef(Reference("⌿definitions⌿Event")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿EventMetaData⌿scopes⌿Opt") → 
-		ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(None, List())),
 	Reference("⌿paths⌿/topics/{topic}/events/batch⌿post⌿event") → 
 		Opt(TypeRef(Reference("⌿definitions⌿Event")), TypeMeta(None, List())),
 	Reference("⌿paths⌿/topics/{topic}/events⌿post⌿responses⌿201") → 

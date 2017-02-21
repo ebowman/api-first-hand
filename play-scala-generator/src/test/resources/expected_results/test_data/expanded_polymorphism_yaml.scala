@@ -12,21 +12,17 @@ object Generators extends JsValueGenerators {
     
     def createNullGenerator = _generate(NullGenerator)
     def createLongGenerator = _generate(LongGenerator)
-    def createPetsGetLimitGenerator = _generate(PetsGetLimitGenerator)
-    def createPetsGetTagsOptGenerator = _generate(PetsGetTagsOptGenerator)
-    def createNewPetTagGenerator = _generate(NewPetTagGenerator)
-    def createPetsGetResponses200Generator = _generate(PetsGetResponses200Generator)
-    def createPetsGetTagsGenerator = _generate(PetsGetTagsGenerator)
+    def createOptionIntGenerator = _generate(OptionIntGenerator)
+    def createSeqPetGenerator = _generate(SeqPetGenerator)
+    def createOptionArrayWrapperStringGenerator = _generate(OptionArrayWrapperStringGenerator)
     
 
     
     def NullGenerator = arbitrary[Null]
     def LongGenerator = arbitrary[Long]
-    def PetsGetLimitGenerator = Gen.option(arbitrary[Int])
-    def PetsGetTagsOptGenerator = _genList(arbitrary[String], "csv")
-    def NewPetTagGenerator = Gen.option(arbitrary[String])
-    def PetsGetResponses200Generator: Gen[List[Pet]] = Gen.containerOf[List,Pet](PetGenerator)
-    def PetsGetTagsGenerator = Gen.option(PetsGetTagsOptGenerator)
+    def OptionIntGenerator = Gen.option(arbitrary[Int])
+    def SeqPetGenerator: Gen[List[Pet]] = Gen.containerOf[List,Pet](PetGenerator)
+    def OptionArrayWrapperStringGenerator = Gen.option(_genList(arbitrary[String], "csv"))
     
 
     def createNewPetGenerator = _generate(NewPetGenerator)
@@ -36,11 +32,11 @@ object Generators extends JsValueGenerators {
 
     def NewPetGenerator = for {
         name <- arbitrary[String]
-        tag <- NewPetTagGenerator
+        tag <- Gen.option(arbitrary[String])
     } yield NewPet(name, tag)
     def PetGenerator = for {
         name <- arbitrary[String]
-        tag <- NewPetTagGenerator
+        tag <- Gen.option(arbitrary[String])
         id <- arbitrary[Long]
     } yield Pet(name, tag, id)
     def ErrorGenerator = for {

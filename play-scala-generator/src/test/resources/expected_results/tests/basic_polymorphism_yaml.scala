@@ -53,7 +53,7 @@ class Basic_polymorphism_yamlSpec extends WordSpec with OptionValues with WsScal
 
 
     "PUT /" should {
-        def testInvalidInput(dummy: PutDummy): Prop = {
+        def testInvalidInput(dummy: Option[Pet]): Prop = {
 
 
             val url = s"""/"""
@@ -97,7 +97,7 @@ class Basic_polymorphism_yamlSpec extends WordSpec with OptionValues with WsScal
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(dummy: PutDummy): Prop = {
+        def testValidInput(dummy: Option[Pet]): Prop = {
             
             val parsed_dummy = parserConstructor("application/json").writeValueAsString(dummy)
             
@@ -149,7 +149,7 @@ class Basic_polymorphism_yamlSpec extends WordSpec with OptionValues with WsScal
         }
         "discard invalid data" in {
             val genInputs = for {
-                    dummy <- PutDummyGenerator
+                    dummy <- OptionPetGenerator
                 } yield dummy
             val inputs = genInputs suchThat { dummy =>
                 new PutValidator(dummy).errors.nonEmpty
@@ -159,7 +159,7 @@ class Basic_polymorphism_yamlSpec extends WordSpec with OptionValues with WsScal
         }
         "do something with valid data" in {
             val genInputs = for {
-                dummy <- PutDummyGenerator
+                dummy <- OptionPetGenerator
             } yield dummy
             val inputs = genInputs suchThat { dummy =>
                 new PutValidator(dummy).errors.isEmpty

@@ -6,30 +6,30 @@ import play.api.libs.json.scalacheck.JsValueGenerators
 import Arbitrary._
 import de.zalando.play.controllers.Base64String
 import Base64String._
+import de.zalando.play.controllers.BinaryString
+import BinaryString._
 import java.time.ZonedDateTime
 import java.util.UUID
 import java.time.LocalDate
-import de.zalando.play.controllers.BinaryString
-import BinaryString._
 
 object Generators extends JsValueGenerators {
     
 
     
-    def createGetBase64Generator = _generate(GetBase64Generator)
+    def createOptionBase64StringGenerator = _generate(OptionBase64StringGenerator)
     def createBinaryStringGenerator = _generate(BinaryStringGenerator)
-    def createGetDate_timeGenerator = _generate(GetDate_timeGenerator)
-    def createGetUuidGenerator = _generate(GetUuidGenerator)
-    def createGetDateGenerator = _generate(GetDateGenerator)
+    def createOptionZonedDateTimeGenerator = _generate(OptionZonedDateTimeGenerator)
+    def createOptionUUIDGenerator = _generate(OptionUUIDGenerator)
+    def createOptionLocalDateGenerator = _generate(OptionLocalDateGenerator)
     def createNullGenerator = _generate(NullGenerator)
     
 
     
-    def GetBase64Generator = Gen.option(arbitrary[Base64String])
+    def OptionBase64StringGenerator = Gen.option(arbitrary[Base64String])
     def BinaryStringGenerator = arbitrary[BinaryString]
-    def GetDate_timeGenerator = Gen.option(arbitrary[ZonedDateTime])
-    def GetUuidGenerator = Gen.option(arbitrary[UUID])
-    def GetDateGenerator = Gen.option(arbitrary[LocalDate])
+    def OptionZonedDateTimeGenerator = Gen.option(arbitrary[ZonedDateTime])
+    def OptionUUIDGenerator = Gen.option(arbitrary[UUID])
+    def OptionLocalDateGenerator = Gen.option(arbitrary[LocalDate])
     def NullGenerator = arbitrary[Null]
     
 

@@ -23,6 +23,7 @@ import javax.inject._
 
 package basic_polymorphism.yaml {
     // ----- Start of unmanaged code area for package Basic_polymorphismYaml
+    
     // ----- End of unmanaged code area for package Basic_polymorphismYaml
     class Basic_polymorphismYaml @Inject() (
         // ----- Start of unmanaged code area for injections Basic_polymorphismYaml
@@ -34,11 +35,11 @@ package basic_polymorphism.yaml {
         // ----- Start of unmanaged code area for constructor Basic_polymorphismYaml
 
         // ----- End of unmanaged code area for constructor Basic_polymorphismYaml
-        val put = putAction { (dummy: PutDummy) =>
+        val put = putAction { (dummy: Option[Pet]) =>  
             // ----- Start of unmanaged code area for action  Basic_polymorphismYaml.put
             NotImplementedYet
             // ----- End of unmanaged code area for action  Basic_polymorphismYaml.put
         }
-
+    
     }
 }

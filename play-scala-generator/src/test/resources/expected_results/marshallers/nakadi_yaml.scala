@@ -26,25 +26,25 @@ object ResponseWriters extends ResponseWritersBase {
     * in order for play-swagger to be able to provide safety net for
     * different response types
     */
-    val writable_application_json_Problem_esc: Writeable[Problem] =
+    val writable_application_json_Problem: Writeable[Problem] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_Metrics_esc: Writeable[Metrics] =
+    val writable_application_json_Metrics: Writeable[Metrics] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_SimpleStreamEvent_esc: Writeable[SimpleStreamEvent] =
+    val writable_application_json_SimpleStreamEvent: Writeable[SimpleStreamEvent] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_TopicPartition_esc: Writeable[TopicPartition] =
+    val writable_application_json_TopicPartition: Writeable[TopicPartition] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_TopicsGetResponses200_esc: Writeable[TopicsGetResponses200] =
+    val writable_application_json_SeqTopic: Writeable[Seq[Topic]] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_Null_esc: Writeable[Null] =
+    val writable_application_json_Null: Writeable[Null] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_TopicsTopicPartitionsGetResponses200_esc: Writeable[TopicsTopicPartitionsGetResponses200] =
+    val writable_application_json_SeqTopicPartition: Writeable[Seq[TopicPartition]] =
         Writeable(a => ???, Some("application/json"))
 
     /**
@@ -52,13 +52,13 @@ object ResponseWriters extends ResponseWritersBase {
     * as a marshaller for different mime types and types of response
     */
     override val custom: Seq[WriteableWrapper[_]] = Seq(
-        writable_application_json_Problem_esc, 
-        writable_application_json_Metrics_esc, 
-        writable_application_json_SimpleStreamEvent_esc, 
-        writable_application_json_TopicPartition_esc, 
-        writable_application_json_TopicsGetResponses200_esc, 
-        writable_application_json_Null_esc, 
-        writable_application_json_TopicsTopicPartitionsGetResponses200_esc
+        writable_application_json_Problem, 
+        writable_application_json_Metrics, 
+        writable_application_json_SimpleStreamEvent, 
+        writable_application_json_TopicPartition, 
+        writable_application_json_SeqTopic, 
+        writable_application_json_Null, 
+        writable_application_json_SeqTopicPartition
     )
 }
 
@@ -75,13 +75,13 @@ object WrappedBodyParsers extends WrappedBodyParsersBase {
     * in order for play-swagger to be able to provide safety net for
     * different response types
     */
-    val reader_application_json_TopicsTopicEventsBatchPostEvent_esc: Parser[TopicsTopicEventsBatchPostEvent] =
+    val reader_application_json_Option_Event__esc: Parser[Option[Event]] =
         (content: ByteString) => ???
     /**
     * This collection contains all {@Writeable}s which could be used in
     * as a marshaller for different mime types and types of response
     */
     override val custom: Seq[(String, ParserWrapper[_])] = Seq(
-            "application/json" -> reader_application_json_TopicsTopicEventsBatchPostEvent_esc
+            "application/json" -> reader_application_json_Option_Event__esc
     )
 }

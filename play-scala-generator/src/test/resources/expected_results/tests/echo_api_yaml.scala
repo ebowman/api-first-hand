@@ -168,7 +168,7 @@ class Echo_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
     }
 
     "POST /echo/" should {
-        def testInvalidInput(input: (PostName, PostName)): Prop = {
+        def testInvalidInput(input: (Option[String], Option[String])): Prop = {
 
             val (name, year) = input
 
@@ -213,7 +213,7 @@ class Echo_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (PostName, PostName)): Prop = {
+        def testValidInput(input: (Option[String], Option[String])): Prop = {
             val (name, year) = input
             
             val url = s"""/echo/"""
@@ -265,8 +265,8 @@ class Echo_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
         }
         "discard invalid data" in {
             val genInputs = for {
-                        name <- PostNameGenerator
-                        year <- PostNameGenerator
+                        name <- OptionStringGenerator
+                        year <- OptionStringGenerator
                     
                 } yield (name, year)
             val inputs = genInputs suchThat { case (name, year) =>
@@ -277,8 +277,8 @@ class Echo_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
         }
         "do something with valid data" in {
             val genInputs = for {
-                    name <- PostNameGenerator
-                    year <- PostNameGenerator
+                    name <- OptionStringGenerator
+                    year <- OptionStringGenerator
                 
             } yield (name, year)
             val inputs = genInputs suchThat { case (name, year) =>

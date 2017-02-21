@@ -46,7 +46,7 @@ class Dependencies(playVersion: String, projectVersion: String, scalaVersion: St
 
   val api = Seq(play, playClient) ++ jacksons
 
-  val playScalaGenerator = Seq(commonsIO, beard)
+  val playScalaGenerator = Seq(commonsIO, beard) ++ jacksons
 
   val swaggerModel = jsonRef +: jacksons
 

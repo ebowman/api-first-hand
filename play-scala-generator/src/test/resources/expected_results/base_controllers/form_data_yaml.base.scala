@@ -10,8 +10,8 @@ import PlayBodyParsing._
 import scala.concurrent.Future
 
 import scala.util._
-import java.io.File
 import scala.math.BigInt
+import java.io.File
 
 import de.zalando.play.controllers.PlayPathBindables
 
@@ -26,7 +26,7 @@ trait Form_dataYamlBase extends Controller with PlayBodyParsing {
     def Postmultipart200(resultF: Future[MultipartPostResponses200])(implicit writerP: String => Option[Writeable[MultipartPostResponses200]]) = resultF map { resultP => (new PostmultipartType[MultipartPostResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type postmultipartActionRequestType       = (String, BothPostYear, MultipartPostAvatar)
+    private type postmultipartActionRequestType       = (String, Option[BigInt], Option[File])
     private type postmultipartActionType[T]            = postmultipartActionRequestType => Future[PostmultipartType[T] forSome { type T }]
 
 
@@ -34,7 +34,7 @@ trait Form_dataYamlBase extends Controller with PlayBodyParsing {
 
 def postmultipartAction[T] = (f: postmultipartActionType[T]) => postmultipartActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidpostmultipartRequest(name: String, year: BothPostYear, avatar: MultipartPostAvatar): Either[Result, Future[PostmultipartType[_]]] = {
+        def processValidpostmultipartRequest(name: String, year: Option[BigInt], avatar: Option[File]): Either[Result, Future[PostmultipartType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((name, year, avatar)))
             
             new MultipartPostValidator(name, year, avatar).errors match {
@@ -83,7 +83,7 @@ def postmultipartAction[T] = (f: postmultipartActionType[T]) => postmultipartAct
     def Posturl_encoded200(resultF: Future[MultipartPostResponses200])(implicit writerP: String => Option[Writeable[MultipartPostResponses200]]) = resultF map { resultP => (new Posturl_encodedType[MultipartPostResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type posturl_encodedActionRequestType       = (String, BothPostYear, File)
+    private type posturl_encodedActionRequestType       = (String, Option[BigInt], File)
     private type posturl_encodedActionType[T]            = posturl_encodedActionRequestType => Future[Posturl_encodedType[T] forSome { type T }]
 
 
@@ -91,7 +91,7 @@ def postmultipartAction[T] = (f: postmultipartActionType[T]) => postmultipartAct
 
 def posturl_encodedAction[T] = (f: posturl_encodedActionType[T]) => posturl_encodedActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidposturl_encodedRequest(name: String, year: BothPostYear, avatar: File): Either[Result, Future[Posturl_encodedType[_]]] = {
+        def processValidposturl_encodedRequest(name: String, year: Option[BigInt], avatar: File): Either[Result, Future[Posturl_encodedType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((name, year, avatar)))
             
             new Url_encodedPostValidator(name, year, avatar).errors match {
@@ -140,7 +140,7 @@ def posturl_encodedAction[T] = (f: posturl_encodedActionType[T]) => posturl_enco
     def Postboth200(resultF: Future[BothPostResponses200])(implicit writerP: String => Option[Writeable[BothPostResponses200]]) = resultF map { resultP => (new PostbothType[BothPostResponses200] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type postbothActionRequestType       = (String, BothPostYear, MultipartPostAvatar, File)
+    private type postbothActionRequestType       = (String, Option[BigInt], Option[File], File)
     private type postbothActionType[T]            = postbothActionRequestType => Future[PostbothType[T] forSome { type T }]
 
 
@@ -148,7 +148,7 @@ def posturl_encodedAction[T] = (f: posturl_encodedActionType[T]) => posturl_enco
 
 def postbothAction[T] = (f: postbothActionType[T]) => postbothActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidpostbothRequest(name: String, year: BothPostYear, avatar: MultipartPostAvatar, ringtone: File): Either[Result, Future[PostbothType[_]]] = {
+        def processValidpostbothRequest(name: String, year: Option[BigInt], avatar: Option[File], ringtone: File): Either[Result, Future[PostbothType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((name, year, avatar, ringtone)))
             
             new BothPostValidator(name, year, avatar, ringtone).errors match {

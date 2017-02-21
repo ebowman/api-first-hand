@@ -10,11 +10,11 @@ import akka.util.ByteString
 
 import de.zalando.play.controllers.Base64String
 import Base64String._
+import de.zalando.play.controllers.BinaryString
+import BinaryString._
 import java.time.ZonedDateTime
 import java.util.UUID
 import java.time.LocalDate
-import de.zalando.play.controllers.BinaryString
-import BinaryString._
 
 
 
@@ -32,10 +32,10 @@ object ResponseWriters extends ResponseWritersBase {
     * in order for play-swagger to be able to provide safety net for
     * different response types
     */
-    val writable_application_json_Null_esc: Writeable[Null] =
+    val writable_application_json_Null: Writeable[Null] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_yaml_Null_esc: Writeable[Null] =
+    val writable_application_yaml_Null: Writeable[Null] =
         Writeable(a => ???, Some("application/yaml"))
 
     /**
@@ -43,8 +43,8 @@ object ResponseWriters extends ResponseWritersBase {
     * as a marshaller for different mime types and types of response
     */
     override val custom: Seq[WriteableWrapper[_]] = Seq(
-        writable_application_json_Null_esc, 
-        writable_application_yaml_Null_esc
+        writable_application_json_Null, 
+        writable_application_yaml_Null
     )
 }
 

@@ -27,10 +27,10 @@ import org.scalatestplus.play.{OneAppPerTest, WsScalaTestClient}
 
 import Generators._
 
+import java.time.ZonedDateTime
 import java.time.LocalDate
 import de.zalando.play.controllers.BinaryString
 import BinaryString._
-import java.time.ZonedDateTime
 import de.zalando.play.controllers.Base64String
 import Base64String._
 
@@ -59,7 +59,7 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
 
 
     "POST /string" should {
-        def testInvalidInput(input: (String, StringPostPassword_optional, LocalDate, StringPostBinary_optional, StringPostDate_optional, Base64String, StringPostBase64optional, StringPostString_optional, ZonedDateTime, String, StringPostDate_time_optional)): Prop = {
+        def testInvalidInput(input: (String, Option[String], LocalDate, Option[BinaryString], Option[LocalDate], Base64String, Option[Base64String], Option[String], ZonedDateTime, String, Option[ZonedDateTime])): Prop = {
 
             val (string_required, password_optional, date_required, binary_optional, date_optional, base64required, base64optional, string_optional, date_time_required, password_required, date_time_optional) = input
 
@@ -108,7 +108,7 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, StringPostPassword_optional, LocalDate, StringPostBinary_optional, StringPostDate_optional, Base64String, StringPostBase64optional, StringPostString_optional, ZonedDateTime, String, StringPostDate_time_optional)): Prop = {
+        def testValidInput(input: (String, Option[String], LocalDate, Option[BinaryString], Option[LocalDate], Base64String, Option[Base64String], Option[String], ZonedDateTime, String, Option[ZonedDateTime])): Prop = {
             val (string_required, password_optional, date_required, binary_optional, date_optional, base64required, base64optional, string_optional, date_time_required, password_required, date_time_optional) = input
             
             val parsed_binary_optional = parserConstructor("application/json").writeValueAsString(binary_optional)
@@ -166,16 +166,16 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
         "discard invalid data" in {
             val genInputs = for {
                         string_required <- StringGenerator
-                        password_optional <- StringPostPassword_optionalGenerator
+                        password_optional <- OptionStringGenerator
                         date_required <- LocalDateGenerator
-                        binary_optional <- StringPostBinary_optionalGenerator
-                        date_optional <- StringPostDate_optionalGenerator
+                        binary_optional <- OptionBinaryStringGenerator
+                        date_optional <- OptionLocalDateGenerator
                         base64required <- Base64StringGenerator
-                        base64optional <- StringPostBase64optionalGenerator
-                        string_optional <- StringPostString_optionalGenerator
+                        base64optional <- OptionBase64StringGenerator
+                        string_optional <- OptionStringGenerator
                         date_time_required <- ZonedDateTimeGenerator
                         password_required <- StringGenerator
-                        date_time_optional <- StringPostDate_time_optionalGenerator
+                        date_time_optional <- OptionZonedDateTimeGenerator
                     
                 } yield (string_required, password_optional, date_required, binary_optional, date_optional, base64required, base64optional, string_optional, date_time_required, password_required, date_time_optional)
             val inputs = genInputs suchThat { case (string_required, password_optional, date_required, binary_optional, date_optional, base64required, base64optional, string_optional, date_time_required, password_required, date_time_optional) =>
@@ -187,16 +187,16 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
         "do something with valid data" in {
             val genInputs = for {
                     string_required <- StringGenerator
-                    password_optional <- StringPostPassword_optionalGenerator
+                    password_optional <- OptionStringGenerator
                     date_required <- LocalDateGenerator
-                    binary_optional <- StringPostBinary_optionalGenerator
-                    date_optional <- StringPostDate_optionalGenerator
+                    binary_optional <- OptionBinaryStringGenerator
+                    date_optional <- OptionLocalDateGenerator
                     base64required <- Base64StringGenerator
-                    base64optional <- StringPostBase64optionalGenerator
-                    string_optional <- StringPostString_optionalGenerator
+                    base64optional <- OptionBase64StringGenerator
+                    string_optional <- OptionStringGenerator
                     date_time_required <- ZonedDateTimeGenerator
                     password_required <- StringGenerator
-                    date_time_optional <- StringPostDate_time_optionalGenerator
+                    date_time_optional <- OptionZonedDateTimeGenerator
                 
             } yield (string_required, password_optional, date_required, binary_optional, date_optional, base64required, base64optional, string_optional, date_time_required, password_required, date_time_optional)
             val inputs = genInputs suchThat { case (string_required, password_optional, date_required, binary_optional, date_optional, base64required, base64optional, string_optional, date_time_required, password_required, date_time_optional) =>

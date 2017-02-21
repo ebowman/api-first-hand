@@ -10,86 +10,60 @@ object Generators extends JsValueGenerators {
     
 
     
-    def createMetaCopyrightGenerator = _generate(MetaCopyrightGenerator)
-    def createModelSchemaKeywordsGenerator = _generate(ModelSchemaKeywordsGenerator)
-    def createModelSchemaSpecialDescriptionsGenerator = _generate(ModelSchemaSpecialDescriptionsGenerator)
-    def createModelSchemaRootDataGenerator = _generate(ModelSchemaRootDataGenerator)
-    def createPetIdGenerator = _generate(PetIdGenerator)
-    def createModelSchemaRootLinksGenerator = _generate(ModelSchemaRootLinksGenerator)
-    def createPetTagsGenerator = _generate(PetTagsGenerator)
     def createModelSchemaSilhouetteIdGenerator = _generate(ModelSchemaSilhouetteIdGenerator)
-    def createPetPhotoUrlsGenerator = _generate(PetPhotoUrlsGenerator)
-    def createModelSchemaLengthRegisterGenerator = _generate(ModelSchemaLengthRegisterGenerator)
-    def createModelSchemaAgeGroupsGenerator = _generate(ModelSchemaAgeGroupsGenerator)
-    def createPetCategoryGenerator = _generate(PetCategoryGenerator)
-    def createModelSchemaAgeGroupsArrResultGenerator = _generate(ModelSchemaAgeGroupsArrResultGenerator)
-    def createPetTagsOptGenerator = _generate(PetTagsOptGenerator)
-    def createModelSchemaRootMetaGenerator = _generate(ModelSchemaRootMetaGenerator)
+    def createModelSchemaAgeGroupsSeqEnumGenerator = _generate(ModelSchemaAgeGroupsSeqEnumGenerator)
     
 
     
-    def MetaCopyrightGenerator = Gen.option(arbitrary[String])
-    def ModelSchemaKeywordsGenerator = Gen.option(arbitrary[String])
-    def ModelSchemaSpecialDescriptionsGenerator = Gen.option(PetPhotoUrlsGenerator)
-    def ModelSchemaRootDataGenerator = Gen.option(ModelSchemaRootDataOptGenerator)
-    def PetIdGenerator = Gen.option(arbitrary[Long])
-    def ModelSchemaRootLinksGenerator = Gen.option(ModelSchemaRootLinksOptGenerator)
-    def PetTagsGenerator = Gen.option(PetTagsOptGenerator)
     def ModelSchemaSilhouetteIdGenerator = { import ModelSchemaSilhouetteId._ ; Gen.oneOf(Seq(Kitchen, Bikini_top, Toys, Nightwear_combination, Bra, One_piece_underwear, Ball, Cleansing, Skincare, Jewellery, Headgear, Bustier, Beach_trouser, Bedroom, Lounge, Nail, Undershirt, Combination_clothing, Gloves, Fragrance, Other_equipment, Fitness, Bathroom, One_piece_nightwear, Sleeping_bag, Coat, Case, Sandals, Ankle_boots, Stocking, Shirt, Backpack, Face_cosmetic, Travel_equipment, Hair, Sneaker, Beauty_equipment, Bikini_combination, Backless_slipper, Beach_accessoires, Scarf, First_shoe, Voucher, Wallet, Peeling, Glasses, Boards, Sun, Shave, Low_shoe, Underwear_combination, Nightdress, Suit_accessoires, Watch, Headphones, Skates, Boots, Jacket, Etui, Night_shirt, Other_accessoires, Vest, Bag, System, Racket, Trouser, Lip_cosmetic, Keychain, Belt, Ballerina_shoe, One_piece_suit, Night_trouser, Skirt, Tights, Beach_shirt, Dress, Bicycle, Protector, Eye_cosmetic, Bathrobe, Bicycle_equipment, Pullover, One_piece_beachwear, Underpant, Living, Cardigan, Corsage, Shoe_accessoires, Umbrella, Pumps, Tent, T_shirt_top, Ski)) }
-    def PetPhotoUrlsGenerator: Gen[List[String]] = Gen.containerOf[List,String](arbitrary[String])
-    def ModelSchemaLengthRegisterGenerator = Gen.option(arbitrary[String])
-    def ModelSchemaAgeGroupsGenerator: Gen[List[ModelSchemaAgeGroupsArrResult]] = Gen.containerOf[List,ModelSchemaAgeGroupsArrResult](ModelSchemaAgeGroupsArrResultGenerator)
-    def PetCategoryGenerator = Gen.option(PetCategoryOptGenerator)
-    def ModelSchemaAgeGroupsArrResultGenerator = { import ModelSchemaAgeGroupsArrResult._ ; Gen.oneOf(Seq(Baby, Kid, Teen, Adult)) }
-    def PetTagsOptGenerator: Gen[List[PetCategoryOpt]] = Gen.containerOf[List,PetCategoryOpt](PetCategoryOptGenerator)
-    def ModelSchemaRootMetaGenerator = Gen.option(ModelSchemaRootMetaOptGenerator)
+    def ModelSchemaAgeGroupsSeqEnumGenerator = { import ModelSchemaAgeGroupsSeqEnum._ ; Gen.oneOf(Seq(Baby, Kid, Teen, Adult)) }
     
 
-    def createPetCategoryOptGenerator = _generate(PetCategoryOptGenerator)
-    def createModelSchemaRootDataOptGenerator = _generate(ModelSchemaRootDataOptGenerator)
-    def createModelSchemaRootMetaOptGenerator = _generate(ModelSchemaRootMetaOptGenerator)
+    def createModelSchemaRootMetaOptionMetaGenerator = _generate(ModelSchemaRootMetaOptionMetaGenerator)
+    def createPetCategoryOptionCategoryGenerator = _generate(PetCategoryOptionCategoryGenerator)
     def createModelSchemaRootGenerator = _generate(ModelSchemaRootGenerator)
+    def createModelSchemaRootLinksOptionLinksGenerator = _generate(ModelSchemaRootLinksOptionLinksGenerator)
     def createPetGenerator = _generate(PetGenerator)
-    def createModelSchemaRootLinksOptGenerator = _generate(ModelSchemaRootLinksOptGenerator)
+    def createModelSchemaRootDataOptionModelSchemaGenerator = _generate(ModelSchemaRootDataOptionModelSchemaGenerator)
 
 
-    def PetCategoryOptGenerator = for {
-        id <- PetIdGenerator
-        name <- MetaCopyrightGenerator
-    } yield PetCategoryOpt(id, name)
-    def ModelSchemaRootDataOptGenerator = for {
+    def ModelSchemaRootMetaOptionMetaGenerator = for {
+        copyright <- Gen.option(arbitrary[String])
+    } yield ModelSchemaRootMetaOptionMeta(copyright)
+    def PetCategoryOptionCategoryGenerator = for {
+        id <- Gen.option(arbitrary[Long])
+        name <- Gen.option(arbitrary[String])
+    } yield PetCategoryOptionCategory(id, name)
+    def ModelSchemaRootGenerator = for {
+        data <- Gen.option(ModelSchemaRootDataOptionModelSchemaGenerator)
+        meta <- Gen.option(ModelSchemaRootMetaOptionMetaGenerator)
+        links <- Gen.option(ModelSchemaRootLinksOptionLinksGenerator)
+    } yield ModelSchemaRoot(data, meta, links)
+    def ModelSchemaRootLinksOptionLinksGenerator = for {
+        self <- Gen.option(arbitrary[String])
+        related <- Gen.option(arbitrary[String])
+    } yield ModelSchemaRootLinksOptionLinks(self, related)
+    def PetGenerator = for {
         name <- arbitrary[String]
+        photoUrls <- Gen.containerOf[List,String](arbitrary[String])
+        id <- Gen.option(arbitrary[Long])
+        status <- Gen.option(arbitrary[String])
+        tags <- Gen.option(Gen.containerOf[List,PetCategoryOptionCategory](PetCategoryOptionCategoryGenerator))
+        category <- Gen.option(PetCategoryOptionCategoryGenerator)
+    } yield Pet(name, photoUrls, id, status, tags, category)
+    def ModelSchemaRootDataOptionModelSchemaGenerator = for {
+        name <- arbitrary[String]
+        description <- Gen.option(arbitrary[String])
         sizeRegister <- arbitrary[String]
         brand <- arbitrary[String]
         partnerArticleModelId <- arbitrary[BigInt]
-        description <- MetaCopyrightGenerator
-        ageGroups <- ModelSchemaAgeGroupsGenerator
-        keywords <- ModelSchemaKeywordsGenerator
-        lengthRegister <- ModelSchemaLengthRegisterGenerator
+        keywords <- Gen.option(arbitrary[String])
+        lengthRegister <- Gen.option(arbitrary[String])
+        specialDescriptions <- Gen.option(Gen.containerOf[List,String](arbitrary[String]))
+        articleModelAttributes <- Gen.option(Gen.containerOf[List,String](arbitrary[String]))
         silhouetteId <- ModelSchemaSilhouetteIdGenerator
-        specialDescriptions <- ModelSchemaSpecialDescriptionsGenerator
-        articleModelAttributes <- ModelSchemaSpecialDescriptionsGenerator
-    } yield ModelSchemaRootDataOpt(name, sizeRegister, brand, partnerArticleModelId, description, ageGroups, keywords, lengthRegister, silhouetteId, specialDescriptions, articleModelAttributes)
-    def ModelSchemaRootMetaOptGenerator = for {
-        copyright <- MetaCopyrightGenerator
-    } yield ModelSchemaRootMetaOpt(copyright)
-    def ModelSchemaRootGenerator = for {
-        data <- ModelSchemaRootDataGenerator
-        meta <- ModelSchemaRootMetaGenerator
-        links <- ModelSchemaRootLinksGenerator
-    } yield ModelSchemaRoot(data, meta, links)
-    def PetGenerator = for {
-        name <- arbitrary[String]
-        tags <- PetTagsGenerator
-        photoUrls <- PetPhotoUrlsGenerator
-        id <- PetIdGenerator
-        status <- MetaCopyrightGenerator
-        category <- PetCategoryGenerator
-    } yield Pet(name, tags, photoUrls, id, status, category)
-    def ModelSchemaRootLinksOptGenerator = for {
-        self <- MetaCopyrightGenerator
-        related <- MetaCopyrightGenerator
-    } yield ModelSchemaRootLinksOpt(self, related)
+        ageGroups <- Gen.containerOf[List,ModelSchemaAgeGroupsSeqEnum](ModelSchemaAgeGroupsSeqEnumGenerator)
+    } yield ModelSchemaRootDataOptionModelSchema(name, description, sizeRegister, brand, partnerArticleModelId, keywords, lengthRegister, specialDescriptions, articleModelAttributes, silhouetteId, ageGroups)
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
 

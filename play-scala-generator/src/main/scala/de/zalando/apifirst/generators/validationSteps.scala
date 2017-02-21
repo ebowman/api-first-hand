@@ -54,7 +54,7 @@ trait CallValidatorsStep extends EnrichmentStep[ApiCall] with ValidatorsCommon {
 
 }
 
-trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with ValidatorsCommon {
+trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with ValidatorsCommon with CommonData {
 
   override def steps: Seq[SingleStep] = callValidators +: super.steps
 
@@ -147,7 +147,7 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
   private def delegateName(r: Reference, t: Type, suffix: String): Reference = {
     t match {
       case p: PrimitiveType => r / suffix
-      case t: CatchAll => r / suffix
+      case p: Container => r / suffix
       case _ => t.name
     }
   }
@@ -160,7 +160,7 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
         case f if constraints0(f.name -> f.tpe).nonEmpty =>
           Map(
             "field_name" -> escape(f.name.simple),
-            "validation_name" -> validator(fieldName(f), table)
+            "validation_name" -> validator(f.name, table)
           )
       }
     )
@@ -180,7 +180,10 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
   }
 
   private def optValidations(r: Reference, t: Container, delegateName: Reference)(implicit table: DenotationTable) = {
-    val typeName = typeNameDenotation(table, r)
+    val typeName = t match {
+      case c: Container if isRecursiveContainerType(c) => getRecursiveContainerName(t, r, "")
+      case _ => typeNameDenotation(table, r)
+    }
     val nonEmptyConstraints = t.meta.constraints.filterNot(_.isEmpty)
     Map(
       "restrictions" -> nonEmptyConstraints.zipWithIndex.map {
@@ -221,8 +224,6 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
       "implicits" -> implicits.map { i => Map("name" -> i) }
     )
   }
-
-  def fieldName(f: Field): TypeName = if (f.tpe.isInstanceOf[PrimitiveType]) f.name else f.tpe.name
 
 }
 

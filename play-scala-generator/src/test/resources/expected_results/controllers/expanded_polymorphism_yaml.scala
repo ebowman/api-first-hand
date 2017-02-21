@@ -23,6 +23,7 @@ import javax.inject._
 
 package expanded {
     // ----- Start of unmanaged code area for package Expanded_polymorphismYaml
+    
     // ----- End of unmanaged code area for package Expanded_polymorphismYaml
     class Expanded_polymorphismYaml @Inject() (
         // ----- Start of unmanaged code area for injections Expanded_polymorphismYaml
@@ -34,22 +35,22 @@ package expanded {
         // ----- Start of unmanaged code area for constructor Expanded_polymorphismYaml
 
         // ----- End of unmanaged code area for constructor Expanded_polymorphismYaml
-        val findPets = findPetsAction { input: (PetsGetTags, PetsGetLimit) =>
+        val findPets = findPetsAction { input: (Option[ArrayWrapper[String]], Option[Int]) =>
             val (tags, limit) = input
             // ----- Start of unmanaged code area for action  Expanded_polymorphismYaml.findPets
             NotImplementedYet
             // ----- End of unmanaged code area for action  Expanded_polymorphismYaml.findPets
         }
-        val addPet = addPetAction { (pet: NewPet) =>
+        val addPet = addPetAction { (pet: NewPet) =>  
             // ----- Start of unmanaged code area for action  Expanded_polymorphismYaml.addPet
             NotImplementedYet
             // ----- End of unmanaged code area for action  Expanded_polymorphismYaml.addPet
         }
-        val deletePet = deletePetAction { (id: Long) =>
+        val deletePet = deletePetAction { (id: Long) =>  
             // ----- Start of unmanaged code area for action  Expanded_polymorphismYaml.deletePet
             NotImplementedYet
             // ----- End of unmanaged code area for action  Expanded_polymorphismYaml.deletePet
         }
-
+    
     }
 }
