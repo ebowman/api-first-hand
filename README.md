@@ -36,8 +36,6 @@ Table of Contents
       
 API-First-Hand is an API-First bootstrapping tool for building RESTful web services from a [Swagger/OpenAPI](http://swagger.io/) specification. It's a plugin that takes your Swagger/OpenAPI definition as the single source of truth and regenerates these code snippets for you, simply and consistently. Instead of writing lots of boilerplate code, you can focus instead on implementing service business logic. Subsequent regenerations keep the code that you have added—either by commenting out the parts that are no longer valid, or by adding parts that are needed because you've changed the API.
 
-[Lightbend](https://www.lightbend.com/activator/template/api-first-hand), the company behind Scala, Akka, Play Framework, and Lagom, hosts an Activator template for API-First-Hand. 
-
 The plugin was built for use with [Play Framework](http://www.playframework.com/), but we'd like to extend it for use with **Akka HTTP**. [Get in touch](https://github.com/zalando/api-first-hand/blob/master/CONTRIBUTING.md) if you'd like to help make that possible.
 
 ### Features and Add-ons
@@ -58,7 +56,7 @@ Api-First-Hand supports round-trip regeneration and compilation of these (manage
 
 ### Build Status: Beta
 
-Enable API-First-Hand with the [api-first-hand](http://www.typesafe.com/activator/template/api-first-hand) activator template; the version in this repository is under active development.
+[Lightbend](https://www.lightbend.com/activator/template/api-first-hand) hosts an Activator template for API-First-Hand.  Enable API-First-Hand with this template; the version in this repository is under active development.
 
 ### More About the Activator Template
 The template contains the following:
