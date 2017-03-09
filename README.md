@@ -80,24 +80,19 @@ The template contains the following:
 - Play 2.5.4+
 - Swagger (OpenAPI) 2.0
   
+## Running Your Application
+
+[**waiting for clarification....**] 
+
 ### Play Routes Integration
 
-As a Play application developer, you are used to defining your endpoints in the `conf/routes` file. 
-Not so with the Api-First-Hand plugin! Swagger API specifications already define endpoints as `path` definitions, 
-as seen in the example above. So why do the work twice, right? Instead, the Api-First-Hand plugin requires you to 
-link your API definition in the routes file ones—making all Swagger API-defined endpoints available as children 
-of one single path context location, and generating Play route definitions from them (as shown below):
+Play application developers are used to defining endpoints in the `conf/routes` file. With Api-First-Hand, however, Swagger API specifications already define endpoints as `path` definitions—saving you from doing the work twice. Just link your API definition in the routes file once. This makes all Swagger API-defined endpoints available as children of a single path context location, and generates Play route definitions from them (as shown below):
 
 ```
 ->      /example        example.yaml.Routes
 ```
 
-Note that the `conf/routes` file provided by this activator template also contains a couple of additional `GET` 
-mappings required for the the Swagger UI sandbox.
-
-There are a couple of commented out links to other examples. If you activate some specification by moving it from 
-the `examples` folder into the `conf` folder, you'll need to uncomment an appropriate line in the `routes` file in
-order for Play to be able to find it.  
+Note that the `conf/routes` file provided by the Activator template also contains additional `GET` mappings required for the the Swagger UI sandbox, and some commented-out links to other examples. If you activate some specification by moving it from the `examples` folder into the `conf` folder, you'll have to uncomment an appropriate line in the `routes` file so that Play can find it.  
 
 
 ### Swagger Domain Definitions
