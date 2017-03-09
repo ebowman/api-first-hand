@@ -9,8 +9,7 @@ Table of Contents
 - [Compatibility](#compatibility)
 - [Build Status: Beta](#build-status-beta)
 - [More About the Activator Template](#tutorial)
-- [Tutorial](#tutorial)
-- [Run Your Application](#run-your-application)
+- [Running an Application](#running-an-application)
 - [Play Routes Integration](#play-routes-integration)
   - [Swagger Domain Definitions](#play-routes-integration)
   - [Specification Cross-References](#specification-cross-references)
@@ -37,7 +36,9 @@ Table of Contents
       
 API-First-Hand is an API-First bootstrapping tool for building RESTful web services from a [Swagger/OpenAPI](http://swagger.io/) specification. It's a plugin that takes your Swagger/OpenAPI definition as the single source of truth and regenerates these code snippets for you, simply and consistently. Instead of writing lots of boilerplate code, you can focus instead on implementing service business logic. Subsequent regenerations keep the code that you have added—either by commenting out the parts that are no longer valid, or by adding parts that are needed because you've changed the API.
 
-[Lightbend](https://www.lightbend.com/activator/template/api-first-hand), the company behind Scala, Akka, Play Framework, and Lagom, hosts an Activator template for API-First-Hand. The plugin was built for use with [Play Framework](http://www.playframework.com/), but we'd like to extend it for use with **Akka HTTP**. [Get in touch](https://github.com/zalando/api-first-hand/blob/master/CONTRIBUTING.md) if you'd like to help make that possible.
+[Lightbend](https://www.lightbend.com/activator/template/api-first-hand), the company behind Scala, Akka, Play Framework, and Lagom, hosts an Activator template for API-First-Hand. 
+
+The plugin was built for use with [Play Framework](http://www.playframework.com/), but we'd like to extend it for use with **Akka HTTP**. [Get in touch](https://github.com/zalando/api-first-hand/blob/master/CONTRIBUTING.md) if you'd like to help make that possible.
 
 ### Features and Add-ons
 Api-First-Hand supports round-trip regeneration and compilation of these (managed means "managed by sbt"):
@@ -79,38 +80,6 @@ The template contains the following:
 - Play 2.5.4+
 - Swagger (OpenAPI) 2.0
   
-## Run Your Application
-
-Before we go any further, let's run the application.
-
-- Open a shell and `cd` into your service project directory.
-- Start `sbt` and `run` the service.
-- View the running application at [http://localhost:9000](http://localhost:9000).
-
-The service template comes with the Swagger UI frontend included, 
-run statically from the within Play, which provides a sandbox for your service. 
-The template is configured with a template Swagger API definition called `example.yaml` 
-and located in the `conf` directory of the Play application. 
-
-The `example.yaml` definition provides an example [API description](https://github.com/zalando/play-swagger-service/blob/master/conf/example.yaml).
-
-This definition contains three end points: 
-- the `/token` path, which accept the `GET` and `POST` methods
-- the `/todos/{user_id}`, which accepts the `GET` method. 
-
-The `GET /token` API plays a role of an authentication server and is used by the Swagger UI for OAuth token requests.
-The `POST /token` API represents an authorization server and is used by the security part of the 
-generated code to validate OAuth tokens.
- 
-The `GET /todos/{user_id}` takes a path parameter `user_id` and returns a TODO list for given user. 
-For the client to be allowed to access this endpoint, it must provide an OAuth token with the scope `admin:org`. 
-The token can be requested using the Swagger UI.
-
-Try it out for yourself: 
-
-Click the [default](http://localhost:9000/) button to expand the API definition in the Swagger UI.
-
-
 ### Play Routes Integration
 
 As a Play application developer, you are used to defining your endpoints in the `conf/routes` file. 
