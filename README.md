@@ -1,4 +1,4 @@
-# Api-First-Hand: Bootstrap your way to boilerplate savings
+## Api-First-Hand: Bootstrap your way to boilerplate savings
 
 [![Build Status](https://travis-ci.org/zalando/api-first-hand.svg)](https://travis-ci.org/zalando/api-first-hand) [![codecov](https://codecov.io/gh/zalando/api-first-hand/branch/master/graph/badge.svg)](https://codecov.io/gh/zalando/api-first-hand) [![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zalando/api-first-hand?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -10,7 +10,6 @@ Table of Contents
   - [Build Status](#build-status)
   - [Tutorial](#tutorial)
   - [Run Your Application](#run-your-application)
-  - [Tutorial](#tutorial)
   - [Play Routes Integration](#play-routes-integration)
       - [Swagger Domain Definitions](#play-routes-integration)
       - [Specification Cross-References](#specification-cross-references)
@@ -57,7 +56,7 @@ an end-to-end functional release intended to demonstrate the possibility to gene
 
 We benefit from community feedback. All comments are welcome!
 
-# Api-First-Hand Tutorial
+## Tutorial
 
 This tutorial is based on the [api-first-hand](http://www.typesafe.com/activator/template/api-first-hand) activator template.
 
