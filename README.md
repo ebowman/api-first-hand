@@ -59,11 +59,11 @@ Api-First-Hand supports round-trip regeneration and compilation of these (manage
 
 API-First-Hand features an Activator template hosted by [Lightbend](https://www.lightbend.com/activator/template/api-first-hand), the company behind Scala, Akka, Play Framework, and Lagom.
 
-## Build Status: Beta
+### Build Status: Beta
 
 Enable API-First-Hand with the [api-first-hand](http://www.typesafe.com/activator/template/api-first-hand) activator template; the version in this repository is under active development.
 
-## More About the Activator Template
+### More About the Activator Template
 The template contains the following:
 
 - `tutorial` folder with HTML tutorial
