@@ -1021,7 +1021,7 @@ test data generators to implement our property-based testing.
 
 Running the test is as simple as running a test set from sbt. Just type `test` from your `sbt` prompt.
 
-# Building a Api-First-Hand Plugin
+# Building an Api-First-Hand Plugin
 
 To build a plugin, do the following:
 
