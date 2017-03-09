@@ -38,11 +38,10 @@ Table of Contents
       
 API-First-Hand is an API-First bootstrapping tool for building RESTful web services from a [Swagger/OpenAPI](http://swagger.io/) specification. It's a plugin that takes your Swagger/OpenAPI definition as the single source of truth and regenerates these code snippets for you, simply and consistently. Instead of writing lots of boilerplate code, you can focus instead on implementing service business logic. Subsequent regenerations keep the code that you have added—either by commenting out the parts that are no longer valid, or by adding parts that are needed because you've changed the API.
 
-API-First-Hand was built as a [Play Framework](http://www.playframework.com/) plugin, but we're **hoping to extend it to Akka HTTP**. Get in touch with us if you'd like to help make that possible.
+[Lightbend](https://www.lightbend.com/activator/template/api-first-hand), the company behind Scala, Akka, Play Framework, and Lagom, hosts an Activator template for API-First-Hand. The plugin was built for use with [Play Framework](http://www.playframework.com/), but we'd like to extend it for use with **Akka HTTP**. [Get in touch](https://github.com/zalando/api-first-hand/blob/master/CONTRIBUTING.md) if you'd like to help make that possible.
 
 ### Features and Add-ons
 Api-First-Hand supports round-trip regeneration and compilation of these (managed means "managed by sbt"):
-
 - Play route definitions (managed)
 - Swagger domain model definitions and parameters onto Scala case classes (managed)
 - Swagger domain model constraints onto Play validations (managed)
@@ -56,8 +55,6 @@ Api-First-Hand supports round-trip regeneration and compilation of these (manage
 - Unmarshallers for custom content types (manual generation and compilation)
 
 "Managed by sbt" means that you don't have to control or change the code as you make your REST service. The security extractors and unmarshallers are available through manual generation and compilation, and supported if A) No security extractor or unmarshaller with the same name already exists; B) The developer issues the `playScalaSecurity` or `playScalaMarshallers` sbt command.
-
-API-First-Hand features an Activator template hosted by [Lightbend](https://www.lightbend.com/activator/template/api-first-hand), the company behind Scala, Akka, Play Framework, and Lagom.
 
 ### Build Status: Beta
 
