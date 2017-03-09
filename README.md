@@ -7,8 +7,7 @@ Table of Contents
 
 - [Features and Add-ons](#features-and-add-ons)
 - [Compatibility](#compatibility)
-- [Build Status: Beta](#build-status)
-  - [Project Goals/Vision](XXX)
+- [Build Status: Beta](#build-status-beta)
 - [More About the Activator Template](#tutorial)
 - [Tutorial](#tutorial)
 - [Run Your Application](#run-your-application)
