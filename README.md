@@ -5,7 +5,7 @@
 Table of Contents
 ------------------------------------------------------------
 
-- [Features and Add-ons](#features-and-add-ons)
+- [Features and Add-ons](@features-and-add-ons)
 - [Compatibility](#compatibility)
 - [Build Status: Beta](#build-status)
   - [Project Goals/Vision](XXX)
