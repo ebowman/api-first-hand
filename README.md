@@ -1,4 +1,4 @@
-## Api-First-Hand: Bootstrap your way to boilerplate savings
+## Api-First-Hand: [xxxx]
 
 [![Build Status](https://travis-ci.org/zalando/api-first-hand.svg)](https://travis-ci.org/zalando/api-first-hand) [![codecov](https://codecov.io/gh/zalando/api-first-hand/branch/master/graph/badge.svg)](https://codecov.io/gh/zalando/api-first-hand) [![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zalando/api-first-hand?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -34,16 +34,13 @@ Table of Contents
   - [Custom Templates For Code Generation](#custom-templates-for-code-generation)
   - [Code Quality](#code-quality) 
       
-## Compatibility
+## Intro
+API-First-Hand is an API-First bootstrapping tool for building RESTful web services from a [Swagger/OpenAPI](http://swagger.io/) specification. You can use this project
 
-- Play 2.5.4+
-- Swagger (OpenAPI) 2.0
+The Activator template for API-First-Hand is hosted by [Lightbend](https://www.lightbend.com/activator/template/api-first-hand), the company behind Scala, Akka, Play Framework, and Lagom.
 
-## Build Status
 
-This plugin should be enabled using the [api-first-hand](http://www.typesafe.com/activator/template/api-first-hand) activator template 
-as the version in this repository is under active development. The status of this software is beta, 
-an end-to-end functional release intended to demonstrate the possibility to generate following from a Swagger specification:
+An end-to-end functional release will enable you to generate the following from a Swagger specification:
 
 - Play route files
 - Generators of random test data
@@ -54,7 +51,14 @@ an end-to-end functional release intended to demonstrate the possibility to gene
 - Security extractors (if needed)
 - Skeletons for custom deserializers (if needed)
 
-We benefit from community feedback. All comments are welcome!
+## Compatibility
+
+- Play 2.5.4+
+- Swagger (OpenAPI) 2.0
+
+## Build Status: Beta
+
+Enable API-First-Hand with the [api-first-hand](http://www.typesafe.com/activator/template/api-first-hand) activator template; the version in this repository is under active development.  
 
 ## Tutorial
 
