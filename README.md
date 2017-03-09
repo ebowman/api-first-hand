@@ -26,13 +26,13 @@ Table of Contents
          - [Nested Arrays](#nested-arrays)
        - [Swagger Validations](#swagger-validations)
        - [Test Generators](#test-generators)
-   - [Building an Api-First-Hand Plugin](#building-an-api-first-hand-plugin)
-      - [Plugin Architecture](#plugin-architecture)
-      - [Plugin Project Structure](#plugin-project-structure)
-      - [Plugin Developing](#plugin-developing)
-      - [Plugin Testing](#plugin-testing)
-      - [Custom Templates For Code Generation](#custom-templates-for-code-generation)
-      - [Code Quality](#code-quality) 
+- [Building an Api-First-Hand Plugin](#building-an-api-first-hand-plugin)
+  - [Plugin Architecture](#plugin-architecture)
+  - [Plugin Project Structure](#plugin-project-structure)
+  - [Plugin Developing](#plugin-developing)
+  - [Plugin Testing](#plugin-testing)
+  - [Custom Templates For Code Generation](#custom-templates-for-code-generation)
+  - [Code Quality](#code-quality) 
       
 ## Compatibility
 
