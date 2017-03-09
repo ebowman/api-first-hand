@@ -58,9 +58,8 @@ Api-First-Hand supports round-trip regeneration and compilation of these (manage
 
 [Lightbend](https://www.lightbend.com/activator/template/api-first-hand) hosts an Activator template for API-First-Hand.  Enable API-First-Hand with this template; the version in this repository is under active development.
 
-### More About the Activator Template
+#### More About the Activator Template
 The template contains the following:
-
 - `tutorial` folder with HTML tutorial
 - `public/swagger` folder containing static files needed for the Swagger UI
 - `project` folder containing a pre-configured `plugins.sbt` file with a definition of all required resolvers and plugins
@@ -95,14 +94,9 @@ Note that the `conf/routes` file provided by the Activator template also contain
 
 ### Swagger Domain Definitions
 
-Scala domain model definitions are generated for all data types defined as Swagger parameters in an API specification. 
-Swagger parameters can be of path, query, header, form or body types, and consist of either primitive data types or 
-more complex types composed from objects and arrays with primitives as leaves. 
+API-First-Hand generates Scala domain model definitions for all data types defined as Swagger parameters in an API specification. Swagger parameters can be of path, query, header, form or body types, and consist of either primitive data types or more complex types composed from objects and arrays with primitives as leaves. Both primitive types and complex types are mapped to Scala.
 
-Both primitive types and complex types are mapped to scala.
-
-As an example, let's look at the Swagger API specification file [`simple.petstore.api.yaml`](https://github.com/zalando/api-first-hand-activator/blob/master/conf/examples/simple.petstore.api.yaml), 
-which defines the API of a simple pet store. It contains a model definition for a pet.
+For an example, let's look at the Swagger API specification file [`simple.petstore.api.yaml`](https://github.com/zalando/api-first-hand-activator/blob/master/conf/examples/simple.petstore.api.yaml), which defines the API of a simple pet store. It contains a model definition for a pet:
 
 ```yaml
 definitions:
@@ -120,9 +114,7 @@ definitions:
         type: string
 ```
 
-This definition consists of an object `pet` containing the required properties `id` and `name` 
-and the optional property `tag`. The Swagger primitive types of these properties are a 64-bit `integer` 
-and (twice) a `string`, successively.  The Api-First-Hand plugin will map this definition on to a generated Scala model.
+This definition consists of an object `pet` containing the required properties `id` and `name` and the optional property `tag`. The Swagger primitive types of these properties are a 64-bit `integer` and (twice) a `string`, successively. Api-First-Hand will map this definition onto a generated Scala model:
 
 ```scala
 package simple.petstore.api
