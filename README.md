@@ -1,13 +1,46 @@
-# Api-First-Hand
+# Api-First-Hand: Bootstrap your way to boilerplate savings
 
 [![Build Status](https://travis-ci.org/zalando/api-first-hand.svg)](https://travis-ci.org/zalando/api-first-hand) [![codecov](https://codecov.io/gh/zalando/api-first-hand/branch/master/graph/badge.svg)](https://codecov.io/gh/zalando/api-first-hand) [![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zalando/api-first-hand?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+Table of Contents
+------------------------------------------------------------
+
+  - [Intro](#why-open-source)
+  - [Compatibility](#compatibility)
+  - [Build Status](#build-status)
+  - [Tutorial](#tutorial)
+  - [Run Your Application](#run-your-application)
+  - [Tutorial](#tutorial)
+  - [Play Routes Integration](#play-routes-integration)
+      - [Swagger Domain Definitions](#play-routes-integration)
+      - [Specification Cross-References](#specification-cross-references)
+      - [Primitive Types](#primitive-types)
+      - [Complex Types](#complex-types)
+        - [Objects](#objects)
+        - [Nested Objects](#nested-objects)
+         - [Optionality](#optionality)
+         - [Parameter Optionality](#parameter-optionality)
+         - [Extension](#extension)
+         - [Polymorphism](#polymorphism)
+         - [Additional Properties](#additional-properties)
+      - [Arrays](#arrays)
+         - [Nested Arrays](#nested-arrays)
+       - [Swagger Validations](#swagger-validations)
+       - [Test Generators](#test-generators)
+   - [Building an Api-First-Hand Plugin](#building-an-api-first-hand-plugin)
+      - [Plugin Architecture](#plugin-architecture)
+      - [Plugin Project Structure](#plugin-project-structure)
+      - [Plugin Developing](#plugin-developing)
+      - [Plugin Testing](#plugin-testing)
+      - [Custom Templates For Code Generation](#custom-templates-for-code-generation)
+      - [Code Quality](#code-quality) 
+      
 ## Compatibility
 
 - Play 2.5.4+
 - Swagger (OpenAPI) 2.0
 
-## Status
+## Build Status
 
 This plugin should be enabled using the [api-first-hand](http://www.typesafe.com/activator/template/api-first-hand) activator template 
 as the version in this repository is under active development. The status of this software is beta, 
@@ -118,7 +151,7 @@ Try it out for yourself:
 Click the [default](http://localhost:9000/) button to expand the API definition in the Swagger UI.
 
 
-# Play Routes Integration
+### Play Routes Integration
 
 As a Play application developer, you are used to defining your endpoints in the `conf/routes` file. 
 Not so with the Api-First-Hand plugin! Swagger API specifications already define endpoints as `path` definitions, 
@@ -138,7 +171,7 @@ the `examples` folder into the `conf` folder, you'll need to uncomment an approp
 order for Play to be able to find it.  
 
 
-## Swagger Domain Definitions
+### Swagger Domain Definitions
 
 Scala domain model definitions are generated for all data types defined as Swagger parameters in an API specification. 
 Swagger parameters can be of path, query, header, form or body types, and consist of either primitive data types or 
@@ -199,7 +232,7 @@ import simple.petstore.api.yaml._
 val pet = Pet(0L, "Tucker", Some("Greyhound"))
 ```
 
-## Specification Cross-References
+### Specification Cross-References
 
 A `$ref` element of the specification is allowed to contain a name of file as it's part. Because of this, it is possible to split 
 a single specification into multiple files as shown in [`cross_spec_references.yaml`](https://github.com/zalando/api-first-hand-activator/blob/master/conf/examples/cross_spec_references.yaml) 
@@ -211,7 +244,7 @@ Thus, even if multiple classes with  the same name and structure might be genera
 own separate namespaces and won't be interchangeable.
 
 
-## Primitive Types
+### Primitive Types
 
 Swagger version 2.0 allows for primitive data types based on the types defined by 
 [JSON-Schema](http://json-schema.org/latest/json-schema-core.html#anchor8).
