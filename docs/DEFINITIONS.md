@@ -2,7 +2,7 @@
 
 Scala domain model definitions are generated for all data types defined as Swagger parameters in an API specification.  Swagger parameters can be of path, query, header, form or body types, and consist of either primitive data types or more complex types composed from objects and arrays with primitives as leaves.  Both primitive types and complex types are mapped to Scala.
 
-As an example, lets look at the Swagger API specification file ```simple.petstore.api.yaml``` that defines the API of a simple pet store. It contains a model definition for a pet:
+As an example, lets look at the Swagger API specification file [`simple.petstore.api.yaml`](https://github.com/zalando/api-first-hand-activator/blob/master/conf/examples/simple.petstore.api.yaml) that defines the API of a simple pet store. It contains a model definition for a pet:
 
 ```yaml
 definitions:
