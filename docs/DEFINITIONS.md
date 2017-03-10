@@ -101,7 +101,7 @@ package object yaml {
 
 #### [Nested Objects](#nested-objects)
 
-Objects can be nested, in which case the scala case class parameter of the outer object that defines the nested object will be the scala case class that is generated for that parameter. E.g.
+Nested objects are generated as adjourned but referenced hierarchically. For example:
 
 ```yaml
 definitions:
@@ -118,18 +118,22 @@ definitions:
           name:
             type: string
 ```
+Is generated as:
 
 ```scala
-package api.yaml
-object definitions {
-  case class Parent(child: Child)
-  case class Child(name: String)
+package api
+package object yaml {
+    case class Parent(child: ParentChild) 
+    case class ParentChild(name: String) 
 }
+
 ```
 
 #### [Optionality](#optionality)
 
-Swagger, by default, defines object properties to be optional, which can be overridden by providing a list of ```required``` object properties as already used in the examples above.  Optional properties are mapped upon scala's ```Option``` type for which a type alias is generated for each property that is optional. E.g.
+Swagger defines object properties as optional by default. You can override this by providing a list of `required` 
+object properties as already used in the examples above. Optional properties are mapped upon Scala's `Option` type, 
+for which a type alias is generated for each property that is optional. For example:
 
 ```yaml
 definitions:
@@ -142,16 +146,18 @@ definitions:
       tag:
         type: string
 ```
+Is generated as:
 
 ```scala
-package api.yaml
-object definitions {
+package api
+package object yaml {
     type ProductTag = Option[String]
-    case class Product(name: String, tag: ProductTag)
+    case class Product(name: String, tag: ProductTag) 
 }
+
 ```
 
-As objects can be nested, so can be object property optionality.  To facilitate for nested optionality, we generate a nested scala ```Option``` type alias. E.g.
+Objects can be nested, and object property optionality can be, too. To facilitate for nested optionality, we generate a nested Scala ```Option``` type alias. For example:
 
 ```yaml
 definitions:
@@ -163,21 +169,27 @@ definitions:
           nested:
             type: string
 ```
+Which is generated as:
 
 ```scala
-object definitions {
-  type BasicOptional = Option[BasicOptionalOpt]
-  type BasicOptionalNested = Option[String]
-  case class Basic(optional: BasicOptional)
-  case class BasicOptionalOpt(nested: BasicOptionalNested)
+package api
+package object yaml {
+    type BasicOptional = Option[BasicOptionalOpt]
+    type BasicOptionalNested = Option[String]
+
+    case class BasicOptionalOpt(nested: BasicOptionalNested) 
+    case class Basic(optional: BasicOptional) 
 }
 ```
+### Parameter optionality
+
+Object properties can be optional. Query, header, body and form parameters can be, too. If they are not required, they are mapped to Scala's `Option` type. 
+
+Path parameters _must_ be declared as required. If a parameter is _not_ required, it can have a default value.
 
 #### [Object Extension](#object-extension)
 
-Objects can extend other objects via employment of swaggers' ```allOf``` property.  In the example below the ```ExtendedErrorModel``` inherits _all of_ the properties of the ```ErrorModel``` which it refers to, that is, the properties ```message``` and ```code```, and _extends_ this model with the property ```rootCause```.
-
-Swagger object extension is mapped by duplicating inherited properties in the object that extends. E.g.
+Objects can extend other objects via employment of Swagger's `allOff` property. In the example below, the `ExtendedErrorModel` inherits _all_ of the properties of the `ErrorModel` which it refers to—that is, the properties `message` and `code`—and _extends_ this model with the property `rootCause`. Swagger object extension is mapped by duplicating inherited properties in the object that extends. For example:
 
 ```yaml
 definitions:
@@ -201,13 +213,16 @@ definitions:
         rootCause:
           type: string
 ```
+Which is generated as:
 
-```scala
-package api.yaml
-object definitions {
-  case class ErrorModel(message: String, code: Int)
-  case class ExtendedErrorModel(message: String, code: Int, rootCause: String)
+``scala
+package api
+package object yaml {
+  import scala.math.BigInt
+  case class ErrorModel(message: String, code: BigInt) 
+  case class ExtendedErrorModel(message: String, code: BigInt, rootCause: String) 
 }
+
 ```
 
 #### [Polymorphism](#polymorphism)
