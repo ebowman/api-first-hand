@@ -96,55 +96,8 @@ Note that the `conf/routes` file provided by the Activator template also contain
 
 API-First-Hand generates Scala domain model definitions for all data types defined as Swagger parameters in an API specification. Swagger parameters can be of path, query, header, form or body types, and consist of either primitive data types or more complex types composed from objects and arrays with primitives as leaves. Both primitive types and complex types are mapped to Scala.
 
-For an example, let's look at the Swagger API specification file [`simple.petstore.api.yaml`](https://github.com/zalando/api-first-hand-activator/blob/master/conf/examples/simple.petstore.api.yaml), which defines the API of a simple pet store. It contains a model definition for a pet:
+For more information and an example, [go here](https://github.com/zalando/api-first-hand/blob/master/docs/DEFINITIONS.md).
 
-```yaml
-definitions:
-  pet:
-    required:
-      - id
-      - name
-    properties:
-      id:
-        type: integer
-        format: int64
-      name:
-        type: string
-      tag:
-        type: string
-```
-
-This definition consists of an object `pet` containing the required properties `id` and `name` and the optional property `tag`. The Swagger primitive types of these properties are a 64-bit `integer` and (twice) a `string`, successively. Api-First-Hand will map this definition onto a generated Scala model:
-
-```scala
-package simple.petstore.api
-
-package object yaml {
-
-    type PetTag = Option[String]
-
-    case class Pet(id: Long, name: String, tag: PetTag)
-}
-```
-
-This generated model contains a type definition `PetTag`, which declares a type alias for the optional `tag` property, 
-and a `Pet` case class with the properties as named in the Swagger API definition and mapped on the subsequent 
-Scala primitive or declared types. The case class and type alias are generated in an package object `yaml`, 
-this package  object itself is contained in the package `simple.petstore.api` so that full object name corresponds 
-to the API filename.
-
-Note that models are generated within a Play application as _managed_ code in the target folder. 
-Generated model code is not intended to be altered.  We should instead look upon the Swagger definition as the single 
-source of truth, and as the source code that defines our model.
-The Swagger specification file of our API is, in that sense, part of the codebase. 
-Even though the generated `Pet` case class is managed by the plugin, and not us, it can (of course) 
-be used in our application codebase after being imported.
-
-```scala
-import simple.petstore.api.yaml._
-
-val pet = Pet(0L, "Tucker", Some("Greyhound"))
-```
 
 ### Specification Cross-References
 
