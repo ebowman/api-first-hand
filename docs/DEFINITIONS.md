@@ -2,7 +2,7 @@
 
 Scala domain model definitions are generated for all data types defined as Swagger parameters in an API specification.  Swagger parameters can be of path, query, header, form or body types, and consist of either primitive data types or more complex types composed from objects and arrays with primitives as leaves.  Both primitive types and complex types are mapped to Scala.
 
-As an example, lets look at the Swagger API specification file [`simple.petstore.api.yaml`](https://github.com/zalando/api-first-hand-activator/blob/master/conf/examples/simple.petstore.api.yaml) that defines the API of a simple pet store. It contains a model definition for a pet:
+As an example, let's consider a Swagger API specification file that defines the API of a simple pet store. It contains a model definition for a pet:
 
 ```yaml
 definitions:
@@ -42,22 +42,25 @@ val pet = Pet(0L, "Tucker", Some("Greyhound"))
          
 ## [Primitive Types](#primitive-types)
          
-Swagger version 2.0 allows for primitive data types based on the types defined by [JSON-Schema](http://json-schema.org/latest/json-schema-core.html#anchor8).  When generated as scala the following mapping applies.
+Swagger version 2.0 allows for primitive data types based on the types defined by [JSON-Schema](http://json-schema.org/latest/json-schema-core.html#anchor8).  When generated as Scala, the following mapping applies:
           
-| Common Name | Swagger Type  | Swagger Format  | Scala Type           |
-| ----------- | ------------- | --------------- | -------------------- |
-| integer     | ```integer``` | ```int32```     | ```scala.Int```      |
-| long        | ```integer``` | ```int64```     | ```scala.Long```     |
-| float       | ```number```  | ```float```     | ```scala.Float```    |
-| double      | ```number```  | ```double```    | ```scala.Double```   |
-| boolean     | ```boolean``` |                 | ```scala.Boolean```  |
-| string      | ```string```  |                 | ```scala.String```   |
-| byte        | ```string```  | ```byte```      | ```scala.Byte```     |
-| binary      | ```string```  | ```binary```    | _unsupported_        |
-| date        | ```string```  | ```date```      | ```java.util.Date``` |
-| datetime    | ```string```  | ```date-time``` | ```java.util.Date``` |
-| password    | ```string```  | ```password```  | ```scala.String```   |
-| file        | ```file```    |                 | ```java.io.File```   |
+| Common Name | Swagger Type | Swagger Format | Scala Type                                  |
+|-------------|--------------|----------------|---------------------------------------------|
+| integer     | integer      | int32          | scala.Int                                   |
+| long        | integer      | int64          | scala.Long                                  |
+| float       | number       | float          | scala.Float                                 |
+| double      | number       | double         | scala.Double                                |
+| big int     | integer      |                | scala.math.BigInt                           |
+| big decimal | number       |                | scala.math.BigDecimal                       |
+| boolean     | boolean      |                | scala.Boolean                               |
+| string      | string       |                | scala.String                                |
+| byte        | string       | byte           | de.zalando.play.controllers.Base64String    |
+| binary      | string       | binary         | de.zalando.play.controllers.BinaryString    |
+| date        | string       | date           | java.time.LocalDate                         |
+| datetime    | string       | date-time      | java.time.ZonedDateTime                     |
+| password    | string       | password       | scala.String                                |
+| uuid        | string       | uuid           | java.util.UUID                              |
+| file        | file         |                | java.io.File                                |
 
 ## [Complex Types](#complex-types)
 
