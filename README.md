@@ -321,107 +321,10 @@ package object yaml {
 
 ## Swagger Validations
 
-Swagger API definitions allow for constraints to be put on parameter types. 
-We have already seen the `required` constraint, used to mark a parameter or specific field within 
-a domain definition to be required upon input. Additional constraints, as defined by the 
-[Parameter Object](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#parameterObject), 
-can be added to your API definition. The Api-First-Hand plugin will generate validations for these parameter 
-constraints and make sure that your controller methods are only called if the input of your service 
-complies to those constraints. 
+Swagger API definitions allow you to impose constraints on parameter types. You can use the `required` constraint to mark a parameter or specific field within a domain definition as required upon input. You can also add to your API definition more constraints, as defined by the [Parameter Object](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#parameterObject). API-First-Hand will generate validations for these parameter constraints and make sure that your controller methods are only called if the input of your service complies to those constraints.
 
-In the example below, the API definition of the `token` parameter of 
-type `Base64String`, as the form parameter, contains validation rules for the length of the parameter as well as a regexp pattern the value of the parameter must confirm to.
-The parameter is also required.
+[Go here](https://github.com/zalando/api-first-hand/blob/master/docs/swagger-validations.md) for more information and examples.
 
-```yaml
-...
-parameters:
-      - name: token
-        in: formData
-        description: oauth2 token
-        type: string
-        format: byte
-        pattern: "[A-Za-z0-9]*"
-        minLength: 5
-        maxLength: 100
-        required: true
-...
-```
-
-Let's take another example:
-
-```yaml
-...
-    get:
-      parameters:
-      - name: state
-        in: query
-        description: Any application state to be forwarded back to the frontend
-        type: string
-        minLength: 1
-        maxLength: 110
-        required: false
-...
-```
-
-The `state` parameter is of type string, is not required and has no default value. 
-It is also only allowed to have a state of length between 1 and 110, otherwise it won't pass validation. 
-For the demo purposes, let's change it's type to `integer` and make it required. 
-
-As the parameter is required now, the `default` value cannot be present. The `maxLength` and `maxLength` validations 
-are not allowed for integer parameters, therefore let's replace them with `minimum` and `maximum` values:
-    
-```yaml
-...
-    get:
-      parameters:
-      - name: state
-        in: query
-        description: Any application state to be forwarded back to the frontend
-        type: integer
-        format: int32
-        required: true
-        minimum: 2000
-        maximum: 2100      
-...
-```    
-
-As we just changed the parameter type, refreshing Swagger UI will, in addition to generating validations 
-for that parameter type, also force a regeneration of the model consistent with the validation. 
-That's nice, but note that it will break the current implementation of the controller class, as the 
-implementation of the `postAction` expects `state` to be of type `String`.
-
-![Validation screenshot](/docs/validations-01.png)
-
-Let's change the implementation. The second parameter `state` is no longer 
-of type `Option[String]` but of type `Int`. We change the implementation to take this fact into the account:
-
-```scala
-...
-val tokenGet = tokenGetAction { input: (String, String, String, Int) =>
-    val (redirect_uri, scope, response_type, state) = input
-    // ----- Start of unmanaged code area for action  TokenService.tokenGet
-    val statePart = s"""state=$state"""
-...
-}
-```
-
-Refreshing Swagger UI and trying out a couple of integer values for `state` shows that the service 
-now excepts value within the range `[2000..2100]`, but returns a descriptive error when outside. I.e.
-
-```json
-[
-  {
-    "messages": [
-      "error.max"
-    ],
-    "args": [
-      2100
-    ]
-  }
-]
-```
-    
 # Building an Api-First-Hand Plugin
 
 To build a plugin, do the following:
