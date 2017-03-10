@@ -1,10 +1,14 @@
-# [Test Generators](#test-generators)
+## [Test Generators](#test-generators)
 
-Having an api definition as the single source of thruth in our codebase, with formal type specification of our in and output values, including their constraints, provides for a powerful feature when it comes to testing.  The play swagger plugin automates the creation of test data generators which can drive property checks directly from the api specification.
+When it comes to testing, having an API definition as the single source of truth in your codebase—with formal type specification of the input and output values, including their constraints—provides for a powerful feature. The Api-First-Hand plugin automates the creation of test data generators that can drive property checks directly from the API specification. 
 
-## [Property Based Testing](#property-based-testing)
+Api-First-Hand derives data generators and unit tests directly from your Swagger API specification.
 
-Property based testing using generator-driven property checks is an upcomming way to test the validity of your application according to the rules, or properties, that apply to your application.  Properties in this sense are high-level specifications that should always hold for a range of data values.  The idea is to generate a range of data values for our data types and let our (also generated) tests assert that the properties of these data types hold.  As a swagger api definition contains formal type definitions _and_ constraints for all data values, and as the play swagger plugin maps these types on _unmannaged_ scala source code that represent the data types, it is also possible to map these api definitions on test data generators that provide a range of data values for these types.  The plugin does exactly that, it creates unmannaged test data generators and unit tests that assert whether your application still complies to your specification, and it does so in a single source of thruth manner, taking the swagger api definition as the source.
+### [Property-Based Testing](#property-based-testing)
+
+Property-based testing using generator-driven property checks is a cool way to test the validity of your application according to the rules or properties that apply to your application. Properties, in this sense, are high-level specifications that should always hold for a range of data values. The idea is to generate a range of data values for your data types and let (also generated) tests assert that the properties of these data types hold. 
+
+A Swagger API definition contains formal type definitions _and_ constraints for all data values. The Api-First-Hand plugin maps these types on managed Scala source code that represents the data types. The plugin creates managed test data generators and unit tests that assert whether your application still complies to your specification. It does this in a single-source-of-truth manner, taking the Swagger API definition as the source.
  
 We employ ScalaTest's [Property-based testing](http://www.scalatest.org/user_guide/property_based_testing) as the framework to generate the data values and map the data types of our api definition on the test data generators that are created by the plugin.  ScalaTest provides ```org.scalacheck.Gen``` and ```org.scalacheck.Arbitrary``` objects with utility methods that help generating a range of (possibly arbitrary) data values for common scala types and primitives.  The play swagger plugin uses this methods to create test data generators specific for the data types of our api definition, and when neccesarry composing generators from primitive types into generators for complex types, such that we end up with a set of generators that provide test data for our complete api.
 
