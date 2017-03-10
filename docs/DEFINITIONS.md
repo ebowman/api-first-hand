@@ -60,8 +60,10 @@ val pet = Pet(0L, "Tucker", Some("Greyhound"))
 ```        
          
 ## [Primitive Types](#primitive-types)
+
+Swagger version 2.0 allows for primitive data types based on the types defined by 
+[JSON-Schema](http://json-schema.org/latest/json-schema-core.html#anchor8). When generated as Scala, the mapping indicated in [this chart](https://github.com/zalando/api-first-hand/blob/master/docs/DEFINITIONS.md#primitive-types) applies:
          
-Swagger version 2.0 allows for primitive data types based on the types defined by [JSON-Schema](http://json-schema.org/latest/json-schema-core.html#anchor8).  When generated as Scala, the following mapping applies:
           
 | Common Name | Swagger Type | Swagger Format | Scala Type                                  |
 |-------------|--------------|----------------|---------------------------------------------|
@@ -80,6 +82,8 @@ Swagger version 2.0 allows for primitive data types based on the types defined b
 | password    | string       | password       | scala.String                                |
 | uuid        | string       | uuid           | java.util.UUID                              |
 | file        | file         |                | java.io.File                                |
+
+Additionally, if a validation of type "enum" is defined for some primitive type, a trait and a set of case objects forming an ADT will be generated for this enum.
 
 ## [Complex Types](#complex-types)
 
