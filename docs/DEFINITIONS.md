@@ -1,8 +1,27 @@
-## [Model Definitions](#model-definitions)
+# [Model Definitions](#model-definitions)
 
+Table of Contents
+-----------------
+
+- [Swagger Domain Definitions](#swagger-domain-definitions)
+  - [Example](#example)
+- [Primitive Types](#primitive-types)
+- [Complex Types](#complex-types)
+  - [Objects](#objects)
+    - [Nested Objects](#nested-objects)
+    - [Optionality](#optionality)
+    - [Parameter optionality](#parameter-optionality)
+    - [Object Extension](#object-extension)
+    - [Polymorphism](#polymorphism)
+    - [Additional Properties](#additional-properties)
+  - [Arrays](#arrays)
+    - [Nested Arrays](#nested-arrays)
+
+## Swagger Domain Definitions
 Scala domain model definitions are generated for all data types defined as Swagger parameters in an API specification.  Swagger parameters can be of path, query, header, form or body types, and consist of either primitive data types or more complex types composed from objects and arrays with primitives as leaves.  Both primitive types and complex types are mapped to Scala.
 
-As an example, let's consider a Swagger API specification file that defines the API of a simple pet store. It contains a model definition for a pet:
+### Example
+Let's consider a Swagger API specification file that defines the API of a simple pet store. It contains a model definition for a pet:
 
 ```yaml
 definitions:
@@ -181,7 +200,7 @@ package object yaml {
     case class Basic(optional: BasicOptional) 
 }
 ```
-### Parameter optionality
+#### Parameter optionality
 
 Object properties can be optional. Query, header, body and form parameters can be, too. If they are not required, they are mapped to Scala's `Option` type. 
 
@@ -298,7 +317,7 @@ package object yaml {
 
 Please note how the enumeration of cat's `huntingSkill`'s becomes translated into the ADT with a sealed trait `CatHuntingSkill`, and four case objects implementing that trait.
 
-### [Additional Properties](#additional-properties)
+#### [Additional Properties](#additional-properties)
 
 Swagger's model language allows the additional properties of objects to be loosely defined, employing the `additionalProperties` annotation in order to model dictionaries. These dictionaries are mapped to Scala's `Map` type, for which a type alias is generated following the same (by now) well-known pattern as for optional properties. The map's key parameter type is a Scala `String`.
 
