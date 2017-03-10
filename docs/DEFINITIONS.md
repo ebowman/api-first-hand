@@ -91,10 +91,7 @@ Complex types are made up of either primitive objects or nested objects.
 
 ### [Objects](#objects)
 
-Complex object types are defined in Swagger model definitions as either objects or arrays.
-
-Again, objects are based on the [JSON-Schema](http://json-schema.org/latest/json-schema-core.html#anchor8) specification 
-and defined as Swagger [Schema Objects](https://github.com/Swagger-api/Swagger-spec/blob/master/versions/2.0.md#schema-object) for parameter definitions of `type: "object"`. 
+Complex object types are defined in Swagger model definitions as either objects or arrays. Again, objects are based on the [JSON-Schema](http://json-schema.org/latest/json-schema-core.html#anchor8) specification and defined as Swagger [Schema Objects](https://github.com/Swagger-api/Swagger-spec/blob/master/versions/2.0.md#schema-object) for parameter definitions of `type: "object"`. 
 
 For example: Given a Swagger API definition file `api.yaml`, containing a model that defines a `person` as an object 
 with the properties `name` and `age` of the primitive types `string` and `integer`, this object will be mapped on a Scala case class. It will be generated in a Scala package object (namespace) with the same name as the extension of the file that the specification is read from, and in a package with the same name as the Swagger definition file in which the model is defined. That is, `api`:
