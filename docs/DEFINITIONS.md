@@ -227,7 +227,6 @@ package object yaml {
 
 #### [Polymorphism](#polymorphism)
 
-
 The Swagger `discriminator` property makes polymorphic object definitions possible. In the example definition below, an abstract `Pet` defines what concrete `Cat`s and `Dog`s have in common. Swagger object models define data, so a discriminator property is required to distinguish concrete cat and dog instances as they are serialised to and from the API. In this sense, the discriminator property works in the same way as a discriminator column works in ORM frameworks when mapping a class hierarchy onto a single table. It contains a value that maps onto one of the concrete types: For example, `petType: "Cat"` or `petType: "Dog"`. 
 
 ```yaml
@@ -301,11 +300,11 @@ Please note how the enumeration of cat's `huntingSkill`'s becomes translated int
 
 ### [Additional Properties](#additional-properties)
 
-Swagger model definition objects allow for additional properties to be loosely defined employing the ```additionalProperties``` annotation in order to model dictionaries.  These dictionaries are mapped to scala's ```Map`` type for which a type alias is generated following the same (by now) well known pattern as for optional properties, with the map's key parameter type being a scala ```String```.
+Swagger's model language allows the additional properties of objects to be loosely defined, employing the `additionalProperties` annotation in order to model dictionaries. These dictionaries are mapped to Scala's `Map` type, for which a type alias is generated following the same (by now) well-known pattern as for optional properties. The map's key parameter type is a Scala `String`.
 
-A swagger additional property definition takes as its type property the element type of the dictionary which can be of primitive or complex type and which is mapped on scala as the map's value parameter type.  Swagger allowss for one ```additionalProperties``` annotation per object definition so we can generate this scala parameter with the static name ```additionalProperties```.
+A Swagger additional property definition takes as its type property the element type of the dictionary, which can be of primitive or complex type and  mapped on Scala as the map's value parameter type. Swagger allows for one `additionalProperties` annotation per object definition, so we can generate this Scala parameter with the static name `additionalProperties`.
 
-In the following example we define a swagger model object definition ```KeyedArray``` that uses the ```additionalProperties``` annotation to provide the object with a set of key value mappings from string to array. E.g.
+The following example defines a Swagger model object definition ```KeyedArray```, useing the ```additionalProperties``` annotation to provide the object with a set of key value mappings from string to array:
    
 ```yaml
 definitions:
@@ -316,13 +315,20 @@ definitions:
       items:
         type: integer
 ```
+Which is generated as:
 
 ```scala
-package api.yaml
-object definitions {
-    type KeyedArraysAdditionalProperties = scala.collection.immutable.Map[String, KeyedArraysAdditionalPropertiesArr]
-    type KeyedArraysAdditionalPropertiesArr = scala.collection.Seq[Int]
-    case class KeyedArrays(additionalProperties: KeyedArraysAdditionalProperties)
+package api
+
+package object yaml {
+
+    import de.zalando.play.controllers.ArrayWrapper
+    import scala.math.BigInt
+    import scala.collection.immutable.Map
+
+    type KeyedArraysAdditionalPropertiesCatchAll = ArrayWrapper[BigInt]
+    type KeyedArraysAdditionalProperties = Map[String, KeyedArraysAdditionalPropertiesCatchAll]
+    case class KeyedArrays(additionalProperties: KeyedArraysAdditionalProperties) 
 }
 ```
 
