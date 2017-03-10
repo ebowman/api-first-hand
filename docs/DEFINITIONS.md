@@ -1,6 +1,8 @@
-# [Model Definitions](#model-definitions)
+## [Model Definitions](#model-definitions)
 
-Scala domain model definitions are generated for all data types defined as swagger parameters in an api specification.  Swagger parameters can be of path, query, header, form or body types and consist of either primitive data types or more complex types composed from objects and arrays with primitives as leaves.  Both primitive types and complex types are mapped to scala.  As an example, lets look at the swagger api specification file ```simple.petstore.api.yaml``` that defines the api of a simple pet store.  It contains a model definition for a pet.
+Scala domain model definitions are generated for all data types defined as Swagger parameters in an API specification.  Swagger parameters can be of path, query, header, form or body types, and consist of either primitive data types or more complex types composed from objects and arrays with primitives as leaves.  Both primitive types and complex types are mapped to Scala.
+
+As an example, lets look at the Swagger API specification file ```simple.petstore.api.yaml``` that defines the API of a simple pet store. It contains a model definition for a pet:
 
 ```yaml
 definitions:
@@ -18,22 +20,22 @@ definitions:
         type: string
 ```
 
-This definition consists of an object ```pet``` containing the required properties ```id``` and ```name```, and the optional property ```tag```, the swagger primitive types of these properties are a 64 bit ```integer``` and twice a ```string``` successively.  The play swagger plugin will map this definition on to a generated scala model.
+This definition consists of an object ```pet``` containing the required properties ```id``` and ```name```, and the optional property ```tag```. The Swagger primitive types of these properties are a 64-bit ```integer``` and (twice) a ```string```, successively.  The API-First-Hand plugin will map this definition on to a generated Scala model:
   
 ```scala
-package simple.petstore.api.yaml
-object definitions {
+package simple.petstore.api
+package object yaml {
     type PetTag = Option[String]
-    case class Pet(id: Long, name: String, tag: PetTag) 
+    case class Pet(id: Long, name: String, tag: PetTag)
 }
 ```
 
-This generated model contains a type definition ```PetTag``` that declares a type alias for the optional ```tag``` property and a ```Pet``` case class with the properties as named in the swagger api definition and mapped on the subsequent scala primitive or declared types.  The case class and type alias are generated in an object ```definitions```, taken from swagger's api specification root property with the same name.  This object itself is contained in the package ```simple.petstore.api.yaml```, which is taken from the api's filename.
+This generated model contains a type definition ```PetTag```, which declares a type alias for the optional ```tag``` property, and a ```Pet``` case class with the properties as named in the Swagger API definition and mapped on the subsequent Scala primitive or declared types. The case class and type alias are generated in an package object ```yaml```.  This package object is contained in the package ```simple.petstore.api```, so that the full object name corresponds to the API filename.
 
-Note that models are generated within a play application as _unmanaged_ code in the target folder.  Generated model code is not intended to be altered, we should instead look upon the swagger definition as the single source of truth, and indeed, as the source code that defines our model.  The swagger specification file of our api is in that sense part of the codebase.  Even though the generated ```Pet``` case class is not managed by us but by the plugin instead, it can of course, after being imported, be used in our application codebase.
+Note that models are generated within a Play application as _managed_ code in the target folder. Generated model code is not intended to be altered. We should instead look upon the Swagger definition as the single source of truth, and as the source code that defines our model. The Swagger specification file of our API is, in that sense, part of the codebase. Even though the generated ```Pet``` case class is managed by the plugin, and not us, it can (of course) be used in our application codebase after being imported.
  
 ```
-import simple.petstore.api.yaml.definitions._
+import simple.petstore.api.yaml._
 
 val pet = Pet(0L, "Tucker", Some("Greyhound"))
 ```        
