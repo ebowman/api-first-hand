@@ -215,7 +215,7 @@ definitions:
 ```
 Which is generated as:
 
-``scala
+```scala
 package api
 package object yaml {
   import scala.math.BigInt
