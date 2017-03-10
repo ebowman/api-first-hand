@@ -227,9 +227,8 @@ package object yaml {
 
 #### [Polymorphism](#polymorphism)
 
-Polymorphic definitions are possible through employment of the swagger ```discriminator``` property.  In the example definition below an abstract ```Pet``` defines that what concrete ```Cat```s and ```Dog```s have in common.  As swagger object models are defining data, a discriminator property is required to distinguish concrete cat and dog instances as they are serialised to and from the api.  The discriminator property works in that sense the same way as a discriminator column works in ORM frameworks when mapping a class hierarchy onto a single table.  It simply contains a value that maps onto one of the concrete types, for example ```petType: “Cat”``` or ```petType: “Dog”```.
 
-The generated scala code for polymorphic definitions do not have such ORM serialisation requirements as the generated case classes are data containers within the application’s codebase.  We would like to omit swagger’s discriminator property from the generated code and map the abstract type on an interface.  But as we are modelling data we cannot predict whether business logic depends on the value of of it, we therefor map the abstract swagger model definition on a scala trait which contains accessor methods for all the properties it defines, that is, including the discriminator property, concrete case classes extending from this trait implement it with concrete values. E.g.      
+The Swagger `discriminator` property makes polymorphic object definitions possible. In the example definition below, an abstract `Pet` defines what concrete `Cat`s and `Dog`s have in common. Swagger object models define data, so a discriminator property is required to distinguish concrete cat and dog instances as they are serialised to and from the API. In this sense, the discriminator property works in the same way as a discriminator column works in ORM frameworks when mapping a class hierarchy onto a single table. It contains a value that maps onto one of the concrete types: For example, `petType: "Cat"` or `petType: "Dog"`. 
 
 ```yaml
 definitions:
@@ -267,18 +266,38 @@ definitions:
       required:
       - packSize
 ```
+Which is generated as:
+
 
 ```scala
-package api.yaml
-object definitions {
-  trait IPet {
-    def name: String
-    def petType: String
-  }
-  case class Cat(name: String, petType: String, huntingSkill: String) extends IPet
-  case class Dog(name: String, petType: String, packSize: Int) extends IPet
+package api
+
+package object yaml {
+
+    trait IPet {
+        def name: String
+        def petType: String
+    }
+    case class Cat(name: String, petType: String, huntingSkill: CatHuntingSkill) extends IPet
+    case class Dog(name: String, petType: String, packSize: Int) extends IPet
+    case class Pet(name: String, petType: String) extends IPet
+
+    sealed trait CatHuntingSkill { def value: String }
+    case object Clueless extends CatHuntingSkill { val value = "clueless" }
+    case object Lazy extends CatHuntingSkill { val value = "lazy" }
+    case object Adventurous extends CatHuntingSkill { val value = "adventurous" }
+    case object Aggressive extends CatHuntingSkill { val value = "aggressive" }
+    implicit def stringToCatHuntingSkill(in: String): CatHuntingSkill = in match {
+        case "clueless" => Clueless
+        case "lazy" => Lazy
+        case "adventurous" => Adventurous
+        case "aggressive" => Aggressive
+    }
 }
+
 ```
+
+Please note how the enumeration of cat's `huntingSkill`'s becomes translated into the ADT with a sealed trait `CatHuntingSkill`, and four case objects implementing that trait.
 
 ### [Additional Properties](#additional-properties)
 
