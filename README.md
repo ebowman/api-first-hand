@@ -68,7 +68,7 @@ Enable API-First-Hand with the Activator Template, hosted by [Lightbend](https:/
   
 ## Running Your Application with API-First-Hand
 
-The service template comes with the Swagger UI frontend included, run statically from the within Play. This provides a sandbox for your application. The template is configured with a template Swagger API definition called example.yaml and located in the conf directory of the Play application.
+The Activator template comes with the Swagger UI frontend included, run statically from the within Play. This provides a sandbox for your application. The template is configured with a template Swagger API definition called example.yaml and located in the conf directory of the Play application.
 
 The example.yaml definition provides an example API description.
 
