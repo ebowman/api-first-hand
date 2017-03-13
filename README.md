@@ -28,7 +28,7 @@ Table of Contents
 ## Intro to API-First-Hand
 **API-First-Hand** is an API-First bootstrapping tool for building RESTful web services from a [Swagger/OpenAPI](http://swagger.io/) specification. Constructed as a plugin, it takes your Swagger/OpenAPI definition as the single source of truth and regenerates these code snippets for you, simply and consistently. Instead of writing lots of boilerplate code, you can focus instead on implementing service business logic. Subsequent regenerations keep the code that you have added—either by commenting out the parts that are no longer valid, or by adding parts that are needed because you've changed the API.
 
-We built API-First-Hand for use with [Play Framework]((http://www.playframework.com/), but we would like to extend it for use with **Akka HTTP**. [Get in touch](https://github.com/zalando/api-first-hand/blob/master/CONTRIBUTING.md) if you'd like to help make that possible.
+We built API-First-Hand for use with [Play Framework](http://www.playframework.com/), but we would like to extend it for use with **Akka HTTP**. [Get in touch](https://github.com/zalando/api-first-hand/blob/master/CONTRIBUTING.md) if you'd like to help make that possible.
 
 ### Plugin Features 
 
