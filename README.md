@@ -5,7 +5,7 @@
 Table of Contents
 ------------------------------------------------------------
 
-- [Features and Add-ons](#features-and-add-ons)
+- [API-First-Hand Features and Add-ons](#api-first-hand-features-and-add-ons)
 - [Compatibility](#compatibility)
 - [Build Status: Beta](#build-status-beta)
 - [More About the Activator Template](#tutorial)
