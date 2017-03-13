@@ -322,9 +322,9 @@ Please note how the enumeration of cat's `huntingSkill`'s becomes translated int
 
 Swagger's model language allows the additional properties of objects to be loosely defined, employing the `additionalProperties` annotation in order to model dictionaries. These dictionaries are mapped to Scala's `Map` type, for which a type alias is generated following the same (by now) well-known pattern as for optional properties. The map's key parameter type is a Scala `String`.
 
-A Swagger additional property definition takes as its type property the element type of the dictionary, which can be of primitive or complex type and  mapped on Scala as the map's value parameter type. Swagger allows for one `additionalProperties` annotation per object definition, so we can generate this Scala parameter with the static name `additionalProperties`.
+A Swagger additional property definition takes as its type property the element type of the dictionary, which can be of primitive or complex type and mapped on Scala as the map's value parameter type. Swagger allows for one `additionalProperties` annotation per object definition, so we can generate this Scala parameter with the static name `additionalProperties`.
 
-The following example defines a Swagger model object definition ```KeyedArray```, useing the ```additionalProperties``` annotation to provide the object with a set of key value mappings from string to array:
+In the following example, we define a Swagger model object definition ```KeyedArray``` and use the ```additionalProperties``` annotation to provide the object with a set of key value mappings from string to array:
    
 ```yaml
 definitions:
