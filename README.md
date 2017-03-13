@@ -1,4 +1,4 @@
-## Api-First-Hand: API-First bootstrapping tool for Swagger/OpenAPI specs
+## Api-First-Hand: [xxxx]
 
 [![Build Status](https://travis-ci.org/zalando/api-first-hand.svg)](https://travis-ci.org/zalando/api-first-hand) [![codecov](https://codecov.io/gh/zalando/api-first-hand/branch/master/graph/badge.svg)](https://codecov.io/gh/zalando/api-first-hand) [![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zalando/api-first-hand?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -15,7 +15,7 @@ Table of Contents
   - [Play Routes Integration](#play-routes-integration)
   - [Model Definitions](#model-definitions)
     - [Primitive Types](#primitive-types)
-    - [Complex Types](#complex-types)
+    - [Complex Types: Objects and Arrays](#complex-types-objects-and-arrays)
   - [Specification Cross-References](#specification-cross-references)
   - [Swagger Validations](#swagger-validations)
 - [About API-First-Hand: Architecture and Structure](#about-api-first-hand-architecture-and-structure)
@@ -38,7 +38,7 @@ Api-First-Hand supports round-trip regeneration and compilation of:
 - Swagger domain model definitions and parameters onto Scala case classes (managed)
 - Swagger domain model constraints onto Play validations (managed)
 - Generators for random test data and parameter values (managed)
-- Unit tests for invalid and valid parameter sets // validating your service at the API boundary (managed)
+- Unit tests for for invalid and valid parameter sets // validating your service at the API boundary (managed)
 - Swagger path definitions onto skeletons for Play controller implementations (unmanaged)
 - Skeletons for domain-driven controller implementation and customized deserializers
 - Wrappers for Play route files to convert semantics from HTTP-related to domain-related (controller_base)
@@ -58,7 +58,7 @@ To use the plugin, you need:
 - the Activator template, hosted by [Lightbend](https://www.lightbend.com/activator/template/api-first-hand)
 
 #### More About the Activator Template
-The Activator template provides a sandbox for your application to run with API-First-Hand. It contains the following:
+The Activator template provides a sandbox for your application to run with API-First-Hand. (Download Activator [here](https://www.lightbend.com/activator/download), then follow [the instructions](https://www.lightbend.com/activator/template/api-first-hand)). It contains the following:
 - HTML tutorial (found in the `tutorial` folder)
 - the Swagger UI frontend included as static files, run from within Play (located in the `public/swagger` folder)
 - a pre-configured `plugins.sbt` file with a definition of all required resolvers and plugins (found in the `project` folder)
