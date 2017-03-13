@@ -1,4 +1,4 @@
-## Api-First-Hand: API-First bootstrapping tool for building RESTful web services from a Swagger/OpenAPI spec 
+## Api-First-Hand: An API-First bootstrapping tool for your Swagger/OpenAPI spec 
 
 [![Build Status](https://travis-ci.org/zalando/api-first-hand.svg)](https://travis-ci.org/zalando/api-first-hand) [![codecov](https://codecov.io/gh/zalando/api-first-hand/branch/master/graph/badge.svg)](https://codecov.io/gh/zalando/api-first-hand) [![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zalando/api-first-hand?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
