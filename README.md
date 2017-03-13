@@ -60,15 +60,15 @@ To use the plugin, you need:
 The Activator template provides a sandbox for your application to run with API-First-Hand. It contains the following:
 - HTML tutorial (found in the `tutorial` folder)
 - the Swagger UI frontend included as static files, run from within Play (located in the `public/swagger` folder)
-- a pre-configured `plugins.sbt` file with a definition of all required resolvers and plugins (find in `project` folder)
+- a pre-configured `plugins.sbt` file with a definition of all required resolvers and plugins (found in the `project` folder)
 - a `conf` folder with the following customized contents:
-    * `routes` file with route configuration for Swagger UI, example specification, and commented out links to other examples
-    * A template Swagger API definition called `example.yaml`, with a dummy implementation in the `app` folder. 
-    * `examples` folder containing additional Swagger specification examples that each represents some aspect of the Api-First-Hand plugin in more detail. For the plugin to pick up the specification, move it into the `conf` folder. You can have multiple Swagger specifications in the `conf` folder at the same time. 
+    * `routes` file with route configuration for Swagger UI, example specification, and commented-out links to other examples
+    * A template Swagger API definition called `example.yaml`, with a dummy implementation in the `app` folder 
+    * `examples` folder containing additional Swagger specification examples, each representing some aspect of Api-First-Hand in greater detail. For the plugin to pick up the specification, move it into the `conf` folder. You can simultaneously have multiple Swagger specifications in the `conf` folder. 
 - `app` directory with following template implementations:
-    * `controllers/Swagger.scala` - a backend side of the Swagger UI
-    * `generated_controllers/example.yaml.scala` - a dummy implementation of the example controller. Will be (re)generated if deleted
-    * `security/example.yaml.scala` - a marshaller for OAuth2 tokens. Will not be regenerated until either deleted or renamed; and then explicitly requested by issuing a `playScalaSecurity` command.
+    * `controllers/Swagger.scala`: a backend side of the Swagger UI
+    * `generated_controllers/example.yaml.scala`: a dummy implementation of the example controller that's (re)generated if deleted
+    * `security/example.yaml.scala`: a marshaller for OAuth2 tokens. Will not be regenerated until either deleted or renamed; and then explicitly requested by issuing a `playScalaSecurity` command.
  
 ## Running Your Application with API-First-Hand
 
@@ -94,7 +94,7 @@ Play application developers are used to defining endpoints in the `conf/routes` 
 ->      /example        example.yaml.Routes
 ```
 
-Note that the `conf/routes` file provided by the Activator template also contains additional `GET` mappings required for the the Swagger UI sandbox, and some commented-out links to other examples. If you activate some specification by moving it from the `examples` folder into the `conf` folder, you'll have to uncomment an appropriate line in the `routes` file so that Play can find it.  
+The `conf/routes` file provided by the Activator template also contains additional `GET` mappings required for the Swagger UI sandbox, and some commented-out links to other examples. If you activate some specification by moving it from the `examples` folder into the `conf` folder, you'll have to uncomment an appropriate line in the `routes` file so that Play can find it.  
 
 ### Model Definitions
 
