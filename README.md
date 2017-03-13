@@ -9,7 +9,7 @@ Table of Contents
   - [Plugin Features](#plugin-features)
   - [Build Status and Requirements](#build-status-and-requirements)
     - [More About The Activator Template](#more-about-the-activator-template)
-- [Getting Started with API-First-Hand]
+- [Getting Started with API-First-Hand](#getting-started-with-api-first-hand)
   - [Creating Your Play Application with the Plugin](#creating-your-play-application-with-the-plugin)
   - [Running Your Application with the Plugin](#running-your-application-with-the-plugin)
   - [Play Routes Integration](#play-routes-integration)
@@ -148,15 +148,13 @@ To build a plugin, do the following:
 
 ## Plugin Architecture
 
-Ths Api-First-Hand plugin has a three-tier architecture:
+Api-First-Hand has a three-tier architecture:
 
-* specification - this tier is responsible for finding and parsing a specification and converting it into the raw AST format
-* normalisation - this tier performs a couple of optimisations on the AST including type deduplication, flattening and parameter dereferencing
-* generation - a final step including transformation of the AST into the source-code related data and generation of source code from it   
+* **Specification**, responsible for finding and parsing a specification and converting it into raw AST format
+* **Normalization**, which performs optimiztions on the AST—including type deduplication, flattening and parameter dereferencing
+* **generation**, a final step including transformation of the AST into source code-related data and generation of source code from it
 
-The separation of the specification and generation tiers allows for plugging in different specification standards 
-and generating source code for different frameworks.
-
+By separating the specification and generation tiers, we can plug in different specification standards and generate source code for different frameworks.
 
 ## Plugin Project Structure
 
@@ -172,8 +170,7 @@ There are a couple of sub-projects:
     - `ApiFirstCore` - a wrapper for AST-related functionality
     - `ApiFirstPlayScalaCodeGenerator` - a wrapper for the Play-Scala generator
 
-Because of the modular plugin architecture, all modules must be enabled separatly in sbt's `build.sbt`. 
-It is also necessary to configure which parser(s) must be used by the plugin, like that: 
+Yu must enable each module separately in sbt's `build.sbt` and configure which parser(s) the plugin will use, like this: 
 
 ```scala
 lazy val root = (project in file(".")).enablePlugins(PlayScala, ApiFirstCore, ApiFirstPlayScalaCodeGenerator, ApiFirstSwaggerParser)
@@ -181,10 +178,9 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, ApiFirstCore, Ap
 apiFirstParsers := Seq(ApiFirstSwaggerParser.swaggerSpec2Ast.value).flatten
 ```
 
-Please take a look at activator template's configuration for complete example.
+Check out the Activator template's configuration for a complete example.
 
-
-## Custom Templates For Code Generation
+## Custom Templates for Code Generation
 
 The PlayScala generator supports custom templates. In order to override default template for some of the components,
 please provide your custom template named in accordance to the following list:
@@ -201,7 +197,7 @@ please provide your custom template named in accordance to the following list:
   * `play_scala_security_extractors.mustache` - for custom security extractors to be augmented by the programmer 
 
 
-Please be aware that generated artifacts need to preserve some specific shape in order to be compiled together without errors.
+Generated artifacts must preserve some specific shape to be compiled together without errors.
 
 The location where custom templates reside needs to be configured by overriding the plugin setting `playScalaCustomTemplateLocation`.
 
@@ -237,4 +233,4 @@ There are some quality checks embedded into the build script:
 * [`scalastyle`](http://www.scalastyle.org) sbt command shall be used to perform code style checks before putting changes into the repository.
 * [`lint:compile`](https://github.com/HairyFotr/linter) sbt command shall be used to perform static code analysis before putting changes into the repository.
 * code coverage for api and compiler modules can be executed by issuing `sbt clean coverage test` command for these 
-projects. Coverage statistics can be generated using `coverageReport` sbt command. 
+projects. Coverage statistics can be generated using `coverageReport` sbt command.
