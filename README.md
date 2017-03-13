@@ -7,7 +7,6 @@ Table of Contents
 
 - [Plugin Features](#plugin-features)
 - [Compatibility](#compatibility)
-- [Build Status: Alpha](#build-status-alpha)
 - [More About the Activator Template](#tutorial)
 - [Running an Application](#running-an-application)
 - [Play Routes Integration](#play-routes-integration)
@@ -27,7 +26,9 @@ Table of Contents
       
 API-First-Hand is an API-First bootstrapping tool for building RESTful web services from a [Swagger/OpenAPI](http://swagger.io/) specification. It's a plugin that takes your Swagger/OpenAPI definition as the single source of truth and regenerates these code snippets for you, simply and consistently. Instead of writing lots of boilerplate code, you can focus instead on implementing service business logic. Subsequent regenerations keep the code that you have added—either by commenting out the parts that are no longer valid, or by adding parts that are needed because you've changed the API.
 
-API-First-Hand is under active development and should not be considered production-ready. It was built for use with [Play Framework](http://www.playframework.com/), but we'd like to extend it for use with **Akka HTTP**. [Get in touch](https://github.com/zalando/api-first-hand/blob/master/CONTRIBUTING.md) if you'd like to help make that possible.
+**The plugin is under active development and should not be considered production-ready**.
+
+API-First-Hand was built for use with [Play Framework](http://www.playframework.com/), but we'd like to extend it for use with **Akka HTTP**. [Get in touch](https://github.com/zalando/api-first-hand/blob/master/CONTRIBUTING.md) if you'd like to help make that possible.
 
 ### Plugin Features 
 
