@@ -6,8 +6,8 @@ Table of Contents
 ------------------------------------------------------------
 
 - [Plugin Features](#plugin-features)
+- [The Activator Template](#the-activator-template)
 - [Compatibility](#compatibility)
-- [More About the Activator Template](#tutorial)
 - [Running an Application](#running-an-application)
 - [Play Routes Integration](#play-routes-integration)
 - [Model Definitions](#model-definitions)
