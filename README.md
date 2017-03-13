@@ -5,7 +5,7 @@
 Table of Contents
 ------------------------------------------------------------
 
-- [Plugin Features and Add-ons](#plugin-features)
+- [Plugin Features](#plugin-features)
 - [Compatibility](#compatibility)
 - [Build Status: Alpha](#build-status-alpha)
 - [More About the Activator Template](#tutorial)
