@@ -432,9 +432,9 @@ package object yaml {
 
 #### [Nested Arrays](#nested-arrays)
 
-Array definition types can be nested and possibly optional. The following (contrived) snippet depicts the generated scala code when both definition types are employed in a somewhat unuseful manner.  The intend of this example is to show that the case class definitions are rather concisely generated, even though a stack of type aliases is needed to make sure that we still refer in scala code to an aptly named swagger definition, especially in conjunction with the object properties being optional.  Next to its benefits, type safety against ```null``` pointers does have an associated cost as well.
-      
-```yaml
+Nested array definition types are possible and optional. The following (contrived) snippet/example depicts the generated Scala code when both definition types are employed in a somewhat non-useful manner. This is to show you that case class definitions are concisely generated, though a stack of type aliases is needed to make sure that we still refer in Scala code to an aptly named Swagger definition (especially in conjunction with the object properties being optional). Despite its benefits, type safety against `null` pointers does have an associated cost:
+
+ ```yaml
 definitions:
   Activity:
     type: object
@@ -462,18 +462,27 @@ definitions:
                 type: string
 ```
 
+Is generated as:
+
 ```scala
-package api.yaml
-object definitions {
-  type ActivityActions = Option[String]
-  type ExampleNested = Option[ExampleNestedOpt]
-  type ExampleNestedOpt = scala.collection.Seq[ExampleNestedOptArr]
-  type ExampleNestedOptArr = scala.collection.Seq[ExampleNestedOptArrArr]
-  type ExampleNestedOptArrArr = scala.collection.Seq[ActivityActions]
-  type ExampleMessages = Option[ExampleMessagesOpt]
-  type ExampleMessagesOpt = scala.collection.Seq[ExampleMessagesOptArr]
-  type ExampleMessagesOptArr = scala.collection.Seq[Activity]
-  case class Activity(actions: ActivityActions)
-  case class Example(messages: ExampleMessages, nested: ExampleNested)
+package api
+
+package object yaml {
+
+    import de.zalando.play.controllers.ArrayWrapper
+
+    type ExampleMessagesOpt = ArrayWrapper[ExampleMessagesOptArr]
+    type ExampleMessages = Option[ExampleMessagesOpt]
+    type ExampleNested = Option[ExampleNestedOpt]
+    type ExampleMessagesOptArr = ArrayWrapper[Activity]
+    type ExampleNestedOptArrArrArr = ArrayWrapper[String]
+    type ExampleNestedOptArrArr = ArrayWrapper[ExampleNestedOptArrArrArr]
+    type ActivityActions = Option[String]
+    type ExampleNestedOptArr = ArrayWrapper[ExampleNestedOptArrArr]
+    type ExampleNestedOpt = ArrayWrapper[ExampleNestedOptArr]
+
+    case class Activity(actions: ActivityActions) 
+    case class Example(messages: ExampleMessages, nested: ExampleNested) 
 }
+
 ```
