@@ -99,15 +99,12 @@ Complex types are made up of either primitive objects or nested objects. [Go her
 
 ### Specification Cross-References
 
-A `$ref` element of the specification is allowed to contain a name of file as it's part. Because of this, it is possible to split 
-a single specification into multiple files as shown in [`cross_spec_references.yaml`](https://github.com/zalando/api-first-hand-activator/blob/master/conf/examples/cross_spec_references.yaml) 
-example. It is also possible to reference a definition in one specification from another specification. 
-In this case for each reference an independent copy of the class definition will be created for each referencing specification. 
-The definition is then placed into the appropriate package for each specification. 
+A `$ref` element of the specification can contain a filename as its part, so you can split a single specification into multiple files (as shown in [`cross_spec_references.yaml`](https://github.com/zalando/api-first-hand-activator/blob/master/conf/examples/cross_spec_references.yaml)). You can also reference a definition in one specification across other specifications.
 
-Thus, even if multiple classes with  the same name and structure might be generated, they all will coexist in their 
+An independent copy of the class definition is created for each referencing specification. The definition is then placed into the appropriate package for each specification. 
+
+Therefore, even if multiple classes with the same name and structure are generated, they all will coexist in their 
 own separate namespaces and won't be interchangeable.
-
 
 ## Swagger Validations
 
