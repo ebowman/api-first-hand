@@ -8,7 +8,7 @@ Table of Contents
 - [Intro to API-First-Hand](#intro-to-api-first-hand)
   - [Plugin Features](#plugin-features)
   - [Build Status and Requirements](#build-status-and-requirements)
-    - [More About The Activator Template](#more-about-the-activator-template)
+    - [More About the Activator Template](#more-about-the-activator-template)
 - [Getting Started with API-First-Hand](#getting-started-with-api-first-hand)
   - [Creating Your Play Application with the Plugin](#creating-your-play-application-with-the-plugin)
   - [Running Your Application with the Plugin](#running-your-application-with-the-plugin)
