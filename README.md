@@ -18,7 +18,7 @@ Table of Contents
     - [Complex Types](#complex-types)
   - [Specification Cross-References](#specification-cross-references)
   - [Swagger Validations](#swagger-validations)
-- [About the Api-First-Hand Plugin: Architecture and Structure](#building-an-api-first-hand-plugin)
+- [About Api-First-Hand: Architecture and Structure](#about-api-first-hand-architecture-and-structure)
   - [Plugin Architecture](#plugin-architecture)
   - [Plugin Project Structure](#plugin-project-structure)
   - [Plugin Developing](#plugin-developing)
@@ -139,7 +139,7 @@ Swagger API definitions allow you to impose constraints on parameter types. You 
 
 [Go here](https://github.com/zalando/api-first-hand/blob/master/docs/TEST_GENERATORS.md) for more detailed information about test generators.
 
-## About the Api-First-Hand Plugin: Architecture and Structure
+## About API-First-Hand: Architecture and Structure
 
 To build a plugin, do the following:
 
