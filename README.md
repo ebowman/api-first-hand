@@ -12,6 +12,8 @@ Table of Contents
 - [Running an Application](#running-an-application)
 - [Play Routes Integration](#play-routes-integration)
 - [Model Definitions](#model-definitions)
+  - [Primitive Types](#primitive-types)
+  - [Complex Types](#complex-types)
 - [Specification Cross-References](#specification-cross-references)
 - [Swagger Validations](#swagger-validations)
 - [Test Generators](#test-generators)
@@ -86,6 +88,15 @@ API-First-Hand generates Scala domain model definitions for all data types defin
 
 For more information and an example, [go here](https://github.com/zalando/api-first-hand/blob/master/docs/DEFINITIONS.md).
 
+#### Primitive Types
+
+Swagger version 2.0 allows for primitive data types based on the types defined by 
+[JSON-Schema](http://json-schema.org/latest/json-schema-core.html#anchor8). When generated as Scala, the mapping indicated in [this chart](https://github.com/zalando/api-first-hand/blob/master/docs/DEFINITIONS.md#primitive-types) applies.
+
+#### Complex Types: Objects and Arrays
+
+Complex types are made up of either primitive objects or nested objects. [Go here](https://github.com/zalando/api-first-hand/blob/master/docs/DEFINITIONS.md#complex-types) for details and examples related to **Objects** (nested objections, optionality, object extensions, polymorphism, and additional properties) and **Arrays** (including nested arrays).
+
 ### Specification Cross-References
 
 A `$ref` element of the specification is allowed to contain a name of file as it's part. Because of this, it is possible to split 
@@ -97,14 +108,6 @@ The definition is then placed into the appropriate package for each specificatio
 Thus, even if multiple classes with  the same name and structure might be generated, they all will coexist in their 
 own separate namespaces and won't be interchangeable.
 
-### Primitive Types
-
-Swagger version 2.0 allows for primitive data types based on the types defined by 
-[JSON-Schema](http://json-schema.org/latest/json-schema-core.html#anchor8). When generated as Scala, the mapping indicated in [this chart](https://github.com/zalando/api-first-hand/blob/master/docs/DEFINITIONS.md#primitive-types) applies.
-
-## Complex Types: Objects and Arrays
-
-Complex types are made up of either primitive objects or nested objects. [Go here](https://github.com/zalando/api-first-hand/blob/master/docs/DEFINITIONS.md#complex-types) for details and examples related to **Objects** (including nested objections, optionality, object extensions, polymorphism, and additional properties) and **Arrays**.
 
 ## Swagger Validations
 
