@@ -1,4 +1,4 @@
-## Api-First-Hand: [xxxx]
+## Api-First-Hand: API-First Bootstrapping Tool for Use with Swagger/OpenAPI specs
 
 [![Build Status](https://travis-ci.org/zalando/api-first-hand.svg)](https://travis-ci.org/zalando/api-first-hand) [![codecov](https://codecov.io/gh/zalando/api-first-hand/branch/master/graph/badge.svg)](https://codecov.io/gh/zalando/api-first-hand) [![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zalando/api-first-hand?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -38,7 +38,7 @@ Api-First-Hand supports round-trip regeneration and compilation of:
 - Swagger domain model definitions and parameters onto Scala case classes (managed)
 - Swagger domain model constraints onto Play validations (managed)
 - Generators for random test data and parameter values (managed)
-- Unit tests for for invalid and valid parameter sets // validating your service at the API boundary (managed)
+- Unit tests for invalid and valid parameter sets // validating your service at the API boundary (managed)
 - Swagger path definitions onto skeletons for Play controller implementations (unmanaged)
 - Skeletons for domain-driven controller implementation and customized deserializers
 - Wrappers for Play route files to convert semantics from HTTP-related to domain-related (controller_base)
