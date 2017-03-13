@@ -6,8 +6,8 @@ Table of Contents
 ------------------------------------------------------------
 
 - [Plugin Features](#plugin-features)
-- [The Activator Template](#the-activator-template)
-- [Compatibility](#compatibility)
+- [Build Status and Requirements](#build-status-and-requirements)
+- [More About The Activator Template](#more-about-the-activator-template)
 - [Running Your Application with API-First-Hand](#running-your-application-with-api-first-hand)
 - [Play Routes Integration](#play-routes-integration)
 - [Model Definitions](#model-definitions)
@@ -26,11 +26,7 @@ Table of Contents
       
 API-First-Hand is an API-First bootstrapping tool for building RESTful web services from a [Swagger/OpenAPI](http://swagger.io/) specification. It's a plugin that takes your Swagger/OpenAPI definition as the single source of truth and regenerates these code snippets for you, simply and consistently. Instead of writing lots of boilerplate code, you can focus instead on implementing service business logic. Subsequent regenerations keep the code that you have added—either by commenting out the parts that are no longer valid, or by adding parts that are needed because you've changed the API.
 
-**API-First-Hand is under active development and should not be considered production-ready**.
-
-API-First-Hand was built for use with [Play Framework](http://www.playframework.com/), but we'd like to extend it for use with **Akka HTTP**. [Get in touch](https://github.com/zalando/api-first-hand/blob/master/CONTRIBUTING.md) if you'd like to help make that possible.
-
-#### Plugin Features 
+### Plugin Features 
 
 Api-First-Hand supports round-trip regeneration and compilation of these (managed means "managed by sbt"):
 - Play route definitions (managed)
@@ -47,48 +43,48 @@ Api-First-Hand supports round-trip regeneration and compilation of these (manage
 
 "Managed by sbt" means that you don't have to control or change the code as you make your REST service. The security extractors and unmarshallers are available through manual generation and compilation, and supported if A) No security extractor or unmarshaller with the same name already exists; B) The developer issues the `playScalaSecurity` or `playScalaMarshallers` sbt command.
 
-#### The Activator Template
-Enable API-First-Hand with the Activator Template, hosted by [Lightbend](https://www.lightbend.com/activator/template/api-first-hand). The template contains the following:
-- `tutorial` folder with HTML tutorial
-- `public/swagger` folder containing static files needed for the Swagger UI
-- `project` folder containing a pre-configured `plugins.sbt` file with a definition of all required resolvers and plugins
-- `conf` folder with the following customized contents:
+### Build Status and Requirements
+
+API-First-Hand is under active development and **should not be considered production-ready**.
+
+**Requirements**: To use the plugin, you need
+- [Play Framework](http://www.playframework.com/) 2.5.4+
+- Swagger (OpenAPI) 2.0
+- the Activator template, hosted by [Lightbend](https://www.lightbend.com/activator/template/api-first-hand)
+
+Note: We would like to extend API-First-Hand for use with **Akka HTTP**. [Get in touch](https://github.com/zalando/api-first-hand/blob/master/CONTRIBUTING.md) if you'd like to help make that possible.
+
+#### More About the Activator Template
+The Activator template provides a sandbox for your application to run with API-First-Hand. It contains the following:
+- HTML tutorial (found in the `tutorial` folder)
+- the Swagger UI frontend included as static files, run from within Play (located in the `public/swagger` folder)
+- a pre-configured `plugins.sbt` file with a definition of all required resolvers and plugins (find in `project` folder)
+- a `conf` folder with the following customized contents:
     * `routes` file with route configuration for Swagger UI, example specification, and commented out links to other examples
-    * `example.yaml`, a demo Swagger specification. The specification has a dummy implementation in the `app` folder. 
+    * A template Swagger API definition called `example.yaml`, with a dummy implementation in the `app` folder. 
     * `examples` folder containing additional Swagger specification examples that each represents some aspect of the Api-First-Hand plugin in more detail. For the plugin to pick up the specification, move it into the `conf` folder. You can have multiple Swagger specifications in the `conf` folder at the same time. 
 - `app` directory with following template implementations:
     * `controllers/Swagger.scala` - a backend side of the Swagger UI
     * `generated_controllers/example.yaml.scala` - a dummy implementation of the example controller. Will be (re)generated if deleted
     * `security/example.yaml.scala` - a marshaller for OAuth2 tokens. Will not be regenerated until either deleted or renamed; and then explicitly requested by issuing a `playScalaSecurity` command.
-
-## Compatibility
-
-- Play 2.5.4+
-- Swagger (OpenAPI) 2.0
-  
-## Running Your Application with API-First-Hand
-
-The Activator template comes with the Swagger UI frontend included, run statically from the within Play. This provides a sandbox for your application. The template is configured with a template Swagger API definition called example.yaml and located in the conf directory of the Play application.
-
-The example.yaml definition provides an example API description.
+ 
+#### Running Your Application with API-First-Hand
 
 Let's run your application with the plugin:
 
-- Open a shell and cd into your service project directory.
-- Start sbt and run the service. This creates a folder on your local machine, using the Activator template.
+- Open a shell and `cd` into your service project directory.
+- Start `sbt` and `run` the service. This creates a folder on your local machine, using the Activator template.
 - View the running application at http://localhost:9000.
 
 A single specification defines a single API. In our case these are three endpoints of the API:
 
-    GET /token
-    POST /token
-    GET /todos/{user_id}
-
-To test the API, you need a token that you can use with the Swagger UI to access the endpoints. Use the marshaller for OAuth2 tokens, security/example.yaml.scala, to request an OAuth token with the scope admin:org.
+- The `GET /token` API plays a role of an authentication server and is used by the Swagger UI for OAuth token requests. 
+- The `POST /token` API represents an authorization server and is used by the security part of the generated code to validate OAuth tokens.
+- The `GET /todos/{user_id}` takes a path parameter `user_id` and returns a TODO list for the given user. Use `security/example.yaml.scala`, the marshaller for OAuth2 tokens, to request an OAuth token with the scope `admin:org`. This will grant permission for the client to access this endpoint and enable you to test the API.  
 
 Click the default button to expand the API definition in the Swagger UI. Now you can change the specification or write some backend code and use the Swagger UI to see the results.
 
-### Play Routes Integration
+#### Play Routes Integration
 
 Play application developers are used to defining endpoints in the `conf/routes` file. With Api-First-Hand, however, Swagger API specifications already define endpoints as `path` definitions—saving you from doing the work twice. Just link your API definition in the routes file once. This makes all Swagger API-defined endpoints available as children of a single path context location, and generates Play route definitions from them (as shown below):
 
