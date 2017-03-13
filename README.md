@@ -87,7 +87,7 @@ Now let's run your application with the plugin:
 
 - Open a shell and `cd` into your service project directory.
 - Start `sbt` and `run` the service. This creates a folder on your local machine, using the Activator template.
-- View the running application at http://localhost:9000.
+- View the running application at [http://localhost:9000](http://localhost:9000).
 
 A single specification defines a single API. In our case these are three endpoints of the API:
 
