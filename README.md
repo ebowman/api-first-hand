@@ -9,15 +9,16 @@ Table of Contents
   - [Plugin Features](#plugin-features)
   - [Build Status and Requirements](#build-status-and-requirements)
     - [More About The Activator Template](#more-about-the-activator-template)
-- [Running Your Application with API-First-Hand](#running-your-application-with-api-first-hand)
+- [Getting Started with API-First-Hand]
+  - [Creating Your Play Application with the Plugin](#creating-your-play-application-with-the-plugin)
+  - [Running Your Application with the Plugin](#running-your-application-with-the-plugin)
   - [Play Routes Integration](#play-routes-integration)
-- [Model Definitions](#model-definitions)
-  - [Primitive Types](#primitive-types)
-  - [Complex Types](#complex-types)
-- [Specification Cross-References](#specification-cross-references)
-- [Swagger Validations](#swagger-validations)
-- [Test Generators](#test-generators)
-- [Building an Api-First-Hand Plugin](#building-an-api-first-hand-plugin)
+  - [Model Definitions](#model-definitions)
+    - [Primitive Types](#primitive-types)
+    - [Complex Types](#complex-types)
+  - [Specification Cross-References](#specification-cross-references)
+  - [Swagger Validations](#swagger-validations)
+- [About the Api-First-Hand Plugin: Architecture and Structure](#building-an-api-first-hand-plugin)
   - [Plugin Architecture](#plugin-architecture)
   - [Plugin Project Structure](#plugin-project-structure)
   - [Plugin Developing](#plugin-developing)
@@ -70,9 +71,19 @@ The Activator template provides a sandbox for your application to run with API-F
     * `generated_controllers/example.yaml.scala`: a dummy implementation of the example controller that's (re)generated if deleted
     * `security/example.yaml.scala`: a marshaller for OAuth2 tokens. Will not be regenerated until either deleted or renamed; and then explicitly requested by issuing a `playScalaSecurity` command.
  
-## Running Your Application with API-First-Hand
+## Getting Started with API-First-Hand
 
-Let's run your application with the plugin:
+### Creating Your Play Application with the Plugin
+
+- Use the Activator template, for example: ```activator new hello-world api-first-hand```
+- Look at the `project/plugins.sbt` of your generated project and add the required plugins and resolvers there
+- Do the same for `build.sbt`
+- Put a Swagger specification with a ```.yaml``` or ```.json``` extension into the ```conf``` directory
+- Add a specification link (`->`) to the Play's routes file
+
+### Running Your Application with the Plugin
+
+Now let's run your application with the plugin:
 
 - Open a shell and `cd` into your service project directory.
 - Start `sbt` and `run` the service. This creates a folder on your local machine, using the Activator template.
@@ -113,34 +124,27 @@ Complex types are made up of either primitive objects or nested objects. [Go her
 
 ### Specification Cross-References
 
-You can use a filename to reference part of another specification with the `$ref` element. You can split a single specification into multiple files (as shown in [`cross_spec_references.yaml`](https://github.com/zalando/api-first-hand-activator/blob/master/conf/examples/cross_spec_references.yaml)). You can also reference a definition in one specification across other specifications. (For example, you can create domain_model.yaml and then reference it from any other API specification.)
+You can use a filename to reference part of another specification with the `$ref` element. You can split a single specification into multiple files (as shown in [`cross_spec_references.yaml`](https://github.com/zalando/api-first-hand-activator/blob/master/conf/examples/cross_spec_references.yaml)), and also reference a definition in one specification across other specifications. (For example, you can create domain_model.yaml and then reference it from any other API specification.)
 
 An independent copy of the class definition is created for each referencing specification. The definition is then placed into the appropriate package for each specification. 
 
 Therefore, even if multiple classes with the same name and structure are generated, they all will coexist in their 
 own separate namespaces and won't be interchangeable.
 
-## Swagger Validations
+### Swagger Validations
 
-Swagger API definitions allow you to impose constraints on parameter types. You can use the `required` constraint to mark a parameter or specific field within a domain definition as required upon input. You can also add to your API definition more constraints, as defined by the [Parameter Object](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#parameterObject). API-First-Hand will generate validations for these parameter constraints and make sure that your controller methods are only called if the input of your service complies to those constraints.
+Swagger API definitions allow you to impose constraints on parameter types. You can use the `required` constraint to mark a parameter or specific field within a domain definition, as required upon input. You can also add to your API definition more constraints, as defined by the [Parameter Object](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#parameterObject). API-First-Hand will generate validations for these parameter constraints and make sure that your controller methods are only called if the input of your service complies to those constraints.
 
 [Go here](https://github.com/zalando/api-first-hand/blob/master/docs/swagger-validations.md) for more information and examples.
 
-# Building an Api-First-Hand Plugin
+[Go here](https://github.com/zalando/api-first-hand/blob/master/docs/TEST_GENERATORS.md) for more detailed information about test generators.
+
+## About the Api-First-Hand Plugin: Architecture and Structure
 
 To build a plugin, do the following:
 
 - Clone the repository to your local filesystem
 - Run ```sbt publishLocal``` in the Api-First-Hand directory. This will publish the plugin into your local ivy repository
-
-To use the plugin in a plain Play project:
-
-- Create a new Api-First-Hand project using activator template, for example: ```activator new hello-world api-first-hand```
-- Take a look at the `project/plugins.sbt` of the generated project and add required plugins and resolvers to the `project/plugins.sbt` of your Play project
-- Do the same for `build.sbt`
-- Put a Swagger specification with a ```.yaml``` or ```.json``` extension into the ```conf``` directory
-- Add a specification link (`->`) to the Play's routes file
-
 
 ## Plugin Architecture
 
