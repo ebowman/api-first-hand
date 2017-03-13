@@ -5,9 +5,9 @@
 Table of Contents
 ------------------------------------------------------------
 
-- [API-First-Hand Features and Add-ons](#api-first-hand-features-and-add-ons)
+- [Plugin Features and Add-ons](#plugin-features)
 - [Compatibility](#compatibility)
-- [Build Status: Beta](#build-status-beta)
+- [Build Status: Alpha](#build-status-alpha)
 - [More About the Activator Template](#tutorial)
 - [Running an Application](#running-an-application)
 - [Play Routes Integration](#play-routes-integration)
@@ -27,9 +27,10 @@ Table of Contents
       
 API-First-Hand is an API-First bootstrapping tool for building RESTful web services from a [Swagger/OpenAPI](http://swagger.io/) specification. It's a plugin that takes your Swagger/OpenAPI definition as the single source of truth and regenerates these code snippets for you, simply and consistently. Instead of writing lots of boilerplate code, you can focus instead on implementing service business logic. Subsequent regenerations keep the code that you have added—either by commenting out the parts that are no longer valid, or by adding parts that are needed because you've changed the API.
 
-The plugin was built for use with [Play Framework](http://www.playframework.com/), but we'd like to extend it for use with **Akka HTTP**. [Get in touch](https://github.com/zalando/api-first-hand/blob/master/CONTRIBUTING.md) if you'd like to help make that possible.
+API-First-Hand is under active development and should not be considered production-ready. It was built for use with [Play Framework](http://www.playframework.com/), but we'd like to extend it for use with **Akka HTTP**. [Get in touch](https://github.com/zalando/api-first-hand/blob/master/CONTRIBUTING.md) if you'd like to help make that possible.
 
-### API-First-Hand Features and Add-ons
+### Plugin Features 
+
 Api-First-Hand supports round-trip regeneration and compilation of these (managed means "managed by sbt"):
 - Play route definitions (managed)
 - Swagger domain model definitions and parameters onto Scala case classes (managed)
@@ -45,12 +46,8 @@ Api-First-Hand supports round-trip regeneration and compilation of these (manage
 
 "Managed by sbt" means that you don't have to control or change the code as you make your REST service. The security extractors and unmarshallers are available through manual generation and compilation, and supported if A) No security extractor or unmarshaller with the same name already exists; B) The developer issues the `playScalaSecurity` or `playScalaMarshallers` sbt command.
 
-### Build Status: Beta
-
-[Lightbend](https://www.lightbend.com/activator/template/api-first-hand) hosts an Activator template for API-First-Hand.  Enable API-First-Hand with this template; the version in this repository is under active development.
-
 #### More About the Activator Template
-The template contains the following:
+Enable API-First-Hand with the Activator Template, hosted by [Lightbend](https://www.lightbend.com/activator/template/api-first-hand). The template contains the following:
 - `tutorial` folder with HTML tutorial
 - `public/swagger` folder containing static files needed for the Swagger UI
 - `project` folder containing a pre-configured `plugins.sbt` file with a definition of all required resolvers and plugins
