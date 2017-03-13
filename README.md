@@ -8,7 +8,7 @@ Table of Contents
 - [Plugin Features](#plugin-features)
 - [The Activator Template](#the-activator-template)
 - [Compatibility](#compatibility)
-- [Running an Application](#running-an-application)
+- [Running an Application with API-First-Hand](#running-an-application-with-api-first-hand)
 - [Play Routes Integration](#play-routes-integration)
 - [Model Definitions](#model-definitions)
   - [Primitive Types](#primitive-types)
@@ -26,7 +26,7 @@ Table of Contents
       
 API-First-Hand is an API-First bootstrapping tool for building RESTful web services from a [Swagger/OpenAPI](http://swagger.io/) specification. It's a plugin that takes your Swagger/OpenAPI definition as the single source of truth and regenerates these code snippets for you, simply and consistently. Instead of writing lots of boilerplate code, you can focus instead on implementing service business logic. Subsequent regenerations keep the code that you have added—either by commenting out the parts that are no longer valid, or by adding parts that are needed because you've changed the API.
 
-**The plugin is under active development and should not be considered production-ready**.
+**API-First-Hand is under active development and should not be considered production-ready**.
 
 API-First-Hand was built for use with [Play Framework](http://www.playframework.com/), but we'd like to extend it for use with **Akka HTTP**. [Get in touch](https://github.com/zalando/api-first-hand/blob/master/CONTRIBUTING.md) if you'd like to help make that possible.
 
@@ -66,9 +66,27 @@ Enable API-First-Hand with the Activator Template, hosted by [Lightbend](https:/
 - Play 2.5.4+
 - Swagger (OpenAPI) 2.0
   
-## Running Your Application
+## Running Your Application with API-First-Hand
 
-[**waiting for clarification....**] 
+The service template comes with the Swagger UI frontend included, run statically from the within Play. This provides a sandbox for your application. The template is configured with a template Swagger API definition called example.yaml and located in the conf directory of the Play application.
+
+The example.yaml definition provides an example API description.
+
+Let's run your application with the plugin:
+
+- Open a shell and cd into your service project directory.
+- Start sbt and run the service. This creates a folder on your local machine, using the Activator template.
+- View the running application at http://localhost:9000.
+
+A single specification defines a single API. In our case these are three endpoints of the API:
+
+    GET /token
+    POST /token
+    GET /todos/{user_id}
+
+To test the API, you need a token that you can use with the Swagger UI to access the endpoints. Use the marshaller for OAuth2 tokens, security/example.yaml.scala, to request an OAuth token with the scope admin:org.
+
+Click the default button to expand the API definition in the Swagger UI. Now you can change the specification or write some backend code and use the Swagger UI to see the results.
 
 ### Play Routes Integration
 
