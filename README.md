@@ -124,7 +124,7 @@ Complex types are made up of either primitive objects or nested objects. [Go her
 
 ### Specification Cross-References
 
-You can use a filename to reference part of another specification with the `$ref` element. You can split a single specification into multiple files (as shown in [`cross_spec_references.yaml`](https://github.com/zalando/api-first-hand-activator/blob/master/conf/examples/cross_spec_references.yaml)), and also reference a definition in one specification across other specifications. (For example, you can create domain_model.yaml and then reference it from any other API specification.)
+You can use a filename to reference part of another specification with the `$ref` element. You can split a single specification into multiple files (as shown in [`cross_spec_references.yaml`](https://github.com/zalando/api-first-hand-activator/blob/master/conf/examples/cross_spec_references.yaml)), and also reference a definition in one specification across other specifications. (For example, you can create `domain_model.yaml` and then reference it from any other API specification.)
 
 An independent copy of the class definition is created for each referencing specification. The definition is then placed into the appropriate package for each specification. 
 
