@@ -18,7 +18,7 @@ Table of Contents
     - [Complex Types](#complex-types)
   - [Specification Cross-References](#specification-cross-references)
   - [Swagger Validations](#swagger-validations)
-- [About Api-First-Hand: Architecture and Structure](#about-api-first-hand-architecture-and-structure)
+- [About API-First-Hand: Architecture and Structure](#about-api-first-hand-architecture-and-structure)
   - [Plugin Architecture](#plugin-architecture)
   - [Plugin Project Structure](#plugin-project-structure)
   - [Plugin Developing](#plugin-developing)
@@ -144,7 +144,7 @@ Swagger API definitions allow you to impose constraints on parameter types. You 
 To build a plugin, do the following:
 
 - Clone the repository to your local filesystem
-- Run ```sbt publishLocal``` in the Api-First-Hand directory. This will publish the plugin into your local ivy repository
+- Publish the plugin into your local ivy repository by running ```sbt publishLocal``` in the API-First-Hand directory 
 
 ## Plugin Architecture
 
@@ -160,17 +160,17 @@ By separating the specification and generation tiers, we can plug in different s
 
 There are a couple of sub-projects:
 
-* `swagger-model` - A standalone Scala Swagger model and a Jackson parser for it. Can be used by another projects
-* `api` - This is the project that's automatically added to the runtime classpath of any projects that use this plugin.
-* `swagger-parser` - A converter of the Swagger model to the internal AST of the plugin
-* `api-first-core` - This is a core of the plugin with minimal functionality. It includes defining an AST structure and some transformations on AST.  
-* `play-scala-generator` - The standalone generator for transforming an AST into the skeleton of Play-Scala application. 
-* `plugin` - A coupble of sbt plugins, one for each tier:
-    - `ApiFirstSwaggerParser` - a plugin wrapping Swagger parsing part 
-    - `ApiFirstCore` - a wrapper for AST-related functionality
-    - `ApiFirstPlayScalaCodeGenerator` - a wrapper for the Play-Scala generator
+* `swagger-model`: A standalone Scala Swagger model with Jackson parser. Can be used by another projects.
+* `api`: Automatically added to the runtime classpath of any projects using API-First-Hand.
+* `swagger-parser`: A converter of the Swagger model to the internal AST of the plugin
+* `api-first-core`: This is a core of the plugin with minimal functionality. It includes defining an AST structure and some transformations on AST.  
+* `play-scala-generator`: The standalone generator for transforming an AST into the skeleton of Play-Scala application. 
+* `plugin`: sbt plugins, one for each tier:
+    - `ApiFirstSwaggerParser`: wraps the Swagger-parsing part 
+    - `ApiFirstCore`: wrapper for AST-related functionality
+    - `ApiFirstPlayScalaCodeGenerator`: a wrapper for the Play-Scala generator
 
-Yu must enable each module separately in sbt's `build.sbt` and configure which parser(s) the plugin will use, like this: 
+You must enable each module separately in sbt's `build.sbt` and configure which parser(s) the plugin will use, like this: 
 
 ```scala
 lazy val root = (project in file(".")).enablePlugins(PlayScala, ApiFirstCore, ApiFirstPlayScalaCodeGenerator, ApiFirstSwaggerParser)
@@ -185,23 +185,21 @@ Check out the Activator template's configuration for a complete example.
 The PlayScala generator supports custom templates. In order to override default template for some of the components,
 please provide your custom template named in accordance to the following list:
 
-  * `play_scala_test.mustache` - for unit tests
-  * `play_validation.mustache` - for validators 
-  * `generators.mustache` - for test data generators
-  * `model.mustache` - for model classes and query and path bindables
-  * `play_scala_controller_base.mustache` - for Play controller bases 
-  * `play_scala_controller_security.mustache` - for security adapters used by controller bases
-  * `play_scala_form_parser.mustache` - for form parsers used by the controller bases
-  * `play_scala_controller.mustache` - for Play controller skeletons supposed to be augmented by the programmer
-  * `play_scala_response_writers.mustache` - for custom serializers to be augmented by the programmer
-  * `play_scala_security_extractors.mustache` - for custom security extractors to be augmented by the programmer 
-
+  * `play_scala_test.mustache`: for unit tests
+  * `play_validation.mustache`: for validators 
+  * `generators.mustache`: for test data generators
+  * `model.mustache`: for model classes and query and path bindables
+  * `play_scala_controller_base.mustache`: for Play controller bases 
+  * `play_scala_controller_security.mustache`: for security adapters used by controller bases
+  * `play_scala_form_parser.mustache`: for form parsers used by the controller bases
+  * `play_scala_controller.mustache`: for Play controller skeletons; you can augment them
+  * `play_scala_response_writers.mustache`: for custom serializers; you can augment them
+  * `play_scala_security_extractors.mustache`: for custom security extractors; you can augment them 
 
 Generated artifacts must preserve some specific shape to be compiled together without errors.
 
-The location where custom templates reside needs to be configured by overriding the plugin setting `playScalaCustomTemplateLocation`.
+You must configure the location for custom templates by overriding the plugin setting `playScalaCustomTemplateLocation`. For example, this configuration will set the project's `conf/templates` folder as the location:
 
-For example following configuration will set this place to be `conf/templates` folder of the project:
 ```scala
 playScalaCustomTemplateLocation := Some(((resourceDirectory in Compile) / "templates").value)
 ```
@@ -209,28 +207,27 @@ playScalaCustomTemplateLocation := Some(((resourceDirectory in Compile) / "templ
 ## Plugin Developing
 
 sbt doesn't allow sub-projects to depend on each other as sbt plugins. To test an sbt plugin, you need a separate 
-project.  This project is `swagger-tester`.  To test your changes as you're developing the plugin, cd into this 
+project. This project is `swagger-tester`.  To test your changes as you're developing the plugin, cd into this 
 directory, and run sbt. This project uses an sbt `ProjectRef` to the sbt plugin, which means you don't need to 
 `publishLocal` the plugin after each change. Just run `reload` in the sbt console, and it will pick up your changes.
 
-The Api-First-Hand plugin provides a couple of commands useful for development: 
+API-First-Hand provides a few commands useful for development: 
 
-* `apiFirstPrintDenotations` - outputs a common names of different parts of the AST as they are intended to be used in generated Scala code
-* `apiFirstPrintRawAstTypes` - outputs all type definitions as they read from the specification before type optimisations
-* `apiFirstPrintRawAstParameters` - outputs all parameters definitions before type optimisations
-* `apiFirstPrintFlatAstTypes` - outputs type definitions after type optimisations
-* `apiFirstPrintFlatAstParameters` - outputs parameter definitions after type optimisations
+* `apiFirstPrintDenotations`: outputs common names of different parts of the AST as they are intended for use in generated Scala code
+* `apiFirstPrintRawAstTypes`: outputs all type definitions as they read from the specification before type optimizations
+* `apiFirstPrintRawAstParameters`: outputs all parameters definitions before type optimizations
+* `apiFirstPrintFlatAstTypes`: outputs type definitions after type optimizations
+* `apiFirstPrintFlatAstParameters`: outputs parameter definitions after type optimizations
 
 ## Plugin Testing
 
-We're using the sbt scripted framework for testing. You can find the tests in `plugin/src/sbt-test`, and run them 
+We're using the sbt scripted framework for testing. You can find the tests in `plugin/src/sbt-test` and run them 
 by running `scripted` in the sbt console.
 
-## Code quality
+## Code Quality
 
 There are some quality checks embedded into the build script:
 * the source code is (re)formatted using [scalariform](https://github.com/scala-ide/scalariform) each time it is compiled (currently deactivated).
-* [`scalastyle`](http://www.scalastyle.org) sbt command shall be used to perform code style checks before putting changes into the repository.
-* [`lint:compile`](https://github.com/HairyFotr/linter) sbt command shall be used to perform static code analysis before putting changes into the repository.
-* code coverage for api and compiler modules can be executed by issuing `sbt clean coverage test` command for these 
-projects. Coverage statistics can be generated using `coverageReport` sbt command.
+* [`scalastyle`](http://www.scalastyle.org) sbt command performs code style checks before putting changes into the repository
+* [`lint:compile`](https://github.com/HairyFotr/linter) sbt command performs static code analysis before putting changes into the repository
+* Execute code coverage for API and compiler modules with the `sbt clean coverage test` command. Generate coverage statistics with the `coverageReport` sbt command.
