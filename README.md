@@ -89,7 +89,7 @@ Now let's run your application with the plugin:
 - Start `sbt` and `run` the service. This creates a folder on your local machine, using the Activator template.
 - View the running application at [http://localhost:9000](http://localhost:9000).
 
-A single specification defines a single API. In our case these are three endpoints of the API:
+A single specification defines a single API; in our case, these are three API endpoints:
 
 - The `GET /token` API plays a role of an authentication server and is used by the Swagger UI for OAuth token requests. 
 - The `POST /token` API represents an authorization server and is used by the security part of the generated code to validate OAuth tokens.
