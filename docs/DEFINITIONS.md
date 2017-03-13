@@ -354,9 +354,12 @@ package object yaml {
 
 ### [Arrays](#arrays)
 
-Swaggers model ```type: array``` is used to define properties that hold sets or lists of model values, possibly of a primitive type, but complex element types are also allowed.  We map swagger array types on scala's ```Seq``` type, parameterised for the element type that it contains.
-  
-For example, in the snippet below, an ```Activity``` object definition is referred as item element in the ```messages``` property of ```type: array``` of the containing object definition ```Example```.  A scala type alias will be generated for the array type, just as we've seen before with for optional properties, after which the array containing property can be generated within the case class as being of this alias type. E.g. in the swagger definition and code
+Use Swagger's `array` to define properties that hold sets or lists of model values (either primitive or complex element type are allowed). Depending on where the array definition appears, `array` can be mapped to one of two Scala types, parameterized for the element type that it contains:
+- if an array is only defined inline as a part of the response definition, it is translated to a `Seq` type
+- otherwise (i.e., array appears in the parameter definition or in the `definitions` part of the specification) it is 
+defined as a `de.zalando.play.controllers.ArrayWrapper`.
+
+The snippet below refers to an `Activity` object definition as an item element in the `messages` property of `type: array`, of the containing object definition `Example`. A Scala type alias is generated for the array type (just as we've seen before with optional properties), after which the array-containing property can be generated within the case class as being of this alias type. In the Swagger definition and code:
 
 ```yaml
 definitions:
@@ -377,13 +380,53 @@ definitions:
         items:
           $ref: '#/definitions/Activity'
 ```
+Is generated as:
 
 ```scala
-package api.yaml
-object definitions {
-  type ExampleMessagesArr = scala.collection.Seq[Activity]
-  case class Activity(actions: ActivityActions)
-  case class Example(messages: ExampleMessagesArr)
+package api
+package object yaml {
+    import de.zalando.play.controllers.ArrayWrapper
+    type ExampleMessages = ArrayWrapper[Activity]
+    case class Activity(actions: String) 
+    case class Example(messages: ExampleMessages) 
+}
+```
+If the description of the same array is inlined as a part of the response definition, like this ...:
+
+```yaml
+paths:
+  /api:
+    get:
+      responses:
+        200:
+          schema:
+            type: object
+            required:
+            - messages
+            properties:
+              messages:
+                type: array
+                items:
+                  $ref: '#/definitions/Activity'
+          description: array payload
+definitions:
+  Activity:
+    type: object
+    required:
+    - actions
+    properties:
+      actions:
+        type: string
+```
+
+... then the `Seq` Scala type is used like this:
+
+```scala
+package api
+package object yaml {
+    type ApiGetResponses200Messages = Seq[Activity]
+    case class Activity(actions: String) 
+    case class ApiGetResponses200(messages: ApiGetResponses200Messages) 
 }
 ```
 
