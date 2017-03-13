@@ -226,7 +226,7 @@ by running `scripted` in the sbt console.
 
 ## Code Quality
 
-There are some quality checks embedded into the build script:
+Some quality checks are embedded into the build script:
 * the source code is (re)formatted using [scalariform](https://github.com/scala-ide/scalariform) each time it is compiled (currently deactivated).
 * [`scalastyle`](http://www.scalastyle.org) sbt command performs code style checks before putting changes into the repository
 * [`lint:compile`](https://github.com/HairyFotr/linter) sbt command performs static code analysis before putting changes into the repository
