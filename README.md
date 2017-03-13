@@ -30,7 +30,7 @@ API-First-Hand is an API-First bootstrapping tool for building RESTful web servi
 
 API-First-Hand was built for use with [Play Framework](http://www.playframework.com/), but we'd like to extend it for use with **Akka HTTP**. [Get in touch](https://github.com/zalando/api-first-hand/blob/master/CONTRIBUTING.md) if you'd like to help make that possible.
 
-### Plugin Features 
+#### Plugin Features 
 
 Api-First-Hand supports round-trip regeneration and compilation of these (managed means "managed by sbt"):
 - Play route definitions (managed)
@@ -47,7 +47,7 @@ Api-First-Hand supports round-trip regeneration and compilation of these (manage
 
 "Managed by sbt" means that you don't have to control or change the code as you make your REST service. The security extractors and unmarshallers are available through manual generation and compilation, and supported if A) No security extractor or unmarshaller with the same name already exists; B) The developer issues the `playScalaSecurity` or `playScalaMarshallers` sbt command.
 
-#### More About the Activator Template
+#### The Activator Template
 Enable API-First-Hand with the Activator Template, hosted by [Lightbend](https://www.lightbend.com/activator/template/api-first-hand). The template contains the following:
 - `tutorial` folder with HTML tutorial
 - `public/swagger` folder containing static files needed for the Swagger UI
