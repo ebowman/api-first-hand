@@ -11,21 +11,10 @@ Table of Contents
 - [More About the Activator Template](#tutorial)
 - [Running an Application](#running-an-application)
 - [Play Routes Integration](#play-routes-integration)
-  - [Swagger Domain Definitions](#play-routes-integration)
-  - [Specification Cross-References](#specification-cross-references)
-  - [Primitive Types](#primitive-types)
-  - [Complex Types](#complex-types)
-    - [Objects](#objects)
-    - [Nested Objects](#nested-objects)
-    - [Optionality](#optionality)
-    - [Parameter Optionality](#parameter-optionality)
-    - [Extension](#extension)
-    - [Polymorphism](#polymorphism)
-    - [Additional Properties](#additional-properties)
-  - [Arrays](#arrays)
-    - [Nested Arrays](#nested-arrays)
-  - [Swagger Validations](#swagger-validations)
-  - [Test Generators](#test-generators)
+- [Model Definitions](#model-definitions)
+- [Specification Cross-References](#specification-cross-references)
+- [Swagger Validations](#swagger-validations)
+- [Test Generators](#test-generators)
 - [Building an Api-First-Hand Plugin](#building-an-api-first-hand-plugin)
   - [Plugin Architecture](#plugin-architecture)
   - [Plugin Project Structure](#plugin-project-structure)
@@ -91,13 +80,11 @@ Play application developers are used to defining endpoints in the `conf/routes` 
 
 Note that the `conf/routes` file provided by the Activator template also contains additional `GET` mappings required for the the Swagger UI sandbox, and some commented-out links to other examples. If you activate some specification by moving it from the `examples` folder into the `conf` folder, you'll have to uncomment an appropriate line in the `routes` file so that Play can find it.  
 
-
-### Swagger Domain Definitions
+### Model Definitions
 
 API-First-Hand generates Scala domain model definitions for all data types defined as Swagger parameters in an API specification. Swagger parameters can be of path, query, header, form or body types, and consist of either primitive data types or more complex types composed from objects and arrays with primitives as leaves. Both primitive types and complex types are mapped to Scala.
 
 For more information and an example, [go here](https://github.com/zalando/api-first-hand/blob/master/docs/DEFINITIONS.md).
-
 
 ### Specification Cross-References
 
@@ -110,214 +97,14 @@ The definition is then placed into the appropriate package for each specificatio
 Thus, even if multiple classes with  the same name and structure might be generated, they all will coexist in their 
 own separate namespaces and won't be interchangeable.
 
-
 ### Primitive Types
 
 Swagger version 2.0 allows for primitive data types based on the types defined by 
-[JSON-Schema](http://json-schema.org/latest/json-schema-core.html#anchor8). When generated as Scala, the mapping indicated in [this chart](https://github.com/zalando/api-first-hand/blob/master/docs/DEFINITIONS.md#primitive-types) applies. Additionally, if a validation of type "enum" is defined for some primitive type, a trait and a set of case objects forming an ADT will be generated for this enum.
+[JSON-Schema](http://json-schema.org/latest/json-schema-core.html#anchor8). When generated as Scala, the mapping indicated in [this chart](https://github.com/zalando/api-first-hand/blob/master/docs/DEFINITIONS.md#primitive-types) applies.
 
-## Complex Types
+## Complex Types: Objects and Arrays
 
-Complex types are made up of either primitive objects or nested objects.
-
-### Objects
-
-Complex object types are defined in Swagger model definitions as either objects or arrays. [Go here](https://github.com/zalando/api-first-hand/blob/master/docs/DEFINITIONS.md#complex-types) for more documentation about nested objects, Optionality, parameter optionality, object extension, Polymorphism
-
-
-### Additional Properties
-
-Swagger's model language allows objects' additional properties to be loosely defined employing the `additionalProperties` annotation 
-in order to model dictionaries. These dictionaries are mapped to Scala's `Map` type, for which a type alias is 
-generated following the same (by now) well-known pattern as for optional properties, with the map's key parameter type being a Scala `String`.
-
-A Swagger additional property definition takes as its type property the element type of the dictionary, 
-which can be of primitive or complex type and which is mapped on Scala as the map's value parameter type. 
-Swagger allows for one `additionalProperties` annotation per object definition, so we can generate this Scala parameter 
-with the static name `additionalProperties`.
-
-In the following example we define a Swagger model object definition `KeyedArray` that uses the `additionalProperties` 
-annotation to provide the object with a set of key value mappings from string to array. E.g.
-
-```yaml
-definitions:
-  KeyedArrays:
-    type: object
-    additionalProperties:
-      type: array
-      items:
-        type: integer
-```
-
-Which is generated as:
-
-```scala
-package api
-
-package object yaml {
-
-    import de.zalando.play.controllers.ArrayWrapper
-    import scala.math.BigInt
-    import scala.collection.immutable.Map
-
-    type KeyedArraysAdditionalPropertiesCatchAll = ArrayWrapper[BigInt]
-    type KeyedArraysAdditionalProperties = Map[String, KeyedArraysAdditionalPropertiesCatchAll]
-    case class KeyedArrays(additionalProperties: KeyedArraysAdditionalProperties) 
-}
-```
-
-## Arrays
-
-Swagger's `array` is used to define properties that hold sets or lists of model values—possibly of a primitive type, 
-but complex element types are also allowed. Depending on the place where the array definition appears, Swagger array can be mapped to one of two Scala types, parametrised for the element type that it contains:
-- if an array only defined inline as a part of the response definition, it is translated to a `Seq` type
-- otherwise (array appears in the parameter definition or in the `definitions` part of the specification) it is 
-defined as a `de.zalando.play.controllers.ArrayWrapper`
-
-For example, in the snippet below, an `Activity` object definition is referred to as an item element in the 
-`messages` property of `type: array` of the containing object definition `Example`. 
-A Scala type alias will be generated for the array type (just as we've seen before with optional properties), 
-after which the array-containing property can be generated within the case class as being of this alias type. 
-E.g. in the Swagger definition and code
-
-```yaml
-definitions:
-  Activity:
-    type: object
-    required:
-    - actions
-    properties:
-      actions:
-        type: string
-  Example:
-    type: object
-    required:
-    - messages
-    properties:
-      messages:
-        type: array
-        items:
-          $ref: '#/definitions/Activity'
-```
-
-Which is generated as:
-
-```scala
-package api
-
-package object yaml {
-
-    import de.zalando.play.controllers.ArrayWrapper
-
-    type ExampleMessages = ArrayWrapper[Activity]
-
-    case class Activity(actions: String) 
-    case class Example(messages: ExampleMessages) 
-}
-
-```
-
-If the description of the same array is inlined as a part of the response definition like that:
-
-```yaml
-paths:
-  /api:
-    get:
-      responses:
-        200:
-          schema:
-            type: object
-            required:
-            - messages
-            properties:
-              messages:
-                type: array
-                items:
-                  $ref: '#/definitions/Activity'
-          description: array payload
-definitions:
-  Activity:
-    type: object
-    required:
-    - actions
-    properties:
-      actions:
-        type: string
-```
-
-than the `Seq` scala type will be used:
-```scala
-package api
-package object yaml {
-    type ApiGetResponses200Messages = Seq[Activity]
-    case class Activity(actions: String) 
-    case class ApiGetResponses200(messages: ApiGetResponses200Messages) 
-}
-```
-
-
-### Nested Arrays
-
-Array definition types can be nested and are possibly optional. 
-The following (contrived) snippet depicts the generated Scala code when both definition types are 
-employed in a somewhat non-useful manner. The intent of this example is to show that the case 
-class definitions are rather concisely generated, even though a stack of type aliases is needed 
-to make sure that we still refer in Scala code to an aptly named Swagger definition—especially 
-in conjunction with the object properties being optional. Next to its benefits, 
-type safety against `null` pointers does have an associated cost as well.
-
-```yaml
-definitions:
-  Activity:
-    type: object
-    properties:
-      actions:
-        type: string
-  Example:
-    type: object
-    properties:
-      messages:
-        type: array
-        items:
-          type: array
-          items:
-            $ref: '#/definitions/Activity'
-      nested:
-        type: array
-        items:
-          type: array
-          items:
-            type: array
-            items:
-              type: array
-              items:
-                type: string
-```
-
-Which is generated as:
-
-```scala
-package api
-
-package object yaml {
-
-    import de.zalando.play.controllers.ArrayWrapper
-
-    type ExampleMessagesOpt = ArrayWrapper[ExampleMessagesOptArr]
-    type ExampleMessages = Option[ExampleMessagesOpt]
-    type ExampleNested = Option[ExampleNestedOpt]
-    type ExampleMessagesOptArr = ArrayWrapper[Activity]
-    type ExampleNestedOptArrArrArr = ArrayWrapper[String]
-    type ExampleNestedOptArrArr = ArrayWrapper[ExampleNestedOptArrArrArr]
-    type ActivityActions = Option[String]
-    type ExampleNestedOptArr = ArrayWrapper[ExampleNestedOptArrArr]
-    type ExampleNestedOpt = ArrayWrapper[ExampleNestedOptArr]
-
-    case class Activity(actions: ActivityActions) 
-    case class Example(messages: ExampleMessages, nested: ExampleNested) 
-}
-
-```
+Complex types are made up of either primitive objects or nested objects. [Go here](https://github.com/zalando/api-first-hand/blob/master/docs/DEFINITIONS.md#complex-types) for details and examples related to **Objects** (including nested objections, optionality, object extensions, polymorphism, and additional properties) and **Arrays**.
 
 ## Swagger Validations
 
@@ -405,7 +192,6 @@ For example following configuration will set this place to be `conf/templates` f
 playScalaCustomTemplateLocation := Some(((resourceDirectory in Compile) / "templates").value)
 ```
 
-
 ## Plugin Developing
 
 sbt doesn't allow sub-projects to depend on each other as sbt plugins. To test an sbt plugin, you need a separate 
@@ -421,12 +207,10 @@ The Api-First-Hand plugin provides a couple of commands useful for development:
 * `apiFirstPrintFlatAstTypes` - outputs type definitions after type optimisations
 * `apiFirstPrintFlatAstParameters` - outputs parameter definitions after type optimisations
 
-
 ## Plugin Testing
 
 We're using the sbt scripted framework for testing. You can find the tests in `plugin/src/sbt-test`, and run them 
 by running `scripted` in the sbt console.
-
 
 ## Code quality
 
