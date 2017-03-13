@@ -32,7 +32,7 @@ We built API-First-Hand for use with [Play Framework](http://www.playframework.c
 
 ### Plugin Features 
 
-Api-First-Hand supports round-trip regeneration and compilation of these (managed means "managed by sbt"):
+Api-First-Hand supports round-trip regeneration and compilation of:
 - Play route definitions (managed)
 - Swagger domain model definitions and parameters onto Scala case classes (managed)
 - Swagger domain model constraints onto Play validations (managed)
@@ -45,7 +45,7 @@ Api-First-Hand supports round-trip regeneration and compilation of these (manage
 - Security extractors (manual generation and compilation)
 - Unmarshallers for custom content types (manual generation and compilation)
 
-"Managed by sbt" means that you don't have to control or change the code as you make your REST service. The security extractors and unmarshallers are available through manual generation and compilation, and supported if A) No security extractor or unmarshaller with the same name already exists; B) The developer issues the `playScalaSecurity` or `playScalaMarshallers` sbt command.
+Managed means "managed by sbt"—and this means that you don't have to control or change the code as you make your REST service. The security extractors and unmarshallers are available through manual generation and compilation, and supported if A) No security extractor or unmarshaller with the same name already exists; B) The developer issues the `playScalaSecurity` or `playScalaMarshallers` sbt command.
 
 ### Build Status and Requirements
 
