@@ -141,7 +141,7 @@ Swagger API definitions allow you to impose constraints on parameter types. You 
 
 ## About API-First-Hand: Architecture and Structure
 
-To build a plugin, do the following:
+to build a plugin from sources, do the following:
 
 - Clone the repository to your local filesystem
 - Publish the plugin into your local ivy repository by running ```sbt publishLocal``` in the API-First-Hand directory 
