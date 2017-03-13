@@ -5,11 +5,12 @@
 Table of Contents
 ------------------------------------------------------------
 
-- [Plugin Features](#plugin-features)
-- [Build Status and Requirements](#build-status-and-requirements)
-- [More About The Activator Template](#more-about-the-activator-template)
+- [Intro to API-First-Hand](#intro-to-api-first-hand)
+  - [Plugin Features](#plugin-features)
+  - [Build Status and Requirements](#build-status-and-requirements)
+    - [More About The Activator Template](#more-about-the-activator-template)
 - [Running Your Application with API-First-Hand](#running-your-application-with-api-first-hand)
-- [Play Routes Integration](#play-routes-integration)
+  - [Play Routes Integration](#play-routes-integration)
 - [Model Definitions](#model-definitions)
   - [Primitive Types](#primitive-types)
   - [Complex Types](#complex-types)
@@ -24,6 +25,7 @@ Table of Contents
   - [Custom Templates For Code Generation](#custom-templates-for-code-generation)
   - [Code Quality](#code-quality)
       
+## Intro to API-First-Hand
 API-First-Hand is an API-First bootstrapping tool for building RESTful web services from a [Swagger/OpenAPI](http://swagger.io/) specification. It's a plugin that takes your Swagger/OpenAPI definition as the single source of truth and regenerates these code snippets for you, simply and consistently. Instead of writing lots of boilerplate code, you can focus instead on implementing service business logic. Subsequent regenerations keep the code that you have added—either by commenting out the parts that are no longer valid, or by adding parts that are needed because you've changed the API.
 
 ### Plugin Features 
@@ -47,7 +49,7 @@ Api-First-Hand supports round-trip regeneration and compilation of these (manage
 
 API-First-Hand is under active development and **should not be considered production-ready**.
 
-**Requirements**: To use the plugin, you need
+To use the plugin, you need:
 - [Play Framework](http://www.playframework.com/) 2.5.4+
 - Swagger (OpenAPI) 2.0
 - the Activator template, hosted by [Lightbend](https://www.lightbend.com/activator/template/api-first-hand)
@@ -68,7 +70,7 @@ The Activator template provides a sandbox for your application to run with API-F
     * `generated_controllers/example.yaml.scala` - a dummy implementation of the example controller. Will be (re)generated if deleted
     * `security/example.yaml.scala` - a marshaller for OAuth2 tokens. Will not be regenerated until either deleted or renamed; and then explicitly requested by issuing a `playScalaSecurity` command.
  
-#### Running Your Application with API-First-Hand
+## Running Your Application with API-First-Hand
 
 Let's run your application with the plugin:
 
@@ -84,7 +86,7 @@ A single specification defines a single API. In our case these are three endpoin
 
 Click the default button to expand the API definition in the Swagger UI. Now you can change the specification or write some backend code and use the Swagger UI to see the results.
 
-#### Play Routes Integration
+### Play Routes Integration
 
 Play application developers are used to defining endpoints in the `conf/routes` file. With Api-First-Hand, however, Swagger API specifications already define endpoints as `path` definitions—saving you from doing the work twice. Just link your API definition in the routes file once. This makes all Swagger API-defined endpoints available as children of a single path context location, and generates Play route definitions from them (as shown below):
 
