@@ -29,7 +29,7 @@ API-First-Hand is an API-First bootstrapping tool for building RESTful web servi
 
 The plugin was built for use with [Play Framework](http://www.playframework.com/), but we'd like to extend it for use with **Akka HTTP**. [Get in touch](https://github.com/zalando/api-first-hand/blob/master/CONTRIBUTING.md) if you'd like to help make that possible.
 
-### Features and Add-ons
+### API-First-Hand Features and Add-ons
 Api-First-Hand supports round-trip regeneration and compilation of these (managed means "managed by sbt"):
 - Play route definitions (managed)
 - Swagger domain model definitions and parameters onto Scala case classes (managed)
