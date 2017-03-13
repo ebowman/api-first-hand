@@ -8,7 +8,7 @@ Table of Contents
 - [Plugin Features](#plugin-features)
 - [The Activator Template](#the-activator-template)
 - [Compatibility](#compatibility)
-- [Running an Application with API-First-Hand](#running-an-application-with-api-first-hand)
+- [Running Your Application with API-First-Hand](#running-your-application-with-api-first-hand)
 - [Play Routes Integration](#play-routes-integration)
 - [Model Definitions](#model-definitions)
   - [Primitive Types](#primitive-types)
