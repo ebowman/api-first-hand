@@ -40,8 +40,7 @@ Api-First-Hand supports round-trip regeneration and compilation of:
 - Generators for random test data and parameter values (managed)
 - Unit tests for invalid and valid parameter sets // validating your service at the API boundary (managed)
 - Swagger path definitions onto skeletons for Play controller implementations (unmanaged)
-- Skeletons for domain-driven controller implementation and customized deserializers
-- Wrappers for Play route files to convert semantics from HTTP-related to domain-related (controller_base)
+- Wrappers for Play route files to convert semantics from HTTP-related to domain-related controller_base (managed)
 - Model classes and validation rules
 - Security extractors (manual generation and compilation)
 - Unmarshallers for custom content types (manual generation and compilation)
@@ -86,7 +85,7 @@ The Activator template provides a sandbox for your application to run with API-F
 Now let's run your application with the plugin:
 
 - Open a shell and `cd` into your service project directory.
-- Start `sbt` and `run` the service. This creates a folder on your local machine, using the Activator template.
+- Start `sbt` and `run` the service.
 - View the running application at [http://localhost:9000](http://localhost:9000).
 
 A single specification defines a single API; in our case, these are three API endpoints:
@@ -95,7 +94,7 @@ A single specification defines a single API; in our case, these are three API en
 - The `POST /token` API represents an authorization server and is used by the security part of the generated code to validate OAuth tokens.
 - The `GET /todos/{user_id}` takes a path parameter `user_id` and returns a TODO list for the given user. Use `security/example.yaml.scala`, the marshaller for OAuth2 tokens, to request an OAuth token with the scope `admin:org`. This will grant permission for the client to access this endpoint and enable you to test the API.  
 
-Click the default button to expand the API definition in the Swagger UI. Now you can change the specification or write some backend code and use the Swagger UI to see the results.
+Click the default button to expand the API definition in the Swagger UI. You can change the specification or write some backend code and use the Swagger UI to see the results.
 
 ### Play Routes Integration
 
@@ -105,7 +104,7 @@ Play application developers are used to defining endpoints in the `conf/routes` 
 ->      /example        example.yaml.Routes
 ```
 
-The `conf/routes` file provided by the Activator template also contains additional `GET` mappings required for the Swagger UI sandbox, and some commented-out links to other examples. If you activate some specification by moving it from the `examples` folder into the `conf` folder, you'll have to uncomment an appropriate line in the `routes` file so that Play can find it.  
+The `conf/routes` file provided by the Activator template also contains additional `GET` mappings required for the Swagger UI sandbox, and some commented-out links to other examples. If you activate some specification by moving it from the `examples` folder into the `conf` folder, you'll have to uncomment an appropriate line in the `routes` file so that Play can find routes generated for it.
 
 ### Model Definitions
 
@@ -129,7 +128,7 @@ You can use a filename to reference part of another specification with the `$ref
 An independent copy of the class definition is created for each referencing specification. The definition is then placed into the appropriate package for each specification. 
 
 Therefore, even if multiple classes with the same name and structure are generated, they all will coexist in their 
-own separate namespaces and won't be interchangeable.
+own separate namespaces and won't be interchangeable. (We plan to change this in future versions.)
 
 ### Swagger Validations
 
@@ -228,6 +227,8 @@ by running `scripted` in the sbt console.
 
 Some quality checks are embedded into the build script:
 * the source code is (re)formatted using [scalariform](https://github.com/scala-ide/scalariform) each time it is compiled (currently deactivated).
-* [`scalastyle`](http://www.scalastyle.org) sbt command performs code style checks before putting changes into the repository
-* [`lint:compile`](https://github.com/HairyFotr/linter) sbt command performs static code analysis before putting changes into the repository
+* [`scalastyle`](http://www.scalastyle.org) sbt command: use this to perform code style checks before putting changes into the repository
+* [`lint:compile`](https://github.com/HairyFotr/linter) sbt command: use this to perform static code analysis before putting changes into the repository
 * Execute code coverage for API and compiler modules with the `sbt clean coverage test` command. Generate coverage statistics with the `coverageReport` sbt command.
+
+command shall be used to ... before putting changes into the repository
