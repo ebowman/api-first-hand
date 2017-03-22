@@ -58,12 +58,12 @@ To use the plugin, you need:
 
 #### More About the Activator Template
 The Activator template provides a sandbox for your application to run with API-First-Hand. (Download Activator [here](https://www.lightbend.com/activator/download), then follow [the instructions](https://www.lightbend.com/activator/template/api-first-hand)). It contains the following:
-- HTML tutorial (found in the `tutorial` folder)
+- HTML tutorial ([found here](https://github.com/zalando-incubator/api-first-hand-service/blob/master/tutorial/index.html))
 - the Swagger UI frontend included as static files, run from within Play (located in the `public/swagger` folder)
 - a pre-configured `plugins.sbt` file with a definition of all required resolvers and plugins (found in the `project` folder)
 - a `conf` folder with the following customized contents:
     * `routes` file with route configuration for Swagger UI, example specification, and commented-out links to other examples
-    * A template Swagger API definition called `example.yaml`, with a dummy implementation in the `app` folder 
+    * A template Swagger API definition called `example.yaml`, with a [dummy implementation](https://github.com/zalando-incubator/api-first-hand-service/blob/master/app/generated_controllers/example.yaml.scala) in the `app` folder 
     * `examples` folder containing additional Swagger specification examples, each representing some aspect of Api-First-Hand in greater detail. For the plugin to pick up the specification, move it into the `conf` folder. You can simultaneously have multiple Swagger specifications in the `conf` folder. 
 - `app` directory with following template implementations:
     * `controllers/Swagger.scala`: a backend side of the Swagger UI
