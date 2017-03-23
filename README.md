@@ -147,7 +147,7 @@ to build a plugin from sources, do the following:
 
 ## Plugin Architecture
 
-Api-First-Hand has a three-tier architecture:
+Api-First-Hand has a three-tier architecture, with pluggable specification parsers and pluggable artefact generators:
 
 * **Specification**, responsible for finding and parsing a specification and converting it into raw AST format
 * **Normalization**, which performs optimiztions on the AST—including type deduplication, flattening and parameter dereferencing
