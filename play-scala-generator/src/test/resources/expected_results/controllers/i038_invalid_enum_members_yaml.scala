@@ -22,7 +22,8 @@ import javax.inject._
  */
 
 package i038_invalid_enum_members.yaml {
-
+    // ----- Start of unmanaged code area for package I038_invalid_enum_membersYaml
+    // ----- End of unmanaged code area for package I038_invalid_enum_membersYaml
     class I038_invalid_enum_membersYaml @Inject() (
         // ----- Start of unmanaged code area for injections I038_invalid_enum_membersYaml
 

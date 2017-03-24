@@ -12,7 +12,9 @@ import {{import.name}}
 
 {{for controller in controllers}}
 package {{controller.effective_package}} {
-
+    {{controller.unmanaged_package_start_comment}}
+    {{controller.unmanaged_package_code}}
+    {{controller.unmanaged_package_end_comment}}
     class {{controller.controller}} @Inject() (
         {{controller.inject_start_comment}}
 {{controller.inject_code}}

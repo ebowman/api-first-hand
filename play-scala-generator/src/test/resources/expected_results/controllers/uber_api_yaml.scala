@@ -22,7 +22,8 @@ import javax.inject._
  */
 
 package uber.api.yaml {
-
+    // ----- Start of unmanaged code area for package UberApiYaml
+    // ----- End of unmanaged code area for package UberApiYaml
     class UberApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections UberApiYaml
 

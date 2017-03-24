@@ -26,7 +26,8 @@ import BinaryString._
  */
 
 package string_formats.yaml {
-
+    // ----- Start of unmanaged code area for package String_formatsYaml
+    // ----- End of unmanaged code area for package String_formatsYaml
     class String_formatsYaml @Inject() (
         // ----- Start of unmanaged code area for injections String_formatsYaml
 

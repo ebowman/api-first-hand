@@ -22,7 +22,8 @@ import javax.inject._
  */
 
 package echo {
-
+    // ----- Start of unmanaged code area for package EchoHandler
+    // ----- End of unmanaged code area for package EchoHandler
     class EchoHandler @Inject() (
         // ----- Start of unmanaged code area for injections EchoHandler
 
@@ -42,7 +43,8 @@ package echo {
     }
 }
 package echo {
-
+    // ----- Start of unmanaged code area for package EchoApiYaml
+    // ----- End of unmanaged code area for package EchoApiYaml
     class EchoApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections EchoApiYaml
 

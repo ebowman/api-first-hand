@@ -22,7 +22,8 @@ import javax.inject._
  */
 
 package admin {
-
+    // ----- Start of unmanaged code area for package Dashboard
+    // ----- End of unmanaged code area for package Dashboard
     class Dashboard @Inject() (
         // ----- Start of unmanaged code area for injections Dashboard
 

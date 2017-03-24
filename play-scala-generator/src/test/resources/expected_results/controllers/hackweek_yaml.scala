@@ -22,7 +22,8 @@ import javax.inject._
  */
 
 package hackweek.yaml {
-
+    // ----- Start of unmanaged code area for package HackweekYaml
+    // ----- End of unmanaged code area for package HackweekYaml
     class HackweekYaml @Inject() (
         // ----- Start of unmanaged code area for injections HackweekYaml
 

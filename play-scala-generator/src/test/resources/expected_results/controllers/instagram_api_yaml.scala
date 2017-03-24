@@ -28,7 +28,8 @@ import scala.math.BigDecimal
  */
 
 package instagram.api.yaml {
-
+    // ----- Start of unmanaged code area for package InstagramApiYaml
+    // ----- End of unmanaged code area for package InstagramApiYaml
     class InstagramApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections InstagramApiYaml
 

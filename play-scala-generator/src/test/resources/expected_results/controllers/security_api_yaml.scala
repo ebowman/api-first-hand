@@ -22,7 +22,8 @@ import javax.inject._
  */
 
 package security.api.yaml {
-
+    // ----- Start of unmanaged code area for package SecurityApiYaml
+    // ----- End of unmanaged code area for package SecurityApiYaml
     class SecurityApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections SecurityApiYaml
 

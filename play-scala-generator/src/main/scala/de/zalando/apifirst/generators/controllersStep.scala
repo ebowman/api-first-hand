@@ -301,6 +301,8 @@ object ControllersCommons {
   val ieof = "// ----- End of unmanaged code area for injections "
   val isof = "// ----- Start of unmanaged code area for injections "
 
+  val peof = "// ----- End of unmanaged code area for package "
+  val psof = "// ----- Start of unmanaged code area for package "
 }
 
 object NewPlayBodyParsing {

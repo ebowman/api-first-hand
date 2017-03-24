@@ -156,9 +156,11 @@ class ScalaGenerator(
     val codeParts = collectImplementations(controllerLines, sof, eof)
     val constructors = collectImplementations(controllerLines, csof, ceof)
     val injections = collectImplementations(controllerLines, isof, ieof)
+    val packageUnmanagedCode = collectImplementations(controllerLines, psof, peof)
 
     val constructorCode = cleanFromComments(constructors, csof, ceof)
     val injectedCode = cleanFromComments(injections, isof, ieof)
+    val packageCode = cleanFromComments(packageUnmanagedCode, psof, peof)
 
     val unmanagedParts = analyzeController(modelCalls, codeParts)
 
@@ -184,7 +186,7 @@ class ScalaGenerator(
     )
 
     val controllersList = PlayScalaControllersGenerator.
-      controllers(modelCalls, unmanagedParts, pckg, deadCode, constructorCode, injectedCode)(denotationTable)
+      controllers(modelCalls, unmanagedParts, pckg, deadCode, constructorCode, injectedCode, packageCode)(denotationTable)
 
     val stdImports = standardImports(modelTypes).map(i => Map("name" -> i))
 
@@ -286,7 +288,10 @@ object PlayScalaControllersGenerator {
   val securityTraitSuffix = "Security"
 
   def controllers(allCalls: Seq[ApiCall], unmanagedParts: Map[ApiCall, UnmanagedPart], packageName: String,
-    deadCode: Map[String, String], constructorCode: Map[String, String], injectedCode: Map[String, String])(table: DenotationTable): Iterable[Map[String, Object]] = {
+    deadCode: Map[String, String],
+    constructorCode: Map[String, String],
+    injectedCode: Map[String, String],
+    packageCode: Map[String, String])(table: DenotationTable): Iterable[Map[String, Object]] = {
     allCalls groupBy { c =>
       (c.handler.packageName, c.handler.controller)
     } map {
@@ -317,7 +322,11 @@ object PlayScalaControllersGenerator {
           "constructor_code" -> constructorCode(controller._2),
           "inject_start_comment" -> (isof + controllerName),
           "inject_end_comment" -> (ieof + controllerName),
-          "inject_code" -> injectedCode(controller._2)
+          "inject_code" -> injectedCode(controller._2),
+          "unmanaged_package_start_comment" -> (psof + controllerName),
+          "unmanaged_package_end_comment" -> (peof + controllerName),
+          "unmanaged_package_code" -> packageCode(controller._2)
+
         )
     }
   }

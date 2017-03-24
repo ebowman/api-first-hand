@@ -24,7 +24,8 @@ import scala.math.BigInt
  */
 
 package heroku.petstore.api.yaml {
-
+    // ----- Start of unmanaged code area for package HerokuPetstoreApiYaml
+    // ----- End of unmanaged code area for package HerokuPetstoreApiYaml
     class HerokuPetstoreApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections HerokuPetstoreApiYaml
 

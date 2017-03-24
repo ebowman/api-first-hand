@@ -22,7 +22,8 @@ import javax.inject._
  */
 
 package wrong_field_name.yaml {
-
+    // ----- Start of unmanaged code area for package Wrong_field_nameYaml
+    // ----- End of unmanaged code area for package Wrong_field_nameYaml
     class Wrong_field_nameYaml @Inject() (
         // ----- Start of unmanaged code area for injections Wrong_field_nameYaml
 
