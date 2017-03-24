@@ -22,7 +22,8 @@ import javax.inject._
  */
 
 package full.petstore.api.yaml {
-
+    // ----- Start of unmanaged code area for package FullPetstoreApiYaml
+    // ----- End of unmanaged code area for package FullPetstoreApiYaml
     class FullPetstoreApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections FullPetstoreApiYaml
 

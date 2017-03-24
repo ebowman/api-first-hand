@@ -22,7 +22,8 @@ import javax.inject._
  */
 
 package basic.auth.api.yaml {
-
+    // ----- Start of unmanaged code area for package BasicAuthApiYaml
+    // ----- End of unmanaged code area for package BasicAuthApiYaml
     class BasicAuthApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections BasicAuthApiYaml
 

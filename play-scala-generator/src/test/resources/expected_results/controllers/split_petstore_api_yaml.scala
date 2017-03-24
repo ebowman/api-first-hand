@@ -22,7 +22,8 @@ import javax.inject._
  */
 
 package split.petstore.api.yaml {
-
+    // ----- Start of unmanaged code area for package SplitPetstoreApiYaml
+    // ----- End of unmanaged code area for package SplitPetstoreApiYaml
     class SplitPetstoreApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections SplitPetstoreApiYaml
 

@@ -22,7 +22,8 @@ import javax.inject._
  */
 
 package nakadi.yaml {
-
+    // ----- Start of unmanaged code area for package NakadiYaml
+    // ----- End of unmanaged code area for package NakadiYaml
     class NakadiYaml @Inject() (
         // ----- Start of unmanaged code area for injections NakadiYaml
 

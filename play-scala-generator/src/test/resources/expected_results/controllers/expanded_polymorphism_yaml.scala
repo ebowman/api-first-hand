@@ -22,7 +22,8 @@ import javax.inject._
  */
 
 package expanded {
-
+    // ----- Start of unmanaged code area for package Expanded_polymorphismYaml
+    // ----- End of unmanaged code area for package Expanded_polymorphismYaml
     class Expanded_polymorphismYaml @Inject() (
         // ----- Start of unmanaged code area for injections Expanded_polymorphismYaml
 

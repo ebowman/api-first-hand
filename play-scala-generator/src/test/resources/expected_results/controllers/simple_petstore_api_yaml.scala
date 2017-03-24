@@ -22,7 +22,8 @@ import javax.inject._
  */
 
 package simple_petstore_api_yaml {
-
+    // ----- Start of unmanaged code area for package SimplePetstoreApiYaml
+    // ----- End of unmanaged code area for package SimplePetstoreApiYaml
     class SimplePetstoreApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections SimplePetstoreApiYaml
 
@@ -42,7 +43,8 @@ package simple_petstore_api_yaml {
     }
 }
 package simple_petstore_api_yaml {
-
+    // ----- Start of unmanaged code area for package Dashboard
+    // ----- End of unmanaged code area for package Dashboard
     class Dashboard @Inject() (
         // ----- Start of unmanaged code area for injections Dashboard
 

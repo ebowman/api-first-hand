@@ -22,7 +22,8 @@ import javax.inject._
  */
 
 package type_deduplication.yaml {
-
+    // ----- Start of unmanaged code area for package Type_deduplicationYaml
+    // ----- End of unmanaged code area for package Type_deduplicationYaml
     class Type_deduplicationYaml @Inject() (
         // ----- Start of unmanaged code area for injections Type_deduplicationYaml
 
