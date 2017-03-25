@@ -57,10 +57,12 @@ trait CallTestsStep extends EnrichmentStep[ApiCall] with ActionResults with Para
     ) ++ parameters(call)(table)
   }
 
-  def acceptHeader(call: ApiCall): Set[Map[String, String]] =
-    call.mimeOut.map(_.name).map { header =>
+  def acceptHeader(call: ApiCall): Set[Map[String, String]] = {
+    lazy val defined = call.mimeOut.map(_.name).map { header =>
       Map("name" -> header)
     }
+    if (call.requiresBody) defined else Set(Map("name" -> "*/*"))
+  }
 
   def contentTypes(call: ApiCall): Set[Map[String, String]] =
     call.mimeIn.map(_.name).map { header =>
