@@ -1,5 +1,5 @@
 
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{Action,Controller}
 
 import play.api.data.validation.Constraint
 
@@ -15,6 +15,7 @@ import scala.util._
 
 import javax.inject._
 
+// -----
 
 /**
  * This controller is re-generated after each change in the specification.
@@ -22,7 +23,9 @@ import javax.inject._
  */
 
 package i038_invalid_enum_members.yaml {
-
+    // ----- Start of unmanaged code area for package I038_invalid_enum_membersYaml
+    
+    // ----- End of unmanaged code area for package I038_invalid_enum_membersYaml
     class I038_invalid_enum_membersYaml @Inject() (
         // ----- Start of unmanaged code area for injections I038_invalid_enum_membersYaml
 
@@ -38,14 +41,6 @@ package i038_invalid_enum_members.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  I038_invalid_enum_membersYaml.get
         }
-    
-     // Dead code for absent methodI038_invalid_enum_membersYaml.post
-     /*
-            // ----- Start of unmanaged code area for action  I038_invalid_enum_membersYaml.post
-            NotImplementedYet
-            // ----- End of unmanaged code area for action  I038_invalid_enum_membersYaml.post
-     */
-
     
     }
 }
