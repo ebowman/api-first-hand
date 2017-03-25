@@ -143,7 +143,7 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
         }
         obj
       case _ =>
-        val typeName = typeNameFromInlinedReference(param) getOrElse name
+        val typeName = if (param.enum.nonEmpty) name else { typeNameFromInlinedReference(param) getOrElse name }
         val primitiveType = fromPrimitiveType(name, p, param.format, param)(required, typeName, param.default, param.enum)
         Seq(primitiveType)
     }
