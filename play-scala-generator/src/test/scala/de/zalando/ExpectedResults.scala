@@ -42,7 +42,8 @@ trait ExpectedResults {
     split_petstore_api_yaml,
     string_formats_yaml,
     type_deduplication_yaml,
-    uber_api_yaml
+    uber_api_yaml,
+    i041_no_json_deserialiser_yaml
   )
   val validations = Seq[WithModel](
     nested_arrays_validation_yaml,
