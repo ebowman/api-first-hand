@@ -59,7 +59,9 @@ class Error_in_array_yamlSpec extends WordSpec with OptionValues with WsScalaTes
 
             val url = s"""/schema/model"""
             val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq()
+            val acceptHeaders: Seq[String] = Seq(
+               "*/*"
+            )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
@@ -104,7 +106,9 @@ class Error_in_array_yamlSpec extends WordSpec with OptionValues with WsScalaTes
             
             val url = s"""/schema/model"""
             val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq()
+            val acceptHeaders: Seq[String] = Seq(
+                "*/*"
+            )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
