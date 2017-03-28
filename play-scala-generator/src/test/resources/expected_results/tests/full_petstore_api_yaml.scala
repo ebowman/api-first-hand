@@ -437,9 +437,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             val url = s"""/v2/users/login?${toQuery("username", username)}&${toQuery("password", password)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json", 
-            
-               "application/xml"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -484,9 +482,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             val url = s"""/v2/users/login?${toQuery("username", username)}&${toQuery("password", password)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json", 
-            
-                "application/xml"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -566,9 +562,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             val url = s"""/v2/stores/order/${toPath(orderId)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json", 
-            
-               "application/xml"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -612,9 +606,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             val url = s"""/v2/stores/order/${toPath(orderId)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json", 
-            
-                "application/xml"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -691,9 +683,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             val url = s"""/v2/users/${toPath(username)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json", 
-            
-               "application/xml"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -737,9 +727,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             val url = s"""/v2/users/${toPath(username)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json", 
-            
-                "application/xml"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -940,9 +928,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             val url = s"""/v2/users/${toPath(username)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json", 
-            
-               "application/xml"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -986,9 +972,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             val url = s"""/v2/users/${toPath(username)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json", 
-            
-                "application/xml"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -1064,9 +1048,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             val url = s"""/v2/stores/order/${toPath(orderId)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json", 
-            
-               "application/xml"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -1110,9 +1092,7 @@ class Full_petstore_api_yamlSpec extends WordSpec with OptionValues with WsScala
             val url = s"""/v2/stores/order/${toPath(orderId)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json", 
-            
-                "application/xml"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")

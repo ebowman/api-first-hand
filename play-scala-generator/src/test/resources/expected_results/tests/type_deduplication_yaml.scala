@@ -61,7 +61,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/users/${toPath(user_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -109,7 +109,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/users/${toPath(user_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -311,7 +311,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/water_needs"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -355,7 +355,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/water_needs"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -559,7 +559,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -603,7 +603,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -680,7 +680,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/waterings/${toPath(watering_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -725,7 +725,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/waterings/${toPath(watering_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -934,7 +934,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/location"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -978,7 +978,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/location"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -1055,7 +1055,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/user/${toPath(user_id)}/plants?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -1100,7 +1100,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/user/${toPath(user_id)}/plants?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -1182,7 +1182,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/users/${toPath(user_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -1226,7 +1226,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/users/${toPath(user_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -1432,7 +1432,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/waterings?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -1477,7 +1477,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/waterings?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -1687,7 +1687,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/users?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -1732,7 +1732,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/users?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -1811,7 +1811,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/users/${toPath(user_id)}/picture"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -1855,7 +1855,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/users/${toPath(user_id)}/picture"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -2061,7 +2061,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/pictures/${toPath(picture_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -2106,7 +2106,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/pictures/${toPath(picture_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -2307,7 +2307,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -2352,7 +2352,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -2552,7 +2552,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/location"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -2596,7 +2596,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/location"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -2672,7 +2672,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -2716,7 +2716,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -2923,7 +2923,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/areas?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -2968,7 +2968,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/areas?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -3174,7 +3174,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/sunlight_needs"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -3218,7 +3218,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/sunlight_needs"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -3294,7 +3294,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/areas/${toPath(area_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -3338,7 +3338,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/areas/${toPath(area_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -3413,7 +3413,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/users/${toPath(user_id)}/picture"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -3457,7 +3457,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/users/${toPath(user_id)}/picture"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -3534,7 +3534,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/pictures/${toPath(picture_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -3579,7 +3579,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/pictures/${toPath(picture_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -3659,7 +3659,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/areas/${toPath(area_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -3703,7 +3703,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/areas/${toPath(area_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -3779,7 +3779,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/pictures?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -3824,7 +3824,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/api/plants/${toPath(plant_id)}/pictures?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")

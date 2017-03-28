@@ -67,9 +67,7 @@ class String_formats_yamlSpec extends WordSpec with OptionValues with WsScalaTes
             val url = s"""/?${toQuery("date_time", date_time)}&${toQuery("date", date)}&${toQuery("base64", base64)}&${toQuery("uuid", uuid)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json", 
-            
-               "application/yaml"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -117,9 +115,7 @@ class String_formats_yamlSpec extends WordSpec with OptionValues with WsScalaTes
             val url = s"""/?${toQuery("date_time", date_time)}&${toQuery("date", date)}&${toQuery("base64", base64)}&${toQuery("uuid", uuid)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json", 
-            
-                "application/yaml"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")

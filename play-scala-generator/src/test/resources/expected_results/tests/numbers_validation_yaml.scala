@@ -60,9 +60,7 @@ class Numbers_validation_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/?${toQuery("float_required", float_required)}&${toQuery("double_required", double_required)}&${toQuery("integer_optional", integer_optional)}&${toQuery("long_required", long_required)}&${toQuery("integer_required", integer_required)}&${toQuery("float_optional", float_optional)}&${toQuery("double_optional", double_optional)}&${toQuery("long_optional", long_optional)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json", 
-            
-               "application/yaml"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -107,9 +105,7 @@ class Numbers_validation_yamlSpec extends WordSpec with OptionValues with WsScal
             val url = s"""/?${toQuery("float_required", float_required)}&${toQuery("double_required", double_required)}&${toQuery("integer_optional", integer_optional)}&${toQuery("long_required", long_required)}&${toQuery("integer_required", integer_required)}&${toQuery("float_optional", float_optional)}&${toQuery("double_optional", double_optional)}&${toQuery("long_optional", long_optional)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json", 
-            
-                "application/yaml"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")

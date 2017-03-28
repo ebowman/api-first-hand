@@ -58,7 +58,9 @@ class Echo_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
 
             val url = s"""/echo/test-path/${toPath(id)}"""
             val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq()
+            val acceptHeaders: Seq[String] = Seq(
+               "*/*"
+            )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
@@ -100,7 +102,9 @@ class Echo_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             
             val url = s"""/echo/test-path/${toPath(id)}"""
             val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq()
+            val acceptHeaders: Seq[String] = Seq(
+                "*/*"
+            )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 

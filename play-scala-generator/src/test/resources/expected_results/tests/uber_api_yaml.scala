@@ -62,7 +62,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val url = s"""/v1/history?${toQuery("offset", offset)}&${toQuery("limit", limit)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -107,7 +107,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val url = s"""/v1/history?${toQuery("offset", offset)}&${toQuery("limit", limit)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -187,7 +187,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val url = s"""/v1/estimates/time?${toQuery("start_latitude", start_latitude)}&${toQuery("start_longitude", start_longitude)}&${toQuery("customer_uuid", customer_uuid)}&${toQuery("product_id", product_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -232,7 +232,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val url = s"""/v1/estimates/time?${toQuery("start_latitude", start_latitude)}&${toQuery("start_longitude", start_longitude)}&${toQuery("customer_uuid", customer_uuid)}&${toQuery("product_id", product_id)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -316,7 +316,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val url = s"""/v1/products?${toQuery("latitude", latitude)}&${toQuery("longitude", longitude)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -361,7 +361,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val url = s"""/v1/products?${toQuery("latitude", latitude)}&${toQuery("longitude", longitude)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -441,7 +441,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val url = s"""/v1/estimates/price?${toQuery("start_latitude", start_latitude)}&${toQuery("start_longitude", start_longitude)}&${toQuery("end_latitude", end_latitude)}&${toQuery("end_longitude", end_longitude)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-               "application/json"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -486,7 +486,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val url = s"""/v1/estimates/price?${toQuery("start_latitude", start_latitude)}&${toQuery("start_longitude", start_longitude)}&${toQuery("end_latitude", end_latitude)}&${toQuery("end_longitude", end_longitude)}"""
             val contentTypes: Seq[String] = Seq()
             val acceptHeaders: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")

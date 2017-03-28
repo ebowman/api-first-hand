@@ -198,9 +198,7 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
                 "text/xml"
             )
             val acceptHeaders: Seq[String] = Seq(
-               "application/json", 
-            
-               "text/html"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -248,9 +246,7 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
                 "text/xml"
             )
             val acceptHeaders: Seq[String] = Seq(
-                "application/json", 
-            
-                "text/html"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -329,9 +325,7 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
                 "text/xml"
             )
             val acceptHeaders: Seq[String] = Seq(
-               "application/json", 
-            
-               "text/html"
+               "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
@@ -379,9 +373,7 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
                 "text/xml"
             )
             val acceptHeaders: Seq[String] = Seq(
-                "application/json", 
-            
-                "text/html"
+                "*/*"
             )
             val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")

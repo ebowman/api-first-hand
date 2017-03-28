@@ -399,6 +399,7 @@ object Application {
       security: Set[Security.Constraint] = Set.empty
   ) {
     def asReference: Reference = (path.prepend("paths") / verb.toString.toLowerCase).ref
+    val requiresBody: Boolean = Set[Http.Verb](Http.POST, Http.PUT, Http.PATCH).contains(verb)
   }
 
   type ParameterLookupTable = Map[ParameterRef, Parameter]
