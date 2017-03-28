@@ -18,18 +18,18 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Status'
+            $ref: '#/definitions/OpStatus'
       responses:
         '200':
           description: 200
           schema:
             type: array
             items:
-              $ref: '#/definitions/Status'
+              $ref: '#/definitions/OpStatus'
 
 
 definitions:
 
-  Status:
+  OpStatus:
     type: string
     enum: [ "Status One", "Status Two", "Status Three" ]

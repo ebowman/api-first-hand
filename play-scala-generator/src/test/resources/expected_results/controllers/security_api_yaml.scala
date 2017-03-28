@@ -1,9 +1,9 @@
 
-import play.api.mvc.{ Action, Controller }
+import play.api.mvc.{Action,Controller}
 
 import play.api.data.validation.Constraint
 
-import play.api.inject.{ ApplicationLifecycle, ConfigurationProvider }
+import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
 
 import de.zalando.play.controllers._
 

@@ -202,9 +202,9 @@ object PlayScalaControllerAnalyzer {
   case class UnmanagedPart(marker: ApiCall, relevantCode: Seq[String])
 
   val controllerImports = Seq(
-    "play.api.mvc.{ Action, Controller }",
+    "play.api.mvc.{Action,Controller}",
     "play.api.data.validation.Constraint",
-    "play.api.inject.{ ApplicationLifecycle, ConfigurationProvider }",
+    "play.api.inject.{ApplicationLifecycle,ConfigurationProvider}",
     "de.zalando.play.controllers._",
     "PlayBodyParsing._",
     "PlayValidations._",
@@ -222,7 +222,7 @@ object PlayScalaControllerAnalyzer {
 
   def unmanagedImports(currentVersion: String, modelTypes: TypeLookupTable): Seq[String] = {
     val allLines = currentVersion.split("\n").filter(_.trim.nonEmpty).dropWhile(_.trim.isEmpty).toSeq
-    allLines.filter(_.trim.startsWith("import")).map(_.replace("import ", "")).
+    allLines.filter(_.trim.startsWith("import")).map(_.replace("import ", "").replaceAll(" ", "")).
       filterNot(controllerImports.contains).filterNot(standardImports(modelTypes).contains)
   }
 
