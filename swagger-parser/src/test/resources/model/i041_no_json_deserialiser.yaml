@@ -1,0 +1,133 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: example
+basePath: /v1
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /user:
+    get:
+      summary: List all users
+      operationId: listUser
+      tags:
+        - user
+      responses:
+        "200":
+          description: An paged array of users
+          headers:
+            x-next:
+              type: string
+              description: A link to the next page of responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create a User
+      operationId: createUser
+      tags:
+        - user
+      parameters:
+        - name: name
+          in: query
+          type: string
+          required: true
+      responses:
+        "200":
+          description: created User
+          schema:
+            $ref: '#/definitions/User'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /user/{id}:
+    get:
+      summary: Info for a specific pet
+      operationId: showUserById
+      tags:
+        - user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the user to retrieve
+          type: integer
+      responses:
+        "200":
+          description: Expected response to a valid request
+          schema:
+            $ref: '#/definitions/User'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Modify user
+      operationId: putUser
+      tags:
+        - user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User id
+          type: integer
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        "200":
+          description: User modified
+          schema:
+            $ref: '#/definitions/User'
+        default:
+          description: unexpetded error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  User:
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      money:
+        type: object
+        allOf:
+          - $ref: '#/definitions/Money'
+  Money:
+    properties:
+      id:
+        type: integer
+        format: int64
+      userId:
+        type: integer
+        format: int64
+      amount:
+        type: number
+      createDate:
+        type: string
+        format: date-time
+  Error:
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string

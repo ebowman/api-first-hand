@@ -1,7 +1,7 @@
 package de.zalando.apifirst.generators
 
 import de.zalando.apifirst.Application.{ ApiCall, StrictModel }
-import de.zalando.apifirst.Domain.TypeDef
+import de.zalando.apifirst.Domain.{ AllOf, TypeDef }
 import de.zalando.apifirst.Http.ApplicationJson
 import de.zalando.apifirst.generators.DenotationNames._
 import de.zalando.apifirst.{ Http, ParameterPlace, ScalaName }
@@ -69,7 +69,10 @@ trait MarshallersStep extends EnrichmentStep[StrictModel] {
   private def specJsonReadables(spec: StrictModel)(table: DenotationTable): Seq[Map[String, Any]] = {
     val bodyParams = bodyParameters(spec).filter { case (mimeType, _) => jsonPattern.matcher(mimeType).matches() }.distinct
     val bodyTypes =
-      bodyParams.flatMap(_._2.typeName.allNestedTypes).distinct.map(_.realType).collect { case TypeDef(name, _, _) => name }.reverse
+      bodyParams.flatMap(_._2.typeName.allNestedTypes).distinct.map(_.realType).collect {
+        case TypeDef(name, _, _) => name
+        case AllOf(name, _, _, _) => name.parent
+      }.reverse
     val denotations = bodyTypes.flatMap(table.apply)
     val typeDefs = denotations.collect { case (k, v) if k == "classes" => v.toSeq }
     typeDefs.map(_.toMap)
@@ -77,7 +80,10 @@ trait MarshallersStep extends EnrichmentStep[StrictModel] {
 
   private def specJsonWritables(spec: StrictModel)(table: DenotationTable): Seq[Map[String, Any]] = {
     val results = callResults(spec).filter { case (mimeType, _) => jsonPattern.matcher(mimeType.name).matches() }.distinct
-    val types = results.flatMap(_._2.allNestedTypes).distinct.map(_.realType).collect { case TypeDef(name, _, _) => name }.reverse
+    val types = results.flatMap(_._2.allNestedTypes).distinct.map(_.realType).collect {
+      case TypeDef(name, _, _) => name
+      case AllOf(name, _, _, _) => name.parent
+    }.reverse
     val denotations = types.flatMap(table.apply)
     val typeDefs = denotations.collect { case (k, v) if k == "classes" => v.toSeq }
     typeDefs.map(_.toMap)
