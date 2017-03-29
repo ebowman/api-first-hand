@@ -1,0 +1,26 @@
+---
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: Simple API
+paths:
+  /:
+    get:
+      parameters:
+        - name: test1
+          in: query
+          required: true
+          type: string
+        - name: test2
+          in: body
+          schema:
+            type: object
+            required:
+              - test3
+            properties:
+              test3:
+                type: integer
+                format: int32
+      responses:
+        200:
+          description: OK

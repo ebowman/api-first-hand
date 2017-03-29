@@ -1,0 +1,7 @@
+"paths" / "/" / "get" / "test1" ->
+	Str
+"paths" / "/" / "get" / "test2" ->
+	Opt(TypeDef("paths" / "/" / "get" / "test2", Seq(
+		Field("paths" / "/" / "get" / "test2" / "test3", Intgr))))
+"paths" / "/" / "get" / "responses" / "200" ->
+	Null
