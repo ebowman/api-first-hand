@@ -21,7 +21,7 @@ object required_parametrs_yaml extends WithModel {
 	Reference("⌿paths⌿/⌿get⌿test2⌿Opt") → 
 		TypeDef(Reference("⌿paths⌿/⌿get⌿test2"), 
 			Seq(
-					Field(Reference("⌿paths⌿/⌿get⌿test2⌿test3"), Intgr(TypeMeta(Some("int32"), List("notNull"))))
+					Field(Reference("⌿paths⌿/⌿get⌿test2⌿test3"), Intgr(TypeMeta(Some("int32"), List("max(100.toInt, false)", "notNull"))))
 			), TypeMeta(Some("Named types: 1"), List()))
 ) 
  

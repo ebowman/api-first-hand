@@ -31,7 +31,7 @@ object ValidationsConverter {
     { case v: StringValidation => toStringValidations(v) },
     { case n: NumberValidation[_] => toNumberValidations(n) },
     { case o: ObjectValidation => toObjectValidations(o) },
-    { case p: QueryParameter[_] => toQueryParameterValidations(p) }
+    { case p: NonBodyParameterCommons[_, _] => toNonBodyParameterCommonsValidations(p) }
   )
 
   private def validationsPF[CF, T](b: ValidationBase): Seq[String] = {
@@ -100,7 +100,7 @@ object ValidationsConverter {
       ifDefined(p.minProperties, s"minProperties(${p.minProperties.get})")
     ).flatten
 
-  private def toQueryParameterValidations(p: QueryParameter[_]): Seq[String] = {
+  private def toNonBodyParameterCommonsValidations(p: NonBodyParameterCommons[_, _]): Seq[String] = {
     if (p.required) Seq(s"""notNull""") else Seq.empty
   }
 

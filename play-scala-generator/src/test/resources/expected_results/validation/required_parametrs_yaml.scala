@@ -15,7 +15,7 @@ class GetTest1Validator(instance: String) extends RecursiveValidator {
 }
 class GetTest2Test3Constraints(override val instance: Int) extends ValidationBase[Int] {
     override def constraints: Seq[Constraint[Int]] =
-        Seq(notNull)
+        Seq(max(100.toInt, false), notNull)
 }
 class GetTest2Test3Validator(instance: Int) extends RecursiveValidator {
     override val validators = Seq(new GetTest2Test3Constraints(instance))

@@ -21,6 +21,7 @@ paths:
               test3:
                 type: integer
                 format: int32
+                maximum: 100
       responses:
         200:
           description: OK
