@@ -32,7 +32,7 @@ paths:
       parameters:
         - in: header
           name: header
-          required: false
+          required: true
           type: string
           format: date-time
         - in: path
