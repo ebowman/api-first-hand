@@ -42,10 +42,10 @@ package i019_date_time_constructor.yaml {
             Post200(body.getOrElse(throw new IllegalStateException("Body is expected")))
             // ----- End of unmanaged code area for action  I019_date_time_constructorYaml.post
         }
-        val getbyTask = getbyTaskAction { input: (ZonedDateTime, ZonedDateTime) =>
+        val getbyTask = getbyTaskAction { input: (TaskComplete_before, ZonedDateTime) =>
             val (header, task) = input
             // ----- Start of unmanaged code area for action  I019_date_time_constructorYaml.getbyTask
-            GetbyTask200(Task(Option(header), Option(task)))
+            GetbyTask200(Task(header, Option(task.toLocalDate)))
             // ----- End of unmanaged code area for action  I019_date_time_constructorYaml.getbyTask
         }
     

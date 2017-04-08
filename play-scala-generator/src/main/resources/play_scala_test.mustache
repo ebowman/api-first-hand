@@ -70,14 +70,14 @@ class {{spec_name}} extends WordSpec with OptionValues with WsScalaTestClient wi
             val acceptHeaders: Seq[String] = Seq({{for header in test.accept_headers}}
                "{{header.name}}"{{if header.isNotLast}}, {{/if}}
             {{/for}})
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
                     Seq({{for header in test.headers}}
                         "{{header.name}}" -> toHeader({{header.parameter_name}}){{if header.isNotLast}}, {{/if}}
-                        {{/for}}) :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                        {{/for}}) :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 {{for b in test.body_param}}
                     val parsed_{{b.body_parameter_name}} = PlayBodyParsing.jacksonMapper("{{b.expected_result_type}}").writeValueAsString({{b.body_parameter_name}})
@@ -85,7 +85,7 @@ class {{spec_name}} extends WordSpec with OptionValues with WsScalaTestClient wi
 
                 val request = FakeRequest({{test.verb_name}}, url).withHeaders(headers:_*){{for b in test.body_param}}.withBody(parsed_{{b.body_parameter_name}}){{/for}}
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = {{for p in test.form_parameters}}{{if p.is_file}}{{if p.optional}}{{p.field_name}}.toSeq.map { m => FilePart("{{p.field_name}}", m.getName, Some("Content-Type: multipart/form-data"), TemporaryFile(m)) } ++ {{else}}Seq(FilePart("{{p.field_name}}", {{p.field_name}}.getName, Some("Content-Type: multipart/form-data"), TemporaryFile({{p.field_name}}))) ++ {{/if}}{{/if}}{{/for}}Nil
@@ -93,7 +93,7 @@ class {{spec_name}} extends WordSpec with OptionValues with WsScalaTestClient wi
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         {{if test.form_parameters}}
                         val form = {{for p in test.form_parameters}} {{if p.is_file}} {{else}} {{if p.optional}}{{p.field_name}}.map(m => "{{p.field_name}}" -> m.toString).toList ::: {{else}}("{{p.field_name}}" -> {{p.field_name}}.toString) :: {{/if}} {{/if}} {{/for}} Nil
                         {{/if}}
@@ -106,9 +106,9 @@ class {{spec_name}} extends WordSpec with OptionValues with WsScalaTestClient wi
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" {{for b in test.body_param}}+ " and body [" + parsed_{{b.body_parameter_name}} + "]"{{/for}}) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" {{for b in test.body_param}}+ " and body [" + parsed_{{b.body_parameter_name}} + "]"{{/for}}) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -123,24 +123,24 @@ class {{spec_name}} extends WordSpec with OptionValues with WsScalaTestClient wi
             val parsed_{{b.body_parameter_name}} = parserConstructor("{{b.expected_result_type}}").writeValueAsString({{b.body_parameter_name}})
             {{/for}}
             val url = {{test.full_url}}
-            val contentTypes: Seq[String] = Seq({{for header in test.content_types}}
+            val consumesAll: Seq[String] = Seq({{for header in test.content_types}}
                 "{{header.name}}"{{if header.isNotLast}}, {{/if}}
             {{/for}})
-            val acceptHeaders: Seq[String] = Seq({{for header in test.accept_headers}}
+            val producesAll: Seq[String] = Seq({{for header in test.accept_headers}}
                 "{{header.name}}"{{if header.isNotLast}}, {{/if}}
             {{/for}})
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
                    Seq({{for header in test.headers}}
                         "{{header.name}}" -> toHeader({{header.parameter_name}}){{if header.isNotLast}}, {{/if}}
-                    {{/for}}) :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    {{/for}}) :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest({{test.verb_name}}, url).withHeaders(headers:_*){{for b in test.body_param}}.withBody(parsed_{{b.body_parameter_name}}){{/for}}
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = {{for p in test.form_parameters}}{{if p.is_file}}{{if p.optional}}{{p.field_name}}.toSeq.map { m => FilePart("{{p.field_name}}", m.getName, Some("Content-Type: multipart/form-data"), TemporaryFile(m)) } ++ {{else}}Seq(FilePart("{{p.field_name}}", {{p.field_name}}.getName, Some("Content-Type: multipart/form-data"), TemporaryFile({{p.field_name}}))) ++ {{/if}}{{/if}}{{/for}}Nil
@@ -148,7 +148,7 @@ class {{spec_name}} extends WordSpec with OptionValues with WsScalaTestClient wi
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         {{if test.form_parameters}}
                         val form = {{for p in test.form_parameters}} {{if p.is_file}} {{else}} {{if p.optional}}{{p.field_name}}.map(m => "{{p.field_name}}" -> m.toString).toList ::: {{else}}("{{p.field_name}}" -> {{p.field_name}}.toString) :: {{/if}} {{/if}} {{/for}} Nil
                         {{/if}}
@@ -164,16 +164,16 @@ class {{spec_name}} extends WordSpec with OptionValues with WsScalaTestClient wi
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" {{for b in test.body_param}}+ " and body [" + parsed_{{b.body_parameter_name}} + "]"{{/for}}) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" {{for b in test.body_param}}+ " and body [" + parsed_{{b.body_parameter_name}} + "]"{{/for}}) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }

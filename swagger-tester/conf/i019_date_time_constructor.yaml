@@ -32,7 +32,7 @@ paths:
       parameters:
         - in: header
           name: header
-          required: true
+          required: false
           type: string
           format: date-time
         - in: path
@@ -54,4 +54,4 @@ definitions:
         format: date-time
       complete_after:
         type: string
-        format: date-time
+        format: date

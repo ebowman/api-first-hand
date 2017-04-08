@@ -58,16 +58,17 @@ trait CallTestsStep extends EnrichmentStep[ApiCall] with ActionResults with Para
   }
 
   def acceptHeader(call: ApiCall): Set[Map[String, String]] = {
-    lazy val defined = call.mimeOut.map(_.name).map { header =>
+    call.mimeOut.map(_.name).map { header =>
+      Map("name" -> header)
+    }
+  }
+
+  def contentTypes(call: ApiCall): Set[Map[String, String]] = {
+    lazy val defined = call.mimeIn.map(_.name).map { header =>
       Map("name" -> header)
     }
     if (call.requiresBody) defined else Set(Map("name" -> "*/*"))
   }
-
-  def contentTypes(call: ApiCall): Set[Map[String, String]] =
-    call.mimeIn.map(_.name).map { header =>
-      Map("name" -> header)
-    }
 
   // TODO should try all possible marshallers
   def bodyParameter(call: ApiCall, resultType: Option[String]): Option[Map[String, String]] = {
