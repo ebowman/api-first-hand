@@ -54,4 +54,4 @@ definitions:
         format: date-time
       complete_after:
         type: string
-        format: date-time
+        format: date
