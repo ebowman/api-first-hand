@@ -23,7 +23,7 @@ import javax.inject._
 
 package i020_number_parsing.yaml {
     // ----- Start of unmanaged code area for package I020_number_parsingYaml
-    
+        
     // ----- End of unmanaged code area for package I020_number_parsingYaml
     class I020_number_parsingYaml @Inject() (
         // ----- Start of unmanaged code area for injections I020_number_parsingYaml

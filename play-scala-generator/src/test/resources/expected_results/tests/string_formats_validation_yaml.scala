@@ -70,18 +70,18 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
             
                "application/yaml"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                     val parsed_binary_optional = PlayBodyParsing.jacksonMapper("application/json").writeValueAsString(binary_optional)
 
                 val request = FakeRequest(POST, url).withHeaders(headers:_*).withBody(parsed_binary_optional)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -89,7 +89,7 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -99,9 +99,9 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_binary_optional + "]") |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_binary_optional + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -114,22 +114,22 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
             val parsed_binary_optional = parserConstructor("application/json").writeValueAsString(binary_optional)
             
             val url = s"""/string?${toQuery("string_required", string_required)}&${toQuery("password_optional", password_optional)}&${toQuery("date_required", date_required)}&${toQuery("date_optional", date_optional)}&${toQuery("base64required", base64required)}&${toQuery("base64optional", base64optional)}&${toQuery("string_optional", string_optional)}&${toQuery("date_time_required", date_time_required)}&${toQuery("password_required", password_required)}&${toQuery("date_time_optional", date_time_optional)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq()
+            val producesAll: Seq[String] = Seq(
                 "application/json", 
             
                 "application/yaml"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(POST, url).withHeaders(headers:_*).withBody(parsed_binary_optional)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -137,7 +137,7 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -148,16 +148,16 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_binary_optional + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_binary_optional + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -219,18 +219,18 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
             
                "application/yaml"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                     val parsed_binary_required = PlayBodyParsing.jacksonMapper("application/json").writeValueAsString(binary_required)
 
                 val request = FakeRequest(POST, url).withHeaders(headers:_*).withBody(parsed_binary_required)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -238,7 +238,7 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -248,9 +248,9 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_binary_required + "]") |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_binary_required + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -262,22 +262,22 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
             val parsed_binary_required = parserConstructor("application/json").writeValueAsString(binary_required)
             
             val url = s"""/string2"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq()
+            val producesAll: Seq[String] = Seq(
                 "application/json", 
             
                 "application/yaml"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(POST, url).withHeaders(headers:_*).withBody(parsed_binary_required)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -285,7 +285,7 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -296,16 +296,16 @@ class String_formats_validation_yamlSpec extends WordSpec with OptionValues with
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_binary_required + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_binary_required + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }

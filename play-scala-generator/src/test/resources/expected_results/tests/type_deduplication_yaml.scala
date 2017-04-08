@@ -59,22 +59,24 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (user_id, user) = input
 
             val url = s"""/api/users/${toPath(user_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                     val parsed_user = PlayBodyParsing.jacksonMapper("Error").writeValueAsString(user)
 
                 val request = FakeRequest(DELETE, url).withHeaders(headers:_*).withBody(parsed_user)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -82,7 +84,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -92,9 +94,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_user + "]") |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_user + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -107,20 +109,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val parsed_user = parserConstructor("Error").writeValueAsString(user)
             
             val url = s"""/api/users/${toPath(user_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(DELETE, url).withHeaders(headers:_*).withBody(parsed_user)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -128,7 +132,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -140,16 +144,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_user + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_user + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -191,18 +195,18 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val acceptHeaders: Seq[String] = Seq(
                "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                     val parsed_signin_data = PlayBodyParsing.jacksonMapper("Error").writeValueAsString(signin_data)
 
                 val request = FakeRequest(POST, url).withHeaders(headers:_*).withBody(parsed_signin_data)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -210,7 +214,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -220,9 +224,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_signin_data + "]") |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_signin_data + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -234,20 +238,20 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val parsed_signin_data = parserConstructor("Error").writeValueAsString(signin_data)
             
             val url = s"""/api/users"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq()
+            val producesAll: Seq[String] = Seq(
                 "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(POST, url).withHeaders(headers:_*).withBody(parsed_signin_data)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -255,7 +259,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -266,16 +270,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_signin_data + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_signin_data + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -309,21 +313,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
 
             val url = s"""/api/plants/${toPath(plant_id)}/water_needs"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -331,7 +337,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -341,9 +347,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -353,20 +359,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         def testValidInput(plant_id: String): Prop = {
             
             val url = s"""/api/plants/${toPath(plant_id)}/water_needs"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -374,7 +382,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -385,16 +393,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -433,18 +441,18 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val acceptHeaders: Seq[String] = Seq(
                "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                     val parsed_sunlight_needs = PlayBodyParsing.jacksonMapper("Error").writeValueAsString(sunlight_needs)
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*).withBody(parsed_sunlight_needs)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -452,7 +460,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -462,9 +470,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_sunlight_needs + "]") |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_sunlight_needs + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -477,20 +485,20 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val parsed_sunlight_needs = parserConstructor("Error").writeValueAsString(sunlight_needs)
             
             val url = s"""/api/plants/${toPath(plant_id)}/sunlight_needs"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq()
+            val producesAll: Seq[String] = Seq(
                 "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*).withBody(parsed_sunlight_needs)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -498,7 +506,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -510,16 +518,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_sunlight_needs + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_sunlight_needs + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -557,21 +565,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
 
             val url = s"""/api/plants/${toPath(plant_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -579,7 +589,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -589,9 +599,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -601,20 +611,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         def testValidInput(plant_id: String): Prop = {
             
             val url = s"""/api/plants/${toPath(plant_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -622,7 +634,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -634,16 +646,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -678,21 +690,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (plant_id, watering_id) = input
 
             val url = s"""/api/plants/${toPath(plant_id)}/waterings/${toPath(watering_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -700,7 +714,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -710,9 +724,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -723,20 +737,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (plant_id, watering_id) = input
             
             val url = s"""/api/plants/${toPath(plant_id)}/waterings/${toPath(watering_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -744,7 +760,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -756,16 +772,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -808,18 +824,18 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val acceptHeaders: Seq[String] = Seq(
                "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                     val parsed_water_needs = PlayBodyParsing.jacksonMapper("Error").writeValueAsString(water_needs)
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*).withBody(parsed_water_needs)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -827,7 +843,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -837,9 +853,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_water_needs + "]") |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_water_needs + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -852,20 +868,20 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val parsed_water_needs = parserConstructor("Error").writeValueAsString(water_needs)
             
             val url = s"""/api/plants/${toPath(plant_id)}/water_needs"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq()
+            val producesAll: Seq[String] = Seq(
                 "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*).withBody(parsed_water_needs)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -873,7 +889,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -885,16 +901,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_water_needs + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_water_needs + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -932,21 +948,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
 
             val url = s"""/api/plants/${toPath(plant_id)}/location"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -954,7 +972,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -964,9 +982,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -976,20 +994,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         def testValidInput(plant_id: String): Prop = {
             
             val url = s"""/api/plants/${toPath(plant_id)}/location"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -997,7 +1017,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1009,16 +1029,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -1053,21 +1073,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (user_id, limit, offset) = input
 
             val url = s"""/api/user/${toPath(user_id)}/plants?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1075,7 +1097,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1085,9 +1107,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -1098,20 +1120,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (user_id, limit, offset) = input
             
             val url = s"""/api/user/${toPath(user_id)}/plants?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1119,7 +1143,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1131,16 +1155,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -1180,21 +1204,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
 
             val url = s"""/api/users/${toPath(user_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1202,7 +1228,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1212,9 +1238,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -1224,20 +1250,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         def testValidInput(user_id: String): Prop = {
             
             val url = s"""/api/users/${toPath(user_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1245,7 +1273,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1257,16 +1285,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -1305,18 +1333,18 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val acceptHeaders: Seq[String] = Seq(
                "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                     val parsed_location = PlayBodyParsing.jacksonMapper("Error").writeValueAsString(location)
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*).withBody(parsed_location)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1324,7 +1352,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1334,9 +1362,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_location + "]") |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_location + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -1349,20 +1377,20 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val parsed_location = parserConstructor("Error").writeValueAsString(location)
             
             val url = s"""/api/plants/${toPath(plant_id)}/location"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq()
+            val producesAll: Seq[String] = Seq(
                 "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*).withBody(parsed_location)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1370,7 +1398,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1382,16 +1410,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_location + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_location + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -1430,21 +1458,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (plant_id, limit, offset) = input
 
             val url = s"""/api/plants/${toPath(plant_id)}/waterings?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1452,7 +1482,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1462,9 +1492,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -1475,20 +1505,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (plant_id, limit, offset) = input
             
             val url = s"""/api/plants/${toPath(plant_id)}/waterings?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1496,7 +1528,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1508,16 +1540,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -1562,17 +1594,17 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val acceptHeaders: Seq[String] = Seq(
                "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1580,7 +1612,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1590,9 +1622,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -1603,20 +1635,20 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (plant_id, watering_id) = input
             
             val url = s"""/api/plants/${toPath(plant_id)}/waterings/${toPath(watering_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq()
+            val producesAll: Seq[String] = Seq(
                 "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1624,7 +1656,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1637,16 +1669,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -1685,21 +1717,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (limit, offset) = input
 
             val url = s"""/api/users?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1707,7 +1741,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1717,9 +1751,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -1730,20 +1764,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (limit, offset) = input
             
             val url = s"""/api/users?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1751,7 +1787,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1762,16 +1798,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -1809,21 +1845,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
 
             val url = s"""/api/users/${toPath(user_id)}/picture"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1831,7 +1869,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1841,9 +1879,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -1853,20 +1891,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         def testValidInput(user_id: String): Prop = {
             
             val url = s"""/api/users/${toPath(user_id)}/picture"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1874,7 +1914,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1886,16 +1926,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -1934,18 +1974,18 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val acceptHeaders: Seq[String] = Seq(
                "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                     val parsed_user = PlayBodyParsing.jacksonMapper("Error").writeValueAsString(user)
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*).withBody(parsed_user)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1953,7 +1993,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -1963,9 +2003,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_user + "]") |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_user + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -1978,20 +2018,20 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val parsed_user = parserConstructor("Error").writeValueAsString(user)
             
             val url = s"""/api/users/${toPath(user_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq()
+            val producesAll: Seq[String] = Seq(
                 "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*).withBody(parsed_user)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -1999,7 +2039,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2011,16 +2051,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_user + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_user + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -2059,21 +2099,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (plant_id, picture_id) = input
 
             val url = s"""/api/plants/${toPath(plant_id)}/pictures/${toPath(picture_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(DELETE, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2081,7 +2123,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2091,9 +2133,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -2104,20 +2146,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (plant_id, picture_id) = input
             
             val url = s"""/api/plants/${toPath(plant_id)}/pictures/${toPath(picture_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(DELETE, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2125,7 +2169,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2137,16 +2181,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -2188,17 +2232,17 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val acceptHeaders: Seq[String] = Seq(
                "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2206,7 +2250,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2216,9 +2260,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -2228,20 +2272,20 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         def testValidInput(area_id: String): Prop = {
             
             val url = s"""/api/areas/${toPath(area_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq()
+            val producesAll: Seq[String] = Seq(
                 "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2249,7 +2293,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2261,16 +2305,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -2305,21 +2349,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (limit, offset) = input
 
             val url = s"""/api/plants?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2327,7 +2373,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2337,9 +2383,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -2350,20 +2396,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (limit, offset) = input
             
             val url = s"""/api/plants?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2371,7 +2419,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2382,16 +2430,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -2433,17 +2481,17 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val acceptHeaders: Seq[String] = Seq(
                "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2451,7 +2499,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2461,9 +2509,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -2473,20 +2521,20 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         def testValidInput(user_id: String): Prop = {
             
             val url = s"""/api/users/${toPath(user_id)}/picture"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq()
+            val producesAll: Seq[String] = Seq(
                 "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2494,7 +2542,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2507,16 +2555,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -2550,21 +2598,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
 
             val url = s"""/api/plants/${toPath(plant_id)}/location"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(DELETE, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2572,7 +2622,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2582,9 +2632,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -2594,20 +2644,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         def testValidInput(plant_id: String): Prop = {
             
             val url = s"""/api/plants/${toPath(plant_id)}/location"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(DELETE, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2615,7 +2667,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2627,16 +2679,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -2670,21 +2722,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
 
             val url = s"""/api/plants/${toPath(plant_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(DELETE, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2692,7 +2746,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2702,9 +2756,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -2714,20 +2768,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         def testValidInput(plant_id: String): Prop = {
             
             val url = s"""/api/plants/${toPath(plant_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(DELETE, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2735,7 +2791,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2747,16 +2803,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -2795,18 +2851,18 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val acceptHeaders: Seq[String] = Seq(
                "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                     val parsed_plant = PlayBodyParsing.jacksonMapper("Error").writeValueAsString(plant)
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*).withBody(parsed_plant)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2814,7 +2870,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2824,9 +2880,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_plant + "]") |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_plant + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -2839,20 +2895,20 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val parsed_plant = parserConstructor("Error").writeValueAsString(plant)
             
             val url = s"""/api/plants/${toPath(plant_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq()
+            val producesAll: Seq[String] = Seq(
                 "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*).withBody(parsed_plant)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2860,7 +2916,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2873,16 +2929,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_plant + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_plant + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -2921,21 +2977,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (limit, offset) = input
 
             val url = s"""/api/areas?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2943,7 +3001,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2953,9 +3011,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -2966,20 +3024,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (limit, offset) = input
             
             val url = s"""/api/areas?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -2987,7 +3047,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -2998,16 +3058,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -3050,17 +3110,17 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val acceptHeaders: Seq[String] = Seq(
                "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -3068,7 +3128,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -3078,9 +3138,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -3091,20 +3151,20 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (plant_id, picture_id) = input
             
             val url = s"""/api/plants/${toPath(plant_id)}/pictures/${toPath(picture_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq()
+            val producesAll: Seq[String] = Seq(
                 "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(PUT, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -3112,7 +3172,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -3125,16 +3185,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -3172,21 +3232,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
 
             val url = s"""/api/plants/${toPath(plant_id)}/sunlight_needs"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -3194,7 +3256,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -3204,9 +3266,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -3216,20 +3278,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         def testValidInput(plant_id: String): Prop = {
             
             val url = s"""/api/plants/${toPath(plant_id)}/sunlight_needs"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -3237,7 +3301,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -3249,16 +3313,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -3292,21 +3356,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
 
             val url = s"""/api/areas/${toPath(area_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(DELETE, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -3314,7 +3380,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -3324,9 +3390,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -3336,20 +3402,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         def testValidInput(area_id: String): Prop = {
             
             val url = s"""/api/areas/${toPath(area_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(DELETE, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -3357,7 +3425,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -3368,16 +3436,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -3411,21 +3479,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
 
             val url = s"""/api/users/${toPath(user_id)}/picture"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(DELETE, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -3433,7 +3503,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -3443,9 +3513,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -3455,20 +3525,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         def testValidInput(user_id: String): Prop = {
             
             val url = s"""/api/users/${toPath(user_id)}/picture"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(DELETE, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -3476,7 +3548,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -3488,16 +3560,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -3532,21 +3604,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (plant_id, picture_id) = input
 
             val url = s"""/api/plants/${toPath(plant_id)}/pictures/${toPath(picture_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -3554,7 +3628,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -3564,9 +3638,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -3577,20 +3651,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (plant_id, picture_id) = input
             
             val url = s"""/api/plants/${toPath(plant_id)}/pictures/${toPath(picture_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -3598,7 +3674,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -3610,16 +3686,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -3657,21 +3733,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
 
             val url = s"""/api/areas/${toPath(area_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -3679,7 +3757,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -3689,9 +3767,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -3701,20 +3779,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
         def testValidInput(area_id: String): Prop = {
             
             val url = s"""/api/areas/${toPath(area_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -3722,7 +3802,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -3733,16 +3813,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -3777,21 +3857,23 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (plant_id, limit, offset) = input
 
             val url = s"""/api/plants/${toPath(plant_id)}/pictures?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -3799,7 +3881,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -3809,9 +3891,9 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -3822,20 +3904,22 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
             val (plant_id, limit, offset) = input
             
             val url = s"""/api/plants/${toPath(plant_id)}/pictures?${toQuery("limit", limit)}&${toQuery("offset", offset)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -3843,7 +3927,7 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -3855,16 +3939,16 @@ class Type_deduplication_yamlSpec extends WordSpec with OptionValues with WsScal
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }

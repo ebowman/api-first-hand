@@ -60,21 +60,23 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val (offset, limit) = input
 
             val url = s"""/v1/history?${toQuery("offset", offset)}&${toQuery("limit", limit)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -82,7 +84,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -92,9 +94,9 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -105,20 +107,22 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val (offset, limit) = input
             
             val url = s"""/v1/history?${toQuery("offset", offset)}&${toQuery("limit", limit)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -126,7 +130,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -137,16 +141,16 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -185,21 +189,23 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val (start_latitude, start_longitude, customer_uuid, product_id) = input
 
             val url = s"""/v1/estimates/time?${toQuery("start_latitude", start_latitude)}&${toQuery("start_longitude", start_longitude)}&${toQuery("customer_uuid", customer_uuid)}&${toQuery("product_id", product_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -207,7 +213,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -217,9 +223,9 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -230,20 +236,22 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val (start_latitude, start_longitude, customer_uuid, product_id) = input
             
             val url = s"""/v1/estimates/time?${toQuery("start_latitude", start_latitude)}&${toQuery("start_longitude", start_longitude)}&${toQuery("customer_uuid", customer_uuid)}&${toQuery("product_id", product_id)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -251,7 +259,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -262,16 +270,16 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -314,21 +322,23 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val (latitude, longitude) = input
 
             val url = s"""/v1/products?${toQuery("latitude", latitude)}&${toQuery("longitude", longitude)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -336,7 +346,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -346,9 +356,9 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -359,20 +369,22 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val (latitude, longitude) = input
             
             val url = s"""/v1/products?${toQuery("latitude", latitude)}&${toQuery("longitude", longitude)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -380,7 +392,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -391,16 +403,16 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -439,21 +451,23 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val (start_latitude, start_longitude, end_latitude, end_longitude) = input
 
             val url = s"""/v1/estimates/price?${toQuery("start_latitude", start_latitude)}&${toQuery("start_longitude", start_longitude)}&${toQuery("end_latitude", end_latitude)}&${toQuery("end_longitude", end_longitude)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+            val contentTypes: Seq[String] = Seq(
+                "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val acceptHeaders: Seq[String] = Seq(
+               "application/json"
+            )
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -461,7 +475,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -471,9 +485,9 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -484,20 +498,22 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val (start_latitude, start_longitude, end_latitude, end_longitude) = input
             
             val url = s"""/v1/estimates/price?${toQuery("start_latitude", start_latitude)}&${toQuery("start_longitude", start_longitude)}&${toQuery("end_latitude", end_latitude)}&${toQuery("end_longitude", end_longitude)}"""
-            val contentTypes: Seq[String] = Seq()
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -505,7 +521,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -516,16 +532,16 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }

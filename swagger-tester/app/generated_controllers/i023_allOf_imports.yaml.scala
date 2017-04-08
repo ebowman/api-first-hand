@@ -23,7 +23,7 @@ import javax.inject._
 
 package i023_allOf_imports.yaml {
     // ----- Start of unmanaged code area for package I023_allOf_importsYaml
-    
+        
     // ----- End of unmanaged code area for package I023_allOf_importsYaml
     class I023_allOf_importsYaml @Inject() (
         // ----- Start of unmanaged code area for injections I023_allOf_importsYaml

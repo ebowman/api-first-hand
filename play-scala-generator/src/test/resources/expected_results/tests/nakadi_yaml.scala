@@ -60,22 +60,22 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
 
             val url = s"""/topics/${toPath(topic)}/partitions/${toPath(partition)}"""
             val contentTypes: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+               "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -83,7 +83,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -93,9 +93,9 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -106,22 +106,22 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
             val (topic, partition) = input
             
             val url = s"""/topics/${toPath(topic)}/partitions/${toPath(partition)}"""
-            val contentTypes: Seq[String] = Seq(
-                "application/json"
-            )
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -129,7 +129,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -140,16 +140,16 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -189,24 +189,24 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
 
             val url = s"""/topics/${toPath(topic)}/events?${toQuery("stream_timeout", stream_timeout)}&${toQuery("stream_limit", stream_limit)}&${toQuery("batch_flush_timeout", batch_flush_timeout)}&${toQuery("batch_limit", batch_limit)}&${toQuery("batch_keep_alive_limit", batch_keep_alive_limit)}"""
             val contentTypes: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+               "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
                     Seq(
                         "x_nakadi_cursors" -> toHeader(x_nakadi_cursors)
-                        ) :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                        ) :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -214,7 +214,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -224,9 +224,9 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -237,24 +237,24 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
             val (stream_timeout, stream_limit, batch_flush_timeout, x_nakadi_cursors, batch_limit, batch_keep_alive_limit, topic) = input
             
             val url = s"""/topics/${toPath(topic)}/events?${toQuery("stream_timeout", stream_timeout)}&${toQuery("stream_limit", stream_limit)}&${toQuery("batch_flush_timeout", batch_flush_timeout)}&${toQuery("batch_limit", batch_limit)}&${toQuery("batch_keep_alive_limit", batch_keep_alive_limit)}"""
-            val contentTypes: Seq[String] = Seq(
-                "application/json"
-            )
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
                    Seq(
                         "x_nakadi_cursors" -> toHeader(x_nakadi_cursors)
-                    ) :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    ) :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -262,7 +262,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -277,16 +277,16 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -336,22 +336,22 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
 
             val url = s"""/topics/${toPath(topic)}/partitions/${toPath(partition)}/events?${toQuery("start_from", start_from)}&${toQuery("stream_limit", stream_limit)}&${toQuery("batch_limit", batch_limit)}&${toQuery("batch_flush_timeout", batch_flush_timeout)}&${toQuery("stream_timeout", stream_timeout)}&${toQuery("batch_keep_alive_limit", batch_keep_alive_limit)}"""
             val contentTypes: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+               "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -359,7 +359,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -369,9 +369,9 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -382,22 +382,22 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
             val (start_from, partition, stream_limit, topic, batch_limit, batch_flush_timeout, stream_timeout, batch_keep_alive_limit) = input
             
             val url = s"""/topics/${toPath(topic)}/partitions/${toPath(partition)}/events?${toQuery("start_from", start_from)}&${toQuery("stream_limit", stream_limit)}&${toQuery("batch_limit", batch_limit)}&${toQuery("batch_flush_timeout", batch_flush_timeout)}&${toQuery("stream_timeout", stream_timeout)}&${toQuery("batch_keep_alive_limit", batch_keep_alive_limit)}"""
-            val contentTypes: Seq[String] = Seq(
-                "application/json"
-            )
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -405,7 +405,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -420,16 +420,16 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -486,18 +486,18 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
             val acceptHeaders: Seq[String] = Seq(
                "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                     val parsed_event = PlayBodyParsing.jacksonMapper("application/json").writeValueAsString(event)
 
                 val request = FakeRequest(POST, url).withHeaders(headers:_*).withBody(parsed_event)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -505,7 +505,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -515,9 +515,9 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_event + "]") |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_event + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -530,22 +530,22 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
             val parsed_event = parserConstructor("application/json").writeValueAsString(event)
             
             val url = s"""/topics/${toPath(topic)}/events"""
-            val contentTypes: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "application/json"
             )
-            val acceptHeaders: Seq[String] = Seq(
+            val producesAll: Seq[String] = Seq(
                 "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(POST, url).withHeaders(headers:_*).withBody(parsed_event)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -553,7 +553,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -568,16 +568,16 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_event + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_event + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -616,22 +616,22 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
 
             val url = s"""/topics/${toPath(topic)}/partitions"""
             val contentTypes: Seq[String] = Seq(
-                "application/json"
+                "*/*"
             )
             val acceptHeaders: Seq[String] = Seq(
-               "*/*"
+               "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -639,7 +639,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -649,9 +649,9 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -661,22 +661,22 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
         def testValidInput(topic: String): Prop = {
             
             val url = s"""/topics/${toPath(topic)}/partitions"""
-            val contentTypes: Seq[String] = Seq(
-                "application/json"
-            )
-            val acceptHeaders: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "*/*"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val producesAll: Seq[String] = Seq(
+                "application/json"
+            )
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(GET, url).withHeaders(headers:_*)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -684,7 +684,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -695,16 +695,16 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" ) |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" ) |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }
@@ -745,18 +745,18 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
             val acceptHeaders: Seq[String] = Seq(
                "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ct, ac)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                    Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                    Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                     val parsed_event = PlayBodyParsing.jacksonMapper("application/json").writeValueAsString(event)
 
                 val request = FakeRequest(POST, url).withHeaders(headers:_*).withBody(parsed_event)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -764,7 +764,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -774,9 +774,9 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                     s"Contains error: $m in ${contentAsString(path)}" |:(contentAsString(path).contains(m) ?= true)
                 }
 
-                (s"given 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_event + "]") |: all(
+                (s"given 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_event + "]") |: all(
                     "StatusCode = BAD_REQUEST" |: (requestStatusCode_(path) ?= BAD_REQUEST),
-                    s"Content-Type = $acceptHeader" |: (requestContentType_(path) ?= Some(acceptHeader)),
+                    s"Content-Type = $produces" |: ((consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "non-empty errors" |: (errors.nonEmpty ?= true),
                     "at least one validation failing" |: atLeastOne(validations:_*)
                 )
@@ -789,22 +789,22 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
             val parsed_event = parserConstructor("application/json").writeValueAsString(event)
             
             val url = s"""/topics/${toPath(topic)}/events/batch"""
-            val contentTypes: Seq[String] = Seq(
+            val consumesAll: Seq[String] = Seq(
                 "application/json"
             )
-            val acceptHeaders: Seq[String] = Seq(
+            val producesAll: Seq[String] = Seq(
                 "application/json"
             )
-            val contentHeaders = for { ct <- contentTypes; ac <- acceptHeaders } yield (ac, ct)
+            val contentHeaders = for { cs <- consumesAll; ps <- producesAll } yield (cs, ps)
             if (contentHeaders.isEmpty) throw new IllegalStateException(s"No 'produces' defined for the $url")
 
-            val propertyList = contentHeaders.map { case (acceptHeader, contentType) =>
+            val propertyList = contentHeaders.map { case (consumes, produces) =>
                 val headers =
-                   Seq() :+ ("Accept" -> acceptHeader) :+ ("Content-Type" -> contentType)
+                   Seq() :+ ("Accept" -> produces) :+ ("Content-Type" -> consumes)
 
                 val request = FakeRequest(POST, url).withHeaders(headers:_*).withBody(parsed_event)
                 val path =
-                    if (contentType == "multipart/form-data") {
+                    if (consumes == "multipart/form-data") {
                         import de.zalando.play.controllers.WriteableWrapper.anyContentAsMultipartFormWritable
 
                         val files: Seq[FilePart[TemporaryFile]] = Nil
@@ -812,7 +812,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
                         val form = new MultipartFormData(data, files, Nil)
 
                         route(app, request.withMultipartFormDataBody(form)).get
-                    } else if (contentType == "application/x-www-form-urlencoded") {
+                    } else if (consumes == "application/x-www-form-urlencoded") {
                         route(app, request.withFormUrlEncodedBody()).get
                     } else route(app, request).get
 
@@ -827,16 +827,16 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
 
                 val expectedCode = requestStatusCode_(path)
                 val mimeType = requestContentType_(path)
-                val mapper = parserConstructor(mimeType.getOrElse("application/json"))
+                val mapper = parserConstructor(mimeType.getOrElse("*/*"))
 
                 val parsedApiResponse = scala.util.Try {
                     parseResponseContent(mapper, requestContentAsString_(path), mimeType, possibleResponseTypes(expectedCode))
                 }
 
-                (s"Given response code [$expectedCode], 'Content-Type' [$contentType], 'Accept' header [$acceptHeader] and URL: [$url]" + " and body [" + parsed_event + "]") |: all(
+                (s"Given response code [$expectedCode], 'Content-Type' [$consumes], 'Accept' header [$produces] and URL: [$url]" + " and body [" + parsed_event + "]") |: all(
                     "Response Code is allowed" |: (possibleResponseTypes.contains(expectedCode) ?= true),
                     "Successful" |: (parsedApiResponse.isSuccess ?= true),
-                    s"Content-Type = $acceptHeader" |: ((parsedApiResponse.get ?= null) || (requestContentType_(path) ?= Some(acceptHeader))),
+                    s"Content-Type = $produces" |: ((parsedApiResponse.get ?= null) || (consumes ?= "*/*") || (requestContentType_(path) ?= Some(produces))),
                     "No errors" |: (errors.isEmpty ?= true)
                 )
             }

@@ -15,7 +15,6 @@ import scala.util._
 
 import javax.inject._
 
-// -----
 
 /**
  * This controller is re-generated after each change in the specification.
@@ -24,7 +23,7 @@ import javax.inject._
 
 package i039_parameter_not_found.yaml {
     // ----- Start of unmanaged code area for package I039_parameter_not_foundYaml
-    
+        
     // ----- End of unmanaged code area for package I039_parameter_not_foundYaml
     class I039_parameter_not_foundYaml @Inject() (
         // ----- Start of unmanaged code area for injections I039_parameter_not_foundYaml
