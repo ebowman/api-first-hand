@@ -9,7 +9,7 @@ import play.api.i18n.{ I18nSupport, Messages }
 // Parsing error to display to the user of the API
 case class ParsingError(messages: Seq[String], args: Seq[Any] = Nil)
 
-case class TranslatedParsingError(messages: Seq[String])
+case class TranslatedParsingError(message: String)
 
 trait Validator {
   def errors: Seq[ParsingError]
@@ -50,14 +50,7 @@ trait ValidationTranslator {
 
   def translateParsingErrors(errors: Seq[ParsingError]): Seq[TranslatedParsingError] = {
     errors.map { pe: ParsingError =>
-      val translated = pe.messages.zipAll(pe.args, "", None).map {
-        (a: (String, Any)) =>
-          a._2 match {
-            case None => Messages(a._1)
-            case _ => Messages(a._1, a._2)
-          }
-      }
-      TranslatedParsingError(translated)
+      TranslatedParsingError(Messages(pe.messages, pe.args: _*))
     }
   }
 }
