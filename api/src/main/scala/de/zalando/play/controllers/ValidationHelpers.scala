@@ -1,12 +1,15 @@
 package de.zalando.play.controllers
 
 import play.api.data.validation._
+import play.api.i18n.{ I18nSupport, Messages }
 
 /**
  * @since 03.09.2015
  */
 // Parsing error to display to the user of the API
 case class ParsingError(messages: Seq[String], args: Seq[Any] = Nil)
+
+case class TranslatedParsingError(messages: Seq[String])
 
 trait Validator {
   def errors: Seq[ParsingError]
@@ -37,7 +40,25 @@ trait ValidationBase[T] extends Validator {
   override def errors: Seq[ParsingError] = {
     constraints.map(_(instance)).collect {
       case Invalid(errors) => errors.toSeq
-    }.flatten.map(ve => ParsingError(ve.messages, ve.args))
+    }.flatten.map((ve: ValidationError) => ParsingError(ve.messages, ve.args))
+  }
+}
+
+trait ValidationTranslator {
+
+  this: I18nSupport =>
+
+  def translateParsingErrors(errors: Seq[ParsingError]): Seq[TranslatedParsingError] = {
+    errors.map { pe: ParsingError =>
+      val translated = pe.messages.zipAll(pe.args, "", None).map {
+        (a: (String, Any)) =>
+          a._2 match {
+            case None => Messages(a._1)
+            case _ => Messages(a._1, a._2)
+          }
+      }
+      TranslatedParsingError(translated)
+    }
   }
 }
 

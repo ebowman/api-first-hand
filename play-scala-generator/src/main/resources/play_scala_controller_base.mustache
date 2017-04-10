@@ -1,6 +1,7 @@
 package {{main_package}}
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -26,7 +27,7 @@ import de.zalando.play.controllers.ResponseWriters
 
 {{for controller in controllers}}
 //noinspection ScalaStyle
-trait {{controller.base}} extends Controller with PlayBodyParsing {{if controller.security_trait}} with {{controller.security_trait}} {{/if}}{
+trait {{controller.base}} extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {{if controller.security_trait}} with {{controller.security_trait}} {{/if}}{
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     {{for m in controller.methods}}
     sealed trait {{m.result_class_prefix}}Type[T] extends ResultWrapper[T]
@@ -74,9 +75,9 @@ def {{m.action}}[T] = (f: {{m.action_type}}[T]) =>{{if m.non_body_params}} ({{/i
             {{for v in m.validations}}new {{v.validation_name}}({{for f in v.fields}}{{f.field_name}}{{if f.isNotLast}}, {{/if}}{{/for}}).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             {{/for}}
           {{/if}}
