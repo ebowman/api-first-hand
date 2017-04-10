@@ -2,7 +2,7 @@ package de.zalando.play.controllers
 
 import akka.util.ByteString
 import play.api.http.Writeable
-import play.api.libs.json.{ JsArray, JsObject, Json, Writes }
+import play.api.libs.json._
 import play.api.mvc.Results.{ Redirect, Status }
 import play.api.mvc.{ AnyContentAsMultipartFormData, RequestHeader, Results }
 
@@ -46,7 +46,7 @@ trait ResponseWritersBase {
   }
 
   implicit val jsonParsingErrorsWrites = new Writes[Seq[ParsingError]] {
-    def writes(pe: Seq[ParsingError]): JsArray = Json.arr(pe)
+    def writes(pe: Seq[ParsingError]): JsValue = Json.toJson(pe)
   }
 }
 
