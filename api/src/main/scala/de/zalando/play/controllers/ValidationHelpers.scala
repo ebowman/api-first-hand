@@ -7,13 +7,13 @@ import play.api.i18n.{ I18nSupport, Messages }
  * @since 03.09.2015
  */
 // Parsing error to display to the user of the API
-case class ParsingError(name: String, messages: Seq[String], args: Seq[Any] = Nil)
+case class ParsingError(reference: String, messages: Seq[String], args: Seq[Any] = Nil)
 
 case class TranslatedParsingErrorsContainer(errors: Seq[TranslatedParsingError])
-case class TranslatedParsingError(name: String, message: String)
+case class TranslatedParsingError(reference: String, message: String)
 
 trait Validator {
-  def name: String
+  def reference: String
   def errors: Seq[ParsingError]
 }
 /**
@@ -42,7 +42,7 @@ trait ValidationBase[T] extends Validator {
   override def errors: Seq[ParsingError] = {
     constraints.map(_(instance)).collect {
       case Invalid(errors) => errors
-    }.flatten.map(ve => ParsingError(name, ve.messages, ve.args))
+    }.flatten.map(ve => ParsingError(reference, ve.messages, ve.args))
   }
 }
 
@@ -53,7 +53,7 @@ trait ValidationTranslator {
   def translateParsingErrors(errors: Seq[ParsingError]): TranslatedParsingErrorsContainer =
     TranslatedParsingErrorsContainer(
       errors.map { pe: ParsingError =>
-        TranslatedParsingError(name = pe.name, message = Messages(pe.messages, pe.args: _*))
+        TranslatedParsingError(reference = pe.reference, message = Messages(pe.messages, pe.args: _*))
       }
     )
 }
