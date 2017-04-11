@@ -76,7 +76,7 @@ def {{m.action}}[T] = (f: {{m.action_type}}[T]) =>{{if m.non_body_params}} ({{/i
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
                 case parsingErrors: Seq[ParsingError] =>
-                    import ResponseWriters.jsonTranslatedParsingErrorWrites
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
                     Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             {{/for}}

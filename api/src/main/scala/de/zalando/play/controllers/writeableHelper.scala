@@ -41,6 +41,8 @@ trait ResponseWritersBase {
   }
 
   implicit val jsonTranslatedParsingErrorWrites = Json.writes[TranslatedParsingError]
+
+  implicit val jsonTranslatedParsingErrorsContainerWrites = Json.writes[TranslatedParsingErrorsContainer]
 }
 
 object WrappedBodyParsers extends WrappedBodyParsersBase

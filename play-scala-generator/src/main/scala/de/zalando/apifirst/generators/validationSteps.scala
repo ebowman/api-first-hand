@@ -42,6 +42,7 @@ trait CallValidatorsStep extends EnrichmentStep[ApiCall] with ValidatorsCommon {
    */
   private def callValidations(r: Reference, call: ApiCall)(table: DenotationTable): Map[String, Object] =
     Map(
+      "name" -> r.qualified,
       "validation_name" -> validator(r, table),
       "fields" -> call.handler.parameters.map { p =>
         Map(
@@ -154,6 +155,7 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
 
   private def typeDefValidations(r: Reference, t: TypeDef)(implicit table: DenotationTable) =
     Map(
+      "name" -> r.qualified,
       "validation_name" -> validator(r, table),
       "type_name" -> abstractTypeNameDenotation(table, r).getOrElse(typeNameDenotation(table, r)),
       "fields" -> t.fields.collect {
@@ -173,6 +175,7 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
         typeDefValidations(d.name, d.realType.asInstanceOf[TypeDef])(table)
     }
     Map(
+      "name" -> r.qualified,
       "validation_name" -> validator(r, table),
       "type_name" -> typeNameDenotation(table, r), // need a concrete type here, abstract does not have all the properties
       "descendants" -> descendants
@@ -183,6 +186,7 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
     val typeName = typeNameDenotation(table, r)
     val nonEmptyConstraints = t.meta.constraints.filterNot(_.isEmpty)
     Map(
+      "name" -> r.qualified,
       "restrictions" -> nonEmptyConstraints.zipWithIndex.map {
         case (c, i) =>
           Map("name" -> c, "last" -> (i == nonEmptyConstraints.length - 1))
@@ -213,6 +217,7 @@ trait ParametersValidatorsStep extends EnrichmentStep[Parameter] with Validators
         Seq.empty[String]
     }
     Map(
+      "name" -> r.qualified,
       "restrictions" -> t.meta.constraints.filterNot(_.isEmpty).map { c => Map("name" -> c) },
       "constraint_name" -> constraint(r, table),
       "validation_name" -> validator(r, table),
