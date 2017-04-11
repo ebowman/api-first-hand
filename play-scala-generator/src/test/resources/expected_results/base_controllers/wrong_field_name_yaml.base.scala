@@ -1,6 +1,7 @@
 package wrong_field_name.yaml
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -20,7 +21,7 @@ import de.zalando.play.controllers.ResponseWriters
 
 
 //noinspection ScalaStyle
-trait Wrong_field_nameYamlBase extends Controller with PlayBodyParsing {
+trait Wrong_field_nameYamlBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait GetType[T] extends ResultWrapper[T]
     def Get200(resultP: StatusAndCode)(implicit writerP: String => Option[Writeable[StatusAndCode]]) = success(new GetType[StatusAndCode] { val statusCode = 200; val result = resultP; val writer = writerP })
@@ -41,9 +42,9 @@ def getAction[T] = (f: getActionType[T]) => getActionConstructor.async { implici
             new GetValidator(optCodes, codes).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           

@@ -1,6 +1,7 @@
 package uber.api.yaml
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -19,7 +20,7 @@ import de.zalando.play.controllers.PlayPathBindables
 
 
 //noinspection ScalaStyle
-trait UberApiYamlBase extends Controller with PlayBodyParsing {
+trait UberApiYamlBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait GetmeType[T] extends ResultWrapper[T]
     def Getme200(resultP: Profile)(implicit writerP: String => Option[Writeable[Profile]]) = success(new GetmeType[Profile] { val statusCode = 200; val result = resultP; val writer = writerP })
@@ -74,9 +75,9 @@ def getproductsAction[T] = (f: getproductsActionType[T]) => (latitude: Double, l
             new ProductsGetValidator(latitude, longitude).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           
@@ -117,9 +118,9 @@ def getestimatesTimeAction[T] = (f: getestimatesTimeActionType[T]) => (start_lat
             new EstimatesTimeGetValidator(start_latitude, start_longitude, customer_uuid, product_id).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           
@@ -160,9 +161,9 @@ def getestimatesPriceAction[T] = (f: getestimatesPriceActionType[T]) => (start_l
             new EstimatesPriceGetValidator(start_latitude, start_longitude, end_latitude, end_longitude).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           
@@ -203,9 +204,9 @@ def gethistoryAction[T] = (f: gethistoryActionType[T]) => (offset: ErrorCode, li
             new HistoryGetValidator(offset, limit).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           

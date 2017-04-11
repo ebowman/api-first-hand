@@ -1,6 +1,7 @@
 package cross_spec_references.yaml
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -18,7 +19,7 @@ import scala.math.BigInt
 
 
 //noinspection ScalaStyle
-trait Cross_spec_referencesYamlBase extends Controller with PlayBodyParsing {
+trait Cross_spec_referencesYamlBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait PostType[T] extends ResultWrapper[T]
     def Post200(resultP: Pet)(implicit writerP: String => Option[Writeable[Pet]]) = success(new PostType[Pet] { val statusCode = 200; val result = resultP; val writer = writerP })
@@ -48,9 +49,9 @@ def postAction[T] = (f: postActionType[T]) => postActionConstructor.async(postPa
             new PostValidator(root).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           

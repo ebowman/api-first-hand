@@ -1,6 +1,7 @@
 package expanded
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -18,7 +19,7 @@ import de.zalando.play.controllers.PlayPathBindables
 
 
 //noinspection ScalaStyle
-trait Expanded_polymorphismYamlBase extends Controller with PlayBodyParsing {
+trait Expanded_polymorphismYamlBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait FindPetsType[T] extends ResultWrapper[T]
     def FindPets200(resultP: Seq[Pet])(implicit writerP: String => Option[Writeable[Seq[Pet]]]) = success(new FindPetsType[Seq[Pet]] { val statusCode = 200; val result = resultP; val writer = writerP })
@@ -41,9 +42,9 @@ def findPetsAction[T] = (f: findPetsActionType[T]) => (tags: PetsGetTags, limit:
             new PetsGetValidator(tags, limit).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           
@@ -96,9 +97,9 @@ def addPetAction[T] = (f: addPetActionType[T]) => addPetActionConstructor.async(
             new PetsPostValidator(pet).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           
@@ -142,9 +143,9 @@ def deletePetAction[T] = (f: deletePetActionType[T]) => (id: Long) => deletePetA
             new PetsIdDeleteValidator(id).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           
