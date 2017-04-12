@@ -20,7 +20,7 @@ class Dependencies(playVersion: String, projectVersion: String, scalaVersion: St
   val jsonRef     = "me.andrz.jackson"  % "jackson-json-reference-core" % "0.2.1"
   val commonsIO   = "commons-io"        % "commons-io"        % "2.5"
 
-  val beard       =  "de.zalando"       %% "beard"            % "0.2.0"
+  val beard       =  "de.zalando"       %% "beard"            % "0.1.2" // latest version for Scala 2.10
 
   val play        = "com.typesafe.play" %% "play"             % playVersion % Provided
   val playRoutes  = "com.typesafe.play" %% "routes-compiler"  % playVersion % Provided
