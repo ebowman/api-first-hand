@@ -75,14 +75,12 @@ val tokenGet = tokenGetAction { input: (String, String, String, Int) =>
 Refreshing the Swagger UI and trying out a couple of integer values for `state` shows that the service now accepts values within the range `[2000..2100]`, but returns a descriptive error when outside:
 
 ```json
-[
-  {
-    "messages": [
-      "error.max"
-    ],
-    "args": [
-      2100
-    ]
-  }
-]
+{
+  "errors": [
+    {
+      "reference": "⌿paths⌿/⌿get⌿state",
+      "message": "Must be less or equal to 2100"
+    }
+  ]
+}
 ```
