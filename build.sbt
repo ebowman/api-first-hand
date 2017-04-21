@@ -4,7 +4,7 @@ import sbt._
 val PlayVersion = "2.5.4"
 val Scala10 = "2.10.5"
 val Scala11 = "2.11.8"
-val ProjectVersion = "0.2.1"
+val ProjectVersion = "0.2.3"
 
 val deps = new Dependencies(PlayVersion, ProjectVersion)
 
