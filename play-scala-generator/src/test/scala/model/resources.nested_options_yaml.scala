@@ -15,17 +15,13 @@ object nested_options_yaml extends WithModel {
 	Reference("⌿definitions⌿Basic") → 
 		TypeDef(Reference("⌿definitions⌿Basic"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Basic⌿optional"), TypeRef(Reference("⌿definitions⌿Basic⌿optional")))
+					Field(Reference("⌿definitions⌿Basic⌿optional"), Opt(TypeRef(Reference("⌿definitions⌿Basic⌿optional⌿Option⌿optional")), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
-	Reference("⌿definitions⌿Basic⌿optional") → 
-		Opt(TypeRef(Reference("⌿definitions⌿Basic⌿optional⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Basic⌿optional⌿Opt") → 
+	Reference("⌿definitions⌿Basic⌿optional⌿Option⌿optional") → 
 		TypeDef(Reference("⌿definitions⌿Basic⌿optional"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Basic⌿optional⌿nested_optional"), TypeRef(Reference("⌿definitions⌿Basic⌿optional⌿nested_optional")))
-			), TypeMeta(Some("Named types: 1"), List())),
-	Reference("⌿definitions⌿Basic⌿optional⌿nested_optional") → 
-		Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))
+					Field(Reference("⌿definitions⌿Basic⌿optional⌿nested_optional"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())))
+			), TypeMeta(Some("Named types: 1"), List()))
 ) 
  
  def parameters = Map[ParameterRef, Parameter](

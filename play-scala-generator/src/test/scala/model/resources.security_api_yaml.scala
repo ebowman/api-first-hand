@@ -22,10 +22,8 @@ object security_api_yaml extends WithModel {
 		TypeDef(Reference("⌿definitions⌿Pet"), 
 			Seq(
 					Field(Reference("⌿definitions⌿Pet⌿name"), Str(None, TypeMeta(None, List()))),
-					Field(Reference("⌿definitions⌿Pet⌿tag"), TypeRef(Reference("⌿definitions⌿Pet⌿tag")))
+					Field(Reference("⌿definitions⌿Pet⌿tag"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
-	Reference("⌿definitions⌿Pet⌿tag") → 
-		Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List())),
 	Reference("⌿paths⌿/pets/{id}⌿get⌿id") → 
 		Arr(Str(None, TypeMeta(None, List())), TypeMeta(None, List()), "csv"),
 	Reference("⌿paths⌿/pets/{id}⌿get⌿responses⌿200") → 

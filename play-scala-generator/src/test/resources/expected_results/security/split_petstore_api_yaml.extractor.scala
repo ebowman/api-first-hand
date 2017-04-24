@@ -4,8 +4,8 @@ package split.petstore.api.yaml
 import scala.concurrent.Future
 import play.api.mvc._
 import de.zalando.play.controllers.SwaggerSecurityExtractors._
-import de.zalando.play.controllers.ArrayWrapper
 import java.time.ZonedDateTime
+import de.zalando.play.controllers.ArrayWrapper
 
 object SecurityExtractorsExecutionContext {
     // this ExecutionContext might be overridden if default configuration is not suitable for some reason

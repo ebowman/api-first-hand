@@ -1,10 +1,10 @@
 package string_formats_validation
 
 
+    import java.time.ZonedDateTime
     import java.time.LocalDate
     import de.zalando.play.controllers.BinaryString
     import BinaryString._
-    import java.time.ZonedDateTime
     import de.zalando.play.controllers.Base64String
     import Base64String._
 
@@ -24,13 +24,7 @@ package yaml {
 //noinspection ScalaStyle
 package object yaml {
 
-    type StringPostString_optional = Option[String]
-    type StringPostPassword_optional = Option[String]
-    type StringPostDate_optional = Option[LocalDate]
-    type StringPostBinary_optional = Option[BinaryString]
     type String2PostResponses200 = Null
-    type StringPostDate_time_optional = Option[ZonedDateTime]
-    type StringPostBase64optional = Option[Base64String]
 
 
 import play.api.mvc.{QueryStringBindable, PathBindable}

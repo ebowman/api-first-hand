@@ -4,34 +4,28 @@ import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 import play.api.libs.json.scalacheck.JsValueGenerators
 import Arbitrary._
-import java.util.UUID
 import scala.math.BigDecimal
+import java.util.UUID
 
 object Generators extends JsValueGenerators {
     
 
     
     def createDoubleGenerator = _generate(DoubleGenerator)
-    def createActivitiesHistoryGenerator = _generate(ActivitiesHistoryGenerator)
-    def createProfilePictureGenerator = _generate(ProfilePictureGenerator)
-    def createErrorCodeGenerator = _generate(ErrorCodeGenerator)
-    def createEstimatesTimeGetCustomer_uuidGenerator = _generate(EstimatesTimeGetCustomer_uuidGenerator)
-    def createProductsGetResponses200Generator = _generate(ProductsGetResponses200Generator)
-    def createPriceEstimateHigh_estimateGenerator = _generate(PriceEstimateHigh_estimateGenerator)
-    def createEstimatesPriceGetResponses200Generator = _generate(EstimatesPriceGetResponses200Generator)
-    def createActivitiesHistoryOptGenerator = _generate(ActivitiesHistoryOptGenerator)
+    def createOptionIntGenerator = _generate(OptionIntGenerator)
+    def createOptionUUIDGenerator = _generate(OptionUUIDGenerator)
+    def createSeqProductGenerator = _generate(SeqProductGenerator)
+    def createOptionStringGenerator = _generate(OptionStringGenerator)
+    def createSeqPriceEstimateGenerator = _generate(SeqPriceEstimateGenerator)
     
 
     
     def DoubleGenerator = arbitrary[Double]
-    def ActivitiesHistoryGenerator = Gen.option(ActivitiesHistoryOptGenerator)
-    def ProfilePictureGenerator = Gen.option(arbitrary[String])
-    def ErrorCodeGenerator = Gen.option(arbitrary[Int])
-    def EstimatesTimeGetCustomer_uuidGenerator = Gen.option(arbitrary[UUID])
-    def ProductsGetResponses200Generator: Gen[List[Product]] = Gen.containerOf[List,Product](ProductGenerator)
-    def PriceEstimateHigh_estimateGenerator = Gen.option(arbitrary[BigDecimal])
-    def EstimatesPriceGetResponses200Generator: Gen[List[PriceEstimate]] = Gen.containerOf[List,PriceEstimate](PriceEstimateGenerator)
-    def ActivitiesHistoryOptGenerator: Gen[List[Activity]] = Gen.containerOf[List,Activity](ActivityGenerator)
+    def OptionIntGenerator = Gen.option(arbitrary[Int])
+    def OptionUUIDGenerator = Gen.option(arbitrary[UUID])
+    def SeqProductGenerator: Gen[List[Product]] = Gen.containerOf[List,Product](ProductGenerator)
+    def OptionStringGenerator = Gen.option(arbitrary[String])
+    def SeqPriceEstimateGenerator: Gen[List[PriceEstimate]] = Gen.containerOf[List,PriceEstimate](PriceEstimateGenerator)
     
 
     def createActivityGenerator = _generate(ActivityGenerator)
@@ -43,41 +37,41 @@ object Generators extends JsValueGenerators {
 
 
     def ActivityGenerator = for {
-        uuid <- ProfilePictureGenerator
+        uuid <- Gen.option(arbitrary[String])
     } yield Activity(uuid)
     def PriceEstimateGenerator = for {
-        low_estimate <- PriceEstimateHigh_estimateGenerator
-        display_name <- ProfilePictureGenerator
-        estimate <- ProfilePictureGenerator
-        high_estimate <- PriceEstimateHigh_estimateGenerator
-        product_id <- ProfilePictureGenerator
-        currency_code <- ProfilePictureGenerator
-        surge_multiplier <- PriceEstimateHigh_estimateGenerator
+        low_estimate <- Gen.option(arbitrary[BigDecimal])
+        display_name <- Gen.option(arbitrary[String])
+        estimate <- Gen.option(arbitrary[String])
+        high_estimate <- Gen.option(arbitrary[BigDecimal])
+        product_id <- Gen.option(arbitrary[String])
+        currency_code <- Gen.option(arbitrary[String])
+        surge_multiplier <- Gen.option(arbitrary[BigDecimal])
     } yield PriceEstimate(low_estimate, display_name, estimate, high_estimate, product_id, currency_code, surge_multiplier)
     def ProductGenerator = for {
-        image <- ProfilePictureGenerator
-        description <- ProfilePictureGenerator
-        display_name <- ProfilePictureGenerator
-        product_id <- ProfilePictureGenerator
-        capacity <- ProfilePictureGenerator
+        image <- Gen.option(arbitrary[String])
+        description <- Gen.option(arbitrary[String])
+        display_name <- Gen.option(arbitrary[String])
+        product_id <- Gen.option(arbitrary[String])
+        capacity <- Gen.option(arbitrary[String])
     } yield Product(image, description, display_name, product_id, capacity)
     def ProfileGenerator = for {
-        first_name <- ProfilePictureGenerator
-        email <- ProfilePictureGenerator
-        promo_code <- ProfilePictureGenerator
-        last_name <- ProfilePictureGenerator
-        picture <- ProfilePictureGenerator
+        first_name <- Gen.option(arbitrary[String])
+        email <- Gen.option(arbitrary[String])
+        promo_code <- Gen.option(arbitrary[String])
+        last_name <- Gen.option(arbitrary[String])
+        picture <- Gen.option(arbitrary[String])
     } yield Profile(first_name, email, promo_code, last_name, picture)
     def ActivitiesGenerator = for {
-        offset <- ErrorCodeGenerator
-        limit <- ErrorCodeGenerator
-        count <- ErrorCodeGenerator
-        history <- ActivitiesHistoryGenerator
+        offset <- Gen.option(arbitrary[Int])
+        limit <- Gen.option(arbitrary[Int])
+        count <- Gen.option(arbitrary[Int])
+        history <- Gen.option(Gen.containerOf[List,Activity](ActivityGenerator))
     } yield Activities(offset, limit, count, history)
     def ErrorGenerator = for {
-        code <- ErrorCodeGenerator
-        message <- ProfilePictureGenerator
-        fields <- ProfilePictureGenerator
+        code <- Gen.option(arbitrary[Int])
+        message <- Gen.option(arbitrary[String])
+        fields <- Gen.option(arbitrary[String])
     } yield Error(code, message, fields)
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample

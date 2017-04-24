@@ -23,7 +23,7 @@ class Test_pathIdGetIdValidator(instance: String) extends RecursiveValidator {
 // ----- complex type validators -----
 
 // ----- option delegating validators -----
-class PostNameValidator(instance: PostName) extends RecursiveValidator {
+class PostNameValidator(instance: Option[String]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new PostNameOptValidator(_) }
 }
 // ----- array delegating validators -----
@@ -36,7 +36,7 @@ class Test_pathIdGetValidator(id: String) extends RecursiveValidator {
     
     )
 }
-class PostValidator(name: PostName, year: PostName) extends RecursiveValidator {
+class PostValidator(name: Option[String], year: Option[String]) extends RecursiveValidator {
     override val validators = Seq(
         new PostNameValidator(name), 
     

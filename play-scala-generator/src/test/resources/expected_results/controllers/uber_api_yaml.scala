@@ -23,6 +23,7 @@ import javax.inject._
 
 package uber.api.yaml {
     // ----- Start of unmanaged code area for package UberApiYaml
+    
     // ----- End of unmanaged code area for package UberApiYaml
     class UberApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections UberApiYaml
@@ -34,7 +35,7 @@ package uber.api.yaml {
         // ----- Start of unmanaged code area for constructor UberApiYaml
 
         // ----- End of unmanaged code area for constructor UberApiYaml
-        val getme = getmeAction {  _ =>
+        val getme = getmeAction {  _ =>  
             // ----- Start of unmanaged code area for action  UberApiYaml.getme
             NotImplementedYet
             // ----- End of unmanaged code area for action  UberApiYaml.getme
@@ -45,7 +46,7 @@ package uber.api.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  UberApiYaml.getproducts
         }
-        val getestimatesTime = getestimatesTimeAction { input: (Double, Double, EstimatesTimeGetCustomer_uuid, ProfilePicture) =>
+        val getestimatesTime = getestimatesTimeAction { input: (Double, Double, Option[UUID], Option[String]) =>
             val (start_latitude, start_longitude, customer_uuid, product_id) = input
             // ----- Start of unmanaged code area for action  UberApiYaml.getestimatesTime
             NotImplementedYet
@@ -57,12 +58,12 @@ package uber.api.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  UberApiYaml.getestimatesPrice
         }
-        val gethistory = gethistoryAction { input: (ErrorCode, ErrorCode) =>
+        val gethistory = gethistoryAction { input: (Option[Int], Option[Int]) =>
             val (offset, limit) = input
             // ----- Start of unmanaged code area for action  UberApiYaml.gethistory
             NotImplementedYet
             // ----- End of unmanaged code area for action  UberApiYaml.gethistory
         }
-
+    
     }
 }

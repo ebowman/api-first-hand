@@ -54,7 +54,7 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
 
 
     "PUT /pet/" should {
-        def testInvalidInput(pet: PutPet): Prop = {
+        def testInvalidInput(pet: Option[Pet]): Prop = {
 
 
             val url = s"""/pet/"""
@@ -106,7 +106,7 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(pet: PutPet): Prop = {
+        def testValidInput(pet: Option[Pet]): Prop = {
             
             val parsed_pet = parserConstructor("application/json").writeValueAsString(pet)
             
@@ -166,7 +166,7 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
         }
         "discard invalid data" in {
             val genInputs = for {
-                    pet <- PutPetGenerator
+                    pet <- OptionPetGenerator
                 } yield pet
             val inputs = genInputs suchThat { pet =>
                 new PutValidator(pet).errors.nonEmpty
@@ -176,7 +176,7 @@ class Heroku_petstore_api_yamlSpec extends WordSpec with OptionValues with WsSca
         }
         "do something with valid data" in {
             val genInputs = for {
-                pet <- PutPetGenerator
+                pet <- OptionPetGenerator
             } yield pet
             val inputs = genInputs suchThat { pet =>
                 new PutValidator(pet).errors.isEmpty

@@ -9,18 +9,14 @@ object Generators extends JsValueGenerators {
     
 
     
-    def createZooTiersOptGenerator = _generate(ZooTiersOptGenerator)
-    def createZooTiersGenerator = _generate(ZooTiersGenerator)
     def createCatHuntingSkillGenerator = _generate(CatHuntingSkillGenerator)
-    def createPutDummyGenerator = _generate(PutDummyGenerator)
+    def createOptionPetGenerator = _generate(OptionPetGenerator)
     def createNullGenerator = _generate(NullGenerator)
     
 
     
-    def ZooTiersOptGenerator: Gen[List[Pet]] = Gen.containerOf[List,Pet](PetGenerator)
-    def ZooTiersGenerator = Gen.option(ZooTiersOptGenerator)
     def CatHuntingSkillGenerator = { import CatHuntingSkill._ ; Gen.oneOf(Seq(Clueless, Lazy, Adventurous, Aggressive)) }
-    def PutDummyGenerator = Gen.option(PetGenerator)
+    def OptionPetGenerator = Gen.option(PetGenerator)
     def NullGenerator = arbitrary[Null]
     
 
@@ -36,7 +32,7 @@ object Generators extends JsValueGenerators {
 
 
     def ZooGenerator = for {
-        tiers <- ZooTiersGenerator
+        tiers <- Gen.option(Gen.containerOf[List,Pet](PetGenerator))
     } yield Zoo(tiers)
     def CatGenerator = for {
         name <- arbitrary[String]

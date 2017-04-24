@@ -11,39 +11,25 @@ object Generators extends JsValueGenerators {
 
     
     def createStringGenerator = _generate(StringGenerator)
-    def createTopicsTopicEventsGetStream_timeoutGenerator = _generate(TopicsTopicEventsGetStream_timeoutGenerator)
+    def createOptionIntGenerator = _generate(OptionIntGenerator)
     def createIntGenerator = _generate(IntGenerator)
-    def createEventEvent_typeGenerator = _generate(EventEvent_typeGenerator)
-    def createSimpleStreamEventEventsOptGenerator = _generate(SimpleStreamEventEventsOptGenerator)
-    def createEventMetaDataParent_idGenerator = _generate(EventMetaDataParent_idGenerator)
-    def createEventMetadataGenerator = _generate(EventMetadataGenerator)
     def createNullGenerator = _generate(NullGenerator)
-    def createEventMetaDataScopesOptGenerator = _generate(EventMetaDataScopesOptGenerator)
-    def createTopicsTopicPartitionsGetResponses200Generator = _generate(TopicsTopicPartitionsGetResponses200Generator)
-    def createTopicsTopicEventsBatchPostEventGenerator = _generate(TopicsTopicEventsBatchPostEventGenerator)
-    def createSimpleStreamEventEventsGenerator = _generate(SimpleStreamEventEventsGenerator)
-    def createEventMetaDataScopesGenerator = _generate(EventMetaDataScopesGenerator)
-    def createTopicsGetResponses200Generator = _generate(TopicsGetResponses200Generator)
+    def createSeqTopicPartitionGenerator = _generate(SeqTopicPartitionGenerator)
+    def createOptionEventGenerator = _generate(OptionEventGenerator)
+    def createSeqTopicGenerator = _generate(SeqTopicGenerator)
     
 
     
     def StringGenerator = arbitrary[String]
-    def TopicsTopicEventsGetStream_timeoutGenerator = Gen.option(arbitrary[Int])
+    def OptionIntGenerator = Gen.option(arbitrary[Int])
     def IntGenerator = arbitrary[Int]
-    def EventEvent_typeGenerator = Gen.option(arbitrary[String])
-    def SimpleStreamEventEventsOptGenerator: Gen[List[Event]] = Gen.containerOf[List,Event](EventGenerator)
-    def EventMetaDataParent_idGenerator = Gen.option(arbitrary[UUID])
-    def EventMetadataGenerator = Gen.option(EventMetaDataNameClashGenerator)
     def NullGenerator = arbitrary[Null]
-    def EventMetaDataScopesOptGenerator: Gen[List[String]] = Gen.containerOf[List,String](arbitrary[String])
-    def TopicsTopicPartitionsGetResponses200Generator: Gen[List[TopicPartition]] = Gen.containerOf[List,TopicPartition](TopicPartitionGenerator)
-    def TopicsTopicEventsBatchPostEventGenerator = Gen.option(EventGenerator)
-    def SimpleStreamEventEventsGenerator = Gen.option(SimpleStreamEventEventsOptGenerator)
-    def EventMetaDataScopesGenerator = Gen.option(EventMetaDataScopesOptGenerator)
-    def TopicsGetResponses200Generator: Gen[List[Topic]] = Gen.containerOf[List,Topic](TopicGenerator)
+    def SeqTopicPartitionGenerator: Gen[List[TopicPartition]] = Gen.containerOf[List,TopicPartition](TopicPartitionGenerator)
+    def OptionEventGenerator = Gen.option(EventGenerator)
+    def SeqTopicGenerator: Gen[List[Topic]] = Gen.containerOf[List,Topic](TopicGenerator)
     
 
-    def createEventMetaDataNameClashGenerator = _generate(EventMetaDataNameClashGenerator)
+    def createEventMetaDataGenerator = _generate(EventMetaDataGenerator)
     def createTopicGenerator = _generate(TopicGenerator)
     def createMetricsGenerator = _generate(MetricsGenerator)
     def createEventGenerator = _generate(EventGenerator)
@@ -53,23 +39,23 @@ object Generators extends JsValueGenerators {
     def createSimpleStreamEventGenerator = _generate(SimpleStreamEventGenerator)
 
 
-    def EventMetaDataNameClashGenerator = for {
-        root_id <- EventMetaDataParent_idGenerator
-        parent_id <- EventMetaDataParent_idGenerator
-        scopes <- EventMetaDataScopesGenerator
-        id <- EventMetaDataParent_idGenerator
-        created <- EventEvent_typeGenerator
-    } yield EventMetaDataNameClash(root_id, parent_id, scopes, id, created)
+    def EventMetaDataGenerator = for {
+        root_id <- Gen.option(arbitrary[UUID])
+        parent_id <- Gen.option(arbitrary[UUID])
+        scopes <- Gen.option(Gen.containerOf[List,String](arbitrary[String]))
+        id <- Gen.option(arbitrary[UUID])
+        created <- Gen.option(arbitrary[String])
+    } yield EventMetaData(root_id, parent_id, scopes, id, created)
     def TopicGenerator = for {
         name <- arbitrary[String]
     } yield Topic(name)
     def MetricsGenerator = for {
-        name <- EventEvent_typeGenerator
+        name <- Gen.option(arbitrary[String])
     } yield Metrics(name)
     def EventGenerator = for {
-        event_type <- EventEvent_typeGenerator
-        partitioning_key <- EventEvent_typeGenerator
-        metadata <- EventMetadataGenerator
+        event_type <- Gen.option(arbitrary[String])
+        partitioning_key <- Gen.option(arbitrary[String])
+        metadata <- Gen.option(EventMetaDataGenerator)
     } yield Event(event_type, partitioning_key, metadata)
     def CursorGenerator = for {
         partition <- arbitrary[String]
@@ -85,7 +71,7 @@ object Generators extends JsValueGenerators {
     } yield TopicPartition(partition, oldest_available_offset, newest_available_offset)
     def SimpleStreamEventGenerator = for {
         cursor <- CursorGenerator
-        events <- SimpleStreamEventEventsGenerator
+        events <- Gen.option(Gen.containerOf[List,Event](EventGenerator))
     } yield SimpleStreamEvent(cursor, events)
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample

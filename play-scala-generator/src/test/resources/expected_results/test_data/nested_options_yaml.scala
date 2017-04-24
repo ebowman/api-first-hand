@@ -7,27 +7,19 @@ import Arbitrary._
 
 object Generators extends JsValueGenerators {
     
-
     
-    def createBasicOptionalGenerator = _generate(BasicOptionalGenerator)
-    def createBasicOptionalNested_optionalGenerator = _generate(BasicOptionalNested_optionalGenerator)
-    
-
-    
-    def BasicOptionalGenerator = Gen.option(BasicOptionalOptGenerator)
-    def BasicOptionalNested_optionalGenerator = Gen.option(arbitrary[String])
     
 
     def createBasicGenerator = _generate(BasicGenerator)
-    def createBasicOptionalOptGenerator = _generate(BasicOptionalOptGenerator)
+    def createBasicOptionalOptionOptionalGenerator = _generate(BasicOptionalOptionOptionalGenerator)
 
 
     def BasicGenerator = for {
-        optional <- BasicOptionalGenerator
+        optional <- Gen.option(BasicOptionalOptionOptionalGenerator)
     } yield Basic(optional)
-    def BasicOptionalOptGenerator = for {
-        nested_optional <- BasicOptionalNested_optionalGenerator
-    } yield BasicOptionalOpt(nested_optional)
+    def BasicOptionalOptionOptionalGenerator = for {
+        nested_optional <- Gen.option(arbitrary[String])
+    } yield BasicOptionalOptionOptional(nested_optional)
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
 

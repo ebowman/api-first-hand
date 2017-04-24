@@ -23,6 +23,7 @@ import javax.inject._
 
 package security.api.yaml {
     // ----- Start of unmanaged code area for package SecurityApiYaml
+    
     // ----- End of unmanaged code area for package SecurityApiYaml
     class SecurityApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections SecurityApiYaml
@@ -34,11 +35,11 @@ package security.api.yaml {
         // ----- Start of unmanaged code area for constructor SecurityApiYaml
 
         // ----- End of unmanaged code area for constructor SecurityApiYaml
-        val getPetsById = getPetsByIdAction { (id: PetsIdGetId) =>
+        val getPetsById = getPetsByIdAction { (id: ArrayWrapper[String]) =>  
             // ----- Start of unmanaged code area for action  SecurityApiYaml.getPetsById
             NotImplementedYet
             // ----- End of unmanaged code area for action  SecurityApiYaml.getPetsById
         }
-
+    
     }
 }

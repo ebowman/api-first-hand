@@ -23,6 +23,7 @@ import javax.inject._
 
 package basic.auth.api.yaml {
     // ----- Start of unmanaged code area for package BasicAuthApiYaml
+    
     // ----- End of unmanaged code area for package BasicAuthApiYaml
     class BasicAuthApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections BasicAuthApiYaml
@@ -34,11 +35,11 @@ package basic.auth.api.yaml {
         // ----- Start of unmanaged code area for constructor BasicAuthApiYaml
 
         // ----- End of unmanaged code area for constructor BasicAuthApiYaml
-        val get = getAction {  _ =>
+        val get = getAction {  _ =>  
             // ----- Start of unmanaged code area for action  BasicAuthApiYaml.get
             NotImplementedYet
             // ----- End of unmanaged code area for action  BasicAuthApiYaml.get
         }
-
+    
     }
 }

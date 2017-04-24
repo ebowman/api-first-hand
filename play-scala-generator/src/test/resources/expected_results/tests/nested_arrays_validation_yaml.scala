@@ -179,7 +179,7 @@ class Nested_arrays_validation_yamlSpec extends WordSpec with OptionValues with 
     }
 
     "POST /api/another" should {
-        def testInvalidInput(example: AnotherPostExample): Prop = {
+        def testInvalidInput(example: Option[Example]): Prop = {
 
 
             val url = s"""/api/another"""
@@ -227,7 +227,7 @@ class Nested_arrays_validation_yamlSpec extends WordSpec with OptionValues with 
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(example: AnotherPostExample): Prop = {
+        def testValidInput(example: Option[Example]): Prop = {
             
             val parsed_example = parserConstructor("application/json").writeValueAsString(example)
             
@@ -283,7 +283,7 @@ class Nested_arrays_validation_yamlSpec extends WordSpec with OptionValues with 
         }
         "discard invalid data" in {
             val genInputs = for {
-                    example <- AnotherPostExampleGenerator
+                    example <- OptionExampleGenerator
                 } yield example
             val inputs = genInputs suchThat { example =>
                 new AnotherPostValidator(example).errors.nonEmpty
@@ -293,7 +293,7 @@ class Nested_arrays_validation_yamlSpec extends WordSpec with OptionValues with 
         }
         "do something with valid data" in {
             val genInputs = for {
-                example <- AnotherPostExampleGenerator
+                example <- OptionExampleGenerator
             } yield example
             val inputs = genInputs suchThat { example =>
                 new AnotherPostValidator(example).errors.isEmpty

@@ -10,13 +10,13 @@ object Generators extends JsValueGenerators {
 
     
     def createNullGenerator = _generate(NullGenerator)
-    def createPostNameGenerator = _generate(PostNameGenerator)
+    def createOptionStringGenerator = _generate(OptionStringGenerator)
     def createStringGenerator = _generate(StringGenerator)
     
 
     
     def NullGenerator = arbitrary[Null]
-    def PostNameGenerator = Gen.option(arbitrary[String])
+    def OptionStringGenerator = Gen.option(arbitrary[String])
     def StringGenerator = arbitrary[String]
     
 
@@ -24,8 +24,8 @@ object Generators extends JsValueGenerators {
 
 
     def PostResponses200Generator = for {
-        name <- PostNameGenerator
-        year <- PostNameGenerator
+        name <- Gen.option(arbitrary[String])
+        year <- Gen.option(arbitrary[String])
     } yield PostResponses200(name, year)
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample

@@ -5,8 +5,8 @@ import de.zalando.play.controllers._
 import PlayBodyParsing._
 import PlayValidations._
 
-import java.io.File
 import scala.math.BigInt
+import java.io.File
 // ----- constraints and wrapper validations -----
 class MultipartPostAvatarOptConstraints(override val instance: File) extends ValidationBase[File] {
     override def constraints: Seq[Constraint[File]] =
@@ -60,17 +60,17 @@ class Url_encodedPostAvatarValidator(instance: File) extends RecursiveValidator 
 // ----- complex type validators -----
 
 // ----- option delegating validators -----
-class MultipartPostAvatarValidator(instance: MultipartPostAvatar) extends RecursiveValidator {
+class MultipartPostAvatarValidator(instance: Option[File]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new MultipartPostAvatarOptValidator(_) }
 }
-class BothPostYearValidator(instance: BothPostYear) extends RecursiveValidator {
+class BothPostYearValidator(instance: Option[BigInt]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new BothPostYearOptValidator(_) }
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
 // ----- composite validators -----
 // ----- call validations -----
-class MultipartPostValidator(name: String, year: BothPostYear, avatar: MultipartPostAvatar) extends RecursiveValidator {
+class MultipartPostValidator(name: String, year: Option[BigInt], avatar: Option[File]) extends RecursiveValidator {
     override val validators = Seq(
         new MultipartPostNameValidator(name), 
     
@@ -80,7 +80,7 @@ class MultipartPostValidator(name: String, year: BothPostYear, avatar: Multipart
     
     )
 }
-class BothPostValidator(name: String, year: BothPostYear, avatar: MultipartPostAvatar, ringtone: File) extends RecursiveValidator {
+class BothPostValidator(name: String, year: Option[BigInt], avatar: Option[File], ringtone: File) extends RecursiveValidator {
     override val validators = Seq(
         new BothPostNameValidator(name), 
     
@@ -92,7 +92,7 @@ class BothPostValidator(name: String, year: BothPostYear, avatar: MultipartPostA
     
     )
 }
-class Url_encodedPostValidator(name: String, year: BothPostYear, avatar: File) extends RecursiveValidator {
+class Url_encodedPostValidator(name: String, year: Option[BigInt], avatar: File) extends RecursiveValidator {
     override val validators = Seq(
         new Url_encodedPostNameValidator(name), 
     

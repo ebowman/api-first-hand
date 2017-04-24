@@ -26,43 +26,43 @@ object ResponseWriters extends ResponseWritersBase {
     * in order for play-swagger to be able to provide safety net for
     * different response types
     */
-    val writable_application_json_PetsGetResponses200_esc: Writeable[PetsGetResponses200] =
-        Writeable(a => ???, Some("application/json"))
-
-    val writable_application_json_ErrorModel_esc: Writeable[ErrorModel] =
-        Writeable(a => ???, Some("application/json"))
-
-    val writable_text_xml_PetsGetResponses200_esc: Writeable[PetsGetResponses200] =
-        Writeable(a => ???, Some("text/xml"))
-
-    val writable_text_html_PetsGetResponses200_esc: Writeable[PetsGetResponses200] =
-        Writeable(a => ???, Some("text/html"))
-
-    val writable_application_xml_PetsGetResponses200_esc: Writeable[PetsGetResponses200] =
+    val writable_application_xml_SeqPet: Writeable[Seq[Pet]] =
         Writeable(a => ???, Some("application/xml"))
 
-    val writable_application_xml_ErrorModel_esc: Writeable[ErrorModel] =
-        Writeable(a => ???, Some("application/xml"))
-
-    val writable_text_html_ErrorModel_esc: Writeable[ErrorModel] =
+    val writable_text_html_SeqPet: Writeable[Seq[Pet]] =
         Writeable(a => ???, Some("text/html"))
 
-    val writable_text_xml_ErrorModel_esc: Writeable[ErrorModel] =
-        Writeable(a => ???, Some("text/xml"))
-
-    val writable_application_json_Pet_esc: Writeable[Pet] =
+    val writable_application_json_ErrorModel: Writeable[ErrorModel] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_xml_Pet_esc: Writeable[Pet] =
-        Writeable(a => ???, Some("application/xml"))
-
-    val writable_text_html_Pet_esc: Writeable[Pet] =
-        Writeable(a => ???, Some("text/html"))
-
-    val writable_text_xml_Pet_esc: Writeable[Pet] =
+    val writable_text_xml_SeqPet: Writeable[Seq[Pet]] =
         Writeable(a => ???, Some("text/xml"))
 
-    val writable_application_json_Null_esc: Writeable[Null] =
+    val writable_application_json_SeqPet: Writeable[Seq[Pet]] =
+        Writeable(a => ???, Some("application/json"))
+
+    val writable_application_xml_ErrorModel: Writeable[ErrorModel] =
+        Writeable(a => ???, Some("application/xml"))
+
+    val writable_text_html_ErrorModel: Writeable[ErrorModel] =
+        Writeable(a => ???, Some("text/html"))
+
+    val writable_text_xml_ErrorModel: Writeable[ErrorModel] =
+        Writeable(a => ???, Some("text/xml"))
+
+    val writable_application_json_Pet: Writeable[Pet] =
+        Writeable(a => ???, Some("application/json"))
+
+    val writable_application_xml_Pet: Writeable[Pet] =
+        Writeable(a => ???, Some("application/xml"))
+
+    val writable_text_html_Pet: Writeable[Pet] =
+        Writeable(a => ???, Some("text/html"))
+
+    val writable_text_xml_Pet: Writeable[Pet] =
+        Writeable(a => ???, Some("text/xml"))
+
+    val writable_application_json_Null: Writeable[Null] =
         Writeable(a => ???, Some("application/json"))
 
     /**
@@ -70,19 +70,19 @@ object ResponseWriters extends ResponseWritersBase {
     * as a marshaller for different mime types and types of response
     */
     override val custom: Seq[WriteableWrapper[_]] = Seq(
-        writable_application_json_PetsGetResponses200_esc, 
-        writable_application_json_ErrorModel_esc, 
-        writable_text_xml_PetsGetResponses200_esc, 
-        writable_text_html_PetsGetResponses200_esc, 
-        writable_application_xml_PetsGetResponses200_esc, 
-        writable_application_xml_ErrorModel_esc, 
-        writable_text_html_ErrorModel_esc, 
-        writable_text_xml_ErrorModel_esc, 
-        writable_application_json_Pet_esc, 
-        writable_application_xml_Pet_esc, 
-        writable_text_html_Pet_esc, 
-        writable_text_xml_Pet_esc, 
-        writable_application_json_Null_esc
+        writable_application_xml_SeqPet, 
+        writable_text_html_SeqPet, 
+        writable_application_json_ErrorModel, 
+        writable_text_xml_SeqPet, 
+        writable_application_json_SeqPet, 
+        writable_application_xml_ErrorModel, 
+        writable_text_html_ErrorModel, 
+        writable_text_xml_ErrorModel, 
+        writable_application_json_Pet, 
+        writable_application_xml_Pet, 
+        writable_text_html_Pet, 
+        writable_text_xml_Pet, 
+        writable_application_json_Null
     )
 }
 

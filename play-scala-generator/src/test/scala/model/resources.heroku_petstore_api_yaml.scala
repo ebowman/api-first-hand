@@ -15,13 +15,9 @@ object heroku_petstore_api_yaml extends WithModel {
 	Reference("⌿definitions⌿Pet") → 
 		TypeDef(Reference("⌿definitions⌿Pet"), 
 			Seq(
-					Field(Reference("⌿definitions⌿Pet⌿name"), TypeRef(Reference("⌿definitions⌿Pet⌿name"))),
-					Field(Reference("⌿definitions⌿Pet⌿birthday"), TypeRef(Reference("⌿definitions⌿Pet⌿birthday")))
+					Field(Reference("⌿definitions⌿Pet⌿name"), Opt(Str(None, TypeMeta(None, List("maxLength(100)", "minLength(3)"))), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿Pet⌿birthday"), Opt(Intgr(TypeMeta(Some("int32"), List("max(100.toInt, false)", "min(1.toInt, false)"))), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
-	Reference("⌿definitions⌿Pet⌿name") → 
-		Opt(Str(None, TypeMeta(None, List("maxLength(100)", "minLength(3)"))), TypeMeta(None, List())),
-	Reference("⌿definitions⌿Pet⌿birthday") → 
-		Opt(Intgr(TypeMeta(Some("int32"), List("max(100.toInt, false)", "min(1.toInt, false)"))), TypeMeta(None, List())),
 	Reference("⌿paths⌿/{petId}⌿get⌿petId") → 
 		Str(None, TypeMeta(None, List())),
 	Reference("⌿paths⌿/⌿get⌿limit") → 

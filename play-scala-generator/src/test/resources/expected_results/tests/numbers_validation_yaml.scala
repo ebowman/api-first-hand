@@ -53,7 +53,7 @@ class Numbers_validation_yamlSpec extends WordSpec with OptionValues with WsScal
 
 
     "GET /" should {
-        def testInvalidInput(input: (Float, Double, GetInteger_optional, Long, Int, GetFloat_optional, GetDouble_optional, GetLong_optional)): Prop = {
+        def testInvalidInput(input: (Float, Double, Option[Int], Long, Int, Option[Float], Option[Double], Option[Long])): Prop = {
 
             val (float_required, double_required, integer_optional, long_required, integer_required, float_optional, double_optional, long_optional) = input
 
@@ -103,7 +103,7 @@ class Numbers_validation_yamlSpec extends WordSpec with OptionValues with WsScal
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (Float, Double, GetInteger_optional, Long, Int, GetFloat_optional, GetDouble_optional, GetLong_optional)): Prop = {
+        def testValidInput(input: (Float, Double, Option[Int], Long, Int, Option[Float], Option[Double], Option[Long])): Prop = {
             val (float_required, double_required, integer_optional, long_required, integer_required, float_optional, double_optional, long_optional) = input
             
             val url = s"""/?${toQuery("float_required", float_required)}&${toQuery("double_required", double_required)}&${toQuery("integer_optional", integer_optional)}&${toQuery("long_required", long_required)}&${toQuery("integer_required", integer_required)}&${toQuery("float_optional", float_optional)}&${toQuery("double_optional", double_optional)}&${toQuery("long_optional", long_optional)}"""
@@ -162,12 +162,12 @@ class Numbers_validation_yamlSpec extends WordSpec with OptionValues with WsScal
             val genInputs = for {
                         float_required <- FloatGenerator
                         double_required <- DoubleGenerator
-                        integer_optional <- GetInteger_optionalGenerator
+                        integer_optional <- OptionIntGenerator
                         long_required <- LongGenerator
                         integer_required <- IntGenerator
-                        float_optional <- GetFloat_optionalGenerator
-                        double_optional <- GetDouble_optionalGenerator
-                        long_optional <- GetLong_optionalGenerator
+                        float_optional <- OptionFloatGenerator
+                        double_optional <- OptionDoubleGenerator
+                        long_optional <- OptionLongGenerator
                     
                 } yield (float_required, double_required, integer_optional, long_required, integer_required, float_optional, double_optional, long_optional)
             val inputs = genInputs suchThat { case (float_required, double_required, integer_optional, long_required, integer_required, float_optional, double_optional, long_optional) =>
@@ -180,12 +180,12 @@ class Numbers_validation_yamlSpec extends WordSpec with OptionValues with WsScal
             val genInputs = for {
                     float_required <- FloatGenerator
                     double_required <- DoubleGenerator
-                    integer_optional <- GetInteger_optionalGenerator
+                    integer_optional <- OptionIntGenerator
                     long_required <- LongGenerator
                     integer_required <- IntGenerator
-                    float_optional <- GetFloat_optionalGenerator
-                    double_optional <- GetDouble_optionalGenerator
-                    long_optional <- GetLong_optionalGenerator
+                    float_optional <- OptionFloatGenerator
+                    double_optional <- OptionDoubleGenerator
+                    long_optional <- OptionLongGenerator
                 
             } yield (float_required, double_required, integer_optional, long_required, integer_required, float_optional, double_optional, long_optional)
             val inputs = genInputs suchThat { case (float_required, double_required, integer_optional, long_required, integer_required, float_optional, double_optional, long_optional) =>

@@ -23,6 +23,7 @@ import javax.inject._
 
 package type_deduplication.yaml {
     // ----- Start of unmanaged code area for package Type_deduplicationYaml
+    
     // ----- End of unmanaged code area for package Type_deduplicationYaml
     class Type_deduplicationYaml @Inject() (
         // ----- Start of unmanaged code area for injections Type_deduplicationYaml
@@ -46,12 +47,12 @@ package type_deduplication.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.putplantsByPlant_idWateringsByWatering_id
         }
-        val getusersMe = getusersMeAction {  _ =>
+        val getusersMe = getusersMeAction {  _ =>  
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.getusersMe
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.getusersMe
         }
-        val getplantsByPlant_idSunlight_needs = getplantsByPlant_idSunlight_needsAction { (plant_id: String) =>
+        val getplantsByPlant_idSunlight_needs = getplantsByPlant_idSunlight_needsAction { (plant_id: String) =>  
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.getplantsByPlant_idSunlight_needs
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.getplantsByPlant_idSunlight_needs
@@ -62,45 +63,45 @@ package type_deduplication.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.putplantsByPlant_idSunlight_needs
         }
-        val getusers = getusersAction { input: (UsersGetLimit, UsersGetLimit) =>
+        val getusers = getusersAction { input: (Option[BigInt], Option[BigInt]) =>
             val (limit, offset) = input
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.getusers
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.getusers
         }
-        val postusers = postusersAction { (signin_data: SigninData) =>
+        val postusers = postusersAction { (signin_data: SigninData) =>  
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.postusers
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.postusers
         }
-        val getareasByArea_id = getareasByArea_idAction { (area_id: String) =>
+        val getareasByArea_id = getareasByArea_idAction { (area_id: String) =>  
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.getareasByArea_id
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.getareasByArea_id
         }
-        val putareasByArea_id = putareasByArea_idAction { (area_id: String) =>
+        val putareasByArea_id = putareasByArea_idAction { (area_id: String) =>  
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.putareasByArea_id
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.putareasByArea_id
         }
-        val deleteareasByArea_id = deleteareasByArea_idAction { (area_id: String) =>
+        val deleteareasByArea_id = deleteareasByArea_idAction { (area_id: String) =>  
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.deleteareasByArea_id
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.deleteareasByArea_id
         }
-        val getplants = getplantsAction { input: (PlantsGetLimit, PlantsGetOffset) =>
+        val getplants = getplantsAction { input: (Option[BigInt], Option[BigInt]) =>
             val (limit, offset) = input
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.getplants
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.getplants
         }
-        val getuserByUser_idPlants = getuserByUser_idPlantsAction { input: (String, UsersGetLimit, UsersGetLimit) =>
+        val getuserByUser_idPlants = getuserByUser_idPlantsAction { input: (String, Option[BigInt], Option[BigInt]) =>
             val (user_id, limit, offset) = input
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.getuserByUser_idPlants
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.getuserByUser_idPlants
         }
-        val getusersByUser_id = getusersByUser_idAction { (user_id: String) =>
+        val getusersByUser_id = getusersByUser_idAction { (user_id: String) =>  
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.getusersByUser_id
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.getusersByUser_id
@@ -117,13 +118,13 @@ package type_deduplication.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.deleteusersByUser_id
         }
-        val getareas = getareasAction { input: (UsersGetLimit, UsersGetLimit) =>
+        val getareas = getareasAction { input: (Option[BigInt], Option[BigInt]) =>
             val (limit, offset) = input
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.getareas
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.getareas
         }
-        val getplantsByPlant_idLocation = getplantsByPlant_idLocationAction { (plant_id: String) =>
+        val getplantsByPlant_idLocation = getplantsByPlant_idLocationAction { (plant_id: String) =>  
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.getplantsByPlant_idLocation
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.getplantsByPlant_idLocation
@@ -134,33 +135,33 @@ package type_deduplication.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.putplantsByPlant_idLocation
         }
-        val deleteplantsByPlant_idLocation = deleteplantsByPlant_idLocationAction { (plant_id: String) =>
+        val deleteplantsByPlant_idLocation = deleteplantsByPlant_idLocationAction { (plant_id: String) =>  
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.deleteplantsByPlant_idLocation
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.deleteplantsByPlant_idLocation
         }
-        val getusersByUser_idPicture = getusersByUser_idPictureAction { (user_id: String) =>
+        val getusersByUser_idPicture = getusersByUser_idPictureAction { (user_id: String) =>  
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.getusersByUser_idPicture
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.getusersByUser_idPicture
         }
-        val putusersByUser_idPicture = putusersByUser_idPictureAction { (user_id: String) =>
+        val putusersByUser_idPicture = putusersByUser_idPictureAction { (user_id: String) =>  
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.putusersByUser_idPicture
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.putusersByUser_idPicture
         }
-        val deleteusersByUser_idPicture = deleteusersByUser_idPictureAction { (user_id: String) =>
+        val deleteusersByUser_idPicture = deleteusersByUser_idPictureAction { (user_id: String) =>  
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.deleteusersByUser_idPicture
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.deleteusersByUser_idPicture
         }
-        val getplantsByPlant_idPictures = getplantsByPlant_idPicturesAction { input: (String, UsersGetLimit, UsersGetLimit) =>
+        val getplantsByPlant_idPictures = getplantsByPlant_idPicturesAction { input: (String, Option[BigInt], Option[BigInt]) =>
             val (plant_id, limit, offset) = input
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.getplantsByPlant_idPictures
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.getplantsByPlant_idPictures
         }
-        val getplantsByPlant_id = getplantsByPlant_idAction { (plant_id: String) =>
+        val getplantsByPlant_id = getplantsByPlant_idAction { (plant_id: String) =>  
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.getplantsByPlant_id
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.getplantsByPlant_id
@@ -171,12 +172,12 @@ package type_deduplication.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.putplantsByPlant_id
         }
-        val deleteplantsByPlant_id = deleteplantsByPlant_idAction { (plant_id: String) =>
+        val deleteplantsByPlant_id = deleteplantsByPlant_idAction { (plant_id: String) =>  
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.deleteplantsByPlant_id
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.deleteplantsByPlant_id
         }
-        val getplantsByPlant_idWaterings = getplantsByPlant_idWateringsAction { input: (String, UsersGetLimit, UsersGetLimit) =>
+        val getplantsByPlant_idWaterings = getplantsByPlant_idWateringsAction { input: (String, Option[BigInt], Option[BigInt]) =>
             val (plant_id, limit, offset) = input
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.getplantsByPlant_idWaterings
             NotImplementedYet
@@ -200,7 +201,7 @@ package type_deduplication.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.deleteplantsByPlant_idPicturesByPicture_id
         }
-        val getplantsByPlant_idWater_needs = getplantsByPlant_idWater_needsAction { (plant_id: String) =>
+        val getplantsByPlant_idWater_needs = getplantsByPlant_idWater_needsAction { (plant_id: String) =>  
             // ----- Start of unmanaged code area for action  Type_deduplicationYaml.getplantsByPlant_idWater_needs
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.getplantsByPlant_idWater_needs
@@ -211,6 +212,6 @@ package type_deduplication.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  Type_deduplicationYaml.putplantsByPlant_idWater_needs
         }
-
+    
     }
 }

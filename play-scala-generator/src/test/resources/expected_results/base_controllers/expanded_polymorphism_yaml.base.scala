@@ -27,15 +27,15 @@ trait Expanded_polymorphismYamlBase extends Controller with PlayBodyParsing {
     def FindPetsNoSuchElementException(resultP: java.util.NoSuchElementException)(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = success(new FindPetsType[java.util.NoSuchElementException] { val statusCode = 404; val result = resultP; val writer = writerP })
     def FindPetsNoSuchElementException(resultF: Future[java.util.NoSuchElementException])(implicit writerP: String => Option[Writeable[java.lang.Exception]]) = resultF map { resultP => (new FindPetsType[java.util.NoSuchElementException] { val statusCode = 404; val result = resultP; val writer = writerP }) }
 
-    private type findPetsActionRequestType       = (PetsGetTags, PetsGetLimit)
+    private type findPetsActionRequestType       = (Option[ArrayWrapper[String]], Option[Int])
     private type findPetsActionType[T]            = findPetsActionRequestType => Future[FindPetsType[T] forSome { type T }]
 
 
     val findPetsActionConstructor  = Action
 
-def findPetsAction[T] = (f: findPetsActionType[T]) => (tags: PetsGetTags, limit: PetsGetLimit) => findPetsActionConstructor.async { implicit request: Request[AnyContent] =>
+def findPetsAction[T] = (f: findPetsActionType[T]) => (tags: Option[ArrayWrapper[String]], limit: Option[Int]) => findPetsActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidfindPetsRequest(tags: PetsGetTags, limit: PetsGetLimit): Either[Result, Future[FindPetsType[_]]] = {
+        def processValidfindPetsRequest(tags: Option[ArrayWrapper[String]], limit: Option[Int]): Either[Result, Future[FindPetsType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((tags, limit)))
             
             new PetsGetValidator(tags, limit).errors match {

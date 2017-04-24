@@ -251,15 +251,15 @@ def putplantsByPlant_idSunlight_needsAction[T] = (f: putplantsByPlant_idSunlight
     def Getusers200(resultF: Future[Seq[User]])(implicit writerP: String => Option[Writeable[Seq[User]]]) = resultF map { resultP => (new GetusersType[Seq[User]] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type getusersActionRequestType       = (UsersGetLimit, UsersGetLimit)
+    private type getusersActionRequestType       = (Option[BigInt], Option[BigInt])
     private type getusersActionType[T]            = getusersActionRequestType => Future[GetusersType[T] forSome { type T }]
 
 
     val getusersActionConstructor  = Action
 
-def getusersAction[T] = (f: getusersActionType[T]) => (limit: UsersGetLimit, offset: UsersGetLimit) => getusersActionConstructor.async { implicit request: Request[AnyContent] =>
+def getusersAction[T] = (f: getusersActionType[T]) => (limit: Option[BigInt], offset: Option[BigInt]) => getusersActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetusersRequest(limit: UsersGetLimit, offset: UsersGetLimit): Either[Result, Future[GetusersType[_]]] = {
+        def processValidgetusersRequest(limit: Option[BigInt], offset: Option[BigInt]): Either[Result, Future[GetusersType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((limit, offset)))
             
             new UsersGetValidator(limit, offset).errors match {
@@ -478,15 +478,15 @@ def deleteareasByArea_idAction[T] = (f: deleteareasByArea_idActionType[T]) => (a
     def Getplants200(resultF: Future[Seq[Plant]])(implicit writerP: String => Option[Writeable[Seq[Plant]]]) = resultF map { resultP => (new GetplantsType[Seq[Plant]] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type getplantsActionRequestType       = (PlantsGetLimit, PlantsGetOffset)
+    private type getplantsActionRequestType       = (Option[BigInt], Option[BigInt])
     private type getplantsActionType[T]            = getplantsActionRequestType => Future[GetplantsType[T] forSome { type T }]
 
 
     val getplantsActionConstructor  = Action
 
-def getplantsAction[T] = (f: getplantsActionType[T]) => (limit: PlantsGetLimit, offset: PlantsGetOffset) => getplantsActionConstructor.async { implicit request: Request[AnyContent] =>
+def getplantsAction[T] = (f: getplantsActionType[T]) => (limit: Option[BigInt], offset: Option[BigInt]) => getplantsActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetplantsRequest(limit: PlantsGetLimit, offset: PlantsGetOffset): Either[Result, Future[GetplantsType[_]]] = {
+        def processValidgetplantsRequest(limit: Option[BigInt], offset: Option[BigInt]): Either[Result, Future[GetplantsType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((limit, offset)))
             
             new PlantsGetValidator(limit, offset).errors match {
@@ -523,15 +523,15 @@ def getplantsAction[T] = (f: getplantsActionType[T]) => (limit: PlantsGetLimit, 
     def GetuserByUser_idPlants404(headers: Seq[(String, String)] = Nil) = success(new EmptyReturn(404, headers){})
     
 
-    private type getuserByUser_idPlantsActionRequestType       = (String, UsersGetLimit, UsersGetLimit)
+    private type getuserByUser_idPlantsActionRequestType       = (String, Option[BigInt], Option[BigInt])
     private type getuserByUser_idPlantsActionType[T]            = getuserByUser_idPlantsActionRequestType => Future[GetuserByUser_idPlantsType[T] forSome { type T }]
 
 
     val getuserByUser_idPlantsActionConstructor  = Action
 
-def getuserByUser_idPlantsAction[T] = (f: getuserByUser_idPlantsActionType[T]) => (user_id: String, limit: UsersGetLimit, offset: UsersGetLimit) => getuserByUser_idPlantsActionConstructor.async { implicit request: Request[AnyContent] =>
+def getuserByUser_idPlantsAction[T] = (f: getuserByUser_idPlantsActionType[T]) => (user_id: String, limit: Option[BigInt], offset: Option[BigInt]) => getuserByUser_idPlantsActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetuserByUser_idPlantsRequest(user_id: String, limit: UsersGetLimit, offset: UsersGetLimit): Either[Result, Future[GetuserByUser_idPlantsType[_]]] = {
+        def processValidgetuserByUser_idPlantsRequest(user_id: String, limit: Option[BigInt], offset: Option[BigInt]): Either[Result, Future[GetuserByUser_idPlantsType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((user_id, limit, offset)))
             
             new UserUser_idPlantsGetValidator(user_id, limit, offset).errors match {
@@ -721,15 +721,15 @@ def deleteusersByUser_idAction[T] = (f: deleteusersByUser_idActionType[T]) => (u
     def Getareas200(resultF: Future[Seq[Area]])(implicit writerP: String => Option[Writeable[Seq[Area]]]) = resultF map { resultP => (new GetareasType[Seq[Area]] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type getareasActionRequestType       = (UsersGetLimit, UsersGetLimit)
+    private type getareasActionRequestType       = (Option[BigInt], Option[BigInt])
     private type getareasActionType[T]            = getareasActionRequestType => Future[GetareasType[T] forSome { type T }]
 
 
     val getareasActionConstructor  = Action
 
-def getareasAction[T] = (f: getareasActionType[T]) => (limit: UsersGetLimit, offset: UsersGetLimit) => getareasActionConstructor.async { implicit request: Request[AnyContent] =>
+def getareasAction[T] = (f: getareasActionType[T]) => (limit: Option[BigInt], offset: Option[BigInt]) => getareasActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetareasRequest(limit: UsersGetLimit, offset: UsersGetLimit): Either[Result, Future[GetareasType[_]]] = {
+        def processValidgetareasRequest(limit: Option[BigInt], offset: Option[BigInt]): Either[Result, Future[GetareasType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((limit, offset)))
             
             new AreasGetValidator(limit, offset).errors match {
@@ -1048,15 +1048,15 @@ def deleteusersByUser_idPictureAction[T] = (f: deleteusersByUser_idPictureAction
     def GetplantsByPlant_idPictures404(headers: Seq[(String, String)] = Nil) = success(new EmptyReturn(404, headers){})
     
 
-    private type getplantsByPlant_idPicturesActionRequestType       = (String, UsersGetLimit, UsersGetLimit)
+    private type getplantsByPlant_idPicturesActionRequestType       = (String, Option[BigInt], Option[BigInt])
     private type getplantsByPlant_idPicturesActionType[T]            = getplantsByPlant_idPicturesActionRequestType => Future[GetplantsByPlant_idPicturesType[T] forSome { type T }]
 
 
     val getplantsByPlant_idPicturesActionConstructor  = Action
 
-def getplantsByPlant_idPicturesAction[T] = (f: getplantsByPlant_idPicturesActionType[T]) => (plant_id: String, limit: UsersGetLimit, offset: UsersGetLimit) => getplantsByPlant_idPicturesActionConstructor.async { implicit request: Request[AnyContent] =>
+def getplantsByPlant_idPicturesAction[T] = (f: getplantsByPlant_idPicturesActionType[T]) => (plant_id: String, limit: Option[BigInt], offset: Option[BigInt]) => getplantsByPlant_idPicturesActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetplantsByPlant_idPicturesRequest(plant_id: String, limit: UsersGetLimit, offset: UsersGetLimit): Either[Result, Future[GetplantsByPlant_idPicturesType[_]]] = {
+        def processValidgetplantsByPlant_idPicturesRequest(plant_id: String, limit: Option[BigInt], offset: Option[BigInt]): Either[Result, Future[GetplantsByPlant_idPicturesType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((plant_id, limit, offset)))
             
             new PlantsPlant_idPicturesGetValidator(plant_id, limit, offset).errors match {
@@ -1240,15 +1240,15 @@ def deleteplantsByPlant_idAction[T] = (f: deleteplantsByPlant_idActionType[T]) =
     def GetplantsByPlant_idWaterings404(headers: Seq[(String, String)] = Nil) = success(new EmptyReturn(404, headers){})
     
 
-    private type getplantsByPlant_idWateringsActionRequestType       = (String, UsersGetLimit, UsersGetLimit)
+    private type getplantsByPlant_idWateringsActionRequestType       = (String, Option[BigInt], Option[BigInt])
     private type getplantsByPlant_idWateringsActionType[T]            = getplantsByPlant_idWateringsActionRequestType => Future[GetplantsByPlant_idWateringsType[T] forSome { type T }]
 
 
     val getplantsByPlant_idWateringsActionConstructor  = Action
 
-def getplantsByPlant_idWateringsAction[T] = (f: getplantsByPlant_idWateringsActionType[T]) => (plant_id: String, limit: UsersGetLimit, offset: UsersGetLimit) => getplantsByPlant_idWateringsActionConstructor.async { implicit request: Request[AnyContent] =>
+def getplantsByPlant_idWateringsAction[T] = (f: getplantsByPlant_idWateringsActionType[T]) => (plant_id: String, limit: Option[BigInt], offset: Option[BigInt]) => getplantsByPlant_idWateringsActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetplantsByPlant_idWateringsRequest(plant_id: String, limit: UsersGetLimit, offset: UsersGetLimit): Either[Result, Future[GetplantsByPlant_idWateringsType[_]]] = {
+        def processValidgetplantsByPlant_idWateringsRequest(plant_id: String, limit: Option[BigInt], offset: Option[BigInt]): Either[Result, Future[GetplantsByPlant_idWateringsType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((plant_id, limit, offset)))
             
             new PlantsPlant_idWateringsGetValidator(plant_id, limit, offset).errors match {

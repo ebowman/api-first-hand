@@ -26,16 +26,16 @@ object ResponseWriters extends ResponseWritersBase {
     * in order for play-swagger to be able to provide safety net for
     * different response types
     */
-    val writable_application_json_GetResponses200_esc: Writeable[GetResponses200] =
+    val writable_application_json_SeqPet: Writeable[Seq[Pet]] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_text_html_GetResponses200_esc: Writeable[GetResponses200] =
+    val writable_text_html_SeqPet: Writeable[Seq[Pet]] =
         Writeable(a => ???, Some("text/html"))
 
-    val writable_application_json_Null_esc: Writeable[Null] =
+    val writable_application_json_Null: Writeable[Null] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_text_html_Null_esc: Writeable[Null] =
+    val writable_text_html_Null: Writeable[Null] =
         Writeable(a => ???, Some("text/html"))
 
     /**
@@ -43,10 +43,10 @@ object ResponseWriters extends ResponseWritersBase {
     * as a marshaller for different mime types and types of response
     */
     override val custom: Seq[WriteableWrapper[_]] = Seq(
-        writable_application_json_GetResponses200_esc, 
-        writable_text_html_GetResponses200_esc, 
-        writable_application_json_Null_esc, 
-        writable_text_html_Null_esc
+        writable_application_json_SeqPet, 
+        writable_text_html_SeqPet, 
+        writable_application_json_Null, 
+        writable_text_html_Null
     )
 }
 
@@ -63,9 +63,9 @@ object WrappedBodyParsers extends WrappedBodyParsersBase {
     * in order for play-swagger to be able to provide safety net for
     * different response types
     */
-    val reader_application_json_PutPet_esc: Parser[PutPet] =
+    val reader_application_json_Option_Pet__esc: Parser[Option[Pet]] =
         (content: ByteString) => ???
-    val reader_text_xml_PutPet_esc: Parser[PutPet] =
+    val reader_text_xml_Option_Pet__esc: Parser[Option[Pet]] =
         (content: ByteString) => ???
     val reader_application_json_Pet_esc: Parser[Pet] =
         (content: ByteString) => ???
@@ -76,8 +76,8 @@ object WrappedBodyParsers extends WrappedBodyParsersBase {
     * as a marshaller for different mime types and types of response
     */
     override val custom: Seq[(String, ParserWrapper[_])] = Seq(
-            "application/json" -> reader_application_json_PutPet_esc, 
-            "text/xml" -> reader_text_xml_PutPet_esc, 
+            "application/json" -> reader_application_json_Option_Pet__esc, 
+            "text/xml" -> reader_text_xml_Option_Pet__esc, 
             "application/json" -> reader_application_json_Pet_esc, 
             "text/xml" -> reader_text_xml_Pet_esc
     )

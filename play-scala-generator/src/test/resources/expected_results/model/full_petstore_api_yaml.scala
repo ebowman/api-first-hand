@@ -1,8 +1,8 @@
 package full.petstore.api
 
 
-    import de.zalando.play.controllers.ArrayWrapper
     import java.time.ZonedDateTime
+    import de.zalando.play.controllers.ArrayWrapper
 
     import de.zalando.play.controllers.PlayPathBindables
 
@@ -11,10 +11,10 @@ package full.petstore.api
 package yaml {
 
 
-    case class User(email: OrderStatus, username: OrderStatus, userStatus: OrderQuantity, lastName: OrderStatus, firstName: OrderStatus, id: OrderPetId, phone: OrderStatus, password: OrderStatus) 
-    case class Order(shipDate: OrderShipDate, quantity: OrderQuantity, petId: OrderPetId, id: OrderPetId, complete: OrderComplete, status: OrderStatus) 
-    case class Tag(id: OrderPetId, name: OrderStatus) 
-    case class Pet(name: String, tags: PetTags, photoUrls: PetPhotoUrls, id: OrderPetId, status: OrderStatus, category: PetCategory) 
+    case class User(email: Option[String], username: Option[String], userStatus: Option[Int], lastName: Option[String], firstName: Option[String], id: Option[Long], phone: Option[String], password: Option[String]) 
+    case class Order(shipDate: Option[ZonedDateTime], quantity: Option[Int], petId: Option[Long], id: Option[Long], complete: Option[Boolean], status: Option[String]) 
+    case class Tag(id: Option[Long], name: Option[String]) 
+    case class Pet(name: String, photoUrls: Seq[String], id: Option[Long], status: Option[String], tags: Option[Seq[Tag]], category: Option[Tag]) 
 
 
     import play.api.libs.json._
@@ -22,16 +22,16 @@ package yaml {
     import de.zalando.play.controllers.MissingDefaultReads
     object BodyReads extends MissingDefaultReads {
         implicit val TagReads: Reads[Tag] = (
-            (JsPath \ "id").readNullable[Long] and (JsPath \ "name").readNullable[String]
+            (JsPath \ "id").read[Option[Long]] and (JsPath \ "name").read[Option[String]]
         )(Tag.apply _)
         implicit val PetReads: Reads[Pet] = (
-            (JsPath \ "name").read[String] and (JsPath \ "tags").readNullable[PetTagsOpt] and (JsPath \ "photoUrls").read[PetPhotoUrls] and (JsPath \ "id").readNullable[Long] and (JsPath \ "status").readNullable[String] and (JsPath \ "category").readNullable[Tag]
+            (JsPath \ "name").read[String] and (JsPath \ "photoUrls").read[Seq[String]] and (JsPath \ "id").read[Option[Long]] and (JsPath \ "status").read[Option[String]] and (JsPath \ "tags").read[Option[Seq[Tag]]] and (JsPath \ "category").read[Option[Tag]]
         )(Pet.apply _)
         implicit val UserReads: Reads[User] = (
-            (JsPath \ "email").readNullable[String] and (JsPath \ "username").readNullable[String] and (JsPath \ "userStatus").readNullable[Int] and (JsPath \ "lastName").readNullable[String] and (JsPath \ "firstName").readNullable[String] and (JsPath \ "id").readNullable[Long] and (JsPath \ "phone").readNullable[String] and (JsPath \ "password").readNullable[String]
+            (JsPath \ "email").read[Option[String]] and (JsPath \ "username").read[Option[String]] and (JsPath \ "userStatus").read[Option[Int]] and (JsPath \ "lastName").read[Option[String]] and (JsPath \ "firstName").read[Option[String]] and (JsPath \ "id").read[Option[Long]] and (JsPath \ "phone").read[Option[String]] and (JsPath \ "password").read[Option[String]]
         )(User.apply _)
         implicit val OrderReads: Reads[Order] = (
-            (JsPath \ "shipDate").readNullable[ZonedDateTime] and (JsPath \ "quantity").readNullable[Int] and (JsPath \ "petId").readNullable[Long] and (JsPath \ "id").readNullable[Long] and (JsPath \ "complete").readNullable[Boolean] and (JsPath \ "status").readNullable[String]
+            (JsPath \ "shipDate").read[Option[ZonedDateTime]] and (JsPath \ "quantity").read[Option[Int]] and (JsPath \ "petId").read[Option[Long]] and (JsPath \ "id").read[Option[Long]] and (JsPath \ "complete").read[Option[Boolean]] and (JsPath \ "status").read[Option[String]]
         )(Order.apply _)
     }
 
@@ -74,10 +74,10 @@ package yaml {
         def writes(ss: Pet) =
           Json.obj(
             "name" -> ss.name, 
-            "tags" -> ss.tags, 
             "photoUrls" -> ss.photoUrls, 
             "id" -> ss.id, 
             "status" -> ss.status, 
+            "tags" -> ss.tags, 
             "category" -> ss.category
           )
         }
@@ -90,29 +90,12 @@ package yaml {
 package object yaml {
 
     type UsersCreateWithListPostResponsesDefault = Null
-    type OrderStatus = Option[String]
-    type PetsFindByStatusGetStatusOpt = ArrayWrapper[String]
-    type UsersCreateWithListPostBodyOpt = Seq[User]
-    type OrderPetId = Option[Long]
-    type PetsFindByStatusGetResponses200 = Seq[Pet]
-    type PetsPostBody = Option[Pet]
-    type OrderShipDate = Option[ZonedDateTime]
-    type UsersUsernamePutBody = Option[User]
-    type StoresOrderPostBody = Option[Order]
-    type OrderComplete = Option[Boolean]
-    type PetTags = Option[PetTagsOpt]
-    type OrderQuantity = Option[Int]
-    type PetPhotoUrls = Seq[String]
-    type UsersCreateWithListPostBody = Option[UsersCreateWithListPostBodyOpt]
-    type PetsFindByStatusGetStatus = Option[PetsFindByStatusGetStatusOpt]
-    type PetCategory = Option[Tag]
-    type PetTagsOpt = Seq[Tag]
 
 
 import play.api.mvc.{QueryStringBindable, PathBindable}
 
     implicit val bindable_OptionStringQuery: QueryStringBindable[Option[String]] = PlayPathBindables.createOptionQueryBindable[String]
     implicit val bindable_ArrayWrapperStringQuery: QueryStringBindable[ArrayWrapper[String]] = PlayPathBindables.createArrayWrapperQueryBindable[String]("multi")
-    implicit val bindable_OptionPetsFindByStatusGetStatusOptQuery: QueryStringBindable[Option[PetsFindByStatusGetStatusOpt]] = PlayPathBindables.createOptionQueryBindable[PetsFindByStatusGetStatusOpt]
+    implicit val bindable_OptionArrayWrapperQuery: QueryStringBindable[Option[ArrayWrapper]] = PlayPathBindables.createOptionQueryBindable[ArrayWrapper]
 
 }

@@ -71,15 +71,15 @@ def nakadiHackGet_metricsAction[T] = (f: nakadiHackGet_metricsActionType[T]) => 
     def NakadiHackGet_events_from_single_partition200(resultF: Future[SimpleStreamEvent])(implicit writerP: String => Option[Writeable[SimpleStreamEvent]]) = resultF map { resultP => (new NakadiHackGet_events_from_single_partitionType[SimpleStreamEvent] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type nakadiHackGet_events_from_single_partitionActionRequestType       = (String, String, TopicsTopicEventsGetStream_timeout, String, Int, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout)
+    private type nakadiHackGet_events_from_single_partitionActionRequestType       = (String, String, Option[Int], String, Int, Option[Int], Option[Int], Option[Int])
     private type nakadiHackGet_events_from_single_partitionActionType[T]            = nakadiHackGet_events_from_single_partitionActionRequestType => Future[NakadiHackGet_events_from_single_partitionType[T] forSome { type T }]
 
 
     val nakadiHackGet_events_from_single_partitionActionConstructor  = Action
 
-def nakadiHackGet_events_from_single_partitionAction[T] = (f: nakadiHackGet_events_from_single_partitionActionType[T]) => (start_from: String, partition: String, stream_limit: TopicsTopicEventsGetStream_timeout, topic: String, batch_limit: Int, batch_flush_timeout: TopicsTopicEventsGetStream_timeout, stream_timeout: TopicsTopicEventsGetStream_timeout, batch_keep_alive_limit: TopicsTopicEventsGetStream_timeout) => nakadiHackGet_events_from_single_partitionActionConstructor.async { implicit request: Request[AnyContent] =>
+def nakadiHackGet_events_from_single_partitionAction[T] = (f: nakadiHackGet_events_from_single_partitionActionType[T]) => (start_from: String, partition: String, stream_limit: Option[Int], topic: String, batch_limit: Int, batch_flush_timeout: Option[Int], stream_timeout: Option[Int], batch_keep_alive_limit: Option[Int]) => nakadiHackGet_events_from_single_partitionActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidnakadiHackGet_events_from_single_partitionRequest(start_from: String, partition: String, stream_limit: TopicsTopicEventsGetStream_timeout, topic: String, batch_limit: Int, batch_flush_timeout: TopicsTopicEventsGetStream_timeout, stream_timeout: TopicsTopicEventsGetStream_timeout, batch_keep_alive_limit: TopicsTopicEventsGetStream_timeout): Either[Result, Future[NakadiHackGet_events_from_single_partitionType[_]]] = {
+        def processValidnakadiHackGet_events_from_single_partitionRequest(start_from: String, partition: String, stream_limit: Option[Int], topic: String, batch_limit: Int, batch_flush_timeout: Option[Int], stream_timeout: Option[Int], batch_keep_alive_limit: Option[Int]): Either[Result, Future[NakadiHackGet_events_from_single_partitionType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((start_from, partition, stream_limit, topic, batch_limit, batch_flush_timeout, stream_timeout, batch_keep_alive_limit)))
             
             new TopicsTopicPartitionsPartitionEventsGetValidator(start_from, partition, stream_limit, topic, batch_limit, batch_flush_timeout, stream_timeout, batch_keep_alive_limit).errors match {
@@ -203,15 +203,15 @@ def nakadiHackGet_topicsAction[T] = (f: nakadiHackGet_topicsActionType[T]) => na
     def NakadiHackGet_events_from_multiple_partitions200(resultF: Future[SimpleStreamEvent])(implicit writerP: String => Option[Writeable[SimpleStreamEvent]]) = resultF map { resultP => (new NakadiHackGet_events_from_multiple_partitionsType[SimpleStreamEvent] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type nakadiHackGet_events_from_multiple_partitionsActionRequestType       = (TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, String, Int, TopicsTopicEventsGetStream_timeout, String)
+    private type nakadiHackGet_events_from_multiple_partitionsActionRequestType       = (Option[Int], Option[Int], Option[Int], String, Int, Option[Int], String)
     private type nakadiHackGet_events_from_multiple_partitionsActionType[T]            = nakadiHackGet_events_from_multiple_partitionsActionRequestType => Future[NakadiHackGet_events_from_multiple_partitionsType[T] forSome { type T }]
 
 
     val nakadiHackGet_events_from_multiple_partitionsActionConstructor  = Action
 
-def nakadiHackGet_events_from_multiple_partitionsAction[T] = (f: nakadiHackGet_events_from_multiple_partitionsActionType[T]) => (stream_timeout: TopicsTopicEventsGetStream_timeout, stream_limit: TopicsTopicEventsGetStream_timeout, batch_flush_timeout: TopicsTopicEventsGetStream_timeout, batch_limit: Int, batch_keep_alive_limit: TopicsTopicEventsGetStream_timeout, topic: String) => nakadiHackGet_events_from_multiple_partitionsActionConstructor.async { implicit request: Request[AnyContent] =>
+def nakadiHackGet_events_from_multiple_partitionsAction[T] = (f: nakadiHackGet_events_from_multiple_partitionsActionType[T]) => (stream_timeout: Option[Int], stream_limit: Option[Int], batch_flush_timeout: Option[Int], batch_limit: Int, batch_keep_alive_limit: Option[Int], topic: String) => nakadiHackGet_events_from_multiple_partitionsActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidnakadiHackGet_events_from_multiple_partitionsRequest(stream_timeout: TopicsTopicEventsGetStream_timeout, stream_limit: TopicsTopicEventsGetStream_timeout, batch_flush_timeout: TopicsTopicEventsGetStream_timeout, x_nakadi_cursors: String, batch_limit: Int, batch_keep_alive_limit: TopicsTopicEventsGetStream_timeout, topic: String): Either[Result, Future[NakadiHackGet_events_from_multiple_partitionsType[_]]] = {
+        def processValidnakadiHackGet_events_from_multiple_partitionsRequest(stream_timeout: Option[Int], stream_limit: Option[Int], batch_flush_timeout: Option[Int], x_nakadi_cursors: String, batch_limit: Int, batch_keep_alive_limit: Option[Int], topic: String): Either[Result, Future[NakadiHackGet_events_from_multiple_partitionsType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((stream_timeout, stream_limit, batch_flush_timeout, x_nakadi_cursors, batch_limit, batch_keep_alive_limit, topic)))
             
             new TopicsTopicEventsGetValidator(stream_timeout, stream_limit, batch_flush_timeout, x_nakadi_cursors, batch_limit, batch_keep_alive_limit, topic).errors match {
@@ -264,7 +264,7 @@ def nakadiHackGet_events_from_multiple_partitionsAction[T] = (f: nakadiHackGet_e
     def NakadiHackPost_event201(headers: Seq[(String, String)] = Nil) = success(new EmptyReturn(201, headers){})
     
 
-    private type nakadiHackPost_eventActionRequestType       = (String, TopicsTopicEventsBatchPostEvent)
+    private type nakadiHackPost_eventActionRequestType       = (String, Option[Event])
     private type nakadiHackPost_eventActionType[T]            = nakadiHackPost_eventActionRequestType => Future[NakadiHackPost_eventType[T] forSome { type T }]
 
         
@@ -280,9 +280,9 @@ def nakadiHackGet_events_from_multiple_partitionsAction[T] = (f: nakadiHackGet_e
 
     val nakadiHackPost_eventActionConstructor  = Action
 
-def nakadiHackPost_eventAction[T] = (f: nakadiHackPost_eventActionType[T]) => (topic: String) => nakadiHackPost_eventActionConstructor.async(nakadiHackPost_eventParser) { implicit request: Request[TopicsTopicEventsBatchPostEvent] =>
+def nakadiHackPost_eventAction[T] = (f: nakadiHackPost_eventActionType[T]) => (topic: String) => nakadiHackPost_eventActionConstructor.async(nakadiHackPost_eventParser) { implicit request: Request[Option[Event]] =>
 
-        def processValidnakadiHackPost_eventRequest(topic: String, event: TopicsTopicEventsBatchPostEvent): Either[Result, Future[NakadiHackPost_eventType[_]]] = {
+        def processValidnakadiHackPost_eventRequest(topic: String, event: Option[Event]): Either[Result, Future[NakadiHackPost_eventType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((topic, event)))
             
             new TopicsTopicEventsPostValidator(topic, event).errors match {
@@ -296,7 +296,7 @@ def nakadiHackPost_eventAction[T] = (f: nakadiHackPost_eventActionType[T]) => (t
           
         }
 
-            val event: TopicsTopicEventsBatchPostEvent = request.body
+            val event: Option[Event] = request.body
             
             
 
@@ -369,7 +369,7 @@ def nakadiHackGet_partitionsAction[T] = (f: nakadiHackGet_partitionsActionType[T
     def NakadiHackPost_events201(headers: Seq[(String, String)] = Nil) = success(new EmptyReturn(201, headers){})
     
 
-    private type nakadiHackPost_eventsActionRequestType       = (String, TopicsTopicEventsBatchPostEvent)
+    private type nakadiHackPost_eventsActionRequestType       = (String, Option[Event])
     private type nakadiHackPost_eventsActionType[T]            = nakadiHackPost_eventsActionRequestType => Future[NakadiHackPost_eventsType[T] forSome { type T }]
 
         
@@ -385,9 +385,9 @@ def nakadiHackGet_partitionsAction[T] = (f: nakadiHackGet_partitionsActionType[T
 
     val nakadiHackPost_eventsActionConstructor  = Action
 
-def nakadiHackPost_eventsAction[T] = (f: nakadiHackPost_eventsActionType[T]) => (topic: String) => nakadiHackPost_eventsActionConstructor.async(nakadiHackPost_eventsParser) { implicit request: Request[TopicsTopicEventsBatchPostEvent] =>
+def nakadiHackPost_eventsAction[T] = (f: nakadiHackPost_eventsActionType[T]) => (topic: String) => nakadiHackPost_eventsActionConstructor.async(nakadiHackPost_eventsParser) { implicit request: Request[Option[Event]] =>
 
-        def processValidnakadiHackPost_eventsRequest(topic: String, event: TopicsTopicEventsBatchPostEvent): Either[Result, Future[NakadiHackPost_eventsType[_]]] = {
+        def processValidnakadiHackPost_eventsRequest(topic: String, event: Option[Event]): Either[Result, Future[NakadiHackPost_eventsType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((topic, event)))
             
             new TopicsTopicEventsBatchPostValidator(topic, event).errors match {
@@ -401,7 +401,7 @@ def nakadiHackPost_eventsAction[T] = (f: nakadiHackPost_eventsActionType[T]) => 
           
         }
 
-            val event: TopicsTopicEventsBatchPostEvent = request.body
+            val event: Option[Event] = request.body
             
             
 

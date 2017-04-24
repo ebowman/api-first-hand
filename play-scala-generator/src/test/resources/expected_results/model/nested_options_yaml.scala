@@ -6,8 +6,8 @@
 package nested_options_yaml {
 
 
-    case class Basic(optional: BasicOptional) 
-    case class BasicOptionalOpt(nested_optional: BasicOptionalNested_optional) 
+    case class Basic(optional: Option[BasicOptionalOptionOptional]) 
+    case class BasicOptionalOptionOptional(nested_optional: Option[String]) 
 
 
 }
@@ -17,8 +17,6 @@ package nested_options_yaml {
 //noinspection ScalaStyle
 package object nested_options_yaml {
 
-    type BasicOptional = Option[BasicOptionalOpt]
-    type BasicOptionalNested_optional = Option[String]
 
 
 

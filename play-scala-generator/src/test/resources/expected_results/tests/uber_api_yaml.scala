@@ -27,8 +27,8 @@ import org.scalatestplus.play.{OneAppPerTest, WsScalaTestClient}
 
 import Generators._
 
-import java.util.UUID
 import scala.math.BigDecimal
+import java.util.UUID
 
 //noinspection ScalaStyle
 class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
@@ -55,7 +55,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
 
 
     "GET /v1/history" should {
-        def testInvalidInput(input: (ErrorCode, ErrorCode)): Prop = {
+        def testInvalidInput(input: (Option[Int], Option[Int])): Prop = {
 
             val (offset, limit) = input
 
@@ -103,7 +103,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (ErrorCode, ErrorCode)): Prop = {
+        def testValidInput(input: (Option[Int], Option[Int])): Prop = {
             val (offset, limit) = input
             
             val url = s"""/v1/history?${toQuery("offset", offset)}&${toQuery("limit", limit)}"""
@@ -158,8 +158,8 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
         }
         "discard invalid data" in {
             val genInputs = for {
-                        offset <- ErrorCodeGenerator
-                        limit <- ErrorCodeGenerator
+                        offset <- OptionIntGenerator
+                        limit <- OptionIntGenerator
                     
                 } yield (offset, limit)
             val inputs = genInputs suchThat { case (offset, limit) =>
@@ -170,8 +170,8 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
         }
         "do something with valid data" in {
             val genInputs = for {
-                    offset <- ErrorCodeGenerator
-                    limit <- ErrorCodeGenerator
+                    offset <- OptionIntGenerator
+                    limit <- OptionIntGenerator
                 
             } yield (offset, limit)
             val inputs = genInputs suchThat { case (offset, limit) =>
@@ -184,7 +184,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
     }
 
     "GET /v1/estimates/time" should {
-        def testInvalidInput(input: (Double, Double, EstimatesTimeGetCustomer_uuid, ProfilePicture)): Prop = {
+        def testInvalidInput(input: (Double, Double, Option[UUID], Option[String])): Prop = {
 
             val (start_latitude, start_longitude, customer_uuid, product_id) = input
 
@@ -232,7 +232,7 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (Double, Double, EstimatesTimeGetCustomer_uuid, ProfilePicture)): Prop = {
+        def testValidInput(input: (Double, Double, Option[UUID], Option[String])): Prop = {
             val (start_latitude, start_longitude, customer_uuid, product_id) = input
             
             val url = s"""/v1/estimates/time?${toQuery("start_latitude", start_latitude)}&${toQuery("start_longitude", start_longitude)}&${toQuery("customer_uuid", customer_uuid)}&${toQuery("product_id", product_id)}"""
@@ -289,8 +289,8 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val genInputs = for {
                         start_latitude <- DoubleGenerator
                         start_longitude <- DoubleGenerator
-                        customer_uuid <- EstimatesTimeGetCustomer_uuidGenerator
-                        product_id <- ProfilePictureGenerator
+                        customer_uuid <- OptionUUIDGenerator
+                        product_id <- OptionStringGenerator
                     
                 } yield (start_latitude, start_longitude, customer_uuid, product_id)
             val inputs = genInputs suchThat { case (start_latitude, start_longitude, customer_uuid, product_id) =>
@@ -303,8 +303,8 @@ class Uber_api_yamlSpec extends WordSpec with OptionValues with WsScalaTestClien
             val genInputs = for {
                     start_latitude <- DoubleGenerator
                     start_longitude <- DoubleGenerator
-                    customer_uuid <- EstimatesTimeGetCustomer_uuidGenerator
-                    product_id <- ProfilePictureGenerator
+                    customer_uuid <- OptionUUIDGenerator
+                    product_id <- OptionStringGenerator
                 
             } yield (start_latitude, start_longitude, customer_uuid, product_id)
             val inputs = genInputs suchThat { case (start_latitude, start_longitude, customer_uuid, product_id) =>

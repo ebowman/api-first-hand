@@ -9,8 +9,8 @@
 package expanded {
 
 
-    case class NewPet(name: String, tag: NewPetTag) 
-    case class Pet(name: String, tag: NewPetTag, id: Long) 
+    case class NewPet(name: String, tag: Option[String]) 
+    case class Pet(name: String, tag: Option[String], id: Long) 
     case class Error(code: Int, message: String) 
 
 
@@ -19,7 +19,7 @@ package expanded {
     import de.zalando.play.controllers.MissingDefaultReads
     object BodyReads extends MissingDefaultReads {
         implicit val NewPetReads: Reads[NewPet] = (
-            (JsPath \ "name").read[String] and (JsPath \ "tag").readNullable[String]
+            (JsPath \ "name").read[String] and (JsPath \ "tag").read[Option[String]]
         )(NewPet.apply _)
     }
 
@@ -51,17 +51,12 @@ package expanded {
 package object expanded {
 
     type PetsIdDeleteResponses204 = Null
-    type PetsGetLimit = Option[Int]
-    type PetsGetTagsOpt = ArrayWrapper[String]
-    type NewPetTag = Option[String]
-    type PetsGetResponses200 = Seq[Pet]
-    type PetsGetTags = Option[PetsGetTagsOpt]
 
 
 import play.api.mvc.{QueryStringBindable, PathBindable}
 
     implicit val bindable_OptionIntQuery: QueryStringBindable[Option[Int]] = PlayPathBindables.createOptionQueryBindable[Int]
     implicit val bindable_ArrayWrapperStringQuery: QueryStringBindable[ArrayWrapper[String]] = PlayPathBindables.createArrayWrapperQueryBindable[String]("csv")
-    implicit val bindable_OptionPetsGetTagsOptQuery: QueryStringBindable[Option[PetsGetTagsOpt]] = PlayPathBindables.createOptionQueryBindable[PetsGetTagsOpt]
+    implicit val bindable_OptionArrayWrapperQuery: QueryStringBindable[Option[ArrayWrapper]] = PlayPathBindables.createOptionQueryBindable[ArrayWrapper]
 
 }

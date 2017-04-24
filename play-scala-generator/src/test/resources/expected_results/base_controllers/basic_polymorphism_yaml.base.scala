@@ -24,7 +24,7 @@ trait Basic_polymorphismYamlBase extends Controller with PlayBodyParsing {
     def Put200(headers: Seq[(String, String)] = Nil) = success(new EmptyReturn(200, headers){})
     
 
-    private type putActionRequestType       = (PutDummy)
+    private type putActionRequestType       = (Option[Pet])
     private type putActionType[T]            = putActionRequestType => Future[PutType[T] forSome { type T }]
 
         
@@ -39,9 +39,9 @@ trait Basic_polymorphismYamlBase extends Controller with PlayBodyParsing {
 
     val putActionConstructor  = Action
 
-def putAction[T] = (f: putActionType[T]) => putActionConstructor.async(putParser) { implicit request: Request[PutDummy] =>
+def putAction[T] = (f: putActionType[T]) => putActionConstructor.async(putParser) { implicit request: Request[Option[Pet]] =>
 
-        def processValidputRequest(dummy: PutDummy): Either[Result, Future[PutType[_]]] = {
+        def processValidputRequest(dummy: Option[Pet]): Either[Result, Future[PutType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((dummy)))
             
             new PutValidator(dummy).errors match {
@@ -55,7 +55,7 @@ def putAction[T] = (f: putActionType[T]) => putActionConstructor.async(putParser
           
         }
 
-            val dummy: PutDummy = request.body
+            val dummy: Option[Pet] = request.body
             
             
 

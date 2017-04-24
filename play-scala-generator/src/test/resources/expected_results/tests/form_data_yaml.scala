@@ -27,8 +27,8 @@ import org.scalatestplus.play.{OneAppPerTest, WsScalaTestClient}
 
 import Generators._
 
-import java.io.File
 import scala.math.BigInt
+import java.io.File
 
 //noinspection ScalaStyle
 class Form_data_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
@@ -55,7 +55,7 @@ class Form_data_yamlSpec extends WordSpec with OptionValues with WsScalaTestClie
 
 
     "POST /form_data/multipart" should {
-        def testInvalidInput(input: (String, BothPostYear, MultipartPostAvatar)): Prop = {
+        def testInvalidInput(input: (String, Option[BigInt], Option[File])): Prop = {
 
             val (name, year, avatar) = input
 
@@ -104,7 +104,7 @@ class Form_data_yamlSpec extends WordSpec with OptionValues with WsScalaTestClie
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, BothPostYear, MultipartPostAvatar)): Prop = {
+        def testValidInput(input: (String, Option[BigInt], Option[File])): Prop = {
             val (name, year, avatar) = input
             
             val url = s"""/form_data/multipart"""
@@ -161,8 +161,8 @@ class Form_data_yamlSpec extends WordSpec with OptionValues with WsScalaTestClie
         "discard invalid data" in {
             val genInputs = for {
                         name <- StringGenerator
-                        year <- BothPostYearGenerator
-                        avatar <- MultipartPostAvatarGenerator
+                        year <- OptionBigIntGenerator
+                        avatar <- OptionFileGenerator
                     
                 } yield (name, year, avatar)
             val inputs = genInputs suchThat { case (name, year, avatar) =>
@@ -174,8 +174,8 @@ class Form_data_yamlSpec extends WordSpec with OptionValues with WsScalaTestClie
         "do something with valid data" in {
             val genInputs = for {
                     name <- StringGenerator
-                    year <- BothPostYearGenerator
-                    avatar <- MultipartPostAvatarGenerator
+                    year <- OptionBigIntGenerator
+                    avatar <- OptionFileGenerator
                 
             } yield (name, year, avatar)
             val inputs = genInputs suchThat { case (name, year, avatar) =>
@@ -188,7 +188,7 @@ class Form_data_yamlSpec extends WordSpec with OptionValues with WsScalaTestClie
     }
 
     "POST /form_data/both" should {
-        def testInvalidInput(input: (String, BothPostYear, MultipartPostAvatar, File)): Prop = {
+        def testInvalidInput(input: (String, Option[BigInt], Option[File], File)): Prop = {
 
             val (name, year, avatar, ringtone) = input
 
@@ -239,7 +239,7 @@ class Form_data_yamlSpec extends WordSpec with OptionValues with WsScalaTestClie
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, BothPostYear, MultipartPostAvatar, File)): Prop = {
+        def testValidInput(input: (String, Option[BigInt], Option[File], File)): Prop = {
             val (name, year, avatar, ringtone) = input
             
             val url = s"""/form_data/both"""
@@ -298,8 +298,8 @@ class Form_data_yamlSpec extends WordSpec with OptionValues with WsScalaTestClie
         "discard invalid data" in {
             val genInputs = for {
                         name <- StringGenerator
-                        year <- BothPostYearGenerator
-                        avatar <- MultipartPostAvatarGenerator
+                        year <- OptionBigIntGenerator
+                        avatar <- OptionFileGenerator
                         ringtone <- FileGenerator
                     
                 } yield (name, year, avatar, ringtone)
@@ -312,8 +312,8 @@ class Form_data_yamlSpec extends WordSpec with OptionValues with WsScalaTestClie
         "do something with valid data" in {
             val genInputs = for {
                     name <- StringGenerator
-                    year <- BothPostYearGenerator
-                    avatar <- MultipartPostAvatarGenerator
+                    year <- OptionBigIntGenerator
+                    avatar <- OptionFileGenerator
                     ringtone <- FileGenerator
                 
             } yield (name, year, avatar, ringtone)
@@ -327,7 +327,7 @@ class Form_data_yamlSpec extends WordSpec with OptionValues with WsScalaTestClie
     }
 
     "POST /form_data/url-encoded" should {
-        def testInvalidInput(input: (String, BothPostYear, File)): Prop = {
+        def testInvalidInput(input: (String, Option[BigInt], File)): Prop = {
 
             val (name, year, avatar) = input
 
@@ -376,7 +376,7 @@ class Form_data_yamlSpec extends WordSpec with OptionValues with WsScalaTestClie
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, BothPostYear, File)): Prop = {
+        def testValidInput(input: (String, Option[BigInt], File)): Prop = {
             val (name, year, avatar) = input
             
             val url = s"""/form_data/url-encoded"""
@@ -433,7 +433,7 @@ class Form_data_yamlSpec extends WordSpec with OptionValues with WsScalaTestClie
         "discard invalid data" in {
             val genInputs = for {
                         name <- StringGenerator
-                        year <- BothPostYearGenerator
+                        year <- OptionBigIntGenerator
                         avatar <- FileGenerator
                     
                 } yield (name, year, avatar)
@@ -446,7 +446,7 @@ class Form_data_yamlSpec extends WordSpec with OptionValues with WsScalaTestClie
         "do something with valid data" in {
             val genInputs = for {
                     name <- StringGenerator
-                    year <- BothPostYearGenerator
+                    year <- OptionBigIntGenerator
                     avatar <- FileGenerator
                 
             } yield (name, year, avatar)

@@ -7,11 +7,11 @@ import PlayValidations._
 
 import de.zalando.play.controllers.Base64String
 import Base64String._
+import de.zalando.play.controllers.BinaryString
+import BinaryString._
 import java.time.ZonedDateTime
 import java.util.UUID
 import java.time.LocalDate
-import de.zalando.play.controllers.BinaryString
-import BinaryString._
 // ----- constraints and wrapper validations -----
 class GetBase64OptConstraints(override val instance: String) extends ValidationBase[String] {
     override def constraints: Seq[Constraint[String]] =
@@ -51,23 +51,23 @@ class GetDateOptValidator(instance: LocalDate) extends RecursiveValidator {
 // ----- complex type validators -----
 
 // ----- option delegating validators -----
-class GetBase64Validator(instance: GetBase64) extends RecursiveValidator {
+class GetBase64Validator(instance: Option[Base64String]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new GetBase64OptValidator(_) }
 }
-class GetDate_timeValidator(instance: GetDate_time) extends RecursiveValidator {
+class GetDate_timeValidator(instance: Option[ZonedDateTime]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new GetDate_timeOptValidator(_) }
 }
-class GetUuidValidator(instance: GetUuid) extends RecursiveValidator {
+class GetUuidValidator(instance: Option[UUID]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new GetUuidOptValidator(_) }
 }
-class GetDateValidator(instance: GetDate) extends RecursiveValidator {
+class GetDateValidator(instance: Option[LocalDate]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new GetDateOptValidator(_) }
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
 // ----- composite validators -----
 // ----- call validations -----
-class GetValidator(date_time: GetDate_time, date: GetDate, base64: GetBase64, uuid: GetUuid, petId: BinaryString) extends RecursiveValidator {
+class GetValidator(date_time: Option[ZonedDateTime], date: Option[LocalDate], base64: Option[Base64String], uuid: Option[UUID], petId: BinaryString) extends RecursiveValidator {
     override val validators = Seq(
         new GetDate_timeValidator(date_time), 
     

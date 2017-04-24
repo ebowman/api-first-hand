@@ -183,7 +183,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
     }
 
     "GET /topics/{topic}/events" should {
-        def testInvalidInput(input: (TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, String, Int, TopicsTopicEventsGetStream_timeout, String)): Prop = {
+        def testInvalidInput(input: (Option[Int], Option[Int], Option[Int], String, Int, Option[Int], String)): Prop = {
 
             val (stream_timeout, stream_limit, batch_flush_timeout, x_nakadi_cursors, batch_limit, batch_keep_alive_limit, topic) = input
 
@@ -233,7 +233,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, String, Int, TopicsTopicEventsGetStream_timeout, String)): Prop = {
+        def testValidInput(input: (Option[Int], Option[Int], Option[Int], String, Int, Option[Int], String)): Prop = {
             val (stream_timeout, stream_limit, batch_flush_timeout, x_nakadi_cursors, batch_limit, batch_keep_alive_limit, topic) = input
             
             val url = s"""/topics/${toPath(topic)}/events?${toQuery("stream_timeout", stream_timeout)}&${toQuery("stream_limit", stream_limit)}&${toQuery("batch_flush_timeout", batch_flush_timeout)}&${toQuery("batch_limit", batch_limit)}&${toQuery("batch_keep_alive_limit", batch_keep_alive_limit)}"""
@@ -294,12 +294,12 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
         }
         "discard invalid data" in {
             val genInputs = for {
-                        stream_timeout <- TopicsTopicEventsGetStream_timeoutGenerator
-                        stream_limit <- TopicsTopicEventsGetStream_timeoutGenerator
-                        batch_flush_timeout <- TopicsTopicEventsGetStream_timeoutGenerator
+                        stream_timeout <- OptionIntGenerator
+                        stream_limit <- OptionIntGenerator
+                        batch_flush_timeout <- OptionIntGenerator
                         x_nakadi_cursors <- StringGenerator
                         batch_limit <- IntGenerator
-                        batch_keep_alive_limit <- TopicsTopicEventsGetStream_timeoutGenerator
+                        batch_keep_alive_limit <- OptionIntGenerator
                         topic <- StringGenerator
                     
                 } yield (stream_timeout, stream_limit, batch_flush_timeout, x_nakadi_cursors, batch_limit, batch_keep_alive_limit, topic)
@@ -311,12 +311,12 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
         }
         "do something with valid data" in {
             val genInputs = for {
-                    stream_timeout <- TopicsTopicEventsGetStream_timeoutGenerator
-                    stream_limit <- TopicsTopicEventsGetStream_timeoutGenerator
-                    batch_flush_timeout <- TopicsTopicEventsGetStream_timeoutGenerator
+                    stream_timeout <- OptionIntGenerator
+                    stream_limit <- OptionIntGenerator
+                    batch_flush_timeout <- OptionIntGenerator
                     x_nakadi_cursors <- StringGenerator
                     batch_limit <- IntGenerator
-                    batch_keep_alive_limit <- TopicsTopicEventsGetStream_timeoutGenerator
+                    batch_keep_alive_limit <- OptionIntGenerator
                     topic <- StringGenerator
                 
             } yield (stream_timeout, stream_limit, batch_flush_timeout, x_nakadi_cursors, batch_limit, batch_keep_alive_limit, topic)
@@ -330,7 +330,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
     }
 
     "GET /topics/{topic}/partitions/{partition}/events" should {
-        def testInvalidInput(input: (String, String, TopicsTopicEventsGetStream_timeout, String, Int, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout)): Prop = {
+        def testInvalidInput(input: (String, String, Option[Int], String, Int, Option[Int], Option[Int], Option[Int])): Prop = {
 
             val (start_from, partition, stream_limit, topic, batch_limit, batch_flush_timeout, stream_timeout, batch_keep_alive_limit) = input
 
@@ -378,7 +378,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, String, TopicsTopicEventsGetStream_timeout, String, Int, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout, TopicsTopicEventsGetStream_timeout)): Prop = {
+        def testValidInput(input: (String, String, Option[Int], String, Int, Option[Int], Option[Int], Option[Int])): Prop = {
             val (start_from, partition, stream_limit, topic, batch_limit, batch_flush_timeout, stream_timeout, batch_keep_alive_limit) = input
             
             val url = s"""/topics/${toPath(topic)}/partitions/${toPath(partition)}/events?${toQuery("start_from", start_from)}&${toQuery("stream_limit", stream_limit)}&${toQuery("batch_limit", batch_limit)}&${toQuery("batch_flush_timeout", batch_flush_timeout)}&${toQuery("stream_timeout", stream_timeout)}&${toQuery("batch_keep_alive_limit", batch_keep_alive_limit)}"""
@@ -439,12 +439,12 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
             val genInputs = for {
                         start_from <- StringGenerator
                         partition <- StringGenerator
-                        stream_limit <- TopicsTopicEventsGetStream_timeoutGenerator
+                        stream_limit <- OptionIntGenerator
                         topic <- StringGenerator
                         batch_limit <- IntGenerator
-                        batch_flush_timeout <- TopicsTopicEventsGetStream_timeoutGenerator
-                        stream_timeout <- TopicsTopicEventsGetStream_timeoutGenerator
-                        batch_keep_alive_limit <- TopicsTopicEventsGetStream_timeoutGenerator
+                        batch_flush_timeout <- OptionIntGenerator
+                        stream_timeout <- OptionIntGenerator
+                        batch_keep_alive_limit <- OptionIntGenerator
                     
                 } yield (start_from, partition, stream_limit, topic, batch_limit, batch_flush_timeout, stream_timeout, batch_keep_alive_limit)
             val inputs = genInputs suchThat { case (start_from, partition, stream_limit, topic, batch_limit, batch_flush_timeout, stream_timeout, batch_keep_alive_limit) =>
@@ -457,12 +457,12 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
             val genInputs = for {
                     start_from <- StringGenerator
                     partition <- StringGenerator
-                    stream_limit <- TopicsTopicEventsGetStream_timeoutGenerator
+                    stream_limit <- OptionIntGenerator
                     topic <- StringGenerator
                     batch_limit <- IntGenerator
-                    batch_flush_timeout <- TopicsTopicEventsGetStream_timeoutGenerator
-                    stream_timeout <- TopicsTopicEventsGetStream_timeoutGenerator
-                    batch_keep_alive_limit <- TopicsTopicEventsGetStream_timeoutGenerator
+                    batch_flush_timeout <- OptionIntGenerator
+                    stream_timeout <- OptionIntGenerator
+                    batch_keep_alive_limit <- OptionIntGenerator
                 
             } yield (start_from, partition, stream_limit, topic, batch_limit, batch_flush_timeout, stream_timeout, batch_keep_alive_limit)
             val inputs = genInputs suchThat { case (start_from, partition, stream_limit, topic, batch_limit, batch_flush_timeout, stream_timeout, batch_keep_alive_limit) =>
@@ -475,7 +475,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
     }
 
     "POST /topics/{topic}/events" should {
-        def testInvalidInput(input: (String, TopicsTopicEventsBatchPostEvent)): Prop = {
+        def testInvalidInput(input: (String, Option[Event])): Prop = {
 
             val (topic, event) = input
 
@@ -524,7 +524,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, TopicsTopicEventsBatchPostEvent)): Prop = {
+        def testValidInput(input: (String, Option[Event])): Prop = {
             val (topic, event) = input
             
             val parsed_event = parserConstructor("application/json").writeValueAsString(event)
@@ -586,7 +586,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
         "discard invalid data" in {
             val genInputs = for {
                         topic <- StringGenerator
-                        event <- TopicsTopicEventsBatchPostEventGenerator
+                        event <- OptionEventGenerator
                     
                 } yield (topic, event)
             val inputs = genInputs suchThat { case (topic, event) =>
@@ -598,7 +598,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
         "do something with valid data" in {
             val genInputs = for {
                     topic <- StringGenerator
-                    event <- TopicsTopicEventsBatchPostEventGenerator
+                    event <- OptionEventGenerator
                 
             } yield (topic, event)
             val inputs = genInputs suchThat { case (topic, event) =>
@@ -734,7 +734,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
     }
 
     "POST /topics/{topic}/events/batch" should {
-        def testInvalidInput(input: (String, TopicsTopicEventsBatchPostEvent)): Prop = {
+        def testInvalidInput(input: (String, Option[Event])): Prop = {
 
             val (topic, event) = input
 
@@ -783,7 +783,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (String, TopicsTopicEventsBatchPostEvent)): Prop = {
+        def testValidInput(input: (String, Option[Event])): Prop = {
             val (topic, event) = input
             
             val parsed_event = parserConstructor("application/json").writeValueAsString(event)
@@ -845,7 +845,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
         "discard invalid data" in {
             val genInputs = for {
                         topic <- StringGenerator
-                        event <- TopicsTopicEventsBatchPostEventGenerator
+                        event <- OptionEventGenerator
                     
                 } yield (topic, event)
             val inputs = genInputs suchThat { case (topic, event) =>
@@ -857,7 +857,7 @@ class Nakadi_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient 
         "do something with valid data" in {
             val genInputs = for {
                     topic <- StringGenerator
-                    event <- TopicsTopicEventsBatchPostEventGenerator
+                    event <- OptionEventGenerator
                 
             } yield (topic, event)
             val inputs = genInputs suchThat { case (topic, event) =>

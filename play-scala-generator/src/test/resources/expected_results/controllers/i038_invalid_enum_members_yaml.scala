@@ -23,6 +23,7 @@ import javax.inject._
 
 package i038_invalid_enum_members.yaml {
     // ----- Start of unmanaged code area for package I038_invalid_enum_membersYaml
+    
     // ----- End of unmanaged code area for package I038_invalid_enum_membersYaml
     class I038_invalid_enum_membersYaml @Inject() (
         // ----- Start of unmanaged code area for injections I038_invalid_enum_membersYaml
@@ -34,11 +35,11 @@ package i038_invalid_enum_members.yaml {
         // ----- Start of unmanaged code area for constructor I038_invalid_enum_membersYaml
 
         // ----- End of unmanaged code area for constructor I038_invalid_enum_membersYaml
-        val get = getAction {  _ =>
+        val get = getAction {  _ =>  
             // ----- Start of unmanaged code area for action  I038_invalid_enum_membersYaml.get
             NotImplementedYet
             // ----- End of unmanaged code area for action  I038_invalid_enum_membersYaml.get
         }
-
+    
     }
 }

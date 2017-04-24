@@ -1,0 +1,21 @@
+swagger: "2.0"
+
+info:
+  title: Enum API
+  version: "0.0.1"
+
+paths:
+  /test:
+    get:
+      parameters:
+        - name: includes
+          in: query
+          type: string
+          enum:
+            - option_one
+            - option_two
+      responses:
+        '200':
+          description: Example response
+          schema:
+            type: string

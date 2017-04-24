@@ -16,7 +16,7 @@ object TypeDeduplicator extends TypeAnalyzer {
 
   private def equal(app: StrictModel) = (t1: Type, t2: Type) =>
     t1 == t2 ||
-      ((notHierarhyRoot(t1, app) || notHierarhyRoot(t2, app)) && isSameTypeDef(t1)(t2) && isSameConstraints(t1)(t2))
+      ((notHierarchyRoot(t1, app) || notHierarchyRoot(t2, app)) && isSameTypeDef(t1)(t2) && isSameConstraints(t1)(t2))
 
   /**
    * Removes redundant type definitions changing pointing references
@@ -30,7 +30,7 @@ object TypeDeduplicator extends TypeAnalyzer {
     duplicate map replaceSingle(app) map apply getOrElse app
   }
 
-  private def notHierarhyRoot(t: Type, app: StrictModel) = !app.discriminators.contains(t.name)
+  private def notHierarchyRoot(t: Type, app: StrictModel) = !app.discriminators.contains(t.name)
 
   private def replaceSingle(model: StrictModel): Type => StrictModel = tpe => {
     val duplicates = model.typeDefs.filter { d => equal(model)(tpe, d._2) }
@@ -38,7 +38,9 @@ object TypeDeduplicator extends TypeAnalyzer {
     val bestMatch :: refsToRemove = duplicateNames
     val typesToRewrite = model.typeDefs filterNot { t => refsToRemove.contains(t._1) }
     val callsWithCorrectRefs = model.calls map { c => replaceReferenceInCall(refsToRemove, bestMatch)(c) }
-    val typesWithCorrectRefs = typesToRewrite map { d => replaceReferencesInTypes(refsToRemove, bestMatch)(d._1, d._2) }
+    val typesWithCorrectRefs = typesToRewrite map { (d: (Reference, Type)) =>
+      replaceReferencesInTypes(refsToRemove, bestMatch)(d._1, d._2)
+    }
     val newParams = model.params map replaceReferenceInParameter(refsToRemove, bestMatch)
     model.copy(typeDefs = typesWithCorrectRefs, params = newParams, calls = callsWithCorrectRefs)
   }
@@ -56,33 +58,46 @@ object TypeDeduplicator extends TypeAnalyzer {
     call.copy(resultTypes = TypesResponseInfo(resultTypes, default))
   }
 
-  private def replaceReferencesInTypes(duplicateRefs: Seq[Reference], target: Reference): (Reference, Type) => (Reference, Type) = (ref, tpe) => ref -> {
-    tpe match {
-      case c: Container =>
-        c.tpe match {
-          case r: TypeRef if duplicateRefs.contains(r.name) => c.withType(TypeRef(target))
-          case o => c
-        }
+  private def replaceType(tpe: Type, duplicateRefs: Seq[Reference], target: Reference): Type = tpe match {
+    case c: Container => replaceContainerType(c, duplicateRefs, target)
+    case c: Composite => replaceCompositeType(c, duplicateRefs, target)
+    case t: TypeDef => replaceTypeDefType(t, duplicateRefs, target)
+    case n: TypeRef if duplicateRefs.contains(n.name) => TypeRef(target)
+    case _ => tpe
+  }
 
-      case c: Composite =>
-        val newDescendants = c.descendants map {
-          case d: TypeRef if duplicateRefs.contains(d.name) => TypeRef(target)
-          case o => o
-        }
-        c.withTypes(newDescendants)
+  private def replaceContainerType(c: Container, duplicateRefs: Seq[Reference], target: Reference): Type = c.tpe match {
+    case r: TypeRef if duplicateRefs.contains(r.name) => c.withType(TypeRef(target))
+    case r: Container if isRecursiveContainerType(r) => c.withType(replaceType(r, duplicateRefs, target))
+    case o => c
+  }
 
-      case t: TypeDef =>
-        val newFields = t.fields.map {
-          case f @ Field(_, tpe: TypeRef) if duplicateRefs.contains(tpe.name) => f.copy(tpe = TypeRef(target))
-          case o => o
-        }
-        val newName = if (duplicateRefs.contains(t.name)) target else t.name
-        t.copy(name = newName, fields = newFields)
-
-      case n: TypeRef if duplicateRefs.contains(n.name) => TypeRef(target)
-
-      case _ => tpe
+  private def replaceCompositeType(c: Composite, duplicateRefs: Seq[Reference], target: Reference) = {
+    val newDescendants = c.descendants map {
+      case d: TypeRef if duplicateRefs.contains(d.name) => TypeRef(target)
+      case o => o
     }
+    c.withTypes(newDescendants)
+  }
+
+  private def replaceTypeDefType(t: TypeDef, duplicateRefs: Seq[Reference], target: Reference) = {
+    val newFields = t.fields.map {
+      case f @ Field(_, tpe: TypeRef) if duplicateRefs.contains(tpe.name) => f.copy(tpe = TypeRef(target))
+      case f @ Field(_, c: Container) if isRecursiveContainerType(c) && duplicateRefs.contains(getInnerContainerType(c).name) =>
+        f.copy(tpe = replaceContainerType(c, duplicateRefs, target))
+      case o => o
+    }
+    val newName = if (duplicateRefs.contains(t.name)) target else t.name
+    t.copy(name = newName, fields = newFields)
+  }
+
+  private def getInnerContainerType(c: Container): Type = c.tpe match {
+    case inner: Container if isRecursiveContainerType(inner) => getInnerContainerType(inner)
+    case inner => inner
+  }
+
+  private def replaceReferencesInTypes(duplicateRefs: Seq[Reference], target: Reference): (Reference, Type) => (Reference, Type) = { (ref, tpe) =>
+    ref -> replaceType(tpe, duplicateRefs, target)
   }
 
   private def replaceReferenceInParameter(duplicateRefs: Seq[Reference], target: Reference): ((ParameterRef, Parameter)) => (ParameterRef, Parameter) = {
@@ -124,7 +139,7 @@ object TypeFlattener extends TypeAnalyzer {
   }
 
   private def flatten0(typeDefs: TypeLookupTable): TypeLookupTable = {
-    val flatTypeDefs = typeDefs flatMap { case (k, v) => extractComplexType(k, v) }
+    val flatTypeDefs = typeDefs flatMap { case (ref, tpe) => extractComplexType(ref, tpe) }
     if (flatTypeDefs == typeDefs)
       flatTypeDefs
     else
@@ -133,20 +148,29 @@ object TypeFlattener extends TypeAnalyzer {
 
   private def extractComplexType(ref: Reference, typeDef: Type): Seq[(Reference, Type)] = typeDef match {
     case t: TypeDef if complexFields(t).nonEmpty =>
-      val (changedFields, extractedTypes) = t.fields.filter(complexField).map(createTypeFromField(t)).unzip
+      val (changedFields, extractedTypes) = complexFields(t).map(createTypeFromField(t)).unzip
       val newFields = t.fields.filterNot(complexField) ++ changedFields
+      val newTypeDef = t.copy(fields = newFields)
+      (ref -> newTypeDef) +: extractedTypes
+    case t: TypeDef if containerFieldsWithComplexType(t).nonEmpty =>
+      val (changedFields, extractedTypes) = containerFieldsWithComplexType(t).map(createRecursiveTypeFromContainerField(t)).unzip
+      val newFields = t.fields.filterNot(containerFieldWithComplexType) ++ changedFields
       val newTypeDef = t.copy(fields = newFields)
       (ref -> newTypeDef) +: extractedTypes
     case t: EnumTrait =>
       val leafTypes = t.leaves.map { l => ref / l.fieldValue -> l }
       (ref -> t) +: leafTypes.toSeq
-    case c: Container if isComplexType(c.tpe) =>
+    case c: Container if isRecursiveContainerType(c) && isRecursiveComplexType(c) =>
+      val (newType, newRef, extractedType) = createRecursiveTypeFromContainer(ref, c)
+      Seq(ref -> newType, newRef -> extractedType)
+    case c: Container if !isRecursiveContainerType(c) && isComplexType(c.tpe) =>
       val newRef = ref / c.getClass.getSimpleName
       Seq(ref -> c.withType(TypeRef(newRef)), newRef -> c.tpe)
     case c: Composite =>
-      val (changedTypes, extractedTypes) = c.descendants.filter(isComplexType).
-        zipWithIndex.map(flattenType(c.getClass.getSimpleName, ref)).unzip
-      val newTypes = c.descendants.filterNot(isComplexType) ++ changedTypes
+      val (complexDescendants, simpleDescendants) = c.descendants.partition(isComplexType)
+      val (changedTypes, extractedTypes) = complexDescendants.zipWithIndex
+        .map(flattenType(c.getClass.getSimpleName, ref)).unzip
+      val newTypes = simpleDescendants ++ changedTypes
       val newTypeDef = c.withTypes(newTypes)
       (ref -> newTypeDef) +: extractedTypes
     case _ => Seq(ref -> typeDef)
@@ -156,10 +180,36 @@ object TypeFlattener extends TypeAnalyzer {
 
   private def complexField: (Field) => Boolean = f => isComplexType(f.tpe)
 
+  private def containerFieldsWithComplexType(typeDef: TypeDef): Seq[Field] = typeDef.fields filter containerFieldWithComplexType
+
+  private def containerFieldWithComplexType: (Field) => Boolean = f => isRecursiveContainerType(f.tpe) && isRecursiveComplexType(f.tpe)
+
   private def createTypeFromField(t: TypeDef): (Field) => (Field, (Reference, Type)) = field => {
     val newReference = TypeRef(t.name / field.name.simple)
+
     val extractedType = field.tpe
     (field.copy(tpe = newReference), newReference.name -> extractedType)
+  }
+
+  private def createRecursiveTypeFromContainerField(t: Type): (Field) => (Field, (Reference, Type)) = field => {
+    val reference = t.name / field.name.simple
+
+    val (newType, newReference, extractedType) = createRecursiveTypeFromContainer(reference, field.tpe)
+
+    (field.copy(tpe = newType), newReference -> extractedType)
+  }
+
+  private def createRecursiveTypeFromContainer(ref: Reference, t: Type): (Type, Reference, Type) = {
+    val newReference = ref / t.name.simple
+
+    t match {
+      case c: Container if isRecursiveContainerType(c) =>
+        val result = createRecursiveTypeFromContainer(newReference, c.tpe)
+        result.copy(c.withType(result._1))
+
+      case t =>
+        (TypeRef(newReference), newReference, t)
+    }
   }
 
   private def flattenType: (String, Reference) => ((Type, Int)) => (Type, (Reference, Type)) = (name, ref) => pair => {
@@ -180,9 +230,9 @@ object ParameterDereferencer extends TypeAnalyzer {
   private[apifirst] def apply(app: StrictModel): StrictModel = {
     var result = app
     result.params foreach {
-      case (name, definition) =>
+      case (name: ParameterRef, definition: Expr) =>
         definition.typeName match {
-          case tpe if isComplexType(tpe) =>
+          case tpe if isComplexTypeParam(tpe) =>
             val newName = name.name / "ref"
             val newReference = TypeRef(newName)
             val tps = app.typeDefs + (newName -> tpe)
@@ -197,9 +247,23 @@ object ParameterDereferencer extends TypeAnalyzer {
 
 trait TypeAnalyzer {
   def isComplexType(t: Type): Boolean = t match {
-    case tpe @ (_: TypeDef | _: Composite | _: Container) => true
+    case _: TypeDef | _: Composite => true
+    case t: Container => !isRecursiveContainerType(t)
     case _ => false
   }
+
+  def isComplexTypeParam(t: Type): Boolean = t match {
+    case _: TypeDef | _: Composite | _: Container => true
+    case _ => false
+  }
+
+  def isRecursiveComplexType(t: Type): Boolean = t match {
+    case c: Container if isRecursiveContainerType(c) => isRecursiveComplexType(c.tpe)
+    case tpe => isComplexType(tpe)
+  }
+
+  def isRecursiveContainerType(t: Type): Boolean =
+    t.isInstanceOf[Arr] || t.isInstanceOf[ArrResult] || t.isInstanceOf[Opt]
 
   def isSameConstraints(one: Type)(two: Type): Boolean = (one, two) match {
     case (c1: Container, c2: Container) if c1.getClass == c2.getClass =>
@@ -237,8 +301,11 @@ trait TypeAnalyzer {
     case _ => false
   }
 
-  def sameFields(t1: TypeDef, t2: TypeDef): Boolean =
-    t1.fields.forall(p => t2.fields.exists(e => isSameTypeDef(p.tpe)(e.tpe) && sameNames(p, e)))
+  def sameFields(t1: TypeDef, t2: TypeDef): Boolean = {
+    t1.fields.forall { field =>
+      t2.fields.exists { e => isSameTypeDef(field.tpe)(e.tpe) & sameNames(field, e) }
+    }
+  }
 
   type hasSimpleName = { def name: { def simple: String } }
 

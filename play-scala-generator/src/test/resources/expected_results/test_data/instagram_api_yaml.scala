@@ -11,252 +11,202 @@ object Generators extends JsValueGenerators {
     
 
     
-    def createTagsSearchGetResponses200MetaGenerator = _generate(TagsSearchGetResponses200MetaGenerator)
+    def createOptionBigIntGenerator = _generate(OptionBigIntGenerator)
     def createBigIntGenerator = _generate(BigIntGenerator)
-    def createMediaFilterGenerator = _generate(MediaFilterGenerator)
-    def createMediaMedia_idCommentsDeleteResponses200MetaGenerator = _generate(MediaMedia_idCommentsDeleteResponses200MetaGenerator)
-    def createUsersSelfFeedGetResponses200DataGenerator = _generate(UsersSelfFeedGetResponses200DataGenerator)
-    def createMediaTagsGenerator = _generate(MediaTagsGenerator)
-    def createMediaMedia_idLikesGetResponses200DataGenerator = _generate(MediaMedia_idLikesGetResponses200DataGenerator)
-    def createMediaIdGenerator = _generate(MediaIdGenerator)
-    def createMediaVideosLow_resolutionGenerator = _generate(MediaVideosLow_resolutionGenerator)
-    def createUsersUser_idRelationshipPostActionGenerator = _generate(UsersUser_idRelationshipPostActionGenerator)
-    def createMediaTagsOptGenerator = _generate(MediaTagsOptGenerator)
-    def createMediaImagesGenerator = _generate(MediaImagesGenerator)
-    def createMediaLikesGenerator = _generate(MediaLikesGenerator)
+    def createOptionBigDecimalGenerator = _generate(OptionBigDecimalGenerator)
+    def createOptionStringGenerator = _generate(OptionStringGenerator)
+    def createOptionUsersUser_idRelationshipPostActionOptionEnumGenerator = _generate(OptionUsersUser_idRelationshipPostActionOptionEnumGenerator)
+    def createUsersUser_idRelationshipPostActionOptionEnumGenerator = _generate(UsersUser_idRelationshipPostActionOptionEnumGenerator)
     def createBigIntNameClashGenerator = _generate(BigIntNameClashGenerator)
-    def createMediaUsers_in_photoOptGenerator = _generate(MediaUsers_in_photoOptGenerator)
-    def createMediaMedia_idLikesGetResponses200DataOptGenerator = _generate(MediaMedia_idLikesGetResponses200DataOptGenerator)
-    def createLocationsSearchGetResponses200DataGenerator = _generate(LocationsSearchGetResponses200DataGenerator)
-    def createMediaComments_escGenerator = _generate(MediaComments_escGenerator)
-    def createMediaSearchGetResponses200DataOptGenerator = _generate(MediaSearchGetResponses200DataOptGenerator)
-    def createCommentFromGenerator = _generate(CommentFromGenerator)
-    def createLocationsSearchGetResponses200DataOptGenerator = _generate(LocationsSearchGetResponses200DataOptGenerator)
-    def createMediaSearchGetResponses200DataGenerator = _generate(MediaSearchGetResponses200DataGenerator)
-    def createUsersSelfFeedGetResponses200DataOptGenerator = _generate(UsersSelfFeedGetResponses200DataOptGenerator)
-    def createUsersUser_idRelationshipPostActionOptGenerator = _generate(UsersUser_idRelationshipPostActionOptGenerator)
-    def createMediaComments_DataOptGenerator = _generate(MediaComments_DataOptGenerator)
-    def createUsersUser_idGetResponses200DataGenerator = _generate(UsersUser_idGetResponses200DataGenerator)
-    def createMediaVideosGenerator = _generate(MediaVideosGenerator)
-    def createMediaLocationGenerator = _generate(MediaLocationGenerator)
     def createNullGenerator = _generate(NullGenerator)
-    def createMediaComments_DataGenerator = _generate(MediaComments_DataGenerator)
-    def createMediaUsers_in_photoGenerator = _generate(MediaUsers_in_photoGenerator)
-    def createLocationLatitudeGenerator = _generate(LocationLatitudeGenerator)
     def createBigDecimalGenerator = _generate(BigDecimalGenerator)
-    def createUserCountsGenerator = _generate(UserCountsGenerator)
     def createStringGenerator = _generate(StringGenerator)
     
 
     
-    def TagsSearchGetResponses200MetaGenerator = Gen.option(UsersSelfRequested_byGetResponses200MetaOptGenerator)
+    def OptionBigIntGenerator = Gen.option(arbitrary[BigInt])
     def BigIntGenerator = arbitrary[BigInt]
-    def MediaFilterGenerator = Gen.option(arbitrary[String])
-    def MediaMedia_idCommentsDeleteResponses200MetaGenerator = Gen.option(MediaMedia_idLikesGetResponses200MetaOptGenerator)
-    def UsersSelfFeedGetResponses200DataGenerator = Gen.option(UsersSelfFeedGetResponses200DataOptGenerator)
-    def MediaTagsGenerator = Gen.option(MediaTagsOptGenerator)
-    def MediaMedia_idLikesGetResponses200DataGenerator = Gen.option(MediaMedia_idLikesGetResponses200DataOptGenerator)
-    def MediaIdGenerator = Gen.option(arbitrary[BigInt])
-    def MediaVideosLow_resolutionGenerator = Gen.option(ImageGenerator)
-    def UsersUser_idRelationshipPostActionGenerator = Gen.option(UsersUser_idRelationshipPostActionOptGenerator)
-    def MediaTagsOptGenerator: Gen[List[Tag]] = Gen.containerOf[List,Tag](TagGenerator)
-    def MediaImagesGenerator = Gen.option(MediaImagesOptGenerator)
-    def MediaLikesGenerator = Gen.option(MediaLikesOptGenerator)
+    def OptionBigDecimalGenerator = Gen.option(arbitrary[BigDecimal])
+    def OptionStringGenerator = Gen.option(arbitrary[String])
+    def OptionUsersUser_idRelationshipPostActionOptionEnumGenerator = Gen.option(UsersUser_idRelationshipPostActionOptionEnumGenerator)
+    def UsersUser_idRelationshipPostActionOptionEnumGenerator = { import UsersUser_idRelationshipPostActionOptionEnum._ ; Gen.oneOf(Seq(Follow, Approve, Unfollow, Block, Unblock)) }
     def BigIntNameClashGenerator = arbitrary[BigInt]
-    def MediaUsers_in_photoOptGenerator: Gen[List[MiniProfile]] = Gen.containerOf[List,MiniProfile](MiniProfileGenerator)
-    def MediaMedia_idLikesGetResponses200DataOptGenerator: Gen[List[Like]] = Gen.containerOf[List,Like](LikeGenerator)
-    def LocationsSearchGetResponses200DataGenerator = Gen.option(LocationsSearchGetResponses200DataOptGenerator)
-    def MediaComments_escGenerator = Gen.option(MediaComments_OptGenerator)
-    def MediaSearchGetResponses200DataOptGenerator: Gen[List[MediaSearchGetResponses200DataOptArrResult]] = Gen.containerOf[List,MediaSearchGetResponses200DataOptArrResult](MediaSearchGetResponses200DataOptArrResultGenerator)
-    def CommentFromGenerator = Gen.option(MiniProfileGenerator)
-    def LocationsSearchGetResponses200DataOptGenerator: Gen[List[Location]] = Gen.containerOf[List,Location](LocationGenerator)
-    def MediaSearchGetResponses200DataGenerator = Gen.option(MediaSearchGetResponses200DataOptGenerator)
-    def UsersSelfFeedGetResponses200DataOptGenerator: Gen[List[Media]] = Gen.containerOf[List,Media](MediaGenerator)
-    def UsersUser_idRelationshipPostActionOptGenerator = { import UsersUser_idRelationshipPostActionOpt._ ; Gen.oneOf(Seq(Follow, Approve, Unfollow, Block, Unblock)) }
-    def MediaComments_DataOptGenerator: Gen[List[Comment]] = Gen.containerOf[List,Comment](CommentGenerator)
-    def UsersUser_idGetResponses200DataGenerator = Gen.option(UserGenerator)
-    def MediaVideosGenerator = Gen.option(MediaVideosOptGenerator)
-    def MediaLocationGenerator = Gen.option(LocationGenerator)
     def NullGenerator = arbitrary[Null]
-    def MediaComments_DataGenerator = Gen.option(MediaComments_DataOptGenerator)
-    def MediaUsers_in_photoGenerator = Gen.option(MediaUsers_in_photoOptGenerator)
-    def LocationLatitudeGenerator = Gen.option(arbitrary[BigDecimal])
     def BigDecimalGenerator = arbitrary[BigDecimal]
-    def UserCountsGenerator = Gen.option(UserCountsOptGenerator)
     def StringGenerator = arbitrary[String]
     
 
+    def createUserCountsOptionCountsGenerator = _generate(UserCountsOptionCountsGenerator)
     def createUsersSelfFeedGetResponses200Generator = _generate(UsersSelfFeedGetResponses200Generator)
+    def createMediaSearchGetResponses200DataOptionSeqDataGenerator = _generate(MediaSearchGetResponses200DataOptionSeqDataGenerator)
+    def createTagsSearchGetResponses200MetaOptionMetaGenerator = _generate(TagsSearchGetResponses200MetaOptionMetaGenerator)
     def createMediaMedia_idCommentsDeleteResponses200Generator = _generate(MediaMedia_idCommentsDeleteResponses200Generator)
-    def createMediaSearchGetResponses200DataOptArrResultGenerator = _generate(MediaSearchGetResponses200DataOptArrResultGenerator)
     def createUsersUser_idFollowsGetResponses200Generator = _generate(UsersUser_idFollowsGetResponses200Generator)
-    def createUserCountsOptGenerator = _generate(UserCountsOptGenerator)
     def createUserGenerator = _generate(UserGenerator)
     def createTagsTag_nameMediaRecentGetResponses200Generator = _generate(TagsTag_nameMediaRecentGetResponses200Generator)
     def createImageGenerator = _generate(ImageGenerator)
     def createUsersSelfRequested_byGetResponses200Generator = _generate(UsersSelfRequested_byGetResponses200Generator)
+    def createMediaMedia_idCommentsDeleteResponses200MetaOptionMetaGenerator = _generate(MediaMedia_idCommentsDeleteResponses200MetaOptionMetaGenerator)
     def createTagGenerator = _generate(TagGenerator)
-    def createUsersSelfRequested_byGetResponses200MetaOptGenerator = _generate(UsersSelfRequested_byGetResponses200MetaOptGenerator)
     def createLocationsLocation_idGetResponses200Generator = _generate(LocationsLocation_idGetResponses200Generator)
     def createCommentGenerator = _generate(CommentGenerator)
     def createMediaGenerator = _generate(MediaGenerator)
     def createMediaMedia_idLikesGetResponses200Generator = _generate(MediaMedia_idLikesGetResponses200Generator)
-    def createMediaMedia_idLikesGetResponses200MetaOptGenerator = _generate(MediaMedia_idLikesGetResponses200MetaOptGenerator)
     def createMediaSearchGetResponses200Generator = _generate(MediaSearchGetResponses200Generator)
     def createTagsSearchGetResponses200Generator = _generate(TagsSearchGetResponses200Generator)
     def createLikeGenerator = _generate(LikeGenerator)
-    def createMediaComments_OptGenerator = _generate(MediaComments_OptGenerator)
     def createUsersUser_idGetResponses200Generator = _generate(UsersUser_idGetResponses200Generator)
     def createMediaMedia_idCommentsGetResponses200Generator = _generate(MediaMedia_idCommentsGetResponses200Generator)
-    def createMediaVideosOptGenerator = _generate(MediaVideosOptGenerator)
+    def createMediaLikesOptionLikesGenerator = _generate(MediaLikesOptionLikesGenerator)
     def createLocationGenerator = _generate(LocationGenerator)
+    def createMediaComments_OptionComments_escGenerator = _generate(MediaComments_OptionComments_escGenerator)
     def createMiniProfileGenerator = _generate(MiniProfileGenerator)
-    def createMediaLikesOptGenerator = _generate(MediaLikesOptGenerator)
+    def createMediaVideosOptionVideosGenerator = _generate(MediaVideosOptionVideosGenerator)
+    def createMediaImagesOptionImagesGenerator = _generate(MediaImagesOptionImagesGenerator)
     def createLocationsSearchGetResponses200Generator = _generate(LocationsSearchGetResponses200Generator)
-    def createMediaImagesOptGenerator = _generate(MediaImagesOptGenerator)
 
 
+    def UserCountsOptionCountsGenerator = for {
+        media <- Gen.option(arbitrary[BigInt])
+        follows <- Gen.option(arbitrary[BigInt])
+        follwed_by <- Gen.option(arbitrary[BigInt])
+    } yield UserCountsOptionCounts(media, follows, follwed_by)
     def UsersSelfFeedGetResponses200Generator = for {
-        data <- UsersSelfFeedGetResponses200DataGenerator
+        data <- Gen.option(Gen.containerOf[List,Media](MediaGenerator))
     } yield UsersSelfFeedGetResponses200(data)
+    def MediaSearchGetResponses200DataOptionSeqDataGenerator = for {
+        created_time <- Gen.option(arbitrary[BigInt])
+        filter <- Gen.option(arbitrary[String])
+        id <- Gen.option(arbitrary[BigInt])
+        `type` <- Gen.option(arbitrary[String])
+        location <- Gen.option(LocationGenerator)
+        comments_esc <- Gen.option(MediaComments_OptionComments_escGenerator)
+        tags <- Gen.option(Gen.containerOf[List,Tag](TagGenerator))
+        users_in_photo <- Gen.option(Gen.containerOf[List,MiniProfile](MiniProfileGenerator))
+        likes <- Gen.option(MediaLikesOptionLikesGenerator)
+        videos <- Gen.option(MediaVideosOptionVideosGenerator)
+        images <- Gen.option(MediaImagesOptionImagesGenerator)
+        user <- Gen.option(MiniProfileGenerator)
+        distance <- Gen.option(arbitrary[BigDecimal])
+    } yield MediaSearchGetResponses200DataOptionSeqData(created_time, filter, id, `type`, location, comments_esc, tags, users_in_photo, likes, videos, images, user, distance)
+    def TagsSearchGetResponses200MetaOptionMetaGenerator = for {
+        code <- Gen.option(arbitrary[BigInt])
+    } yield TagsSearchGetResponses200MetaOptionMeta(code)
     def MediaMedia_idCommentsDeleteResponses200Generator = for {
-        meta <- MediaMedia_idCommentsDeleteResponses200MetaGenerator
-        data <- MediaFilterGenerator
-    } yield MediaMedia_idCommentsDeleteResponses200(meta, data)
-    def MediaSearchGetResponses200DataOptArrResultGenerator = for {
-        location <- MediaLocationGenerator
-        created_time <- MediaIdGenerator
-        comments_esc <- MediaComments_escGenerator
-        tags <- MediaTagsGenerator
-        users_in_photo <- MediaUsers_in_photoGenerator
-        filter <- MediaFilterGenerator
-        likes <- MediaLikesGenerator
-        id <- MediaIdGenerator
-        videos <- MediaVideosGenerator
-        `type` <- MediaFilterGenerator
-        images <- MediaImagesGenerator
-        user <- CommentFromGenerator
-        distance <- LocationLatitudeGenerator
-    } yield MediaSearchGetResponses200DataOptArrResult(location, created_time, comments_esc, tags, users_in_photo, filter, likes, id, videos, `type`, images, user, distance)
+        data <- Gen.option(arbitrary[String])
+        meta <- Gen.option(MediaMedia_idCommentsDeleteResponses200MetaOptionMetaGenerator)
+    } yield MediaMedia_idCommentsDeleteResponses200(data, meta)
     def UsersUser_idFollowsGetResponses200Generator = for {
-        data <- MediaUsers_in_photoGenerator
+        data <- Gen.option(Gen.containerOf[List,MiniProfile](MiniProfileGenerator))
     } yield UsersUser_idFollowsGetResponses200(data)
-    def UserCountsOptGenerator = for {
-        media <- MediaIdGenerator
-        follows <- MediaIdGenerator
-        follwed_by <- MediaIdGenerator
-    } yield UserCountsOpt(media, follows, follwed_by)
     def UserGenerator = for {
-        website <- MediaFilterGenerator
-        profile_picture <- MediaFilterGenerator
-        username <- MediaFilterGenerator
-        full_name <- MediaFilterGenerator
-        bio <- MediaFilterGenerator
-        id <- MediaIdGenerator
-        counts <- UserCountsGenerator
+        website <- Gen.option(arbitrary[String])
+        profile_picture <- Gen.option(arbitrary[String])
+        username <- Gen.option(arbitrary[String])
+        full_name <- Gen.option(arbitrary[String])
+        bio <- Gen.option(arbitrary[String])
+        id <- Gen.option(arbitrary[BigInt])
+        counts <- Gen.option(UserCountsOptionCountsGenerator)
     } yield User(website, profile_picture, username, full_name, bio, id, counts)
     def TagsTag_nameMediaRecentGetResponses200Generator = for {
-        data <- MediaTagsGenerator
+        data <- Gen.option(Gen.containerOf[List,Tag](TagGenerator))
     } yield TagsTag_nameMediaRecentGetResponses200(data)
     def ImageGenerator = for {
-        width <- MediaIdGenerator
-        height <- MediaIdGenerator
-        url <- MediaFilterGenerator
+        width <- Gen.option(arbitrary[BigInt])
+        height <- Gen.option(arbitrary[BigInt])
+        url <- Gen.option(arbitrary[String])
     } yield Image(width, height, url)
     def UsersSelfRequested_byGetResponses200Generator = for {
-        meta <- TagsSearchGetResponses200MetaGenerator
-        data <- MediaUsers_in_photoGenerator
+        meta <- Gen.option(TagsSearchGetResponses200MetaOptionMetaGenerator)
+        data <- Gen.option(Gen.containerOf[List,MiniProfile](MiniProfileGenerator))
     } yield UsersSelfRequested_byGetResponses200(meta, data)
+    def MediaMedia_idCommentsDeleteResponses200MetaOptionMetaGenerator = for {
+        code <- Gen.option(arbitrary[BigDecimal])
+    } yield MediaMedia_idCommentsDeleteResponses200MetaOptionMeta(code)
     def TagGenerator = for {
-        media_count <- MediaIdGenerator
-        name <- MediaFilterGenerator
+        media_count <- Gen.option(arbitrary[BigInt])
+        name <- Gen.option(arbitrary[String])
     } yield Tag(media_count, name)
-    def UsersSelfRequested_byGetResponses200MetaOptGenerator = for {
-        code <- MediaIdGenerator
-    } yield UsersSelfRequested_byGetResponses200MetaOpt(code)
     def LocationsLocation_idGetResponses200Generator = for {
-        data <- MediaLocationGenerator
+        data <- Gen.option(LocationGenerator)
     } yield LocationsLocation_idGetResponses200(data)
     def CommentGenerator = for {
-        id <- MediaFilterGenerator
-        created_time <- MediaFilterGenerator
-        text <- MediaFilterGenerator
-        from <- CommentFromGenerator
+        id <- Gen.option(arbitrary[String])
+        created_time <- Gen.option(arbitrary[String])
+        text <- Gen.option(arbitrary[String])
+        from <- Gen.option(MiniProfileGenerator)
     } yield Comment(id, created_time, text, from)
     def MediaGenerator = for {
-        location <- MediaLocationGenerator
-        created_time <- MediaIdGenerator
-        comments_esc <- MediaComments_escGenerator
-        tags <- MediaTagsGenerator
-        users_in_photo <- MediaUsers_in_photoGenerator
-        filter <- MediaFilterGenerator
-        likes <- MediaLikesGenerator
-        id <- MediaIdGenerator
-        videos <- MediaVideosGenerator
-        `type` <- MediaFilterGenerator
-        images <- MediaImagesGenerator
-        user <- CommentFromGenerator
-    } yield Media(location, created_time, comments_esc, tags, users_in_photo, filter, likes, id, videos, `type`, images, user)
+        created_time <- Gen.option(arbitrary[BigInt])
+        filter <- Gen.option(arbitrary[String])
+        id <- Gen.option(arbitrary[BigInt])
+        `type` <- Gen.option(arbitrary[String])
+        location <- Gen.option(LocationGenerator)
+        comments_esc <- Gen.option(MediaComments_OptionComments_escGenerator)
+        tags <- Gen.option(Gen.containerOf[List,Tag](TagGenerator))
+        users_in_photo <- Gen.option(Gen.containerOf[List,MiniProfile](MiniProfileGenerator))
+        likes <- Gen.option(MediaLikesOptionLikesGenerator)
+        videos <- Gen.option(MediaVideosOptionVideosGenerator)
+        images <- Gen.option(MediaImagesOptionImagesGenerator)
+        user <- Gen.option(MiniProfileGenerator)
+    } yield Media(created_time, filter, id, `type`, location, comments_esc, tags, users_in_photo, likes, videos, images, user)
     def MediaMedia_idLikesGetResponses200Generator = for {
-        meta <- MediaMedia_idCommentsDeleteResponses200MetaGenerator
-        data <- MediaMedia_idLikesGetResponses200DataGenerator
+        meta <- Gen.option(MediaMedia_idCommentsDeleteResponses200MetaOptionMetaGenerator)
+        data <- Gen.option(Gen.containerOf[List,Like](LikeGenerator))
     } yield MediaMedia_idLikesGetResponses200(meta, data)
-    def MediaMedia_idLikesGetResponses200MetaOptGenerator = for {
-        code <- LocationLatitudeGenerator
-    } yield MediaMedia_idLikesGetResponses200MetaOpt(code)
     def MediaSearchGetResponses200Generator = for {
-        data <- MediaSearchGetResponses200DataGenerator
+        data <- Gen.option(Gen.containerOf[List,MediaSearchGetResponses200DataOptionSeqData](MediaSearchGetResponses200DataOptionSeqDataGenerator))
     } yield MediaSearchGetResponses200(data)
     def TagsSearchGetResponses200Generator = for {
-        meta <- TagsSearchGetResponses200MetaGenerator
-        data <- MediaTagsGenerator
+        meta <- Gen.option(TagsSearchGetResponses200MetaOptionMetaGenerator)
+        data <- Gen.option(Gen.containerOf[List,Tag](TagGenerator))
     } yield TagsSearchGetResponses200(meta, data)
     def LikeGenerator = for {
-        first_name <- MediaFilterGenerator
-        id <- MediaFilterGenerator
-        last_name <- MediaFilterGenerator
-        `type` <- MediaFilterGenerator
-        user_name <- MediaFilterGenerator
+        first_name <- Gen.option(arbitrary[String])
+        id <- Gen.option(arbitrary[String])
+        last_name <- Gen.option(arbitrary[String])
+        `type` <- Gen.option(arbitrary[String])
+        user_name <- Gen.option(arbitrary[String])
     } yield Like(first_name, id, last_name, `type`, user_name)
-    def MediaComments_OptGenerator = for {
-        count <- MediaIdGenerator
-        data <- MediaComments_DataGenerator
-    } yield MediaComments_Opt(count, data)
     def UsersUser_idGetResponses200Generator = for {
-        data <- UsersUser_idGetResponses200DataGenerator
+        data <- Gen.option(UserGenerator)
     } yield UsersUser_idGetResponses200(data)
     def MediaMedia_idCommentsGetResponses200Generator = for {
-        meta <- MediaMedia_idCommentsDeleteResponses200MetaGenerator
-        data <- MediaComments_DataGenerator
+        meta <- Gen.option(MediaMedia_idCommentsDeleteResponses200MetaOptionMetaGenerator)
+        data <- Gen.option(Gen.containerOf[List,Comment](CommentGenerator))
     } yield MediaMedia_idCommentsGetResponses200(meta, data)
-    def MediaVideosOptGenerator = for {
-        low_resolution <- MediaVideosLow_resolutionGenerator
-        standard_resolution <- MediaVideosLow_resolutionGenerator
-    } yield MediaVideosOpt(low_resolution, standard_resolution)
+    def MediaLikesOptionLikesGenerator = for {
+        count <- Gen.option(arbitrary[BigInt])
+        data <- Gen.option(Gen.containerOf[List,MiniProfile](MiniProfileGenerator))
+    } yield MediaLikesOptionLikes(count, data)
     def LocationGenerator = for {
-        id <- MediaFilterGenerator
-        name <- MediaFilterGenerator
-        latitude <- LocationLatitudeGenerator
-        longitude <- LocationLatitudeGenerator
+        id <- Gen.option(arbitrary[String])
+        name <- Gen.option(arbitrary[String])
+        latitude <- Gen.option(arbitrary[BigDecimal])
+        longitude <- Gen.option(arbitrary[BigDecimal])
     } yield Location(id, name, latitude, longitude)
+    def MediaComments_OptionComments_escGenerator = for {
+        count <- Gen.option(arbitrary[BigInt])
+        data <- Gen.option(Gen.containerOf[List,Comment](CommentGenerator))
+    } yield MediaComments_OptionComments_esc(count, data)
     def MiniProfileGenerator = for {
-        user_name <- MediaFilterGenerator
-        full_name <- MediaFilterGenerator
-        id <- MediaIdGenerator
-        profile_picture <- MediaFilterGenerator
+        user_name <- Gen.option(arbitrary[String])
+        full_name <- Gen.option(arbitrary[String])
+        id <- Gen.option(arbitrary[BigInt])
+        profile_picture <- Gen.option(arbitrary[String])
     } yield MiniProfile(user_name, full_name, id, profile_picture)
-    def MediaLikesOptGenerator = for {
-        count <- MediaIdGenerator
-        data <- MediaUsers_in_photoGenerator
-    } yield MediaLikesOpt(count, data)
+    def MediaVideosOptionVideosGenerator = for {
+        low_resolution <- Gen.option(ImageGenerator)
+        standard_resolution <- Gen.option(ImageGenerator)
+    } yield MediaVideosOptionVideos(low_resolution, standard_resolution)
+    def MediaImagesOptionImagesGenerator = for {
+        low_resolution <- Gen.option(ImageGenerator)
+        thumbnail <- Gen.option(ImageGenerator)
+        standard_resolution <- Gen.option(ImageGenerator)
+    } yield MediaImagesOptionImages(low_resolution, thumbnail, standard_resolution)
     def LocationsSearchGetResponses200Generator = for {
-        data <- LocationsSearchGetResponses200DataGenerator
+        data <- Gen.option(Gen.containerOf[List,Location](LocationGenerator))
     } yield LocationsSearchGetResponses200(data)
-    def MediaImagesOptGenerator = for {
-        low_resolution <- MediaVideosLow_resolutionGenerator
-        thumbnail <- MediaVideosLow_resolutionGenerator
-        standard_resolution <- MediaVideosLow_resolutionGenerator
-    } yield MediaImagesOpt(low_resolution, thumbnail, standard_resolution)
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
 

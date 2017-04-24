@@ -11,32 +11,28 @@ object Generators extends JsValueGenerators {
 
     
     def createStringGenerator = _generate(StringGenerator)
-    def createUsersGetLimitGenerator = _generate(UsersGetLimitGenerator)
+    def createOptionBigIntGenerator = _generate(OptionBigIntGenerator)
     def createNullGenerator = _generate(NullGenerator)
-    def createPlantPlant_idGenerator = _generate(PlantPlant_idGenerator)
-    def createPlantsGetLimitGenerator = _generate(PlantsGetLimitGenerator)
-    def createUsersGetResponses200Generator = _generate(UsersGetResponses200Generator)
-    def createErrorCodeGenerator = _generate(ErrorCodeGenerator)
-    def createPlantsGetResponses200Generator = _generate(PlantsGetResponses200Generator)
-    def createAreasGetResponses200Generator = _generate(AreasGetResponses200Generator)
-    def createPlantsGetOffsetGenerator = _generate(PlantsGetOffsetGenerator)
-    def createPlantsPlant_idPicturesGetResponses200Generator = _generate(PlantsPlant_idPicturesGetResponses200Generator)
-    def createPlantsPlant_idWateringsGetResponses200Generator = _generate(PlantsPlant_idWateringsGetResponses200Generator)
+    def createOptionBigIntNameClashGenerator = _generate(OptionBigIntNameClashGenerator)
+    def createSeqUserGenerator = _generate(SeqUserGenerator)
+    def createSeqPlantGenerator = _generate(SeqPlantGenerator)
+    def createSeqAreaGenerator = _generate(SeqAreaGenerator)
+    def createOptionBigIntNameClashNameClashGenerator = _generate(OptionBigIntNameClashNameClashGenerator)
+    def createSeqStringGenerator = _generate(SeqStringGenerator)
+    def createSeqWateringGenerator = _generate(SeqWateringGenerator)
     
 
     
     def StringGenerator = arbitrary[String]
-    def UsersGetLimitGenerator = Gen.option(arbitrary[BigInt])
+    def OptionBigIntGenerator = Gen.option(arbitrary[BigInt])
     def NullGenerator = arbitrary[Null]
-    def PlantPlant_idGenerator = Gen.option(arbitrary[String])
-    def PlantsGetLimitGenerator = Gen.option(arbitrary[BigInt])
-    def UsersGetResponses200Generator: Gen[List[User]] = Gen.containerOf[List,User](UserGenerator)
-    def ErrorCodeGenerator = Gen.option(arbitrary[Int])
-    def PlantsGetResponses200Generator: Gen[List[Plant]] = Gen.containerOf[List,Plant](PlantGenerator)
-    def AreasGetResponses200Generator: Gen[List[Area]] = Gen.containerOf[List,Area](AreaGenerator)
-    def PlantsGetOffsetGenerator = Gen.option(arbitrary[BigInt])
-    def PlantsPlant_idPicturesGetResponses200Generator: Gen[List[String]] = Gen.containerOf[List,String](arbitrary[String])
-    def PlantsPlant_idWateringsGetResponses200Generator: Gen[List[Watering]] = Gen.containerOf[List,Watering](WateringGenerator)
+    def OptionBigIntNameClashGenerator = Gen.option(arbitrary[BigInt])
+    def SeqUserGenerator: Gen[List[User]] = Gen.containerOf[List,User](UserGenerator)
+    def SeqPlantGenerator: Gen[List[Plant]] = Gen.containerOf[List,Plant](PlantGenerator)
+    def SeqAreaGenerator: Gen[List[Area]] = Gen.containerOf[List,Area](AreaGenerator)
+    def OptionBigIntNameClashNameClashGenerator = Gen.option(arbitrary[BigInt])
+    def SeqStringGenerator: Gen[List[String]] = Gen.containerOf[List,String](arbitrary[String])
+    def SeqWateringGenerator: Gen[List[Watering]] = Gen.containerOf[List,Watering](WateringGenerator)
     
 
     def createSunlightNeedsGenerator = _generate(SunlightNeedsGenerator)
@@ -51,49 +47,49 @@ object Generators extends JsValueGenerators {
 
 
     def SunlightNeedsGenerator = for {
-        amount <- PlantPlant_idGenerator
+        amount <- Gen.option(arbitrary[String])
     } yield SunlightNeeds(amount)
     def PlantGenerator = for {
-        species <- PlantPlant_idGenerator
-        name <- PlantPlant_idGenerator
-        description <- PlantPlant_idGenerator
-        owner_id <- PlantPlant_idGenerator
-        plant_id <- PlantPlant_idGenerator
-        godparent <- PlantPlant_idGenerator
+        species <- Gen.option(arbitrary[String])
+        name <- Gen.option(arbitrary[String])
+        description <- Gen.option(arbitrary[String])
+        owner_id <- Gen.option(arbitrary[String])
+        plant_id <- Gen.option(arbitrary[String])
+        godparent <- Gen.option(arbitrary[String])
     } yield Plant(species, name, description, owner_id, plant_id, godparent)
     def UserGenerator = for {
-        user_id <- PlantPlant_idGenerator
-        name <- PlantPlant_idGenerator
-        area_id <- PlantPlant_idGenerator
+        user_id <- Gen.option(arbitrary[String])
+        name <- Gen.option(arbitrary[String])
+        area_id <- Gen.option(arbitrary[String])
     } yield User(user_id, name, area_id)
     def SigninDataGenerator = for {
-        username <- PlantPlant_idGenerator
-        password <- PlantPlant_idGenerator
-        email <- PlantPlant_idGenerator
+        username <- Gen.option(arbitrary[String])
+        password <- Gen.option(arbitrary[String])
+        email <- Gen.option(arbitrary[String])
     } yield SigninData(username, password, email)
     def WateringGenerator = for {
-        watering_id <- PlantPlant_idGenerator
-        user_id <- PlantPlant_idGenerator
-        date <- PlantPlant_idGenerator
+        watering_id <- Gen.option(arbitrary[String])
+        user_id <- Gen.option(arbitrary[String])
+        date <- Gen.option(arbitrary[String])
     } yield Watering(watering_id, user_id, date)
     def AreaGenerator = for {
-        area_id <- PlantPlant_idGenerator
-        building <- PlantPlant_idGenerator
-        floor <- PlantPlant_idGenerator
-        room <- PlantPlant_idGenerator
+        area_id <- Gen.option(arbitrary[String])
+        building <- Gen.option(arbitrary[String])
+        floor <- Gen.option(arbitrary[String])
+        room <- Gen.option(arbitrary[String])
     } yield Area(area_id, building, floor, room)
     def LocationGenerator = for {
-        area_id <- PlantPlant_idGenerator
-        details <- PlantPlant_idGenerator
+        area_id <- Gen.option(arbitrary[String])
+        details <- Gen.option(arbitrary[String])
     } yield Location(area_id, details)
     def ErrorGenerator = for {
-        code <- ErrorCodeGenerator
-        message <- PlantPlant_idGenerator
-        fields <- PlantPlant_idGenerator
+        code <- Gen.option(arbitrary[Int])
+        message <- Gen.option(arbitrary[String])
+        fields <- Gen.option(arbitrary[String])
     } yield Error(code, message, fields)
     def WaterNeedsGenerator = for {
-        amount <- PlantPlant_idGenerator
-        period <- PlantPlant_idGenerator
+        amount <- Gen.option(arbitrary[String])
+        period <- Gen.option(arbitrary[String])
     } yield WaterNeeds(amount, period)
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample

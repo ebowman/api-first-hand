@@ -69,23 +69,23 @@ class GetLong_requiredValidator(instance: Long) extends RecursiveValidator {
 // ----- complex type validators -----
 
 // ----- option delegating validators -----
-class GetDouble_optionalValidator(instance: GetDouble_optional) extends RecursiveValidator {
+class GetDouble_optionalValidator(instance: Option[Double]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new GetDouble_optionalOptValidator(_) }
 }
-class GetInteger_optionalValidator(instance: GetInteger_optional) extends RecursiveValidator {
+class GetInteger_optionalValidator(instance: Option[Int]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new GetInteger_optionalOptValidator(_) }
 }
-class GetLong_optionalValidator(instance: GetLong_optional) extends RecursiveValidator {
+class GetLong_optionalValidator(instance: Option[Long]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new GetLong_optionalOptValidator(_) }
 }
-class GetFloat_optionalValidator(instance: GetFloat_optional) extends RecursiveValidator {
+class GetFloat_optionalValidator(instance: Option[Float]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new GetFloat_optionalOptValidator(_) }
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
 // ----- composite validators -----
 // ----- call validations -----
-class GetValidator(float_required: Float, double_required: Double, integer_optional: GetInteger_optional, long_required: Long, integer_required: Int, float_optional: GetFloat_optional, double_optional: GetDouble_optional, long_optional: GetLong_optional) extends RecursiveValidator {
+class GetValidator(float_required: Float, double_required: Double, integer_optional: Option[Int], long_required: Long, integer_required: Int, float_optional: Option[Float], double_optional: Option[Double], long_optional: Option[Long]) extends RecursiveValidator {
     override val validators = Seq(
         new GetFloat_requiredValidator(float_required), 
     

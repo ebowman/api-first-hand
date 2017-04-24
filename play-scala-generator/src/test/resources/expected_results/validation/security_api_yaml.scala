@@ -18,17 +18,17 @@ class PetsIdGetIdArrValidator(instance: String) extends RecursiveValidator {
 
 // ----- option delegating validators -----
 // ----- array delegating validators -----
-class PetsIdGetIdConstraints(override val instance: PetsIdGetId) extends ValidationBase[PetsIdGetId] {
-    override def constraints: Seq[Constraint[PetsIdGetId]] =
+class PetsIdGetIdConstraints(override val instance: ArrayWrapper[String]) extends ValidationBase[ArrayWrapper[String]] {
+    override def constraints: Seq[Constraint[ArrayWrapper[String]]] =
         Seq()
 }
-class PetsIdGetIdValidator(instance: PetsIdGetId) extends RecursiveValidator {
+class PetsIdGetIdValidator(instance: ArrayWrapper[String]) extends RecursiveValidator {
     override val validators = new PetsIdGetIdConstraints(instance) +: instance.map { new PetsIdGetIdArrValidator(_)}
 }
 // ----- catch all simple validators -----
 // ----- composite validators -----
 // ----- call validations -----
-class PetsIdGetValidator(id: PetsIdGetId) extends RecursiveValidator {
+class PetsIdGetValidator(id: ArrayWrapper[String]) extends RecursiveValidator {
     override val validators = Seq(
         new PetsIdGetIdValidator(id)
     

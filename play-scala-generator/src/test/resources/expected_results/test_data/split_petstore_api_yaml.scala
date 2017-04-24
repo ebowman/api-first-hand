@@ -4,8 +4,8 @@ import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 import play.api.libs.json.scalacheck.JsValueGenerators
 import Arbitrary._
-import de.zalando.play.controllers.ArrayWrapper
 import java.time.ZonedDateTime
+import de.zalando.play.controllers.ArrayWrapper
 
 object Generators extends JsValueGenerators {
     
@@ -13,84 +13,64 @@ object Generators extends JsValueGenerators {
     
     def createStringGenerator = _generate(StringGenerator)
     def createNullGenerator = _generate(NullGenerator)
-    def createOrderStatusGenerator = _generate(OrderStatusGenerator)
-    def createPetsFindByStatusGetStatusOptGenerator = _generate(PetsFindByStatusGetStatusOptGenerator)
-    def createUsersCreateWithListPostBodyOptGenerator = _generate(UsersCreateWithListPostBodyOptGenerator)
-    def createOrderPetIdGenerator = _generate(OrderPetIdGenerator)
-    def createPetsFindByStatusGetResponses200Generator = _generate(PetsFindByStatusGetResponses200Generator)
-    def createPetsPostBodyGenerator = _generate(PetsPostBodyGenerator)
-    def createOrderShipDateGenerator = _generate(OrderShipDateGenerator)
-    def createUsersUsernamePutBodyGenerator = _generate(UsersUsernamePutBodyGenerator)
-    def createStoresOrderPostBodyGenerator = _generate(StoresOrderPostBodyGenerator)
-    def createOrderCompleteGenerator = _generate(OrderCompleteGenerator)
-    def createPetTagsGenerator = _generate(PetTagsGenerator)
+    def createOptionStringGenerator = _generate(OptionStringGenerator)
+    def createSeqPetGenerator = _generate(SeqPetGenerator)
+    def createOptionPetGenerator = _generate(OptionPetGenerator)
+    def createOptionUserGenerator = _generate(OptionUserGenerator)
+    def createOptionOrderGenerator = _generate(OptionOrderGenerator)
     def createLongGenerator = _generate(LongGenerator)
-    def createOrderQuantityGenerator = _generate(OrderQuantityGenerator)
-    def createPetPhotoUrlsGenerator = _generate(PetPhotoUrlsGenerator)
-    def createUsersCreateWithListPostBodyGenerator = _generate(UsersCreateWithListPostBodyGenerator)
-    def createPetsFindByStatusGetStatusGenerator = _generate(PetsFindByStatusGetStatusGenerator)
-    def createPetCategoryGenerator = _generate(PetCategoryGenerator)
-    def createPetTagsOptGenerator = _generate(PetTagsOptGenerator)
+    def createOptionSeqUserGenerator = _generate(OptionSeqUserGenerator)
+    def createOptionArrayWrapperStringGenerator = _generate(OptionArrayWrapperStringGenerator)
     
 
     
     def StringGenerator = arbitrary[String]
     def NullGenerator = arbitrary[Null]
-    def OrderStatusGenerator = Gen.option(arbitrary[String])
-    def PetsFindByStatusGetStatusOptGenerator = _genList(arbitrary[String], "multi")
-    def UsersCreateWithListPostBodyOptGenerator: Gen[List[User]] = Gen.containerOf[List,User](UserGenerator)
-    def OrderPetIdGenerator = Gen.option(arbitrary[Long])
-    def PetsFindByStatusGetResponses200Generator: Gen[List[Pet]] = Gen.containerOf[List,Pet](PetGenerator)
-    def PetsPostBodyGenerator = Gen.option(PetGenerator)
-    def OrderShipDateGenerator = Gen.option(arbitrary[ZonedDateTime])
-    def UsersUsernamePutBodyGenerator = Gen.option(UserGenerator)
-    def StoresOrderPostBodyGenerator = Gen.option(OrderGenerator)
-    def OrderCompleteGenerator = Gen.option(arbitrary[Boolean])
-    def PetTagsGenerator = Gen.option(PetTagsOptGenerator)
+    def OptionStringGenerator = Gen.option(arbitrary[String])
+    def SeqPetGenerator: Gen[List[Pet]] = Gen.containerOf[List,Pet](PetGenerator)
+    def OptionPetGenerator = Gen.option(PetGenerator)
+    def OptionUserGenerator = Gen.option(UserGenerator)
+    def OptionOrderGenerator = Gen.option(OrderGenerator)
     def LongGenerator = arbitrary[Long]
-    def OrderQuantityGenerator = Gen.option(arbitrary[Int])
-    def PetPhotoUrlsGenerator: Gen[List[String]] = Gen.containerOf[List,String](arbitrary[String])
-    def UsersCreateWithListPostBodyGenerator = Gen.option(UsersCreateWithListPostBodyOptGenerator)
-    def PetsFindByStatusGetStatusGenerator = Gen.option(PetsFindByStatusGetStatusOptGenerator)
-    def PetCategoryGenerator = Gen.option(PetCategoryOptGenerator)
-    def PetTagsOptGenerator: Gen[List[PetCategoryOpt]] = Gen.containerOf[List,PetCategoryOpt](PetCategoryOptGenerator)
+    def OptionSeqUserGenerator = Gen.option(Gen.containerOf[List,User](UserGenerator))
+    def OptionArrayWrapperStringGenerator = Gen.option(_genList(arbitrary[String], "multi"))
     
 
-    def createPetCategoryOptGenerator = _generate(PetCategoryOptGenerator)
-    def createPetGenerator = _generate(PetGenerator)
+    def createPetCategoryOptionCategoryGenerator = _generate(PetCategoryOptionCategoryGenerator)
     def createUserGenerator = _generate(UserGenerator)
+    def createPetGenerator = _generate(PetGenerator)
     def createOrderGenerator = _generate(OrderGenerator)
 
 
-    def PetCategoryOptGenerator = for {
-        id <- OrderPetIdGenerator
-        name <- OrderStatusGenerator
-    } yield PetCategoryOpt(id, name)
+    def PetCategoryOptionCategoryGenerator = for {
+        id <- Gen.option(arbitrary[Long])
+        name <- Gen.option(arbitrary[String])
+    } yield PetCategoryOptionCategory(id, name)
+    def UserGenerator = for {
+        email <- Gen.option(arbitrary[String])
+        username <- Gen.option(arbitrary[String])
+        userStatus <- Gen.option(arbitrary[Int])
+        lastName <- Gen.option(arbitrary[String])
+        firstName <- Gen.option(arbitrary[String])
+        id <- Gen.option(arbitrary[Long])
+        phone <- Gen.option(arbitrary[String])
+        password <- Gen.option(arbitrary[String])
+    } yield User(email, username, userStatus, lastName, firstName, id, phone, password)
     def PetGenerator = for {
         name <- arbitrary[String]
-        tags <- PetTagsGenerator
-        photoUrls <- PetPhotoUrlsGenerator
-        id <- OrderPetIdGenerator
-        status <- OrderStatusGenerator
-        category <- PetCategoryGenerator
-    } yield Pet(name, tags, photoUrls, id, status, category)
-    def UserGenerator = for {
-        email <- OrderStatusGenerator
-        username <- OrderStatusGenerator
-        userStatus <- OrderQuantityGenerator
-        lastName <- OrderStatusGenerator
-        firstName <- OrderStatusGenerator
-        id <- OrderPetIdGenerator
-        phone <- OrderStatusGenerator
-        password <- OrderStatusGenerator
-    } yield User(email, username, userStatus, lastName, firstName, id, phone, password)
+        photoUrls <- Gen.containerOf[List,String](arbitrary[String])
+        id <- Gen.option(arbitrary[Long])
+        status <- Gen.option(arbitrary[String])
+        tags <- Gen.option(Gen.containerOf[List,PetCategoryOptionCategory](PetCategoryOptionCategoryGenerator))
+        category <- Gen.option(PetCategoryOptionCategoryGenerator)
+    } yield Pet(name, photoUrls, id, status, tags, category)
     def OrderGenerator = for {
-        shipDate <- OrderShipDateGenerator
-        quantity <- OrderQuantityGenerator
-        petId <- OrderPetIdGenerator
-        id <- OrderPetIdGenerator
-        complete <- OrderCompleteGenerator
-        status <- OrderStatusGenerator
+        shipDate <- Gen.option(arbitrary[ZonedDateTime])
+        quantity <- Gen.option(arbitrary[Int])
+        petId <- Gen.option(arbitrary[Long])
+        id <- Gen.option(arbitrary[Long])
+        complete <- Gen.option(arbitrary[Boolean])
+        status <- Gen.option(arbitrary[String])
     } yield Order(shipDate, quantity, petId, id, complete, status)
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample

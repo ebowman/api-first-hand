@@ -15,36 +15,28 @@ object nested_objects_yaml extends WithModel {
 	Reference("⌿definitions⌿NestedObjects") → 
 		TypeDef(Reference("⌿definitions⌿NestedObjects"), 
 			Seq(
-					Field(Reference("⌿definitions⌿NestedObjects⌿plain"), TypeRef(Reference("⌿definitions⌿NestedObjects⌿plain"))),
-					Field(Reference("⌿definitions⌿NestedObjects⌿nested"), TypeRef(Reference("⌿definitions⌿NestedObjects⌿nested")))
+					Field(Reference("⌿definitions⌿NestedObjects⌿plain"), Opt(TypeRef(Reference("⌿definitions⌿NestedObjects⌿plain⌿Option⌿plain")), TypeMeta(None, List()))),
+					Field(Reference("⌿definitions⌿NestedObjects⌿nested"), Opt(TypeRef(Reference("⌿definitions⌿NestedObjects⌿nested⌿Option⌿nested")), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
-	Reference("⌿definitions⌿NestedObjects⌿nested") → 
-		Opt(TypeRef(Reference("⌿definitions⌿NestedObjects⌿nested⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿NestedObjects⌿plain") → 
-		Opt(TypeRef(Reference("⌿definitions⌿NestedObjects⌿plain⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿NestedObjects⌿nested⌿Opt") → 
-		TypeDef(Reference("⌿definitions⌿NestedObjects⌿nested"), 
+	Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2") → 
+		TypeDef(Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2"), 
 			Seq(
-					Field(Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2"), TypeRef(Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2")))
+					Field(Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3"), Opt(TypeRef(Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3⌿Option⌿nested3")), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
-	Reference("⌿definitions⌿NestedObjects⌿plain⌿Opt") → 
+	Reference("⌿definitions⌿NestedObjects⌿plain⌿Option⌿plain") → 
 		TypeDef(Reference("⌿definitions⌿NestedObjects⌿plain"), 
 			Seq(
 					Field(Reference("⌿definitions⌿NestedObjects⌿plain⌿simple"), Str(None, TypeMeta(None, List("""pattern("""+"""""""""+"""the pattern"""+"""""""""+""".r)"""))))
 			), TypeMeta(Some("Named types: 1"), List())),
-	Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2") → 
-		TypeDef(Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2"), 
+	Reference("⌿definitions⌿NestedObjects⌿nested⌿Option⌿nested") → 
+		TypeDef(Reference("⌿definitions⌿NestedObjects⌿nested"), 
 			Seq(
-					Field(Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3"), TypeRef(Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3")))
+					Field(Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2"), TypeRef(Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2")))
 			), TypeMeta(Some("Named types: 1"), List())),
-	Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3") → 
-		Opt(TypeRef(Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3⌿Opt")), TypeMeta(None, List())),
-	Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3⌿bottom") → 
-		Opt(Str(None, TypeMeta(None, List("maxLength(30)", "minLength(3)"))), TypeMeta(None, List())),
-	Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3⌿Opt") → 
+	Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3⌿Option⌿nested3") → 
 		TypeDef(Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3"), 
 			Seq(
-					Field(Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3⌿bottom"), TypeRef(Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3⌿bottom")))
+					Field(Reference("⌿definitions⌿NestedObjects⌿nested⌿nested2⌿nested3⌿bottom"), Opt(Str(None, TypeMeta(None, List("maxLength(30)", "minLength(3)"))), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List()))
 ) 
  

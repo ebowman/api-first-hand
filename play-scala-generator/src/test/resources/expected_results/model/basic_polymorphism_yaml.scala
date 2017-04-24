@@ -11,7 +11,7 @@ package yaml {
         def petType: String
     }
 
-    case class Zoo(tiers: ZooTiers) 
+    case class Zoo(tiers: Option[Seq[Pet]]) 
     case class Cat(name: String, petType: String, huntingSkill: CatHuntingSkill) extends IPet
     case class LabradorAllOf0(name: String, petType: String, packSize: Int) extends IPet
     case class Dog(name: String, petType: String, packSize: Int) extends IPet
@@ -39,9 +39,6 @@ package yaml {
 //noinspection ScalaStyle
 package object yaml {
 
-    type ZooTiersOpt = Seq[IPet]
-    type ZooTiers = Option[ZooTiersOpt]
-    type PutDummy = Option[IPet]
     type PutResponses200 = Null
 
     object CatHuntingSkill {

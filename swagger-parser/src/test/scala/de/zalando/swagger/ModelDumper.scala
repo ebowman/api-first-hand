@@ -24,7 +24,7 @@ object ModelDumper extends App with ExpectedResults {
 
   val validationFixtures = new File(resourcesPath + "validations").listFiles
 
-  def toTest: File => Boolean = f => f.getName.endsWith(".yaml") && f.getName.startsWith("i038")
+  def toTest: File => Boolean = f => f.getName.endsWith(".yaml") && f.getName.startsWith("enum")
 
   def run: Unit = {
     (modelFixtures ++ exampleFixtures ++ validationFixtures).filter(toTest).foreach { file =>

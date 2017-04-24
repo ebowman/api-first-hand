@@ -8,8 +8,8 @@ import de.zalando.play.controllers._
 import WriteableWrapper.writeable2wrapper
 import akka.util.ByteString
 
-import java.util.UUID
 import scala.math.BigDecimal
+import java.util.UUID
 
 
 
@@ -27,19 +27,19 @@ object ResponseWriters extends ResponseWritersBase {
     * in order for play-swagger to be able to provide safety net for
     * different response types
     */
-    val writable_application_json_Profile_esc: Writeable[Profile] =
+    val writable_application_json_Profile: Writeable[Profile] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_Error_esc: Writeable[Error] =
+    val writable_application_json_Error: Writeable[Error] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_ProductsGetResponses200_esc: Writeable[ProductsGetResponses200] =
+    val writable_application_json_SeqProduct: Writeable[Seq[Product]] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_EstimatesPriceGetResponses200_esc: Writeable[EstimatesPriceGetResponses200] =
+    val writable_application_json_SeqPriceEstimate: Writeable[Seq[PriceEstimate]] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_Activities_esc: Writeable[Activities] =
+    val writable_application_json_Activities: Writeable[Activities] =
         Writeable(a => ???, Some("application/json"))
 
     /**
@@ -47,11 +47,11 @@ object ResponseWriters extends ResponseWritersBase {
     * as a marshaller for different mime types and types of response
     */
     override val custom: Seq[WriteableWrapper[_]] = Seq(
-        writable_application_json_Profile_esc, 
-        writable_application_json_Error_esc, 
-        writable_application_json_ProductsGetResponses200_esc, 
-        writable_application_json_EstimatesPriceGetResponses200_esc, 
-        writable_application_json_Activities_esc
+        writable_application_json_Profile, 
+        writable_application_json_Error, 
+        writable_application_json_SeqProduct, 
+        writable_application_json_SeqPriceEstimate, 
+        writable_application_json_Activities
     )
 }
 

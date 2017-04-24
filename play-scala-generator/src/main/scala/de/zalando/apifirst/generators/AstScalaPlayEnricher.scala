@@ -145,8 +145,10 @@ object DenotationNames {
 
   private val generatorsSuffix = "Generator"
 
-  def generator(r: Reference, table: DenotationTable): String =
-    append(typeNameDenotation(table, r), generatorsSuffix)
+  def generator(r: Reference, table: DenotationTable): String = {
+    val name = typeNameDenotation(table, r).replace("[", "").replace("]", "")
+    append(name, generatorsSuffix)
+  }
 
   private val validatorsSuffix = "Validator"
 
@@ -183,7 +185,7 @@ object ReShaper {
   }
 
   def filterByType(tpe: String, table: DenotationTable): Iterable[Map[String, Any]] = table.collect {
-    case (r, m) if m.contains(tpe) => m(tpe)
+    case (_, denotation: Denotation) if denotation.contains(tpe) => denotation(tpe)
   }
 }
 

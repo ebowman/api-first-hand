@@ -31,14 +31,14 @@ class GetOptCodesOptValidator(instance: GetOptCodesOpt) extends RecursiveValidat
 }
 
 // ----- option delegating validators -----
-class GetOptCodesValidator(instance: GetOptCodes) extends RecursiveValidator {
+class GetOptCodesValidator(instance: Option[GetOptCodesOpt]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new GetOptCodesOptValidator(_) }
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
 // ----- composite validators -----
 // ----- call validations -----
-class GetValidator(optCodes: GetOptCodes, codes: GetCodes) extends RecursiveValidator {
+class GetValidator(optCodes: Option[GetOptCodesOpt], codes: GetCodes) extends RecursiveValidator {
     override val validators = Seq(
         new GetOptCodesValidator(optCodes), 
     

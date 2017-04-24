@@ -34,7 +34,6 @@ package yaml {
 //noinspection ScalaStyle
 package object yaml {
 
-    type GetOptCodes = Option[GetOptCodesOpt]
 
     object GetCodes {
         

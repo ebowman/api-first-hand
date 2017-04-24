@@ -26,46 +26,46 @@ object ResponseWriters extends ResponseWritersBase {
     * in order for play-swagger to be able to provide safety net for
     * different response types
     */
-    val writable_application_json_Error_esc: Writeable[Error] =
+    val writable_application_json_Error: Writeable[Error] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_Watering_esc: Writeable[Watering] =
+    val writable_application_json_Watering: Writeable[Watering] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_Null_esc: Writeable[Null] =
+    val writable_application_json_Null: Writeable[Null] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_User_esc: Writeable[User] =
+    val writable_application_json_User: Writeable[User] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_SunlightNeeds_esc: Writeable[SunlightNeeds] =
+    val writable_application_json_SunlightNeeds: Writeable[SunlightNeeds] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_UsersGetResponses200_esc: Writeable[UsersGetResponses200] =
+    val writable_application_json_SeqUser: Writeable[Seq[User]] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_Area_esc: Writeable[Area] =
+    val writable_application_json_Area: Writeable[Area] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_PlantsGetResponses200_esc: Writeable[PlantsGetResponses200] =
+    val writable_application_json_SeqPlant: Writeable[Seq[Plant]] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_AreasGetResponses200_esc: Writeable[AreasGetResponses200] =
+    val writable_application_json_SeqArea: Writeable[Seq[Area]] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_Location_esc: Writeable[Location] =
+    val writable_application_json_Location: Writeable[Location] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_PlantsPlant_idPicturesGetResponses200_esc: Writeable[PlantsPlant_idPicturesGetResponses200] =
+    val writable_application_json_SeqString: Writeable[Seq[String]] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_Plant_esc: Writeable[Plant] =
+    val writable_application_json_Plant: Writeable[Plant] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_PlantsPlant_idWateringsGetResponses200_esc: Writeable[PlantsPlant_idWateringsGetResponses200] =
+    val writable_application_json_SeqWatering: Writeable[Seq[Watering]] =
         Writeable(a => ???, Some("application/json"))
 
-    val writable_application_json_WaterNeeds_esc: Writeable[WaterNeeds] =
+    val writable_application_json_WaterNeeds: Writeable[WaterNeeds] =
         Writeable(a => ???, Some("application/json"))
 
     /**
@@ -73,20 +73,20 @@ object ResponseWriters extends ResponseWritersBase {
     * as a marshaller for different mime types and types of response
     */
     override val custom: Seq[WriteableWrapper[_]] = Seq(
-        writable_application_json_Error_esc, 
-        writable_application_json_Watering_esc, 
-        writable_application_json_Null_esc, 
-        writable_application_json_User_esc, 
-        writable_application_json_SunlightNeeds_esc, 
-        writable_application_json_UsersGetResponses200_esc, 
-        writable_application_json_Area_esc, 
-        writable_application_json_PlantsGetResponses200_esc, 
-        writable_application_json_AreasGetResponses200_esc, 
-        writable_application_json_Location_esc, 
-        writable_application_json_PlantsPlant_idPicturesGetResponses200_esc, 
-        writable_application_json_Plant_esc, 
-        writable_application_json_PlantsPlant_idWateringsGetResponses200_esc, 
-        writable_application_json_WaterNeeds_esc
+        writable_application_json_Error, 
+        writable_application_json_Watering, 
+        writable_application_json_Null, 
+        writable_application_json_User, 
+        writable_application_json_SunlightNeeds, 
+        writable_application_json_SeqUser, 
+        writable_application_json_Area, 
+        writable_application_json_SeqPlant, 
+        writable_application_json_SeqArea, 
+        writable_application_json_Location, 
+        writable_application_json_SeqString, 
+        writable_application_json_Plant, 
+        writable_application_json_SeqWatering, 
+        writable_application_json_WaterNeeds
     )
 }
 

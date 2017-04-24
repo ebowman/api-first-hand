@@ -58,21 +58,21 @@ class NewPetValidator(instance: NewPet) extends RecursiveValidator {
 }
 
 // ----- option delegating validators -----
-class PetsGetLimitValidator(instance: PetsGetLimit) extends RecursiveValidator {
+class PetsGetLimitValidator(instance: Option[Int]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new PetsGetLimitOptValidator(_) }
 }
-class PetsGetTagsValidator(instance: PetsGetTags) extends RecursiveValidator {
+class PetsGetTagsValidator(instance: Option[ArrayWrapper[String]]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new PetsGetTagsOptValidator(_) }
 }
-class NewPetTagValidator(instance: NewPetTag) extends RecursiveValidator {
+class NewPetTagValidator(instance: Option[String]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new NewPetTagOptValidator(_) }
 }
 // ----- array delegating validators -----
-class PetsGetTagsOptConstraints(override val instance: PetsGetTagsOpt) extends ValidationBase[PetsGetTagsOpt] {
-    override def constraints: Seq[Constraint[PetsGetTagsOpt]] =
+class PetsGetTagsOptConstraints(override val instance: ArrayWrapper[String]) extends ValidationBase[ArrayWrapper[String]] {
+    override def constraints: Seq[Constraint[ArrayWrapper[String]]] =
         Seq()
 }
-class PetsGetTagsOptValidator(instance: PetsGetTagsOpt) extends RecursiveValidator {
+class PetsGetTagsOptValidator(instance: ArrayWrapper[String]) extends RecursiveValidator {
     override val validators = new PetsGetTagsOptConstraints(instance) +: instance.map { new PetsGetTagsOptArrValidator(_)}
 }
 // ----- catch all simple validators -----
@@ -84,7 +84,7 @@ class PetsPostValidator(pet: NewPet) extends RecursiveValidator {
     
     )
 }
-class PetsGetValidator(tags: PetsGetTags, limit: PetsGetLimit) extends RecursiveValidator {
+class PetsGetValidator(tags: Option[ArrayWrapper[String]], limit: Option[Int]) extends RecursiveValidator {
     override val validators = Seq(
         new PetsGetTagsValidator(tags), 
     

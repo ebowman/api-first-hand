@@ -1,6 +1,6 @@
 package de.zalando.apifirst
 
-import java.io.File
+import java.io.{ File, PrintWriter }
 
 import de.zalando.apifirst.util.ScalaPrinter
 import org.scalatest.{ FunSpec, MustMatchers }
@@ -20,9 +20,11 @@ class TypeFlattenerIntegrationTest extends FunSpec with MustMatchers {
     basic_polymorphism_yaml,
     cross_spec_references_yaml,
     echo_api_yaml,
+    enum_yaml,
     error_in_array_yaml,
     expanded_polymorphism_yaml,
     form_data_yaml,
+    foodpanda_yaml,
     full_petstore_api_yaml,
     hackweek_yaml,
     heroku_petstore_api_yaml,
@@ -56,9 +58,18 @@ class TypeFlattenerIntegrationTest extends FunSpec with MustMatchers {
     val name = ScalaPrinter.nameFromModel(ast)
     it(s"should flatten API model $name") {
       val scalaModel = TypeNormaliser.flatten(ast.model)
+      //dump(name, ".scala", ScalaPrinter.asScala(name, scalaModel))
       val expected = asInFile(name, ".scala")
       clean(ScalaPrinter.asScala(name, scalaModel)) mustBe clean(expected)
     }
+  }
+
+  def dump(name: String, suffix: String, contents: String): Unit = {
+    val file = new File(expectation_path, prefix + name + suffix)
+    println(s"Writing {${file}}")
+    val pw = new PrintWriter(file)
+    pw.write(contents)
+    pw.close()
   }
 
   def asInFile(name: String, suffix: String): String = {

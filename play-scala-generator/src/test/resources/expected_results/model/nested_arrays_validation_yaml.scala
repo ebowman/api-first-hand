@@ -7,8 +7,8 @@ package nested_arrays_validation
 package yaml {
 
 
-    case class Activity(actions: ActivityActions) 
-    case class Example(messages: ExampleMessages, nestedArrays: ExampleNestedArrays) 
+    case class Activity(actions: Option[String]) 
+    case class Example(nestedArrays: Option[Seq[Seq[Seq[Seq[String]]]]], messages: Option[Seq[Seq[Activity]]]) 
 
 
     import play.api.libs.json._
@@ -16,10 +16,10 @@ package yaml {
     import de.zalando.play.controllers.MissingDefaultReads
     object BodyReads extends MissingDefaultReads {
         implicit val ExampleReads: Reads[Example] = (
-            (JsPath \ "messages").readNullable[ExampleMessagesOpt] and (JsPath \ "nestedArrays").readNullable[ExampleNestedArraysOpt]
+            (JsPath \ "nestedArrays").read[Option[Seq[Seq[Seq[Seq[String]]]]]] and (JsPath \ "messages").read[Option[Seq[Seq[Activity]]]]
         )(Example.apply _)
         implicit val ActivityReads: Reads[Activity] = (
-            (JsPath \ "actions").readNullable[String]
+            (JsPath \ "actions").read[Option[String]]
         ).map(Activity.apply )
     }
 
@@ -30,17 +30,7 @@ package yaml {
 //noinspection ScalaStyle
 package object yaml {
 
-    type ExampleNestedArraysOptArrResultArrResult = Seq[ExampleNestedArraysOptArrResultArrResultArrResult]
-    type ExampleNestedArraysOpt = Seq[ExampleNestedArraysOptArrResult]
-    type ExampleMessagesOpt = Seq[ExampleMessagesOptArrResult]
-    type AnotherPostExample = Option[Example]
-    type ExampleMessages = Option[ExampleMessagesOpt]
-    type ExampleNestedArraysOptArrResultArrResultArrResult = Seq[String]
     type AnotherPostResponses200 = Null
-    type ExampleNestedArraysOptArrResult = Seq[ExampleNestedArraysOptArrResultArrResult]
-    type ExampleNestedArrays = Option[ExampleNestedArraysOpt]
-    type ExampleMessagesOptArrResult = Seq[Activity]
-    type ActivityActions = Option[String]
 
 
 

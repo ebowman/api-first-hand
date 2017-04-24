@@ -11,24 +11,18 @@ object Generators extends JsValueGenerators {
 
     
     def createNullGenerator = _generate(NullGenerator)
-    def createNewPetTagGenerator = _generate(NewPetTagGenerator)
     def createLongGenerator = _generate(LongGenerator)
-    def createPetsGetLimitGenerator = _generate(PetsGetLimitGenerator)
-    def createNewPetIdGenerator = _generate(NewPetIdGenerator)
-    def createPetsGetTagsOptGenerator = _generate(PetsGetTagsOptGenerator)
-    def createPetsGetResponses200Generator = _generate(PetsGetResponses200Generator)
-    def createPetsGetTagsGenerator = _generate(PetsGetTagsGenerator)
+    def createOptionIntGenerator = _generate(OptionIntGenerator)
+    def createSeqPetGenerator = _generate(SeqPetGenerator)
+    def createOptionArrayWrapperStringGenerator = _generate(OptionArrayWrapperStringGenerator)
     
 
     
     def NullGenerator = arbitrary[Null]
-    def NewPetTagGenerator = Gen.option(arbitrary[String])
     def LongGenerator = arbitrary[Long]
-    def PetsGetLimitGenerator = Gen.option(arbitrary[Int])
-    def NewPetIdGenerator = Gen.option(arbitrary[Long])
-    def PetsGetTagsOptGenerator = _genList(arbitrary[String], "csv")
-    def PetsGetResponses200Generator: Gen[List[Pet]] = Gen.containerOf[List,Pet](PetGenerator)
-    def PetsGetTagsGenerator = Gen.option(PetsGetTagsOptGenerator)
+    def OptionIntGenerator = Gen.option(arbitrary[Int])
+    def SeqPetGenerator: Gen[List[Pet]] = Gen.containerOf[List,Pet](PetGenerator)
+    def OptionArrayWrapperStringGenerator = Gen.option(_genList(arbitrary[String], "csv"))
     
 
     def createErrorModelGenerator = _generate(ErrorModelGenerator)
@@ -43,13 +37,13 @@ object Generators extends JsValueGenerators {
     def PetGenerator = for {
         id <- arbitrary[Long]
         name <- arbitrary[String]
-        tag <- NewPetTagGenerator
+        tag <- Gen.option(arbitrary[String])
     } yield Pet(id, name, tag)
     def NewPetGenerator = for {
+        id <- Gen.option(arbitrary[Long])
         name <- arbitrary[String]
-        id <- NewPetIdGenerator
-        tag <- NewPetTagGenerator
-    } yield NewPet(name, id, tag)
+        tag <- Gen.option(arbitrary[String])
+    } yield NewPet(id, name, tag)
 
     def _generate[T](gen: Gen[T]) = (count: Int) => for (i <- 1 to count) yield gen.sample
 

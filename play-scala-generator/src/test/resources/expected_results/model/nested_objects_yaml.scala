@@ -6,11 +6,11 @@
 package nested_objects_yaml {
 
 
-    case class NestedObjectsNestedOpt(nested2: NestedObjectsNestedNested2) 
-    case class NestedObjectsNestedNested2Nested3Opt(bottom: NestedObjectsNestedNested2Nested3Bottom) 
-    case class NestedObjects(plain: NestedObjectsPlain, nested: NestedObjectsNested) 
-    case class NestedObjectsPlainOpt(simple: String) 
-    case class NestedObjectsNestedNested2(nested3: NestedObjectsNestedNested2Nested3) 
+    case class NestedObjectsNestedNested2Nested3OptionNested3(bottom: Option[String]) 
+    case class NestedObjectsPlainOptionPlain(simple: String) 
+    case class NestedObjects(plain: Option[NestedObjectsPlainOptionPlain], nested: Option[NestedObjectsNestedOptionNested]) 
+    case class NestedObjectsNestedOptionNested(nested2: NestedObjectsNestedNested2) 
+    case class NestedObjectsNestedNested2(nested3: Option[NestedObjectsNestedNested2Nested3OptionNested3]) 
 
 
 }
@@ -20,10 +20,6 @@ package nested_objects_yaml {
 //noinspection ScalaStyle
 package object nested_objects_yaml {
 
-    type NestedObjectsNested = Option[NestedObjectsNestedOpt]
-    type NestedObjectsNestedNested2Nested3Bottom = Option[String]
-    type NestedObjectsNestedNested2Nested3 = Option[NestedObjectsNestedNested2Nested3Opt]
-    type NestedObjectsPlain = Option[NestedObjectsPlainOpt]
 
 
 

@@ -7,21 +7,21 @@ import de.zalando.apifirst.Hypermedia._
 import de.zalando.apifirst.Http._
 import de.zalando.apifirst.Security
 import java.net.URL
-import Security._ 
+import Security._
 //noinspection ScalaStyle
 object hackweek_yaml extends WithModel {
- 
+
  def types = Map[Reference, Type](
-	Reference("⌿definitions⌿ModelSchemaRoot") → 
-		TypeDef(Reference("⌿definitions⌿ModelSchemaRoot"), 
+	Reference("⌿definitions⌿ModelSchemaRoot") →
+		TypeDef(Reference("⌿definitions⌿ModelSchemaRoot"),
 			Seq(
-					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿data"), Opt(TypeDef(Reference("⌿definitions⌿ModelSchema"), 
+					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿data"), Opt(TypeDef(Reference("⌿definitions⌿ModelSchema"),
 			Seq(
 						Field(Reference("⌿definitions⌿ModelSchema⌿name"), Str(None, TypeMeta(Some("Product name"), List()))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿description"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿sizeRegister"), Str(None, TypeMeta(None, List("maxLength(10)", "minLength(10)", """pattern("""+"""""""""+"""/[1-9][A-Z0-9]*/"""+"""""""""+""".r)""")))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿brand"), Str(None, TypeMeta(Some("Zalando brand code"), List("maxLength(3)", "minLength(3)", """pattern("""+"""""""""+"""/[A-Z0-9]{3,3}/"""+"""""""""+""".r)""")))),
-						Field(Reference("⌿definitions⌿ModelSchema⌿ageGroups"), ArrResult(					EnumTrait(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), TypeMeta(None, List("""enum("baby,kid,teen,adult")""")), 
+						Field(Reference("⌿definitions⌿ModelSchema⌿ageGroups"), ArrResult(					EnumTrait(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), TypeMeta(None, List("""enum("baby,kid,teen,adult")""")),
 						Set(
 							EnumObject(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), "baby", TypeMeta(Some("baby"), List())),
 							EnumObject(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), "kid", TypeMeta(Some("kid"), List())),
@@ -32,7 +32,7 @@ object hackweek_yaml extends WithModel {
 						Field(Reference("⌿definitions⌿ModelSchema⌿partnerArticleModelId"), BInt(TypeMeta(Some("???"), List()))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿keywords"), Opt(Str(None, TypeMeta(Some("Product Keywords. Comma-Space (', ') separated Keyword List. A keyword may contain letters both upper and lowercase as well as numbers and spaces. Each keyword has a maximum length of 255 characters. "), List("""pattern("""+"""""""""+"""/([\w\s]{1,255}|([\w\s]{1,255}, )+[\w\s]{1,255})/"""+"""""""""+""".r)"""))), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿lengthRegister"), Opt(Str(None, TypeMeta(Some("Zalando Product Length Grid"), List("maxLength(10)", "minLength(10)", """pattern("""+"""""""""+"""/[1-9][A-Z0-9]*/"""+"""""""""+""".r)"""))), TypeMeta(None, List()))),
-						Field(Reference("⌿definitions⌿ModelSchema⌿silhouetteId"), 					EnumTrait(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")""")), 
+						Field(Reference("⌿definitions⌿ModelSchema⌿silhouetteId"), 					EnumTrait(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")""")),
 						Set(
 							EnumObject(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), "vest", TypeMeta(Some("vest"), List())),
 							EnumObject(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), "ski", TypeMeta(Some("ski"), List())),
@@ -132,22 +132,22 @@ object hackweek_yaml extends WithModel {
 						Field(Reference("⌿definitions⌿ModelSchema⌿specialDescriptions"), Opt(ArrResult(Str(None, TypeMeta(Some("Each occurance of the 'specialDescription' node will be transformed into a single line in the Zalando Shop Frontend "), List())), TypeMeta(None, List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿articleModelAttributes"), Opt(ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(Some("Optional collection of product attributes - if present at least one attribute is required "), List("minItems(1)"))), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 11"), List())), TypeMeta(None, List()))),
-					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿meta"), Opt(TypeDef(Reference("⌿definitions⌿Meta"), 
+					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿meta"), Opt(TypeDef(Reference("⌿definitions⌿Meta"),
 			Seq(
 						Field(Reference("⌿definitions⌿Meta⌿copyright"), Opt(Str(None, TypeMeta(Some("Zalando SE Copyright notice"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())), TypeMeta(None, List()))),
-					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿links"), Opt(TypeDef(Reference("⌿definitions⌿Links"), 
+					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿links"), Opt(TypeDef(Reference("⌿definitions⌿Links"),
 			Seq(
 						Field(Reference("⌿definitions⌿Links⌿self"), Opt(Str(None, TypeMeta(Some("The link that generated the current response document"), List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿Links⌿related"), Opt(Str(None, TypeMeta(Some("A related resource link when the primary data represents a resource relationship"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 3"), List())),
-	Reference("⌿definitions⌿Errors") → 
-		TypeDef(Reference("⌿definitions⌿Errors"), 
+	Reference("⌿definitions⌿Errors") →
+		TypeDef(Reference("⌿definitions⌿Errors"),
 			Seq(
-					Field(Reference("⌿definitions⌿Errors⌿errors"), Opt(ArrResult(TypeDef(Reference("⌿definitions⌿Error"), 
+					Field(Reference("⌿definitions⌿Errors⌿errors"), Opt(ArrResult(TypeDef(Reference("⌿definitions⌿Error"),
 			Seq(
-						Field(Reference("⌿definitions⌿Error⌿source"), Opt(TypeDef(Reference("⌿definitions⌿ErrorSource"), 
+						Field(Reference("⌿definitions⌿Error⌿source"), Opt(TypeDef(Reference("⌿definitions⌿ErrorSource"),
 			Seq(
 							Field(Reference("⌿definitions⌿ErrorSource⌿pointer"), Opt(Str(None, TypeMeta(Some("""A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute]."""), List())), TypeMeta(None, List()))),
 							Field(Reference("⌿definitions⌿ErrorSource⌿parameter"), Opt(Str(None, TypeMeta(Some("A string indicating which URI query parameter caused the error."), List())), TypeMeta(None, List())))
@@ -158,25 +158,25 @@ object hackweek_yaml extends WithModel {
 						Field(Reference("⌿definitions⌿Error⌿title"), Opt(Str(None, TypeMeta(Some("A short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrenc of the problem, except for purposes of localization."), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 5"), List())), TypeMeta(Some("All errors"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
-	Reference("⌿definitions⌿ErrorSource") → 
-		TypeDef(Reference("⌿definitions⌿ErrorSource"), 
+	Reference("⌿definitions⌿ErrorSource") →
+		TypeDef(Reference("⌿definitions⌿ErrorSource"),
 			Seq(
 					Field(Reference("⌿definitions⌿ErrorSource⌿pointer"), Opt(Str(None, TypeMeta(Some("""A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute]."""), List())), TypeMeta(None, List()))),
 					Field(Reference("⌿definitions⌿ErrorSource⌿parameter"), Opt(Str(None, TypeMeta(Some("A string indicating which URI query parameter caused the error."), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
-	Reference("⌿definitions⌿Meta") → 
-		TypeDef(Reference("⌿definitions⌿Meta"), 
+	Reference("⌿definitions⌿Meta") →
+		TypeDef(Reference("⌿definitions⌿Meta"),
 			Seq(
 					Field(Reference("⌿definitions⌿Meta⌿copyright"), Opt(Str(None, TypeMeta(Some("Zalando SE Copyright notice"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())),
-	Reference("⌿definitions⌿ModelSchema") → 
-		TypeDef(Reference("⌿definitions⌿ModelSchema"), 
+	Reference("⌿definitions⌿ModelSchema") →
+		TypeDef(Reference("⌿definitions⌿ModelSchema"),
 			Seq(
 					Field(Reference("⌿definitions⌿ModelSchema⌿name"), Str(None, TypeMeta(Some("Product name"), List()))),
 					Field(Reference("⌿definitions⌿ModelSchema⌿description"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
 					Field(Reference("⌿definitions⌿ModelSchema⌿sizeRegister"), Str(None, TypeMeta(None, List("maxLength(10)", "minLength(10)", """pattern("""+"""""""""+"""/[1-9][A-Z0-9]*/"""+"""""""""+""".r)""")))),
 					Field(Reference("⌿definitions⌿ModelSchema⌿brand"), Str(None, TypeMeta(Some("Zalando brand code"), List("maxLength(3)", "minLength(3)", """pattern("""+"""""""""+"""/[A-Z0-9]{3,3}/"""+"""""""""+""".r)""")))),
-					Field(Reference("⌿definitions⌿ModelSchema⌿ageGroups"), ArrResult(				EnumTrait(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), TypeMeta(None, List("""enum("baby,kid,teen,adult")""")), 
+					Field(Reference("⌿definitions⌿ModelSchema⌿ageGroups"), ArrResult(				EnumTrait(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), TypeMeta(None, List("""enum("baby,kid,teen,adult")""")),
 					Set(
 						EnumObject(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), "baby", TypeMeta(Some("baby"), List())),
 						EnumObject(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), "kid", TypeMeta(Some("kid"), List())),
@@ -187,7 +187,7 @@ object hackweek_yaml extends WithModel {
 					Field(Reference("⌿definitions⌿ModelSchema⌿partnerArticleModelId"), BInt(TypeMeta(Some("???"), List()))),
 					Field(Reference("⌿definitions⌿ModelSchema⌿keywords"), Opt(Str(None, TypeMeta(Some("Product Keywords. Comma-Space (', ') separated Keyword List. A keyword may contain letters both upper and lowercase as well as numbers and spaces. Each keyword has a maximum length of 255 characters. "), List("""pattern("""+"""""""""+"""/([\w\s]{1,255}|([\w\s]{1,255}, )+[\w\s]{1,255})/"""+"""""""""+""".r)"""))), TypeMeta(None, List()))),
 					Field(Reference("⌿definitions⌿ModelSchema⌿lengthRegister"), Opt(Str(None, TypeMeta(Some("Zalando Product Length Grid"), List("maxLength(10)", "minLength(10)", """pattern("""+"""""""""+"""/[1-9][A-Z0-9]*/"""+"""""""""+""".r)"""))), TypeMeta(None, List()))),
-					Field(Reference("⌿definitions⌿ModelSchema⌿silhouetteId"), 				EnumTrait(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")""")), 
+					Field(Reference("⌿definitions⌿ModelSchema⌿silhouetteId"), 				EnumTrait(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")""")),
 					Set(
 						EnumObject(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), "low_shoe", TypeMeta(Some("low_shoe"), List())),
 						EnumObject(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), "headphones", TypeMeta(Some("headphones"), List())),
@@ -287,10 +287,10 @@ object hackweek_yaml extends WithModel {
 					Field(Reference("⌿definitions⌿ModelSchema⌿specialDescriptions"), Opt(ArrResult(Str(None, TypeMeta(Some("Each occurance of the 'specialDescription' node will be transformed into a single line in the Zalando Shop Frontend "), List())), TypeMeta(None, List())), TypeMeta(None, List()))),
 					Field(Reference("⌿definitions⌿ModelSchema⌿articleModelAttributes"), Opt(ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(Some("Optional collection of product attributes - if present at least one attribute is required "), List("minItems(1)"))), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 11"), List())),
-	Reference("⌿definitions⌿Error") → 
-		TypeDef(Reference("⌿definitions⌿Error"), 
+	Reference("⌿definitions⌿Error") →
+		TypeDef(Reference("⌿definitions⌿Error"),
 			Seq(
-					Field(Reference("⌿definitions⌿Error⌿source"), Opt(TypeDef(Reference("⌿definitions⌿ErrorSource"), 
+					Field(Reference("⌿definitions⌿Error⌿source"), Opt(TypeDef(Reference("⌿definitions⌿ErrorSource"),
 			Seq(
 						Field(Reference("⌿definitions⌿ErrorSource⌿pointer"), Opt(Str(None, TypeMeta(Some("""A JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute]."""), List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿ErrorSource⌿parameter"), Opt(Str(None, TypeMeta(Some("A string indicating which URI query parameter caused the error."), List())), TypeMeta(None, List())))
@@ -300,22 +300,22 @@ object hackweek_yaml extends WithModel {
 					Field(Reference("⌿definitions⌿Error⌿detail"), Opt(Str(None, TypeMeta(Some("A human-readable explanation specific to this occurrence of the problem."), List())), TypeMeta(None, List()))),
 					Field(Reference("⌿definitions⌿Error⌿title"), Opt(Str(None, TypeMeta(Some("A short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrenc of the problem, except for purposes of localization."), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 5"), List())),
-	Reference("⌿definitions⌿Links") → 
-		TypeDef(Reference("⌿definitions⌿Links"), 
+	Reference("⌿definitions⌿Links") →
+		TypeDef(Reference("⌿definitions⌿Links"),
 			Seq(
 					Field(Reference("⌿definitions⌿Links⌿self"), Opt(Str(None, TypeMeta(Some("The link that generated the current response document"), List())), TypeMeta(None, List()))),
 					Field(Reference("⌿definitions⌿Links⌿related"), Opt(Str(None, TypeMeta(Some("A related resource link when the primary data represents a resource relationship"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())),
-	Reference("⌿paths⌿/schema/model⌿get⌿root") → 
-		TypeDef(Reference("⌿definitions⌿ModelSchemaRoot"), 
+	Reference("⌿paths⌿/schema/model⌿get⌿root") →
+		TypeDef(Reference("⌿definitions⌿ModelSchemaRoot"),
 			Seq(
-					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿data"), Opt(TypeDef(Reference("⌿definitions⌿ModelSchema"), 
+					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿data"), Opt(TypeDef(Reference("⌿definitions⌿ModelSchema"),
 			Seq(
 						Field(Reference("⌿definitions⌿ModelSchema⌿name"), Str(None, TypeMeta(Some("Product name"), List()))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿description"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿sizeRegister"), Str(None, TypeMeta(None, List("maxLength(10)", "minLength(10)", """pattern("""+"""""""""+"""/[1-9][A-Z0-9]*/"""+"""""""""+""".r)""")))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿brand"), Str(None, TypeMeta(Some("Zalando brand code"), List("maxLength(3)", "minLength(3)", """pattern("""+"""""""""+"""/[A-Z0-9]{3,3}/"""+"""""""""+""".r)""")))),
-						Field(Reference("⌿definitions⌿ModelSchema⌿ageGroups"), ArrResult(					EnumTrait(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), TypeMeta(None, List("""enum("baby,kid,teen,adult")""")), 
+						Field(Reference("⌿definitions⌿ModelSchema⌿ageGroups"), ArrResult(					EnumTrait(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), TypeMeta(None, List("""enum("baby,kid,teen,adult")""")),
 						Set(
 							EnumObject(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), "baby", TypeMeta(Some("baby"), List())),
 							EnumObject(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), "kid", TypeMeta(Some("kid"), List())),
@@ -326,7 +326,7 @@ object hackweek_yaml extends WithModel {
 						Field(Reference("⌿definitions⌿ModelSchema⌿partnerArticleModelId"), BInt(TypeMeta(Some("???"), List()))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿keywords"), Opt(Str(None, TypeMeta(Some("Product Keywords. Comma-Space (', ') separated Keyword List. A keyword may contain letters both upper and lowercase as well as numbers and spaces. Each keyword has a maximum length of 255 characters. "), List("""pattern("""+"""""""""+"""/([\w\s]{1,255}|([\w\s]{1,255}, )+[\w\s]{1,255})/"""+"""""""""+""".r)"""))), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿lengthRegister"), Opt(Str(None, TypeMeta(Some("Zalando Product Length Grid"), List("maxLength(10)", "minLength(10)", """pattern("""+"""""""""+"""/[1-9][A-Z0-9]*/"""+"""""""""+""".r)"""))), TypeMeta(None, List()))),
-						Field(Reference("⌿definitions⌿ModelSchema⌿silhouetteId"), 					EnumTrait(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")""")), 
+						Field(Reference("⌿definitions⌿ModelSchema⌿silhouetteId"), 					EnumTrait(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")""")),
 						Set(
 							EnumObject(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), "vest", TypeMeta(Some("vest"), List())),
 							EnumObject(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), "ski", TypeMeta(Some("ski"), List())),
@@ -426,26 +426,26 @@ object hackweek_yaml extends WithModel {
 						Field(Reference("⌿definitions⌿ModelSchema⌿specialDescriptions"), Opt(ArrResult(Str(None, TypeMeta(Some("Each occurance of the 'specialDescription' node will be transformed into a single line in the Zalando Shop Frontend "), List())), TypeMeta(None, List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿articleModelAttributes"), Opt(ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(Some("Optional collection of product attributes - if present at least one attribute is required "), List("minItems(1)"))), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 11"), List())), TypeMeta(None, List()))),
-					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿meta"), Opt(TypeDef(Reference("⌿definitions⌿Meta"), 
+					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿meta"), Opt(TypeDef(Reference("⌿definitions⌿Meta"),
 			Seq(
 						Field(Reference("⌿definitions⌿Meta⌿copyright"), Opt(Str(None, TypeMeta(Some("Zalando SE Copyright notice"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())), TypeMeta(None, List()))),
-					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿links"), Opt(TypeDef(Reference("⌿definitions⌿Links"), 
+					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿links"), Opt(TypeDef(Reference("⌿definitions⌿Links"),
 			Seq(
 						Field(Reference("⌿definitions⌿Links⌿self"), Opt(Str(None, TypeMeta(Some("The link that generated the current response document"), List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿Links⌿related"), Opt(Str(None, TypeMeta(Some("A related resource link when the primary data represents a resource relationship"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 3"), List())),
-	Reference("⌿paths⌿/schema/model⌿get⌿responses⌿200") → 
-		TypeDef(Reference("⌿definitions⌿ModelSchemaRoot"), 
+	Reference("⌿paths⌿/schema/model⌿get⌿responses⌿200") →
+		TypeDef(Reference("⌿definitions⌿ModelSchemaRoot"),
 			Seq(
-					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿data"), Opt(TypeDef(Reference("⌿definitions⌿ModelSchema"), 
+					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿data"), Opt(TypeDef(Reference("⌿definitions⌿ModelSchema"),
 			Seq(
 						Field(Reference("⌿definitions⌿ModelSchema⌿name"), Str(None, TypeMeta(Some("Product name"), List()))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿description"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿sizeRegister"), Str(None, TypeMeta(None, List("maxLength(10)", "minLength(10)", """pattern("""+"""""""""+"""/[1-9][A-Z0-9]*/"""+"""""""""+""".r)""")))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿brand"), Str(None, TypeMeta(Some("Zalando brand code"), List("maxLength(3)", "minLength(3)", """pattern("""+"""""""""+"""/[A-Z0-9]{3,3}/"""+"""""""""+""".r)""")))),
-						Field(Reference("⌿definitions⌿ModelSchema⌿ageGroups"), ArrResult(					EnumTrait(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), TypeMeta(None, List("""enum("baby,kid,teen,adult")""")), 
+						Field(Reference("⌿definitions⌿ModelSchema⌿ageGroups"), ArrResult(					EnumTrait(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), TypeMeta(None, List("""enum("baby,kid,teen,adult")""")),
 						Set(
 							EnumObject(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), "baby", TypeMeta(Some("baby"), List())),
 							EnumObject(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), "kid", TypeMeta(Some("kid"), List())),
@@ -456,7 +456,7 @@ object hackweek_yaml extends WithModel {
 						Field(Reference("⌿definitions⌿ModelSchema⌿partnerArticleModelId"), BInt(TypeMeta(Some("???"), List()))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿keywords"), Opt(Str(None, TypeMeta(Some("Product Keywords. Comma-Space (', ') separated Keyword List. A keyword may contain letters both upper and lowercase as well as numbers and spaces. Each keyword has a maximum length of 255 characters. "), List("""pattern("""+"""""""""+"""/([\w\s]{1,255}|([\w\s]{1,255}, )+[\w\s]{1,255})/"""+"""""""""+""".r)"""))), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿lengthRegister"), Opt(Str(None, TypeMeta(Some("Zalando Product Length Grid"), List("maxLength(10)", "minLength(10)", """pattern("""+"""""""""+"""/[1-9][A-Z0-9]*/"""+"""""""""+""".r)"""))), TypeMeta(None, List()))),
-						Field(Reference("⌿definitions⌿ModelSchema⌿silhouetteId"), 					EnumTrait(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")""")), 
+						Field(Reference("⌿definitions⌿ModelSchema⌿silhouetteId"), 					EnumTrait(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")""")),
 						Set(
 							EnumObject(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), "vest", TypeMeta(Some("vest"), List())),
 							EnumObject(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), "ski", TypeMeta(Some("ski"), List())),
@@ -556,28 +556,28 @@ object hackweek_yaml extends WithModel {
 						Field(Reference("⌿definitions⌿ModelSchema⌿specialDescriptions"), Opt(ArrResult(Str(None, TypeMeta(Some("Each occurance of the 'specialDescription' node will be transformed into a single line in the Zalando Shop Frontend "), List())), TypeMeta(None, List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿ModelSchema⌿articleModelAttributes"), Opt(ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(Some("Optional collection of product attributes - if present at least one attribute is required "), List("minItems(1)"))), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 11"), List())), TypeMeta(None, List()))),
-					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿meta"), Opt(TypeDef(Reference("⌿definitions⌿Meta"), 
+					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿meta"), Opt(TypeDef(Reference("⌿definitions⌿Meta"),
 			Seq(
 						Field(Reference("⌿definitions⌿Meta⌿copyright"), Opt(Str(None, TypeMeta(Some("Zalando SE Copyright notice"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())), TypeMeta(None, List()))),
-					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿links"), Opt(TypeDef(Reference("⌿definitions⌿Links"), 
+					Field(Reference("⌿definitions⌿ModelSchemaRoot⌿links"), Opt(TypeDef(Reference("⌿definitions⌿Links"),
 			Seq(
 						Field(Reference("⌿definitions⌿Links⌿self"), Opt(Str(None, TypeMeta(Some("The link that generated the current response document"), List())), TypeMeta(None, List()))),
 						Field(Reference("⌿definitions⌿Links⌿related"), Opt(Str(None, TypeMeta(Some("A related resource link when the primary data represents a resource relationship"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 3"), List()))
-) 
- 
+)
+
  def parameters = Map[ParameterRef, Parameter](
-	ParameterRef(	Reference("⌿paths⌿/schema/model⌿get⌿root")) → Parameter("root", TypeDef(Reference("⌿definitions⌿ModelSchemaRoot"), 
+	ParameterRef(	Reference("⌿paths⌿/schema/model⌿get⌿root")) → Parameter("root", TypeDef(Reference("⌿definitions⌿ModelSchemaRoot"),
 			Seq(
-		Field(Reference("⌿definitions⌿ModelSchemaRoot⌿data"), Opt(TypeDef(Reference("⌿definitions⌿ModelSchema"), 
+		Field(Reference("⌿definitions⌿ModelSchemaRoot⌿data"), Opt(TypeDef(Reference("⌿definitions⌿ModelSchema"),
 			Seq(
 			Field(Reference("⌿definitions⌿ModelSchema⌿name"), Str(None, TypeMeta(Some("Product name"), List()))),
 			Field(Reference("⌿definitions⌿ModelSchema⌿description"), Opt(Str(None, TypeMeta(None, List())), TypeMeta(None, List()))),
 			Field(Reference("⌿definitions⌿ModelSchema⌿sizeRegister"), Str(None, TypeMeta(None, List("maxLength(10)", "minLength(10)", """pattern("""+"""""""""+"""/[1-9][A-Z0-9]*/"""+"""""""""+""".r)""")))),
 			Field(Reference("⌿definitions⌿ModelSchema⌿brand"), Str(None, TypeMeta(Some("Zalando brand code"), List("maxLength(3)", "minLength(3)", """pattern("""+"""""""""+"""/[A-Z0-9]{3,3}/"""+"""""""""+""".r)""")))),
-			Field(Reference("⌿definitions⌿ModelSchema⌿ageGroups"), ArrResult(		EnumTrait(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), TypeMeta(None, List("""enum("baby,kid,teen,adult")""")), 
+			Field(Reference("⌿definitions⌿ModelSchema⌿ageGroups"), ArrResult(		EnumTrait(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), TypeMeta(None, List("""enum("baby,kid,teen,adult")""")),
 			Set(
 				EnumObject(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), "baby", TypeMeta(Some("baby"), List())),
 				EnumObject(Str(None, TypeMeta(None, List("""enum("baby,kid,teen,adult")"""))), "kid", TypeMeta(Some("kid"), List())),
@@ -588,7 +588,7 @@ object hackweek_yaml extends WithModel {
 			Field(Reference("⌿definitions⌿ModelSchema⌿partnerArticleModelId"), BInt(TypeMeta(Some("???"), List()))),
 			Field(Reference("⌿definitions⌿ModelSchema⌿keywords"), Opt(Str(None, TypeMeta(Some("Product Keywords. Comma-Space (', ') separated Keyword List. A keyword may contain letters both upper and lowercase as well as numbers and spaces. Each keyword has a maximum length of 255 characters. "), List("""pattern("""+"""""""""+"""/([\w\s]{1,255}|([\w\s]{1,255}, )+[\w\s]{1,255})/"""+"""""""""+""".r)"""))), TypeMeta(None, List()))),
 			Field(Reference("⌿definitions⌿ModelSchema⌿lengthRegister"), Opt(Str(None, TypeMeta(Some("Zalando Product Length Grid"), List("maxLength(10)", "minLength(10)", """pattern("""+"""""""""+"""/[1-9][A-Z0-9]*/"""+"""""""""+""".r)"""))), TypeMeta(None, List()))),
-			Field(Reference("⌿definitions⌿ModelSchema⌿silhouetteId"), 		EnumTrait(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")""")), 
+			Field(Reference("⌿definitions⌿ModelSchema⌿silhouetteId"), 		EnumTrait(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")""")),
 			Set(
 				EnumObject(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), "night_trouser", TypeMeta(Some("night_trouser"), List())),
 				EnumObject(Str(None, TypeMeta(None, List("""enum("ankle_boots,nightdress,low_shoe,ballerina_shoe,voucher,belt,skates,eye_cosmetic,dress,sleeping_bag,system,other_accessoires,bag,etui,bikini_top,hair,undershirt,bathroom,bedroom,one_piece_nightwear,combination_clothing,sun,t_shirt_top,watch,night_shirt,pumps,stocking,boots,beach_trouser,tent,lip_cosmetic,underpant,skincare,backpack,pullover,lounge,sandals,suit_accessoires,coat,other_equipment,beach_shirt,bicycle,ski,cardigan,protector,beach_accessoires,jacket,one_piece_beachwear,headgear,shoe_accessoires,sneaker,headphones,kitchen,bicycle_equipment,ball,nightwear_combination,fitness,tights,one_piece_suit,vest,bustier,first_shoe,one_piece_underwear,bikini_combination,face_cosmetic,fragrance,glasses,shirt,trouser,racket,travel_equipment,case,backless_slipper,umbrella,underwear_combination,jewellery,shave,skirt,bathrobe,wallet,cleansing,night_trouser,corsage,peeling,beauty_equipment,nail,toys,bra,gloves,living,keychain,scarf,boards")"""))), "beach_shirt", TypeMeta(Some("beach_shirt"), List())),
@@ -688,22 +688,22 @@ object hackweek_yaml extends WithModel {
 			Field(Reference("⌿definitions⌿ModelSchema⌿specialDescriptions"), Opt(ArrResult(Str(None, TypeMeta(Some("Each occurance of the 'specialDescription' node will be transformed into a single line in the Zalando Shop Frontend "), List())), TypeMeta(None, List())), TypeMeta(None, List()))),
 			Field(Reference("⌿definitions⌿ModelSchema⌿articleModelAttributes"), Opt(ArrResult(Str(None, TypeMeta(None, List())), TypeMeta(Some("Optional collection of product attributes - if present at least one attribute is required "), List("minItems(1)"))), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 11"), List())), TypeMeta(None, List()))),
-		Field(Reference("⌿definitions⌿ModelSchemaRoot⌿meta"), Opt(TypeDef(Reference("⌿definitions⌿Meta"), 
+		Field(Reference("⌿definitions⌿ModelSchemaRoot⌿meta"), Opt(TypeDef(Reference("⌿definitions⌿Meta"),
 			Seq(
 			Field(Reference("⌿definitions⌿Meta⌿copyright"), Opt(Str(None, TypeMeta(Some("Zalando SE Copyright notice"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 1"), List())), TypeMeta(None, List()))),
-		Field(Reference("⌿definitions⌿ModelSchemaRoot⌿links"), Opt(TypeDef(Reference("⌿definitions⌿Links"), 
+		Field(Reference("⌿definitions⌿ModelSchemaRoot⌿links"), Opt(TypeDef(Reference("⌿definitions⌿Links"),
 			Seq(
 			Field(Reference("⌿definitions⌿Links⌿self"), Opt(Str(None, TypeMeta(Some("The link that generated the current response document"), List())), TypeMeta(None, List()))),
 			Field(Reference("⌿definitions⌿Links⌿related"), Opt(Str(None, TypeMeta(Some("A related resource link when the primary data represents a resource relationship"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 2"), List())), TypeMeta(None, List())))
 			), TypeMeta(Some("Named types: 3"), List())), None, None, ".+", encode = false, ParameterPlace.withName("body"))
-) 
- def basePath: String = "/boo" 
+)
+ def basePath: String = "/boo"
  def discriminators: DiscriminatorLookupTable = Map[Reference, Reference](
 	)
  def securityDefinitions: SecurityDefinitionsTable = Map[String, Security.Definition](
-	
+
 )
 def stateTransitions: StateTransitionsTable = Map[State, Map[State, TransitionProperties]]()
 def calls: Seq[ApiCall] = Seq(
@@ -712,7 +712,7 @@ def calls: Seq[ApiCall] = Seq(
 			"hackweek.yaml",
 			"HackweekYaml",
 			instantiate = false,
-			"getschemaModel",parameters = 
+			"getschemaModel",parameters =
 			Seq(
 				ParameterRef(Reference("⌿paths⌿/schema/model⌿get⌿root"))
 				)
@@ -733,5 +733,5 @@ def calls: Seq[ApiCall] = Seq(
 def packageName: Option[String] = Some("hackweek.yaml")
 
 def model = new StrictModel(calls, types, parameters, discriminators, basePath, packageName, stateTransitions, securityDefinitions)
-    
-} 
+
+}

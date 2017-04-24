@@ -29,11 +29,11 @@ import Generators._
 
 import de.zalando.play.controllers.Base64String
 import Base64String._
+import de.zalando.play.controllers.BinaryString
+import BinaryString._
 import java.time.ZonedDateTime
 import java.util.UUID
 import java.time.LocalDate
-import de.zalando.play.controllers.BinaryString
-import BinaryString._
 
 //noinspection ScalaStyle
 class String_formats_yamlSpec extends WordSpec with OptionValues with WsScalaTestClient with OneAppPerTest  {
@@ -60,7 +60,7 @@ class String_formats_yamlSpec extends WordSpec with OptionValues with WsScalaTes
 
 
     "GET /" should {
-        def testInvalidInput(input: (GetDate_time, GetDate, GetBase64, GetUuid, BinaryString)): Prop = {
+        def testInvalidInput(input: (Option[ZonedDateTime], Option[LocalDate], Option[Base64String], Option[UUID], BinaryString)): Prop = {
 
             val (date_time, date, base64, uuid, petId) = input
 
@@ -111,7 +111,7 @@ class String_formats_yamlSpec extends WordSpec with OptionValues with WsScalaTes
             }
             propertyList.reduce(_ && _)
         }
-        def testValidInput(input: (GetDate_time, GetDate, GetBase64, GetUuid, BinaryString)): Prop = {
+        def testValidInput(input: (Option[ZonedDateTime], Option[LocalDate], Option[Base64String], Option[UUID], BinaryString)): Prop = {
             val (date_time, date, base64, uuid, petId) = input
             
             val parsed_petId = parserConstructor("application/json").writeValueAsString(petId)
@@ -170,10 +170,10 @@ class String_formats_yamlSpec extends WordSpec with OptionValues with WsScalaTes
         }
         "discard invalid data" in {
             val genInputs = for {
-                        date_time <- GetDate_timeGenerator
-                        date <- GetDateGenerator
-                        base64 <- GetBase64Generator
-                        uuid <- GetUuidGenerator
+                        date_time <- OptionZonedDateTimeGenerator
+                        date <- OptionLocalDateGenerator
+                        base64 <- OptionBase64StringGenerator
+                        uuid <- OptionUUIDGenerator
                         petId <- BinaryStringGenerator
                     
                 } yield (date_time, date, base64, uuid, petId)
@@ -185,10 +185,10 @@ class String_formats_yamlSpec extends WordSpec with OptionValues with WsScalaTes
         }
         "do something with valid data" in {
             val genInputs = for {
-                    date_time <- GetDate_timeGenerator
-                    date <- GetDateGenerator
-                    base64 <- GetBase64Generator
-                    uuid <- GetUuidGenerator
+                    date_time <- OptionZonedDateTimeGenerator
+                    date <- OptionLocalDateGenerator
+                    base64 <- OptionBase64StringGenerator
+                    uuid <- OptionUUIDGenerator
                     petId <- BinaryStringGenerator
                 
             } yield (date_time, date, base64, uuid, petId)

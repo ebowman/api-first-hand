@@ -5,10 +5,10 @@ import de.zalando.play.controllers._
 import PlayBodyParsing._
 import PlayValidations._
 
+import java.time.ZonedDateTime
 import java.time.LocalDate
 import de.zalando.play.controllers.BinaryString
 import BinaryString._
-import java.time.ZonedDateTime
 import de.zalando.play.controllers.Base64String
 import Base64String._
 // ----- constraints and wrapper validations -----
@@ -99,29 +99,29 @@ class StringPostBase64optionalOptValidator(instance: Base64String) extends Recur
 // ----- complex type validators -----
 
 // ----- option delegating validators -----
-class StringPostString_optionalValidator(instance: StringPostString_optional) extends RecursiveValidator {
+class StringPostString_optionalValidator(instance: Option[String]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new StringPostString_optionalOptValidator(_) }
 }
-class StringPostPassword_optionalValidator(instance: StringPostPassword_optional) extends RecursiveValidator {
+class StringPostPassword_optionalValidator(instance: Option[String]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new StringPostPassword_optionalOptValidator(_) }
 }
-class StringPostDate_optionalValidator(instance: StringPostDate_optional) extends RecursiveValidator {
+class StringPostDate_optionalValidator(instance: Option[LocalDate]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new StringPostDate_optionalOptValidator(_) }
 }
-class StringPostBinary_optionalValidator(instance: StringPostBinary_optional) extends RecursiveValidator {
+class StringPostBinary_optionalValidator(instance: Option[BinaryString]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new StringPostBinary_optionalOptValidator(_) }
 }
-class StringPostDate_time_optionalValidator(instance: StringPostDate_time_optional) extends RecursiveValidator {
+class StringPostDate_time_optionalValidator(instance: Option[ZonedDateTime]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new StringPostDate_time_optionalOptValidator(_) }
 }
-class StringPostBase64optionalValidator(instance: StringPostBase64optional) extends RecursiveValidator {
+class StringPostBase64optionalValidator(instance: Option[Base64String]) extends RecursiveValidator {
     override val validators = instance.toSeq.map { new StringPostBase64optionalOptValidator(_) }
 }
 // ----- array delegating validators -----
 // ----- catch all simple validators -----
 // ----- composite validators -----
 // ----- call validations -----
-class StringPostValidator(string_required: String, password_optional: StringPostPassword_optional, date_required: LocalDate, binary_optional: StringPostBinary_optional, date_optional: StringPostDate_optional, base64required: Base64String, base64optional: StringPostBase64optional, string_optional: StringPostString_optional, date_time_required: ZonedDateTime, password_required: String, date_time_optional: StringPostDate_time_optional) extends RecursiveValidator {
+class StringPostValidator(string_required: String, password_optional: Option[String], date_required: LocalDate, binary_optional: Option[BinaryString], date_optional: Option[LocalDate], base64required: Base64String, base64optional: Option[Base64String], string_optional: Option[String], date_time_required: ZonedDateTime, password_required: String, date_time_optional: Option[ZonedDateTime]) extends RecursiveValidator {
     override val validators = Seq(
         new StringPostString_requiredValidator(string_required), 
     

@@ -10,15 +10,15 @@ package type_deduplication
 package yaml {
 
 
-    case class SunlightNeeds(amount: PlantPlant_id) 
-    case class Plant(species: PlantPlant_id, name: PlantPlant_id, description: PlantPlant_id, owner_id: PlantPlant_id, plant_id: PlantPlant_id, godparent: PlantPlant_id) 
-    case class User(user_id: PlantPlant_id, name: PlantPlant_id, area_id: PlantPlant_id) 
-    case class SigninData(username: PlantPlant_id, password: PlantPlant_id, email: PlantPlant_id) 
-    case class Watering(watering_id: PlantPlant_id, user_id: PlantPlant_id, date: PlantPlant_id) 
-    case class Area(area_id: PlantPlant_id, building: PlantPlant_id, floor: PlantPlant_id, room: PlantPlant_id) 
-    case class Location(area_id: PlantPlant_id, details: PlantPlant_id) 
-    case class Error(code: ErrorCode, message: PlantPlant_id, fields: PlantPlant_id) 
-    case class WaterNeeds(amount: PlantPlant_id, period: PlantPlant_id) 
+    case class SunlightNeeds(amount: Option[String]) 
+    case class Plant(species: Option[String], name: Option[String], description: Option[String], owner_id: Option[String], plant_id: Option[String], godparent: Option[String]) 
+    case class User(user_id: Option[String], name: Option[String], area_id: Option[String]) 
+    case class SigninData(username: Option[String], password: Option[String], email: Option[String]) 
+    case class Watering(watering_id: Option[String], user_id: Option[String], date: Option[String]) 
+    case class Area(area_id: Option[String], building: Option[String], floor: Option[String], room: Option[String]) 
+    case class Location(area_id: Option[String], details: Option[String]) 
+    case class Error(code: Option[Int], message: Option[String], fields: Option[String]) 
+    case class WaterNeeds(amount: Option[String], period: Option[String]) 
 
 
     import play.api.libs.json._
@@ -26,22 +26,22 @@ package yaml {
     import de.zalando.play.controllers.MissingDefaultReads
     object BodyReads extends MissingDefaultReads {
         implicit val WaterNeedsReads: Reads[WaterNeeds] = (
-            (JsPath \ "amount").readNullable[String] and (JsPath \ "period").readNullable[String]
+            (JsPath \ "amount").read[Option[String]] and (JsPath \ "period").read[Option[String]]
         )(WaterNeeds.apply _)
         implicit val PlantReads: Reads[Plant] = (
-            (JsPath \ "species").readNullable[String] and (JsPath \ "name").readNullable[String] and (JsPath \ "description").readNullable[String] and (JsPath \ "owner_id").readNullable[String] and (JsPath \ "plant_id").readNullable[String] and (JsPath \ "godparent").readNullable[String]
+            (JsPath \ "species").read[Option[String]] and (JsPath \ "name").read[Option[String]] and (JsPath \ "description").read[Option[String]] and (JsPath \ "owner_id").read[Option[String]] and (JsPath \ "plant_id").read[Option[String]] and (JsPath \ "godparent").read[Option[String]]
         )(Plant.apply _)
         implicit val LocationReads: Reads[Location] = (
-            (JsPath \ "area_id").readNullable[String] and (JsPath \ "details").readNullable[String]
+            (JsPath \ "area_id").read[Option[String]] and (JsPath \ "details").read[Option[String]]
         )(Location.apply _)
         implicit val UserReads: Reads[User] = (
-            (JsPath \ "user_id").readNullable[String] and (JsPath \ "name").readNullable[String] and (JsPath \ "area_id").readNullable[String]
+            (JsPath \ "user_id").read[Option[String]] and (JsPath \ "name").read[Option[String]] and (JsPath \ "area_id").read[Option[String]]
         )(User.apply _)
         implicit val SigninDataReads: Reads[SigninData] = (
-            (JsPath \ "username").readNullable[String] and (JsPath \ "password").readNullable[String] and (JsPath \ "email").readNullable[String]
+            (JsPath \ "username").read[Option[String]] and (JsPath \ "password").read[Option[String]] and (JsPath \ "email").read[Option[String]]
         )(SigninData.apply _)
         implicit val SunlightNeedsReads: Reads[SunlightNeeds] = (
-            (JsPath \ "amount").readNullable[String]
+            (JsPath \ "amount").read[Option[String]]
         ).map(SunlightNeeds.apply )
     }
 
@@ -121,17 +121,7 @@ package yaml {
 //noinspection ScalaStyle
 package object yaml {
 
-    type UsersGetLimit = Option[BigInt]
     type PlantsPlant_idPicturesPicture_idPutResponses404 = Null
-    type PlantPlant_id = Option[String]
-    type PlantsGetLimit = Option[BigInt]
-    type UsersGetResponses200 = Seq[User]
-    type ErrorCode = Option[Int]
-    type PlantsGetResponses200 = Seq[Plant]
-    type AreasGetResponses200 = Seq[Area]
-    type PlantsGetOffset = Option[BigInt]
-    type PlantsPlant_idPicturesGetResponses200 = Seq[String]
-    type PlantsPlant_idWateringsGetResponses200 = Seq[Watering]
 
 
 import play.api.mvc.{QueryStringBindable, PathBindable}

@@ -37,8 +37,6 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
           |// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
           |//noinspection ScalaStyle
           |package object scala {
-          |    type Opti = Option[Long]
-          |    type Stri = Option[String]
           |}"""
     }
 
@@ -56,8 +54,6 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
           |// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
           |//noinspection ScalaStyle
           |package object txt {
-          |    type Option = Option[Long]
-          |    type String = Option[String]
           |}"""
     }
 
@@ -77,9 +73,6 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
           |// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
           |//noinspection ScalaStyle
           |package object scala {
-          |    type Int = ArrayWrapper[Int]
-          |    type Dbl = ArrayWrapper[Double]
-          |    type Flt = ArrayWrapper[Float]
           |}"""
     }
 
@@ -145,8 +138,6 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
           |// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
           |//noinspection ScalaStyle
           |package object scala {
-          |    type OptionalData = Option[Passwords]
-          |    type Passwords = ArrayWrapper[String]
           |}"""
     }
 
@@ -247,6 +238,24 @@ class ScalaModelGeneratorTest extends FunSpec with MustMatchers {
           |package scala {
           |    case class ErrorModel(message: String, code: Int)
           |    case class ExtendedErrorModel(message: String, code: Int, rootCause: String)
+          |}
+          |// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
+          |//noinspection ScalaStyle
+          |package object scala {
+          |}"""
+    }
+
+    it("should generate recursive containers") {
+      val model = Map(
+        "definitions" / "Opti" -> Opt(Opt(Lng(None), None), None),
+        "definitions" / "ArrStri" -> ArrResult(Opt(Arr(Str(None, None), None, "format here"), None), None)
+      )
+      val result = new ScalaGenerator(model).generateModel("test-file.scala", "`test-file`.scala")
+      result mustBeAs
+        """package `test-file`
+          |    import de.zalando.play.controllers.ArrayWrapper
+          |//noinspection ScalaStyle
+          |package scala {
           |}
           |// should be defined after the package because of the https://issues.scala-lang.org/browse/SI-9922
           |//noinspection ScalaStyle

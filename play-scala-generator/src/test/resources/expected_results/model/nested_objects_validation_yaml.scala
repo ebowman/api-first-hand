@@ -7,11 +7,11 @@ package nested_objects_validation
 package yaml {
 
 
-    case class NestedObjectsNestedOpt(nested2: NestedObjectsNestedNested2) 
-    case class NestedObjectsNestedNested2Nested3Opt(bottom: NestedObjectsNestedNested2Nested3Bottom) 
-    case class NestedObjects(plain: NestedObjectsPlain, nested: NestedObjectsNested) 
-    case class NestedObjectsPlainOpt(simple: String) 
-    case class NestedObjectsNestedNested2(nested3: NestedObjectsNestedNested2Nested3) 
+    case class NestedObjectsNestedNested2Nested3OptionNested3(bottom: Option[String]) 
+    case class NestedObjectsPlainOptionPlain(simple: String) 
+    case class NestedObjects(plain: Option[NestedObjectsPlainOptionPlain], nested: Option[NestedObjectsNestedOptionNested]) 
+    case class NestedObjectsNestedOptionNested(nested2: NestedObjectsNestedNested2) 
+    case class NestedObjectsNestedNested2(nested3: Option[NestedObjectsNestedNested2Nested3OptionNested3]) 
 
 
     import play.api.libs.json._
@@ -19,10 +19,10 @@ package yaml {
     import de.zalando.play.controllers.MissingDefaultReads
     object BodyReads extends MissingDefaultReads {
         implicit val NestedObjectsNestedNested2Reads: Reads[NestedObjectsNestedNested2] = (
-            (JsPath \ "nested3").readNullable[NestedObjectsNestedNested2Nested3Opt]
+            (JsPath \ "nested3").read[Option[NestedObjectsNestedNested2Nested3OptionNested3]]
         ).map(NestedObjectsNestedNested2.apply )
         implicit val NestedObjectsReads: Reads[NestedObjects] = (
-            (JsPath \ "plain").readNullable[NestedObjectsPlainOpt] and (JsPath \ "nested").readNullable[NestedObjectsNestedOpt]
+            (JsPath \ "plain").read[Option[NestedObjectsPlainOptionPlain]] and (JsPath \ "nested").read[Option[NestedObjectsNestedOptionNested]]
         )(NestedObjects.apply _)
     }
 
@@ -33,10 +33,6 @@ package yaml {
 //noinspection ScalaStyle
 package object yaml {
 
-    type NestedObjectsNested = Option[NestedObjectsNestedOpt]
-    type NestedObjectsNestedNested2Nested3Bottom = Option[String]
-    type NestedObjectsNestedNested2Nested3 = Option[NestedObjectsNestedNested2Nested3Opt]
-    type NestedObjectsPlain = Option[NestedObjectsPlainOpt]
     type GetResponses200 = Null
 
 

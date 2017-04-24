@@ -10,8 +10,8 @@ import PlayBodyParsing._
 import scala.concurrent.Future
 
 import scala.util._
-import java.util.UUID
 import scala.math.BigDecimal
+import java.util.UUID
 
 import de.zalando.play.controllers.PlayPathBindables
 
@@ -103,15 +103,15 @@ def getproductsAction[T] = (f: getproductsActionType[T]) => (latitude: Double, l
     def GetestimatesTime200(resultF: Future[Seq[Product]])(implicit writerP: String => Option[Writeable[Seq[Product]]]) = resultF map { resultP => (new GetestimatesTimeType[Seq[Product]] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type getestimatesTimeActionRequestType       = (Double, Double, EstimatesTimeGetCustomer_uuid, ProfilePicture)
+    private type getestimatesTimeActionRequestType       = (Double, Double, Option[UUID], Option[String])
     private type getestimatesTimeActionType[T]            = getestimatesTimeActionRequestType => Future[GetestimatesTimeType[T] forSome { type T }]
 
 
     val getestimatesTimeActionConstructor  = Action
 
-def getestimatesTimeAction[T] = (f: getestimatesTimeActionType[T]) => (start_latitude: Double, start_longitude: Double, customer_uuid: EstimatesTimeGetCustomer_uuid, product_id: ProfilePicture) => getestimatesTimeActionConstructor.async { implicit request: Request[AnyContent] =>
+def getestimatesTimeAction[T] = (f: getestimatesTimeActionType[T]) => (start_latitude: Double, start_longitude: Double, customer_uuid: Option[UUID], product_id: Option[String]) => getestimatesTimeActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgetestimatesTimeRequest(start_latitude: Double, start_longitude: Double, customer_uuid: EstimatesTimeGetCustomer_uuid, product_id: ProfilePicture): Either[Result, Future[GetestimatesTimeType[_]]] = {
+        def processValidgetestimatesTimeRequest(start_latitude: Double, start_longitude: Double, customer_uuid: Option[UUID], product_id: Option[String]): Either[Result, Future[GetestimatesTimeType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((start_latitude, start_longitude, customer_uuid, product_id)))
             
             new EstimatesTimeGetValidator(start_latitude, start_longitude, customer_uuid, product_id).errors match {
@@ -189,15 +189,15 @@ def getestimatesPriceAction[T] = (f: getestimatesPriceActionType[T]) => (start_l
     def Gethistory200(resultF: Future[Activities])(implicit writerP: String => Option[Writeable[Activities]]) = resultF map { resultP => (new GethistoryType[Activities] { val statusCode = 200; val result = resultP; val writer = writerP }) }
     
 
-    private type gethistoryActionRequestType       = (ErrorCode, ErrorCode)
+    private type gethistoryActionRequestType       = (Option[Int], Option[Int])
     private type gethistoryActionType[T]            = gethistoryActionRequestType => Future[GethistoryType[T] forSome { type T }]
 
 
     val gethistoryActionConstructor  = Action
 
-def gethistoryAction[T] = (f: gethistoryActionType[T]) => (offset: ErrorCode, limit: ErrorCode) => gethistoryActionConstructor.async { implicit request: Request[AnyContent] =>
+def gethistoryAction[T] = (f: gethistoryActionType[T]) => (offset: Option[Int], limit: Option[Int]) => gethistoryActionConstructor.async { implicit request: Request[AnyContent] =>
 
-        def processValidgethistoryRequest(offset: ErrorCode, limit: ErrorCode): Either[Result, Future[GethistoryType[_]]] = {
+        def processValidgethistoryRequest(offset: Option[Int], limit: Option[Int]): Either[Result, Future[GethistoryType[_]]] = {
           lazy val apiFirstTempResultHolder = Right(f((offset, limit)))
             
             new HistoryGetValidator(offset, limit).errors match {
