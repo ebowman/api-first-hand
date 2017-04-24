@@ -1,6 +1,7 @@
 package echo
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -20,7 +21,7 @@ import de.zalando.play.controllers.ResponseWriters
 
 
 //noinspection ScalaStyle
-trait EchoHandlerBase extends Controller with PlayBodyParsing {
+trait EchoHandlerBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait MethodType[T] extends ResultWrapper[T]
     
@@ -61,7 +62,7 @@ def methodAction[T] = (f: methodActionType[T]) => methodActionConstructor.async 
     lazy val NotImplementedYet = Future.successful(NotImplementedYetSync)
 }
 //noinspection ScalaStyle
-trait EchoApiYamlBase extends Controller with PlayBodyParsing {
+trait EchoApiYamlBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait PostType[T] extends ResultWrapper[T]
     def Post200(resultP: PostResponses200)(implicit writerP: String => Option[Writeable[PostResponses200]]) = success(new PostType[PostResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })
@@ -82,9 +83,9 @@ def postAction[T] = (f: postActionType[T]) => postActionConstructor.async { impl
             new PostValidator(name, year).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           
@@ -139,9 +140,9 @@ def gettest_pathByIdAction[T] = (f: gettest_pathByIdActionType[T]) => (id: Strin
             new Test_pathIdGetValidator(id).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           

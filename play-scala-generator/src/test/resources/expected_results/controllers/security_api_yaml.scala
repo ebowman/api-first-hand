@@ -3,6 +3,8 @@ import play.api.mvc.{Action,Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.i18n.MessagesApi
+
 import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
 
 import de.zalando.play.controllers._
@@ -23,22 +25,24 @@ import javax.inject._
 
 package security.api.yaml {
     // ----- Start of unmanaged code area for package SecurityApiYaml
+            
     // ----- End of unmanaged code area for package SecurityApiYaml
     class SecurityApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections SecurityApiYaml
 
         // ----- End of unmanaged code area for injections SecurityApiYaml
+        val messagesApi: MessagesApi,
         lifecycle: ApplicationLifecycle,
         config: ConfigurationProvider
     ) extends SecurityApiYamlBase {
         // ----- Start of unmanaged code area for constructor SecurityApiYaml
 
         // ----- End of unmanaged code area for constructor SecurityApiYaml
-        val getPetsById = getPetsByIdAction { (id: PetsIdGetId) =>
+        val getPetsById = getPetsByIdAction { (id: PetsIdGetId) =>  
             // ----- Start of unmanaged code area for action  SecurityApiYaml.getPetsById
             NotImplementedYet
             // ----- End of unmanaged code area for action  SecurityApiYaml.getPetsById
         }
-
+    
     }
 }

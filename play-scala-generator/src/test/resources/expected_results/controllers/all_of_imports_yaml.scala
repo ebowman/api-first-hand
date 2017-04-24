@@ -3,6 +3,8 @@ import play.api.mvc.{Action,Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.i18n.MessagesApi
+
 import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
 
 import de.zalando.play.controllers._
@@ -23,22 +25,24 @@ import javax.inject._
 
 package all_of_imports.yaml {
     // ----- Start of unmanaged code area for package All_of_importsYaml
+            
     // ----- End of unmanaged code area for package All_of_importsYaml
     class All_of_importsYaml @Inject() (
         // ----- Start of unmanaged code area for injections All_of_importsYaml
 
         // ----- End of unmanaged code area for injections All_of_importsYaml
+        val messagesApi: MessagesApi,
         lifecycle: ApplicationLifecycle,
         config: ConfigurationProvider
     ) extends All_of_importsYamlBase {
         // ----- Start of unmanaged code area for constructor All_of_importsYaml
 
         // ----- End of unmanaged code area for constructor All_of_importsYaml
-        val post = postAction { (body: DatetimeValue) =>
+        val post = postAction { (body: DatetimeValue) =>  
             // ----- Start of unmanaged code area for action  All_of_importsYaml.post
             NotImplementedYet
             // ----- End of unmanaged code area for action  All_of_importsYaml.post
         }
-
+    
     }
 }

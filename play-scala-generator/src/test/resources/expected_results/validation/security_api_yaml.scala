@@ -8,10 +8,12 @@ import PlayValidations._
 import de.zalando.play.controllers.ArrayWrapper
 // ----- constraints and wrapper validations -----
 class PetsIdGetIdArrConstraints(override val instance: String) extends ValidationBase[String] {
+    override val reference = "⌿paths⌿/pets/{id}⌿get⌿id⌿Arr"
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
 class PetsIdGetIdArrValidator(instance: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/pets/{id}⌿get⌿id⌿Arr"
     override val validators = Seq(new PetsIdGetIdArrConstraints(instance))
 }
 // ----- complex type validators -----
@@ -19,16 +21,19 @@ class PetsIdGetIdArrValidator(instance: String) extends RecursiveValidator {
 // ----- option delegating validators -----
 // ----- array delegating validators -----
 class PetsIdGetIdConstraints(override val instance: PetsIdGetId) extends ValidationBase[PetsIdGetId] {
+    override val reference = "⌿paths⌿/pets/{id}⌿get⌿id"
     override def constraints: Seq[Constraint[PetsIdGetId]] =
         Seq()
 }
 class PetsIdGetIdValidator(instance: PetsIdGetId) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/pets/{id}⌿get⌿id"
     override val validators = new PetsIdGetIdConstraints(instance) +: instance.map { new PetsIdGetIdArrValidator(_)}
 }
 // ----- catch all simple validators -----
 // ----- composite validators -----
 // ----- call validations -----
 class PetsIdGetValidator(id: PetsIdGetId) extends RecursiveValidator {
+    override val reference = "⌿paths⌿pets⌿{id}⌿get"
     override val validators = Seq(
         new PetsIdGetIdValidator(id)
     

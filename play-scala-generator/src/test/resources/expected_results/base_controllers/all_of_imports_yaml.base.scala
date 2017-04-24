@@ -1,6 +1,7 @@
 package all_of_imports.yaml
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -16,7 +17,7 @@ import java.time.ZonedDateTime
 
 
 //noinspection ScalaStyle
-trait All_of_importsYamlBase extends Controller with PlayBodyParsing {
+trait All_of_importsYamlBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait PostType[T] extends ResultWrapper[T]
     def Post200(resultP: DatetimeValue)(implicit writerP: String => Option[Writeable[DatetimeValue]]) = success(new PostType[DatetimeValue] { val statusCode = 200; val result = resultP; val writer = writerP })
@@ -49,9 +50,9 @@ def postAction[T] = (f: postActionType[T]) => postActionConstructor.async(postPa
             new PostValidator(body).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           

@@ -1,6 +1,7 @@
 package admin
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -18,7 +19,7 @@ import de.zalando.play.controllers.ResponseWriters
 
 
 //noinspection ScalaStyle
-trait DashboardBase extends Controller with PlayBodyParsing {
+trait DashboardBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait IndexType[T] extends ResultWrapper[T]
     

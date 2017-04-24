@@ -3,6 +3,8 @@ import play.api.mvc.{Action,Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.i18n.MessagesApi
+
 import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
 
 import de.zalando.play.controllers._
@@ -23,38 +25,40 @@ import javax.inject._
 
 package split.petstore.api.yaml {
     // ----- Start of unmanaged code area for package SplitPetstoreApiYaml
+            
     // ----- End of unmanaged code area for package SplitPetstoreApiYaml
     class SplitPetstoreApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections SplitPetstoreApiYaml
 
         // ----- End of unmanaged code area for injections SplitPetstoreApiYaml
+        val messagesApi: MessagesApi,
         lifecycle: ApplicationLifecycle,
         config: ConfigurationProvider
     ) extends SplitPetstoreApiYamlBase {
         // ----- Start of unmanaged code area for constructor SplitPetstoreApiYaml
 
         // ----- End of unmanaged code area for constructor SplitPetstoreApiYaml
-        val findPetsByTags = findPetsByTagsAction { (tags: PetsFindByStatusGetStatus) =>
+        val findPetsByTags = findPetsByTagsAction { (tags: PetsFindByStatusGetStatus) =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.findPetsByTags
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.findPetsByTags
         }
-        val placeOrder = placeOrderAction { (body: StoresOrderPostBody) =>
+        val placeOrder = placeOrderAction { (body: StoresOrderPostBody) =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.placeOrder
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.placeOrder
         }
-        val createUser = createUserAction { (body: UsersUsernamePutBody) =>
+        val createUser = createUserAction { (body: UsersUsernamePutBody) =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.createUser
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.createUser
         }
-        val createUsersWithListInput = createUsersWithListInputAction { (body: UsersCreateWithListPostBody) =>
+        val createUsersWithListInput = createUsersWithListInputAction { (body: UsersCreateWithListPostBody) =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.createUsersWithListInput
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.createUsersWithListInput
         }
-        val getUserByName = getUserByNameAction { (username: String) =>
+        val getUserByName = getUserByNameAction { (username: String) =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.getUserByName
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.getUserByName
@@ -65,42 +69,42 @@ package split.petstore.api.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.updateUser
         }
-        val deleteUser = deleteUserAction { (username: String) =>
+        val deleteUser = deleteUserAction { (username: String) =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.deleteUser
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.deleteUser
         }
-        val updatePet = updatePetAction { (body: PetsPostBody) =>
+        val updatePet = updatePetAction { (body: PetsPostBody) =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.updatePet
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.updatePet
         }
-        val addPet = addPetAction { (body: PetsPostBody) =>
+        val addPet = addPetAction { (body: PetsPostBody) =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.addPet
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.addPet
         }
-        val createUsersWithArrayInput = createUsersWithArrayInputAction { (body: UsersCreateWithListPostBody) =>
+        val createUsersWithArrayInput = createUsersWithArrayInputAction { (body: UsersCreateWithListPostBody) =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.createUsersWithArrayInput
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.createUsersWithArrayInput
         }
-        val getOrderById = getOrderByIdAction { (orderId: String) =>
+        val getOrderById = getOrderByIdAction { (orderId: String) =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.getOrderById
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.getOrderById
         }
-        val deleteOrder = deleteOrderAction { (orderId: String) =>
+        val deleteOrder = deleteOrderAction { (orderId: String) =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.deleteOrder
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.deleteOrder
         }
-        val logoutUser = logoutUserAction {  _ =>
+        val logoutUser = logoutUserAction {  _ =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.logoutUser
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.logoutUser
         }
-        val getPetById = getPetByIdAction { (petId: Long) =>
+        val getPetById = getPetByIdAction { (petId: Long) =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.getPetById
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.getPetById
@@ -117,7 +121,7 @@ package split.petstore.api.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.deletePet
         }
-        val findPetsByStatus = findPetsByStatusAction { (status: PetsFindByStatusGetStatus) =>
+        val findPetsByStatus = findPetsByStatusAction { (status: PetsFindByStatusGetStatus) =>  
             // ----- Start of unmanaged code area for action  SplitPetstoreApiYaml.findPetsByStatus
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.findPetsByStatus
@@ -128,6 +132,6 @@ package split.petstore.api.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  SplitPetstoreApiYaml.loginUser
         }
-
+    
     }
 }

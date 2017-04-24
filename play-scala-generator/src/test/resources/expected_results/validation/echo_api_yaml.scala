@@ -7,23 +7,28 @@ import PlayValidations._
 
 // ----- constraints and wrapper validations -----
 class PostNameOptConstraints(override val instance: String) extends ValidationBase[String] {
+    override val reference = "⌿paths⌿/⌿post⌿name⌿Opt"
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
 class PostNameOptValidator(instance: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/⌿post⌿name⌿Opt"
     override val validators = Seq(new PostNameOptConstraints(instance))
 }
 class Test_pathIdGetIdConstraints(override val instance: String) extends ValidationBase[String] {
+    override val reference = "⌿paths⌿/test-path/{id}⌿get⌿id"
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
 class Test_pathIdGetIdValidator(instance: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/test-path/{id}⌿get⌿id"
     override val validators = Seq(new Test_pathIdGetIdConstraints(instance))
 }
 // ----- complex type validators -----
 
 // ----- option delegating validators -----
 class PostNameValidator(instance: PostName) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/⌿post⌿name"
     override val validators = instance.toSeq.map { new PostNameOptValidator(_) }
 }
 // ----- array delegating validators -----
@@ -31,12 +36,14 @@ class PostNameValidator(instance: PostName) extends RecursiveValidator {
 // ----- composite validators -----
 // ----- call validations -----
 class Test_pathIdGetValidator(id: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿test-path⌿{id}⌿get"
     override val validators = Seq(
         new Test_pathIdGetIdValidator(id)
     
     )
 }
 class PostValidator(name: PostName, year: PostName) extends RecursiveValidator {
+    override val reference = "⌿paths⌿⌿post"
     override val validators = Seq(
         new PostNameValidator(name), 
     

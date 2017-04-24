@@ -1,6 +1,7 @@
 package i041_no_json_deserialiser.yaml
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -20,7 +21,7 @@ import de.zalando.play.controllers.PlayPathBindables
 
 
 //noinspection ScalaStyle
-trait I041_no_json_deserialiserYamlBase extends Controller with PlayBodyParsing {
+trait I041_no_json_deserialiserYamlBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait ListUserType[T] extends ResultWrapper[T]
     def ListUser200(resultP: Seq[User])(implicit writerP: String => Option[Writeable[Seq[User]]]) = success(new ListUserType[Seq[User]] { val statusCode = 200; val result = resultP; val writer = writerP })
@@ -75,9 +76,9 @@ def createUserAction[T] = (f: createUserActionType[T]) => (name: String) => crea
             new UserPostValidator(name).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           
@@ -118,9 +119,9 @@ def showUserByIdAction[T] = (f: showUserByIdActionType[T]) => (id: BigInt) => sh
             new UserIdGetValidator(id).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           
@@ -171,9 +172,9 @@ def putUserAction[T] = (f: putUserActionType[T]) => (id: BigInt) => putUserActio
             new UserIdPutValidator(id, body).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           

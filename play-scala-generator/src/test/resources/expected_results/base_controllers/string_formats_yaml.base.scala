@@ -1,6 +1,7 @@
 package string_formats.yaml
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -24,7 +25,7 @@ import de.zalando.play.controllers.PlayPathBindables
 
 
 //noinspection ScalaStyle
-trait String_formatsYamlBase extends Controller with PlayBodyParsing {
+trait String_formatsYamlBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait GetType[T] extends ResultWrapper[T]
     
@@ -54,9 +55,9 @@ def getAction[T] = (f: getActionType[T]) => (date_time: GetDate_time, date: GetD
             new GetValidator(date_time, date, base64, uuid, petId).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           

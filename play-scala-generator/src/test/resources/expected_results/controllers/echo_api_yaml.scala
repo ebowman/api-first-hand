@@ -3,6 +3,8 @@ import play.api.mvc.{Action,Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.i18n.MessagesApi
+
 import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
 
 import de.zalando.play.controllers._
@@ -23,32 +25,36 @@ import javax.inject._
 
 package echo {
     // ----- Start of unmanaged code area for package EchoHandler
+            
     // ----- End of unmanaged code area for package EchoHandler
     class EchoHandler @Inject() (
         // ----- Start of unmanaged code area for injections EchoHandler
 
         // ----- End of unmanaged code area for injections EchoHandler
+        val messagesApi: MessagesApi,
         lifecycle: ApplicationLifecycle,
         config: ConfigurationProvider
     ) extends EchoHandlerBase {
         // ----- Start of unmanaged code area for constructor EchoHandler
 
         // ----- End of unmanaged code area for constructor EchoHandler
-        val method = methodAction {  _ =>
+        val method = methodAction {  _ =>  
             // ----- Start of unmanaged code area for action  EchoHandler.method
             NotImplementedYet
             // ----- End of unmanaged code area for action  EchoHandler.method
         }
-
+    
     }
 }
 package echo {
     // ----- Start of unmanaged code area for package EchoApiYaml
+            
     // ----- End of unmanaged code area for package EchoApiYaml
     class EchoApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections EchoApiYaml
 
         // ----- End of unmanaged code area for injections EchoApiYaml
+        val messagesApi: MessagesApi,
         lifecycle: ApplicationLifecycle,
         config: ConfigurationProvider
     ) extends EchoApiYamlBase {
@@ -61,11 +67,11 @@ package echo {
             NotImplementedYet
             // ----- End of unmanaged code area for action  EchoApiYaml.post
         }
-        val gettest_pathById = gettest_pathByIdAction { (id: String) =>
+        val gettest_pathById = gettest_pathByIdAction { (id: String) =>  
             // ----- Start of unmanaged code area for action  EchoApiYaml.gettest_pathById
             NotImplementedYet
             // ----- End of unmanaged code area for action  EchoApiYaml.gettest_pathById
         }
-
+    
     }
 }

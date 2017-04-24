@@ -1,6 +1,7 @@
 package simple_petstore_api_yaml
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -18,7 +19,7 @@ import de.zalando.play.controllers.PlayPathBindables
 
 
 //noinspection ScalaStyle
-trait SimplePetstoreApiYamlBase extends Controller with PlayBodyParsing {
+trait SimplePetstoreApiYamlBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait AddPetType[T] extends ResultWrapper[T]
     def AddPet200(resultP: Pet)(implicit writerP: String => Option[Writeable[Pet]]) = success(new AddPetType[Pet] { val statusCode = 200; val result = resultP; val writer = writerP })
@@ -49,9 +50,9 @@ def addPetAction[T] = (f: addPetActionType[T]) => addPetActionConstructor.async(
             new PetsPostValidator(pet).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           
@@ -79,7 +80,7 @@ def addPetAction[T] = (f: addPetActionType[T]) => addPetActionConstructor.async(
     lazy val NotImplementedYet = Future.successful(NotImplementedYetSync)
 }
 //noinspection ScalaStyle
-trait DashboardBase extends Controller with PlayBodyParsing {
+trait DashboardBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait MethodLevelType[T] extends ResultWrapper[T]
     def MethodLevel200(resultP: Seq[Pet])(implicit writerP: String => Option[Writeable[Seq[Pet]]]) = success(new MethodLevelType[Seq[Pet]] { val statusCode = 200; val result = resultP; val writer = writerP })
@@ -100,9 +101,9 @@ def methodLevelAction[T] = (f: methodLevelActionType[T]) => (tags: PetsGetTags, 
             new PetsGetValidator(tags, limit).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           
@@ -143,9 +144,9 @@ def pathLevelGetAction[T] = (f: pathLevelGetActionType[T]) => (id: Long) => path
             new PetsIdGetValidator(id).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           
@@ -186,9 +187,9 @@ def pathLevelDeleteAction[T] = (f: pathLevelDeleteActionType[T]) => (id: Long) =
             new PetsIdDeleteValidator(id).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           

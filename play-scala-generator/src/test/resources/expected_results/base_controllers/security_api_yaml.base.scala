@@ -1,6 +1,7 @@
 package security.api.yaml
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -18,7 +19,7 @@ import de.zalando.play.controllers.PlayPathBindables
 
 
 //noinspection ScalaStyle
-trait SecurityApiYamlBase extends Controller with PlayBodyParsing  with SecurityApiYamlSecurity {
+trait SecurityApiYamlBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator  with SecurityApiYamlSecurity {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait GetPetsByIdType[T] extends ResultWrapper[T]
     def GetPetsById200(resultP: Seq[Pet])(implicit writerP: String => Option[Writeable[Seq[Pet]]]) = success(new GetPetsByIdType[Seq[Pet]] { val statusCode = 200; val result = resultP; val writer = writerP })
@@ -39,9 +40,9 @@ def getPetsByIdAction[T] = (f: getPetsByIdActionType[T]) => (id: PetsIdGetId) =>
             new PetsIdGetValidator(id).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           

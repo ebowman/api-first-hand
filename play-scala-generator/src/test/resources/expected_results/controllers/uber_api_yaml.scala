@@ -3,6 +3,8 @@ import play.api.mvc.{Action,Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.i18n.MessagesApi
+
 import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
 
 import de.zalando.play.controllers._
@@ -23,18 +25,20 @@ import javax.inject._
 
 package uber.api.yaml {
     // ----- Start of unmanaged code area for package UberApiYaml
+            
     // ----- End of unmanaged code area for package UberApiYaml
     class UberApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections UberApiYaml
 
         // ----- End of unmanaged code area for injections UberApiYaml
+        val messagesApi: MessagesApi,
         lifecycle: ApplicationLifecycle,
         config: ConfigurationProvider
     ) extends UberApiYamlBase {
         // ----- Start of unmanaged code area for constructor UberApiYaml
 
         // ----- End of unmanaged code area for constructor UberApiYaml
-        val getme = getmeAction {  _ =>
+        val getme = getmeAction {  _ =>  
             // ----- Start of unmanaged code area for action  UberApiYaml.getme
             NotImplementedYet
             // ----- End of unmanaged code area for action  UberApiYaml.getme
@@ -63,6 +67,6 @@ package uber.api.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  UberApiYaml.gethistory
         }
-
+    
     }
 }

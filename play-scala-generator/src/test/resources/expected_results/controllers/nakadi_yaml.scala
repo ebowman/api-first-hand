@@ -3,6 +3,8 @@ import play.api.mvc.{Action,Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.i18n.MessagesApi
+
 import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
 
 import de.zalando.play.controllers._
@@ -23,18 +25,20 @@ import javax.inject._
 
 package nakadi.yaml {
     // ----- Start of unmanaged code area for package NakadiYaml
+            
     // ----- End of unmanaged code area for package NakadiYaml
     class NakadiYaml @Inject() (
         // ----- Start of unmanaged code area for injections NakadiYaml
 
         // ----- End of unmanaged code area for injections NakadiYaml
+        val messagesApi: MessagesApi,
         lifecycle: ApplicationLifecycle,
         config: ConfigurationProvider
     ) extends NakadiYamlBase {
         // ----- Start of unmanaged code area for constructor NakadiYaml
 
         // ----- End of unmanaged code area for constructor NakadiYaml
-        val nakadiHackGet_metrics = nakadiHackGet_metricsAction {  _ =>
+        val nakadiHackGet_metrics = nakadiHackGet_metricsAction {  _ =>  
             // ----- Start of unmanaged code area for action  NakadiYaml.nakadiHackGet_metrics
             NotImplementedYet
             // ----- End of unmanaged code area for action  NakadiYaml.nakadiHackGet_metrics
@@ -51,7 +55,7 @@ package nakadi.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  NakadiYaml.nakadiHackGet_partition
         }
-        val nakadiHackGet_topics = nakadiHackGet_topicsAction {  _ =>
+        val nakadiHackGet_topics = nakadiHackGet_topicsAction {  _ =>  
             // ----- Start of unmanaged code area for action  NakadiYaml.nakadiHackGet_topics
             NotImplementedYet
             // ----- End of unmanaged code area for action  NakadiYaml.nakadiHackGet_topics
@@ -68,7 +72,7 @@ package nakadi.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  NakadiYaml.nakadiHackPost_event
         }
-        val nakadiHackGet_partitions = nakadiHackGet_partitionsAction { (topic: String) =>
+        val nakadiHackGet_partitions = nakadiHackGet_partitionsAction { (topic: String) =>  
             // ----- Start of unmanaged code area for action  NakadiYaml.nakadiHackGet_partitions
             NotImplementedYet
             // ----- End of unmanaged code area for action  NakadiYaml.nakadiHackGet_partitions
@@ -79,6 +83,6 @@ package nakadi.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  NakadiYaml.nakadiHackPost_events
         }
-
+    
     }
 }
