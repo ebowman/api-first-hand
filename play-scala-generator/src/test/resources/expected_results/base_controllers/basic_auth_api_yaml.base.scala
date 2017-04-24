@@ -1,6 +1,7 @@
 package basic.auth.api.yaml
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -18,7 +19,7 @@ import de.zalando.play.controllers.ResponseWriters
 
 
 //noinspection ScalaStyle
-trait BasicAuthApiYamlBase extends Controller with PlayBodyParsing  with BasicAuthApiYamlSecurity {
+trait BasicAuthApiYamlBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator  with BasicAuthApiYamlSecurity {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait GetType[T] extends ResultWrapper[T]
     

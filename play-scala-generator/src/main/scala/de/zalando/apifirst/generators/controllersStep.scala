@@ -204,6 +204,7 @@ object PlayScalaControllerAnalyzer {
   val controllerImports = Seq(
     "play.api.mvc.{Action,Controller}",
     "play.api.data.validation.Constraint",
+    "play.api.i18n.MessagesApi",
     "play.api.inject.{ApplicationLifecycle,ConfigurationProvider}",
     "de.zalando.play.controllers._",
     "PlayBodyParsing._",

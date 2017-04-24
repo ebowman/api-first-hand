@@ -1,6 +1,7 @@
 package i038_invalid_enum_members.yaml
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -15,7 +16,7 @@ import scala.util._
 
 
 //noinspection ScalaStyle
-trait I038_invalid_enum_membersYamlBase extends Controller with PlayBodyParsing {
+trait I038_invalid_enum_membersYamlBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait GetType[T] extends ResultWrapper[T]
     def Get200(resultP: GetResponses200)(implicit writerP: String => Option[Writeable[GetResponses200]]) = success(new GetType[GetResponses200] { val statusCode = 200; val result = resultP; val writer = writerP })

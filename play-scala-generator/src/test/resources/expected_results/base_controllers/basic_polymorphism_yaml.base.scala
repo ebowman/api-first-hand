@@ -1,6 +1,7 @@
 package basic_polymorphism.yaml
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -17,7 +18,7 @@ import scala.util._
 
 
 //noinspection ScalaStyle
-trait Basic_polymorphismYamlBase extends Controller with PlayBodyParsing {
+trait Basic_polymorphismYamlBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait PutType[T] extends ResultWrapper[T]
     
@@ -47,9 +48,9 @@ def putAction[T] = (f: putActionType[T]) => putActionConstructor.async(putParser
             new PutValidator(dummy).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           

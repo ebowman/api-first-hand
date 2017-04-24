@@ -3,6 +3,8 @@ import play.api.mvc.{Action,Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.i18n.MessagesApi
+
 import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
 
 import de.zalando.play.controllers._
@@ -23,22 +25,24 @@ import javax.inject._
 
 package basic_polymorphism.yaml {
     // ----- Start of unmanaged code area for package Basic_polymorphismYaml
+            
     // ----- End of unmanaged code area for package Basic_polymorphismYaml
     class Basic_polymorphismYaml @Inject() (
         // ----- Start of unmanaged code area for injections Basic_polymorphismYaml
 
         // ----- End of unmanaged code area for injections Basic_polymorphismYaml
+        val messagesApi: MessagesApi,
         lifecycle: ApplicationLifecycle,
         config: ConfigurationProvider
     ) extends Basic_polymorphismYamlBase {
         // ----- Start of unmanaged code area for constructor Basic_polymorphismYaml
 
         // ----- End of unmanaged code area for constructor Basic_polymorphismYaml
-        val put = putAction { (dummy: PutDummy) =>
+        val put = putAction { (dummy: PutDummy) =>  
             // ----- Start of unmanaged code area for action  Basic_polymorphismYaml.put
             NotImplementedYet
             // ----- End of unmanaged code area for action  Basic_polymorphismYaml.put
         }
-
+    
     }
 }

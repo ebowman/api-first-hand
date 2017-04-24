@@ -1,14 +1,19 @@
 package de.zalando.play.controllers
 
 import play.api.data.validation._
+import play.api.i18n.{ I18nSupport, Messages }
 
 /**
  * @since 03.09.2015
  */
 // Parsing error to display to the user of the API
-case class ParsingError(messages: Seq[String], args: Seq[Any] = Nil)
+case class ParsingError(reference: String, messages: Seq[String], args: Seq[Any] = Nil)
+
+case class TranslatedParsingErrorsContainer(errors: Seq[TranslatedParsingError])
+case class TranslatedParsingError(reference: String, message: String)
 
 trait Validator {
+  def reference: String
   def errors: Seq[ParsingError]
 }
 /**
@@ -36,9 +41,21 @@ trait ValidationBase[T] extends Validator {
   // helper to convert failing constraints to errors
   override def errors: Seq[ParsingError] = {
     constraints.map(_(instance)).collect {
-      case Invalid(errors) => errors.toSeq
-    }.flatten.map(ve => ParsingError(ve.messages, ve.args))
+      case Invalid(errors) => errors
+    }.flatten.map(ve => ParsingError(reference, ve.messages, ve.args))
   }
+}
+
+trait ValidationTranslator {
+
+  this: I18nSupport =>
+
+  def translateParsingErrors(errors: Seq[ParsingError]): TranslatedParsingErrorsContainer =
+    TranslatedParsingErrorsContainer(
+      errors.map { pe: ParsingError =>
+        TranslatedParsingError(reference = pe.reference, message = Messages(pe.messages, pe.args: _*))
+      }
+    )
 }
 
 object PlayValidations extends Constraints {

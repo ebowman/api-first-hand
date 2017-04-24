@@ -3,6 +3,8 @@ import play.api.mvc.{Action,Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.i18n.MessagesApi
+
 import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
 
 import de.zalando.play.controllers._
@@ -27,11 +29,13 @@ import BinaryString._
 
 package string_formats.yaml {
     // ----- Start of unmanaged code area for package String_formatsYaml
+            
     // ----- End of unmanaged code area for package String_formatsYaml
     class String_formatsYaml @Inject() (
         // ----- Start of unmanaged code area for injections String_formatsYaml
 
         // ----- End of unmanaged code area for injections String_formatsYaml
+        val messagesApi: MessagesApi,
         lifecycle: ApplicationLifecycle,
         config: ConfigurationProvider
     ) extends String_formatsYamlBase {
@@ -44,6 +48,6 @@ package string_formats.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  String_formatsYaml.get
         }
-
+    
     }
 }

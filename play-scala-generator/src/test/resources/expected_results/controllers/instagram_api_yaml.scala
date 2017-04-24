@@ -3,6 +3,8 @@ import play.api.mvc.{Action,Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.i18n.MessagesApi
+
 import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
 
 import de.zalando.play.controllers._
@@ -29,38 +31,40 @@ import scala.math.BigDecimal
 
 package instagram.api.yaml {
     // ----- Start of unmanaged code area for package InstagramApiYaml
+            
     // ----- End of unmanaged code area for package InstagramApiYaml
     class InstagramApiYaml @Inject() (
         // ----- Start of unmanaged code area for injections InstagramApiYaml
 
         // ----- End of unmanaged code area for injections InstagramApiYaml
+        val messagesApi: MessagesApi,
         lifecycle: ApplicationLifecycle,
         config: ConfigurationProvider
     ) extends InstagramApiYamlBase {
         // ----- Start of unmanaged code area for constructor InstagramApiYaml
 
         // ----- End of unmanaged code area for constructor InstagramApiYaml
-        val getmediaByMedia_idLikes = getmediaByMedia_idLikesAction { (media_id: BigInt) =>
+        val getmediaByMedia_idLikes = getmediaByMedia_idLikesAction { (media_id: BigInt) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.getmediaByMedia_idLikes
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.getmediaByMedia_idLikes
         }
-        val postmediaByMedia_idLikes = postmediaByMedia_idLikesAction { (media_id: BigInt) =>
+        val postmediaByMedia_idLikes = postmediaByMedia_idLikesAction { (media_id: BigInt) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.postmediaByMedia_idLikes
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.postmediaByMedia_idLikes
         }
-        val deletemediaByMedia_idLikes = deletemediaByMedia_idLikesAction { (media_id: BigInt) =>
+        val deletemediaByMedia_idLikes = deletemediaByMedia_idLikesAction { (media_id: BigInt) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.deletemediaByMedia_idLikes
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.deletemediaByMedia_idLikes
         }
-        val getusersByUser_idFollows = getusersByUser_idFollowsAction { (user_id: BigDecimal) =>
+        val getusersByUser_idFollows = getusersByUser_idFollowsAction { (user_id: BigDecimal) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.getusersByUser_idFollows
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.getusersByUser_idFollows
         }
-        val getlocationsByLocation_id = getlocationsByLocation_idAction { (location_id: BigInt) =>
+        val getlocationsByLocation_id = getlocationsByLocation_idAction { (location_id: BigInt) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.getlocationsByLocation_id
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.getlocationsByLocation_id
@@ -77,22 +81,22 @@ package instagram.api.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.getusersSelfMediaLiked
         }
-        val gettagsByTag_name = gettagsByTag_nameAction { (tag_name: String) =>
+        val gettagsByTag_name = gettagsByTag_nameAction { (tag_name: String) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.gettagsByTag_name
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.gettagsByTag_name
         }
-        val gettagsSearch = gettagsSearchAction { (q: MediaFilter) =>
+        val gettagsSearch = gettagsSearchAction { (q: MediaFilter) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.gettagsSearch
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.gettagsSearch
         }
-        val getusersByUser_idFollowed_by = getusersByUser_idFollowed_byAction { (user_id: BigDecimal) =>
+        val getusersByUser_idFollowed_by = getusersByUser_idFollowed_byAction { (user_id: BigDecimal) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.getusersByUser_idFollowed_by
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.getusersByUser_idFollowed_by
         }
-        val getmediaByMedia_idComments = getmediaByMedia_idCommentsAction { (media_id: BigInt) =>
+        val getmediaByMedia_idComments = getmediaByMedia_idCommentsAction { (media_id: BigInt) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.getmediaByMedia_idComments
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.getmediaByMedia_idComments
@@ -103,12 +107,12 @@ package instagram.api.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.postmediaByMedia_idComments
         }
-        val deletemediaByMedia_idComments = deletemediaByMedia_idCommentsAction { (media_id: BigInt) =>
+        val deletemediaByMedia_idComments = deletemediaByMedia_idCommentsAction { (media_id: BigInt) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.deletemediaByMedia_idComments
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.deletemediaByMedia_idComments
         }
-        val gettagsByTag_nameMediaRecent = gettagsByTag_nameMediaRecentAction { (tag_name: String) =>
+        val gettagsByTag_nameMediaRecent = gettagsByTag_nameMediaRecentAction { (tag_name: String) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.gettagsByTag_nameMediaRecent
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.gettagsByTag_nameMediaRecent
@@ -125,7 +129,7 @@ package instagram.api.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.getusersSelfFeed
         }
-        val getusersByUser_id = getusersByUser_idAction { (user_id: BigDecimal) =>
+        val getusersByUser_id = getusersByUser_idAction { (user_id: BigDecimal) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.getusersByUser_id
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.getusersByUser_id
@@ -142,7 +146,7 @@ package instagram.api.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.getgeographiesByGeo_idMediaRecent
         }
-        val getmediaByShortcode = getmediaByShortcodeAction { (shortcode: String) =>
+        val getmediaByShortcode = getmediaByShortcodeAction { (shortcode: String) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.getmediaByShortcode
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.getmediaByShortcode
@@ -153,12 +157,12 @@ package instagram.api.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.getlocationsSearch
         }
-        val getusersSelfRequested_by = getusersSelfRequested_byAction {  _ =>
+        val getusersSelfRequested_by = getusersSelfRequested_byAction {  _ =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.getusersSelfRequested_by
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.getusersSelfRequested_by
         }
-        val getmediaByMedia_id = getmediaByMedia_idAction { (media_id: BigInt) =>
+        val getmediaByMedia_id = getmediaByMedia_idAction { (media_id: BigInt) =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.getmediaByMedia_id
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.getmediaByMedia_id
@@ -175,11 +179,11 @@ package instagram.api.yaml {
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.getusersByUser_idMediaRecent
         }
-        val getmediaPopular = getmediaPopularAction {  _ =>
+        val getmediaPopular = getmediaPopularAction {  _ =>  
             // ----- Start of unmanaged code area for action  InstagramApiYaml.getmediaPopular
             NotImplementedYet
             // ----- End of unmanaged code area for action  InstagramApiYaml.getmediaPopular
         }
-
+    
     }
 }

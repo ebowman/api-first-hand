@@ -8,119 +8,152 @@ import PlayValidations._
 import java.util.UUID
 // ----- constraints and wrapper validations -----
 class TopicsTopicEventsBatchPostTopicConstraints(override val instance: String) extends ValidationBase[String] {
+    override val reference = "⌿paths⌿/topics/{topic}/events/batch⌿post⌿topic"
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
 class TopicsTopicEventsBatchPostTopicValidator(instance: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/topics/{topic}/events/batch⌿post⌿topic"
     override val validators = Seq(new TopicsTopicEventsBatchPostTopicConstraints(instance))
 }
 class TopicsTopicEventsGetStream_timeoutOptConstraints(override val instance: Int) extends ValidationBase[Int] {
+    override val reference = "⌿paths⌿/topics/{topic}/events⌿get⌿stream_timeout⌿Opt"
     override def constraints: Seq[Constraint[Int]] =
         Seq()
 }
 class TopicsTopicEventsGetStream_timeoutOptValidator(instance: Int) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/topics/{topic}/events⌿get⌿stream_timeout⌿Opt"
     override val validators = Seq(new TopicsTopicEventsGetStream_timeoutOptConstraints(instance))
 }
 class TopicsTopicPartitionsPartitionEventsGetStart_fromConstraints(override val instance: String) extends ValidationBase[String] {
+    override val reference = "⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿start_from"
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
 class TopicsTopicPartitionsPartitionEventsGetStart_fromValidator(instance: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿start_from"
     override val validators = Seq(new TopicsTopicPartitionsPartitionEventsGetStart_fromConstraints(instance))
 }
 class TopicsTopicEventsGetBatch_limitConstraints(override val instance: Int) extends ValidationBase[Int] {
+    override val reference = "⌿paths⌿/topics/{topic}/events⌿get⌿batch_limit"
     override def constraints: Seq[Constraint[Int]] =
         Seq()
 }
 class TopicsTopicEventsGetBatch_limitValidator(instance: Int) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/topics/{topic}/events⌿get⌿batch_limit"
     override val validators = Seq(new TopicsTopicEventsGetBatch_limitConstraints(instance))
 }
 class TopicsTopicPartitionsGetTopicConstraints(override val instance: String) extends ValidationBase[String] {
+    override val reference = "⌿paths⌿/topics/{topic}/partitions⌿get⌿topic"
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
 class TopicsTopicPartitionsGetTopicValidator(instance: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/topics/{topic}/partitions⌿get⌿topic"
     override val validators = Seq(new TopicsTopicPartitionsGetTopicConstraints(instance))
 }
 class EventEvent_typeOptConstraints(override val instance: String) extends ValidationBase[String] {
+    override val reference = "⌿definitions⌿Event⌿event_type⌿Opt"
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
 class EventEvent_typeOptValidator(instance: String) extends RecursiveValidator {
+    override val reference = "⌿definitions⌿Event⌿event_type⌿Opt"
     override val validators = Seq(new EventEvent_typeOptConstraints(instance))
 }
 class EventMetaDataParent_idOptConstraints(override val instance: UUID) extends ValidationBase[UUID] {
+    override val reference = "⌿definitions⌿EventMetaData⌿parent_id⌿Opt"
     override def constraints: Seq[Constraint[UUID]] =
         Seq()
 }
 class EventMetaDataParent_idOptValidator(instance: UUID) extends RecursiveValidator {
+    override val reference = "⌿definitions⌿EventMetaData⌿parent_id⌿Opt"
     override val validators = Seq(new EventMetaDataParent_idOptConstraints(instance))
 }
 class EventMetaDataScopesOptArrConstraints(override val instance: String) extends ValidationBase[String] {
+    override val reference = "⌿definitions⌿EventMetaData⌿scopes⌿Opt⌿Arr"
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
 class EventMetaDataScopesOptArrValidator(instance: String) extends RecursiveValidator {
+    override val reference = "⌿definitions⌿EventMetaData⌿scopes⌿Opt⌿Arr"
     override val validators = Seq(new EventMetaDataScopesOptArrConstraints(instance))
 }
 class TopicsTopicPartitionsPartitionGetTopicConstraints(override val instance: String) extends ValidationBase[String] {
+    override val reference = "⌿paths⌿/topics/{topic}/partitions/{partition}⌿get⌿topic"
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
 class TopicsTopicPartitionsPartitionGetTopicValidator(instance: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/topics/{topic}/partitions/{partition}⌿get⌿topic"
     override val validators = Seq(new TopicsTopicPartitionsPartitionGetTopicConstraints(instance))
 }
 class TopicsTopicEventsGetX_nakadi_cursorsConstraints(override val instance: String) extends ValidationBase[String] {
+    override val reference = "⌿paths⌿/topics/{topic}/events⌿get⌿x_nakadi_cursors"
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
 class TopicsTopicEventsGetX_nakadi_cursorsValidator(instance: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/topics/{topic}/events⌿get⌿x_nakadi_cursors"
     override val validators = Seq(new TopicsTopicEventsGetX_nakadi_cursorsConstraints(instance))
 }
 class TopicsTopicEventsPostTopicConstraints(override val instance: String) extends ValidationBase[String] {
+    override val reference = "⌿paths⌿/topics/{topic}/events⌿post⌿topic"
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
 class TopicsTopicEventsPostTopicValidator(instance: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/topics/{topic}/events⌿post⌿topic"
     override val validators = Seq(new TopicsTopicEventsPostTopicConstraints(instance))
 }
 class TopicsTopicEventsGetTopicConstraints(override val instance: String) extends ValidationBase[String] {
+    override val reference = "⌿paths⌿/topics/{topic}/events⌿get⌿topic"
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
 class TopicsTopicEventsGetTopicValidator(instance: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/topics/{topic}/events⌿get⌿topic"
     override val validators = Seq(new TopicsTopicEventsGetTopicConstraints(instance))
 }
 class TopicsTopicPartitionsPartitionEventsGetTopicConstraints(override val instance: String) extends ValidationBase[String] {
+    override val reference = "⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿topic"
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
 class TopicsTopicPartitionsPartitionEventsGetTopicValidator(instance: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿topic"
     override val validators = Seq(new TopicsTopicPartitionsPartitionEventsGetTopicConstraints(instance))
 }
 class TopicsTopicPartitionsPartitionEventsGetPartitionConstraints(override val instance: String) extends ValidationBase[String] {
+    override val reference = "⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿partition"
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
 class TopicsTopicPartitionsPartitionEventsGetPartitionValidator(instance: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿partition"
     override val validators = Seq(new TopicsTopicPartitionsPartitionEventsGetPartitionConstraints(instance))
 }
 class TopicsTopicPartitionsPartitionGetPartitionConstraints(override val instance: String) extends ValidationBase[String] {
+    override val reference = "⌿paths⌿/topics/{topic}/partitions/{partition}⌿get⌿partition"
     override def constraints: Seq[Constraint[String]] =
         Seq()
 }
 class TopicsTopicPartitionsPartitionGetPartitionValidator(instance: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/topics/{topic}/partitions/{partition}⌿get⌿partition"
     override val validators = Seq(new TopicsTopicPartitionsPartitionGetPartitionConstraints(instance))
 }
 class TopicsTopicPartitionsPartitionEventsGetBatch_limitConstraints(override val instance: Int) extends ValidationBase[Int] {
+    override val reference = "⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿batch_limit"
     override def constraints: Seq[Constraint[Int]] =
         Seq()
 }
 class TopicsTopicPartitionsPartitionEventsGetBatch_limitValidator(instance: Int) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/topics/{topic}/partitions/{partition}/events⌿get⌿batch_limit"
     override val validators = Seq(new TopicsTopicPartitionsPartitionEventsGetBatch_limitConstraints(instance))
 }
 // ----- complex type validators -----
 class EventValidator(instance: Event) extends RecursiveValidator {
+    override val reference = "⌿definitions⌿Event"
     override val validators = Seq(
         new EventEvent_typeValidator(instance.event_type), 
         new EventEvent_typeValidator(instance.partitioning_key), 
@@ -128,6 +161,7 @@ class EventValidator(instance: Event) extends RecursiveValidator {
     )
 }
 class EventMetaDataValidator(instance: EventMetaDataNameClash) extends RecursiveValidator {
+    override val reference = "⌿definitions⌿EventMetaData"
     override val validators = Seq(
         new EventMetaDataParent_idValidator(instance.root_id), 
         new EventMetaDataParent_idValidator(instance.parent_id), 
@@ -139,35 +173,44 @@ class EventMetaDataValidator(instance: EventMetaDataNameClash) extends Recursive
 
 // ----- option delegating validators -----
 class TopicsTopicEventsGetStream_timeoutValidator(instance: TopicsTopicEventsGetStream_timeout) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/topics/{topic}/events⌿get⌿stream_timeout"
     override val validators = instance.toSeq.map { new TopicsTopicEventsGetStream_timeoutOptValidator(_) }
 }
 class TopicsTopicEventsBatchPostEventValidator(instance: TopicsTopicEventsBatchPostEvent) extends RecursiveValidator {
+    override val reference = "⌿paths⌿/topics/{topic}/events/batch⌿post⌿event"
     override val validators = instance.toSeq.map { new EventValidator(_) }
 }
 class EventEvent_typeValidator(instance: EventEvent_type) extends RecursiveValidator {
+    override val reference = "⌿definitions⌿Event⌿event_type"
     override val validators = instance.toSeq.map { new EventEvent_typeOptValidator(_) }
 }
 class EventMetadataValidator(instance: EventMetadata) extends RecursiveValidator {
+    override val reference = "⌿definitions⌿Event⌿metadata"
     override val validators = instance.toSeq.map { new EventMetaDataValidator(_) }
 }
 class EventMetaDataParent_idValidator(instance: EventMetaDataParent_id) extends RecursiveValidator {
+    override val reference = "⌿definitions⌿EventMetaData⌿parent_id"
     override val validators = instance.toSeq.map { new EventMetaDataParent_idOptValidator(_) }
 }
 class EventMetaDataScopesValidator(instance: EventMetaDataScopes) extends RecursiveValidator {
+    override val reference = "⌿definitions⌿EventMetaData⌿scopes"
     override val validators = instance.toSeq.map { new EventMetaDataScopesOptValidator(_) }
 }
 // ----- array delegating validators -----
 class EventMetaDataScopesOptConstraints(override val instance: EventMetaDataScopesOpt) extends ValidationBase[EventMetaDataScopesOpt] {
+    override val reference = "⌿definitions⌿EventMetaData⌿scopes⌿Opt"
     override def constraints: Seq[Constraint[EventMetaDataScopesOpt]] =
         Seq()
 }
 class EventMetaDataScopesOptValidator(instance: EventMetaDataScopesOpt) extends RecursiveValidator {
+    override val reference = "⌿definitions⌿EventMetaData⌿scopes⌿Opt"
     override val validators = new EventMetaDataScopesOptConstraints(instance) +: instance.map { new EventMetaDataScopesOptArrValidator(_)}
 }
 // ----- catch all simple validators -----
 // ----- composite validators -----
 // ----- call validations -----
 class TopicsTopicPartitionsPartitionGetValidator(topic: String, partition: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿topics⌿{topic}⌿partitions⌿{partition}⌿get"
     override val validators = Seq(
         new TopicsTopicPartitionsPartitionGetTopicValidator(topic), 
     
@@ -176,6 +219,7 @@ class TopicsTopicPartitionsPartitionGetValidator(topic: String, partition: Strin
     )
 }
 class TopicsTopicEventsGetValidator(stream_timeout: TopicsTopicEventsGetStream_timeout, stream_limit: TopicsTopicEventsGetStream_timeout, batch_flush_timeout: TopicsTopicEventsGetStream_timeout, x_nakadi_cursors: String, batch_limit: Int, batch_keep_alive_limit: TopicsTopicEventsGetStream_timeout, topic: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿topics⌿{topic}⌿events⌿get"
     override val validators = Seq(
         new TopicsTopicEventsGetStream_timeoutValidator(stream_timeout), 
     
@@ -194,6 +238,7 @@ class TopicsTopicEventsGetValidator(stream_timeout: TopicsTopicEventsGetStream_t
     )
 }
 class TopicsTopicPartitionsPartitionEventsGetValidator(start_from: String, partition: String, stream_limit: TopicsTopicEventsGetStream_timeout, topic: String, batch_limit: Int, batch_flush_timeout: TopicsTopicEventsGetStream_timeout, stream_timeout: TopicsTopicEventsGetStream_timeout, batch_keep_alive_limit: TopicsTopicEventsGetStream_timeout) extends RecursiveValidator {
+    override val reference = "⌿paths⌿topics⌿{topic}⌿partitions⌿{partition}⌿events⌿get"
     override val validators = Seq(
         new TopicsTopicPartitionsPartitionEventsGetStart_fromValidator(start_from), 
     
@@ -214,6 +259,7 @@ class TopicsTopicPartitionsPartitionEventsGetValidator(start_from: String, parti
     )
 }
 class TopicsTopicEventsPostValidator(topic: String, event: TopicsTopicEventsBatchPostEvent) extends RecursiveValidator {
+    override val reference = "⌿paths⌿topics⌿{topic}⌿events⌿post"
     override val validators = Seq(
         new TopicsTopicEventsPostTopicValidator(topic), 
     
@@ -222,12 +268,14 @@ class TopicsTopicEventsPostValidator(topic: String, event: TopicsTopicEventsBatc
     )
 }
 class TopicsTopicPartitionsGetValidator(topic: String) extends RecursiveValidator {
+    override val reference = "⌿paths⌿topics⌿{topic}⌿partitions⌿get"
     override val validators = Seq(
         new TopicsTopicPartitionsGetTopicValidator(topic)
     
     )
 }
 class TopicsTopicEventsBatchPostValidator(topic: String, event: TopicsTopicEventsBatchPostEvent) extends RecursiveValidator {
+    override val reference = "⌿paths⌿topics⌿{topic}⌿events⌿batch⌿post"
     override val validators = Seq(
         new TopicsTopicEventsBatchPostTopicValidator(topic), 
     

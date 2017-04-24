@@ -3,6 +3,8 @@ import play.api.mvc.{Action,Controller}
 
 import play.api.data.validation.Constraint
 
+import play.api.i18n.MessagesApi
+
 import play.api.inject.{ApplicationLifecycle,ConfigurationProvider}
 
 import de.zalando.play.controllers._
@@ -23,11 +25,13 @@ import javax.inject._
 
 package expanded {
     // ----- Start of unmanaged code area for package Expanded_polymorphismYaml
+            
     // ----- End of unmanaged code area for package Expanded_polymorphismYaml
     class Expanded_polymorphismYaml @Inject() (
         // ----- Start of unmanaged code area for injections Expanded_polymorphismYaml
 
         // ----- End of unmanaged code area for injections Expanded_polymorphismYaml
+        val messagesApi: MessagesApi,
         lifecycle: ApplicationLifecycle,
         config: ConfigurationProvider
     ) extends Expanded_polymorphismYamlBase {
@@ -40,16 +44,16 @@ package expanded {
             NotImplementedYet
             // ----- End of unmanaged code area for action  Expanded_polymorphismYaml.findPets
         }
-        val addPet = addPetAction { (pet: NewPet) =>
+        val addPet = addPetAction { (pet: NewPet) =>  
             // ----- Start of unmanaged code area for action  Expanded_polymorphismYaml.addPet
             NotImplementedYet
             // ----- End of unmanaged code area for action  Expanded_polymorphismYaml.addPet
         }
-        val deletePet = deletePetAction { (id: Long) =>
+        val deletePet = deletePetAction { (id: Long) =>  
             // ----- Start of unmanaged code area for action  Expanded_polymorphismYaml.deletePet
             NotImplementedYet
             // ----- End of unmanaged code area for action  Expanded_polymorphismYaml.deletePet
         }
-
+    
     }
 }

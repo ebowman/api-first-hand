@@ -1,6 +1,7 @@
 package hackweek.yaml
 
 import scala.language.existentials
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import play.api.http._
 import play.api.libs.json._
@@ -18,7 +19,7 @@ import scala.math.BigInt
 
 
 //noinspection ScalaStyle
-trait HackweekYamlBase extends Controller with PlayBodyParsing {
+trait HackweekYamlBase extends Controller with PlayBodyParsing with I18nSupport with ValidationTranslator {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     sealed trait GetschemaModelType[T] extends ResultWrapper[T]
     def GetschemaModel200(resultP: ModelSchemaRoot)(implicit writerP: String => Option[Writeable[ModelSchemaRoot]]) = success(new GetschemaModelType[ModelSchemaRoot] { val statusCode = 200; val result = resultP; val writer = writerP })
@@ -48,9 +49,9 @@ def getschemaModelAction[T] = (f: getschemaModelActionType[T]) => getschemaModel
             new SchemaModelGetValidator(root).errors match {
                 case e if e.isEmpty =>
                     apiFirstTempResultHolder
-                case l =>
-                    import ResponseWriters.jsonParsingErrorsWrites
-                    Left(BadRequest(Json.toJson(l)))
+                case parsingErrors: Seq[ParsingError] =>
+                    import ResponseWriters.jsonTranslatedParsingErrorsContainerWrites
+                    Left(BadRequest(Json.toJson(translateParsingErrors(parsingErrors))))
             }
             
           
