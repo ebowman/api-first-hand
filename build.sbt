@@ -2,7 +2,6 @@ import bintray.Keys._
 import sbt._
 
 val PlayVersion = "2.5.4"
-val Scala10 = "2.10.5"
 val Scala11 = "2.11.8"
 val ProjectVersion = "0.2.3"
 
@@ -13,7 +12,7 @@ javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 lazy val common = (project in file("common"))
   .settings(commonSettings: _*)
   .settings(
-    scalaVersion := Scala10,
+    scalaVersion := Scala11,
     name := "api-first-hand-common",
     libraryDependencies ++= deps.jacksonsJava ++ deps.test
   )
@@ -32,15 +31,14 @@ lazy val swaggerModel = (project in file("swagger-model"))
   .settings(commonSettings: _*)
   .settings(
     name := "swagger-model",
-    scalaVersion := Scala10,
-    crossScalaVersions := Seq(Scala10, Scala11),
+    scalaVersion := Scala11,
     libraryDependencies ++= deps.swaggerModel ++ deps.test
   )
 
 lazy val apiFirstCore = (project in file("api-first-core"))
   .settings(commonSettings: _*)
   .settings(
-    scalaVersion := Scala10,
+    scalaVersion := Scala11,
     name := "api-first-core",
     libraryDependencies ++= deps.test
   )
@@ -48,7 +46,7 @@ lazy val apiFirstCore = (project in file("api-first-core"))
 lazy val swaggerParser = (project in file("swagger-parser"))
   .settings(commonSettings: _*)
   .settings(
-    scalaVersion := Scala10,
+    scalaVersion := Scala11,
     name := "swagger-parser",
     libraryDependencies ++= deps.swaggerParser(scalaVersion.value) ++ deps.test
   )
@@ -57,7 +55,7 @@ lazy val swaggerParser = (project in file("swagger-parser"))
 lazy val playScalaGenerator = (project in file("play-scala-generator"))
   .settings(commonSettings: _*)
   .settings(
-    scalaVersion := Scala10,
+    scalaVersion := Scala11,
     name := "play-scala-generator",
     libraryDependencies ++= deps.playScalaGenerator ++ deps.test
   )
