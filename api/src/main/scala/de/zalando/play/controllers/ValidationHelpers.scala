@@ -60,6 +60,11 @@ trait ValidationTranslator {
 
 object PlayValidations extends Constraints {
 
+  def notNull[T]: Constraint[T] = Constraint[T]("constraint.notNull") { o =>
+    if (o == null) Invalid(ValidationError("error.required"))
+    else Valid
+  }
+
   /**
    * Defines a ‘lowerCase’ constraint for `String` values, i.e. one in which string
    * should be non-empty and lowercase. Has no direct relationship with swagger,

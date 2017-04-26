@@ -6,6 +6,7 @@ import de.zalando.apifirst.Domain
 import Domain._
 import TypeMetaConverter._
 import de.zalando.apifirst.naming._
+import de.zalando.swagger.ValidationsConverter.toValidations
 import strictModel._
 
 import scala.collection.mutable
@@ -144,7 +145,9 @@ class TypeConverter(base: URI, model: strictModel.SwaggerModel, keyPrefix: Strin
         obj
       case _ =>
         val typeName = if (param.enum.nonEmpty) name else { typeNameFromInlinedReference(param) getOrElse name }
-        val primitiveType = fromPrimitiveType(name, p, param.format, param)(required, typeName, param.default, param.enum)
+        val isRequired = required.exists { _.contains(name.simple) }
+        val typeMeta = TypeMeta(Option(param.description).orElse(Option(param.format)), toValidations(param, isRequired))
+        val primitiveType: (Reference, Type) = fromPrimitiveType(name, p, param.format, typeMeta)(required, typeName, param.default, param.enum)
         Seq(primitiveType)
     }
   }

@@ -12,6 +12,9 @@ object ValidationsConverter {
 
   lazy val log = LoggerFactory.getLogger(this.getClass)
 
+  def toValidations(s: Schema[_], required: Boolean): Seq[String] =
+    validationsPF(s) ++ toSchemaRequiredValidation(required)
+
   def toValidations(s: Schema[_]): Seq[String] = validationsPF(s)
 
   def toValidations[T, CF](bp: BodyParameter[T]): Seq[String] = validationsPF(bp)
@@ -27,7 +30,8 @@ object ValidationsConverter {
     { case v: EnumValidation[_] => toEnumValidations(v) },
     { case v: StringValidation => toStringValidations(v) },
     { case n: NumberValidation[_] => toNumberValidations(n) },
-    { case o: ObjectValidation => toObjectValidations(o) }
+    { case o: ObjectValidation => toObjectValidations(o) },
+    { case p: NonBodyParameterCommons[_, _] => toNonBodyParameterCommonsValidations(p) }
   )
 
   private def validationsPF[CF, T](b: ValidationBase): Seq[String] = {
@@ -95,6 +99,14 @@ object ValidationsConverter {
       ifDefined(p.maxProperties, s"maxProperties(${p.maxProperties.get})"),
       ifDefined(p.minProperties, s"minProperties(${p.minProperties.get})")
     ).flatten
+
+  private def toNonBodyParameterCommonsValidations(p: NonBodyParameterCommons[_, _]): Seq[String] = {
+    if (p.required) Seq(s"""notNull""") else Seq.empty
+  }
+
+  private def toSchemaRequiredValidation(required: Boolean): Seq[String] = {
+    if (required) Seq(s"""notNull""") else Seq.empty
+  }
 
   def ifNot0(check: Int, result: String): Option[String] = if (check != 0) Some(result) else None
 

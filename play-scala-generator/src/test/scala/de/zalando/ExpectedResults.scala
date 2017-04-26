@@ -37,6 +37,7 @@ trait ExpectedResults {
     instagram_api_yaml,
     minimal_api_yaml,
     nakadi_yaml,
+    required_parametrs_yaml,
     security_api_yaml,
     simple_petstore_api_yaml,
     split_petstore_api_yaml,
